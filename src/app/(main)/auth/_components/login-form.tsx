@@ -12,6 +12,8 @@ import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "
 import { Input } from "@/components/ui/input";
 import { authService } from "@/services/auth";
 
+const IS_DEMO = process.env.NEXT_PUBLIC_DEMO === "true";
+
 const FormSchema = z.object({
   email: z.string().email({ message: "Введите корректный email." }),
   password: z.string().min(6, { message: "Пароль должен содержать минимум 6 символов." }),
@@ -19,6 +21,7 @@ const FormSchema = z.object({
 
 export function LoginForm() {
   const router = useRouter();
+
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
@@ -28,15 +31,25 @@ export function LoginForm() {
   });
 
   const onSubmit = async (data: z.infer<typeof FormSchema>) => {
+    if (IS_DEMO) {
+      if (data.email === "test@gmail.com" && data.password === "test123") {
+        toast.success("Demo login successful!");
+        router.push("/dashboard/main");
+        return;
+      } else {
+        toast.error("Неверный demo логин или пароль");
+        return;
+      }
+    }
+
+    // 🟢 NORMAL API MODE
     try {
-      const payload = {
+      await authService.login({
         email: data.email,
         password: data.password,
-      };
+      });
 
-      await authService.login(payload);
       toast.success("Вход выполнен успешно!");
-
       router.push("/dashboard/main");
     } catch (error) {
       console.log(error);
@@ -54,7 +67,13 @@ export function LoginForm() {
             <FormItem>
               <FormLabel>Email</FormLabel>
               <FormControl>
-                <Input id="email" type="email" placeholder="you@example.com" autoComplete="email" {...field} />
+                <Input
+                  id="email"
+                  type="email"
+                  placeholder={IS_DEMO ? "test" : "you@example.com"}
+                  autoComplete="email"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -71,7 +90,7 @@ export function LoginForm() {
                 <Input
                   id="password"
                   type="password"
-                  placeholder="••••••••"
+                  placeholder={IS_DEMO ? "test123" : "••••••••"}
                   autoComplete="current-password"
                   {...field}
                 />

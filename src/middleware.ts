@@ -1,6 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 
+const IS_DEMO = process.env.NEXT_PUBLIC_DEMO === "true";
+
 export function middleware(req: NextRequest) {
+  if (IS_DEMO) return NextResponse.next();
+
   const { pathname } = req.nextUrl;
 
   const protectedRoutes = ["/dashboard"];
