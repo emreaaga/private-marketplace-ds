@@ -1,3 +1,5 @@
+"use client";
+
 import { Users, Lock, LayoutDashboard, LayoutDashboardIcon, UserCircle, type LucideIcon } from "lucide-react";
 
 export interface NavSubItem {
