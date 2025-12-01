@@ -1,4 +1,6 @@
-export const MOCK_USERS = [
+import type { User } from "@/types/users";
+
+export const MOCK_USERS: User[] = [
   {
     id: 1,
     name: "Demo Admin",
