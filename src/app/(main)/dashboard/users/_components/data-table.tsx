@@ -39,8 +39,7 @@ export function DataTable<TData, TValue>({
 
   return (
     <>
-      {/* 📱 MOBILE VERSION */}
-      <div className="md:hidden">
+      <div className="-mx-8 md:hidden">
         <DataTableMobile
           data={data as User[]}
           onDelete={onDelete}
@@ -49,7 +48,6 @@ export function DataTable<TData, TValue>({
         />
       </div>
 
-      {/* 🖥 DESKTOP TABLE */}
       <div className="hidden overflow-hidden rounded-md border md:block">
         <Table>
           <TableHeader>

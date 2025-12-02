@@ -29,40 +29,39 @@ export function DataTableMobile({
   }
 
   return (
-    <div className="space-y-3 md:hidden">
+    <div className="divide-y rounded-lg border bg-white md:hidden">
       {data.map((user) => (
-        <div key={user.id} className="flex items-start justify-between gap-3 rounded-lg border p-4">
-          {/* LEFT BLOCK */}
-          <div className="flex-1 space-y-1">
-            <p className="font-medium">{user.name}</p>
-            <p className="text-muted-foreground text-sm">{user.email}</p>
+        <div key={user.id} className="flex items-start justify-between p-3">
+          {/* LEFT SIDE */}
+          <div className="flex flex-col space-y-1">
+            <p className="text-[15px] font-medium">{user.name}</p>
+            <p className="text-muted-foreground text-xs">{user.email}</p>
 
-            <div className="flex items-center gap-2 pt-2">
-              <Badge variant="outline" className="text-xs capitalize">
+            <div className="flex items-center gap-2 pt-1">
+              <Badge variant="outline" className="rounded-md px-2 py-0.5 text-[10px] capitalize">
                 {user.role}
               </Badge>
 
               <Badge
                 variant="secondary"
-                className="text-xs capitalize"
+                className="rounded-md border px-2 py-0.5 text-[10px] capitalize"
                 style={{
                   borderColor: user.status === "active" ? "#10b981" : user.status === "pending" ? "#f59e0b" : "#ef4444",
                   backgroundColor:
-                    user.status === "active" ? "#10b98120" : user.status === "pending" ? "#f59e0b20" : "#ef444420",
-                  color: user.status === "active" ? "#10b981" : user.status === "pending" ? "#f59e0b" : "#ef4444",
+                    user.status === "active" ? "#10b98115" : user.status === "pending" ? "#f59e0b15" : "#ef444415",
+                  color: user.status === "active" ? "#059669" : user.status === "pending" ? "#b45309" : "#b91c1c",
                 }}
               >
                 {user.status}
               </Badge>
             </div>
 
-            <p className="text-muted-foreground text-xs">{new Date(user.created_at).toLocaleString()}</p>
+            <p className="text-muted-foreground pt-1 text-[10px]">{new Date(user.created_at).toLocaleString()}</p>
           </div>
 
-          {/* ACTIONS */}
           <DropdownMenu>
-            <DropdownMenuTrigger>
-              <Button size="icon" variant="ghost">
+            <DropdownMenuTrigger asChild>
+              <Button size="icon" variant="ghost" className="h-8 w-8">
                 <MoreVertical className="h-4 w-4" />
               </Button>
             </DropdownMenuTrigger>

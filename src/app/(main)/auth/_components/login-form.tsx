@@ -25,8 +25,8 @@ export function LoginForm() {
   const form = useForm<z.infer<typeof FormSchema>>({
     resolver: zodResolver(FormSchema),
     defaultValues: {
-      email: "",
-      password: "",
+      email: IS_DEMO ? "test@gmail.com" : "",
+      password: IS_DEMO ? "test123" : "",
     },
   });
 
@@ -42,7 +42,6 @@ export function LoginForm() {
       }
     }
 
-    // 🟢 NORMAL API MODE
     try {
       await authService.login({
         email: data.email,

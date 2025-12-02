@@ -5,7 +5,7 @@ import { Users, Lock, LayoutDashboard, LayoutDashboardIcon, UserCircle, type Luc
 export interface NavSubItem {
   title: string;
   url: string;
-  icon?: LucideIcon;
+  icon: LucideIcon;
   comingSoon?: boolean;
   newTab?: boolean;
   isNew?: boolean;
@@ -14,7 +14,7 @@ export interface NavSubItem {
 export interface NavMainItem {
   title: string;
   url: string;
-  icon?: LucideIcon;
+  icon: LucideIcon;
   subItems?: NavSubItem[];
   comingSoon?: boolean;
   newTab?: boolean;
