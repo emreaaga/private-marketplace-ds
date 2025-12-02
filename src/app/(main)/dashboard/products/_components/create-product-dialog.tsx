@@ -46,7 +46,6 @@ const defaultForm = {
 
 type FormValues = typeof defaultForm;
 
-// Выносим компонент наружу
 function ProductFormContent({
   form,
   preview,
@@ -64,7 +63,6 @@ function ProductFormContent({
 }) {
   return (
     <>
-      {/* Фото загрузка */}
       <FormItem>
         <FormLabel>Фото товара</FormLabel>
         <FormControl>
@@ -94,7 +92,6 @@ function ProductFormContent({
         </FormControl>
       </FormItem>
 
-      {/* Название и категория */}
       <div className="grid gap-4 sm:grid-cols-2">
         <FormField
           control={form.control}
@@ -125,7 +122,6 @@ function ProductFormContent({
         />
       </div>
 
-      {/* Единица, количество, цена */}
       <div className="grid gap-4 sm:grid-cols-3">
         <FormField
           control={form.control}
@@ -170,7 +166,6 @@ function ProductFormContent({
         />
       </div>
 
-      {/* Комментарий */}
       <FormField
         control={form.control}
         name="comment"
@@ -178,18 +173,13 @@ function ProductFormContent({
           <FormItem>
             <FormLabel>Комментарий</FormLabel>
             <FormControl>
-              <Textarea
-                placeholder="Высокое качество, крупные ядра..."
-                className="min-h-[80px] resize-none"
-                {...field}
-              />
+              <Textarea placeholder="Высокое качество, крупные ядра..." className="min-h-20 resize-none" {...field} />
             </FormControl>
             <FormMessage />
           </FormItem>
         )}
       />
 
-      {/* Публичный товар */}
       <FormField
         control={form.control}
         name="is_public"
@@ -206,7 +196,6 @@ function ProductFormContent({
         )}
       />
 
-      {/* Кнопки */}
       {isDesktop ? (
         <DialogFooter className="gap-2 sm:gap-0">
           <Button type="button" variant="outline" onClick={onCancel}>
@@ -230,7 +219,7 @@ export function CreateProductDialog({
   onCreate,
   buttonClassName,
 }: {
-  onCreate: (data: any) => void;
+  onCreate: (data: FormValues) => void;
   buttonClassName?: string;
 }) {
   const [open, setOpen] = useState(false);
@@ -329,7 +318,6 @@ export function CreateProductDialog({
                 preview={preview}
                 isDesktop={isDesktop}
                 onPhotoUpload={handlePhotoUpload}
-                // eslint-disable-next-line max-lines
                 onRemovePhoto={handleRemovePhoto}
                 onCancel={handleCancel}
               />
