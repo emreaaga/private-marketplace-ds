@@ -8,9 +8,9 @@ import type { Product } from "@/features/products/types/product.types";
 import { Button } from "@/shared/ui/atoms/button";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/shared/ui/atoms/dropdown-menu";
 
 interface ProductsTableProps {
@@ -51,7 +51,7 @@ export function ProductsTable({ products }: ProductsTableProps) {
                       <MoreVertical className="h-4 w-4" />
                     </Button>
                   </DropdownMenuTrigger>
-                  <DropdownMenuContent>
+                  <DropdownMenuContent align="end">
                     <DropdownMenuItem>Редактировать</DropdownMenuItem>
                     <DropdownMenuItem>Удалить</DropdownMenuItem>
                     <DropdownMenuItem>Сделать публичным</DropdownMenuItem>

@@ -3,8 +3,8 @@
 import { useState } from "react";
 
 import { Copy, RefreshCcw, Link as LinkIcon, Check } from "lucide-react";
-import { toast } from "sonner";
 
+import { copyStoreLink, generateNewStoreLink } from "@/features/clients/lib/store-link";
 import { Button } from "@/shared/ui/atoms/button";
 import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/shared/ui/atoms/card";
 import { Label } from "@/shared/ui/atoms/label";
@@ -17,25 +17,15 @@ export function StoreLinkCard() {
   const [expireAfter, setExpireAfter] = useState<ExpireAfter>("never");
   const [copied, setCopied] = useState(false);
 
-  const handleCopy = () => {
-    if (!navigator?.clipboard) return;
-
-    navigator.clipboard
-      .writeText(storeUrl)
-      .then(() => {
-        setCopied(true);
-        toast.success("Ссылка скопирована");
-        setTimeout(() => setCopied(false), 2000);
-      })
-      .catch(() => {
-        toast.error("Не удалось скопировать");
-      });
+  const handleCopy = async () => {
+    await copyStoreLink(storeUrl, () => {
+      setCopied(true);
+      setTimeout(() => setCopied(false), 2000);
+    });
   };
 
   const handleRegenerate = () => {
-    const random = Math.random().toString(36).slice(2, 8);
-    setStoreUrl(`https://dashboard.crocopay.uz/seller/emir-nuts-${random}`);
-    toast.success("Ссылка обновлена");
+    setStoreUrl(generateNewStoreLink(storeUrl));
   };
 
   return (

@@ -2,25 +2,26 @@
 
 import { Filter } from "lucide-react";
 
+import type { ProductSort } from "@/features/products/lib/filter-products";
 import { Button } from "@/shared/ui/atoms/button";
 import {
   Drawer,
   DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
   DrawerDescription,
   DrawerFooter,
+  DrawerHeader,
+  DrawerTitle,
 } from "@/shared/ui/atoms/drawer";
-import { Select, SelectTrigger, SelectValue, SelectItem, SelectContent } from "@/shared/ui/atoms/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 
 interface ProductsFiltersDrawerProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
   category: string;
-  sort: string;
+  sort: ProductSort;
   categories: string[];
   onChangeCategory: (value: string) => void;
-  onChangeSort: (value: string) => void;
+  onChangeSort: (value: ProductSort) => void;
 }
 
 export function ProductsFiltersDrawer({
@@ -74,7 +75,7 @@ export function ProductsFiltersDrawer({
 
             <div className="space-y-2">
               <p className="text-sm font-medium">Сортировка</p>
-              <Select value={sort} onValueChange={onChangeSort}>
+              <Select value={sort} onValueChange={(v) => onChangeSort(v as ProductSort)}>
                 <SelectTrigger className="w-full">
                   <SelectValue placeholder="Сортировка" />
                 </SelectTrigger>
