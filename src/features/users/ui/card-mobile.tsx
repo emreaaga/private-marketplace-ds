@@ -1,6 +1,6 @@
+import type { User } from "@/features/users/types/user.types";
 import { RoleBadge } from "@/shared/ui/molecules/badges/role-badge";
 import { StatusBadge } from "@/shared/ui/molecules/badges/status-badge";
-import type { User } from "@/features/users/types/user.types";
 
 interface UserCardMobileProps {
   user: User;

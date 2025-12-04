@@ -32,6 +32,8 @@ export default function UsersPage() {
 
   return (
     <div className="p-0 sm:p-2">
+      <h2 className="mb-2 text-xl font-bold tracking-tight">Админ панель</h2>
+
       <UsersListResponsive
         users={users}
         onEdit={handleEdit}

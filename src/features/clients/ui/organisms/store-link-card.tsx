@@ -6,8 +6,7 @@ import { Copy, RefreshCcw, Link as LinkIcon, Check } from "lucide-react";
 
 import { copyStoreLink, generateNewStoreLink } from "@/features/clients/lib/store-link";
 import { Button } from "@/shared/ui/atoms/button";
-import { Card, CardHeader, CardTitle, CardDescription, CardContent } from "@/shared/ui/atoms/card";
-import { Label } from "@/shared/ui/atoms/label";
+import { Card, CardHeader, CardTitle, CardContent } from "@/shared/ui/atoms/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 
 type ExpireAfter = "never" | "7d" | "30d";
@@ -31,55 +30,49 @@ export function StoreLinkCard() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle className="flex items-center gap-2">
+        <CardTitle className="flex items-center gap-2 text-lg">
           <LinkIcon className="h-5 w-5" />
           Ссылка на витрину
         </CardTitle>
-        <CardDescription>Поделитесь этой ссылкой с клиентами для доступа к каталогу.</CardDescription>
+
+        <p className="text-muted-foreground hidden text-sm sm:block">
+          Поделитесь этой ссылкой с клиентами для доступа к каталогу.
+        </p>
       </CardHeader>
+
       <CardContent className="space-y-4">
         <div className="space-y-2">
-          <Label>URL вашей витрины</Label>
-          <div className="flex flex-col gap-2">
-            <div className="bg-muted/40 flex min-w-0 items-center rounded-lg border px-3 py-2.5 text-sm">
+          <div className="flex items-center gap-2">
+            <div className="bg-muted/40 flex min-w-0 flex-1 items-center rounded-lg border px-3 py-2 text-sm">
               <span className="truncate">{storeUrl}</span>
             </div>
 
-            <div className="flex flex-col gap-2 sm:flex-row">
-              <Button type="button" variant="outline" className="w-full sm:flex-1" onClick={handleCopy}>
-                {copied ? (
-                  <>
-                    <Check className="mr-2 h-4 w-4" />
-                    Скопировано
-                  </>
-                ) : (
-                  <>
-                    <Copy className="mr-2 h-4 w-4" />
-                    Копировать
-                  </>
-                )}
-              </Button>
-
-              <Button
-                type="button"
-                variant="outline"
-                size="icon"
-                onClick={handleRegenerate}
-                className="w-full sm:w-auto sm:shrink-0"
-              >
-                <RefreshCcw className="h-4 w-4" />
-              </Button>
-            </div>
+            <Button type="button" variant="outline" size="icon" onClick={handleRegenerate} className="h-9 w-9 shrink-0">
+              <RefreshCcw className="h-4 w-4" />
+            </Button>
           </div>
-          <p className="text-muted-foreground text-xs">При обновлении ссылки старая перестанет работать.</p>
         </div>
 
-        <div className="space-y-2">
-          <Label>Срок действия ссылки</Label>
+        <div className="flex items-center gap-2">
+          <Button type="button" variant="outline" className="flex-1" onClick={handleCopy}>
+            {copied ? (
+              <>
+                <Check className="mr-1 h-2 w-2" />
+                Скопировано
+              </>
+            ) : (
+              <>
+                <Copy className="mr-1 h-2 w-2" />
+                Копировать
+              </>
+            )}
+          </Button>
+
           <Select value={expireAfter} onValueChange={(value) => setExpireAfter(value as ExpireAfter)}>
-            <SelectTrigger>
-              <SelectValue placeholder="Бессрочно" />
+            <SelectTrigger className="w-[130px] shrink-0">
+              <SelectValue placeholder="Срок" />
             </SelectTrigger>
+
             <SelectContent>
               <SelectItem value="never">Бессрочно</SelectItem>
               <SelectItem value="7d">7 дней</SelectItem>

@@ -14,23 +14,35 @@ export function AccessSettingsCard() {
     <Card>
       <CardHeader>
         <CardTitle>Настройки доступа</CardTitle>
-        <CardDescription>Определите правила доступа к каталогу.</CardDescription>
+
+        <CardDescription className="hidden sm:block">Определите правила доступа к каталогу.</CardDescription>
       </CardHeader>
+
       <CardContent className="space-y-6">
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex-1 space-y-1">
+        <div className="space-y-1">
+          <div className="flex items-center justify-between">
             <Label className="text-base">Требовать регистрацию</Label>
-            <p className="text-muted-foreground text-sm">Клиент должен создать аккаунт перед просмотром.</p>
+
+            <Switch
+              checked={requireRegistration}
+              onCheckedChange={setRequireRegistration}
+              className="origin-right scale-125"
+            />
           </div>
-          <Switch checked={requireRegistration} onCheckedChange={setRequireRegistration} className="sm:shrink-0" />
+
+          <p className="text-muted-foreground hidden text-sm sm:block">
+            Клиент должен создать аккаунт перед просмотром.
+          </p>
         </div>
 
-        <div className="flex flex-col gap-2 sm:flex-row sm:items-center sm:justify-between">
-          <div className="flex-1 space-y-1">
+        <div className="space-y-1">
+          <div className="flex items-center justify-between">
             <Label className="text-base">Ручное подтверждение</Label>
-            <p className="text-muted-foreground text-sm">Новые клиенты попадают на модерацию.</p>
+
+            <Switch checked={requireApproval} onCheckedChange={setRequireApproval} className="origin-right scale-125" />
           </div>
-          <Switch checked={requireApproval} onCheckedChange={setRequireApproval} className="sm:shrink-0" />
+
+          <p className="text-muted-foreground hidden text-sm sm:block">Новые клиенты попадают на модерацию.</p>
         </div>
       </CardContent>
     </Card>
