@@ -5,9 +5,9 @@ import { Inter } from "next/font/google";
 
 import { Analytics } from "@vercel/analytics/next";
 
-import { Toaster } from "@/components/ui/sonner";
-import { APP_CONFIG } from "@/config/app-config";
-import { PreferencesStoreProvider } from "@/stores/preferences/preferences-provider";
+import { APP_CONFIG } from "@/shared/lib/app-config";
+import { PreferencesStoreProvider } from "@/shared/styles/preferences-provider";
+import { Toaster } from "@/shared/ui/atoms/sonner";
 
 import "./globals.css";
 

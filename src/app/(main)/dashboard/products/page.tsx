@@ -4,19 +4,18 @@ import { useMemo, useState } from "react";
 
 import { Search, Package, Filter } from "lucide-react";
 
-import { Button } from "@/components/ui/button";
-import { Input } from "@/components/ui/input";
-import { Select, SelectTrigger, SelectValue, SelectItem, SelectContent } from "@/components/ui/select";
-import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/components/ui/tabs";
-import { useIsMobile } from "@/hooks/use-mobile";
-
-import { fakeProducts, type Product } from "../../../../data/fake-products";
-
-import { CreateProductDialog } from "./_components/create-product-dialog";
-import { ProductViewDrawer } from "./_components/product-view-drawer";
-import { ProductsFiltersDrawer } from "./_components/products-filters-drawer";
-import { ProductsGrid } from "./_components/products-grid";
-import { ProductsTable } from "./_components/products-table";
+import { fakeProducts } from "@/features/products/fake-products";
+import { type Product } from "@/features/products/types/product.types";
+import { CreateProductDialog } from "@/features/products/ui/organisms/create-product-dialog";
+import { ProductViewDrawer } from "@/features/products/ui/organisms/product-view-drawer";
+import { ProductsFiltersDrawer } from "@/features/products/ui/organisms/products-filters-drawer";
+import { ProductsGrid } from "@/features/products/ui/organisms/products-grid";
+import { ProductsTable } from "@/features/products/ui/organisms/products-table";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { Button } from "@/shared/ui/atoms/button";
+import { Input } from "@/shared/ui/atoms/input";
+import { Select, SelectTrigger, SelectValue, SelectItem, SelectContent } from "@/shared/ui/atoms/select";
+import { Tabs, TabsList, TabsTrigger, TabsContent } from "@/shared/ui/atoms/tabs";
 
 export default function ProductsPage() {
   const [search, setSearch] = useState("");
@@ -59,7 +58,6 @@ export default function ProductsPage() {
   };
 
   const handleCreateProduct = (data: any) => {
-    // пока просто лог, потом подключишь API
     console.log("create product", data);
   };
 

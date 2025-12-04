@@ -1,10 +1,26 @@
 "use client";
 
-import { AccessSettingsCard } from "./_components/access-settings-card";
-import { ClientsSection } from "./_components/clients-section";
-import { StoreLinkCard } from "./_components/store-link-card";
+import { AccessSettingsCard } from "@/features/clients/ui/organisms/access-settings-card";
+import { StoreLinkCard } from "@/features/clients/ui/organisms/store-link-card";
+import { useUserActions } from "@/features/users/hooks/use-user-actions";
+import { useUsers } from "@/features/users/hooks/use-users";
+import { EditUserForm } from "@/features/users/ui/organisms/forms/edit-user";
+import { UsersListResponsive } from "@/features/users/ui/organisms/lists/user-responsive";
 
 export default function ClientsPage() {
+  const { users, setUsers, isLoading } = useUsers();
+
+  const {
+    editingUser,
+    setEditingUser,
+    handleDelete,
+    handleStatusChange,
+    handleRoleChange,
+    handleEdit,
+    handleSaveEdit,
+  } = useUserActions({
+    onUsersUpdate: setUsers,
+  });
   return (
     <div className="space-y-6">
       <div className="space-y-2">
@@ -19,7 +35,21 @@ export default function ClientsPage() {
         <AccessSettingsCard />
       </div>
 
-      <ClientsSection />
+      <UsersListResponsive
+        users={users}
+        onEdit={handleEdit}
+        onDelete={handleDelete}
+        onRoleChange={handleRoleChange}
+        onStatusChange={handleStatusChange}
+      />
+      {editingUser && (
+        <EditUserForm
+          user={editingUser}
+          open={!!editingUser}
+          onOpenChange={(open) => !open && setEditingUser(null)}
+          onSave={handleSaveEdit}
+        />
+      )}
     </div>
   );
 }

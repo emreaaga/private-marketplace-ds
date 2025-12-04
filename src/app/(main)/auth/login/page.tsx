@@ -2,7 +2,7 @@ import Link from "next/link";
 
 import { Command } from "lucide-react";
 
-import { LoginForm } from "../_components/login-form";
+import { LoginForm } from "@/features/auth/ui/organisms/login-form";
 
 export default function LoginV1() {
   return (
