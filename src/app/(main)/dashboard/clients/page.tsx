@@ -8,7 +8,7 @@ import { EditUserForm } from "@/features/users/ui/organisms/forms/edit-user";
 import { UsersListResponsive } from "@/features/users/ui/organisms/lists/user-responsive";
 
 export default function ClientsPage() {
-  const { users, setUsers, isLoading } = useUsers();
+  const { users, setUsers } = useUsers();
 
   const {
     editingUser,
