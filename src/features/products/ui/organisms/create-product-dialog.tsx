@@ -115,14 +115,13 @@ export function CreateProductDialog({ onCreate, buttonClassName }: CreateProduct
   return (
     <Drawer open={open} onOpenChange={setOpen}>
       <DrawerTrigger asChild>
-        <Button className={buttonClassName}>Создать продукт</Button>
+        <Button className={buttonClassName}>Создать +</Button>
       </DrawerTrigger>
 
       <DrawerContent className="max-h-[90vh]">
         <div className="overflow-y-auto px-4">
           <DrawerHeader>
             <DrawerTitle>Создать продукт</DrawerTitle>
-            <DrawerDescription>Добавьте оптовый товар в каталог</DrawerDescription>
           </DrawerHeader>
 
           <Form {...form}>

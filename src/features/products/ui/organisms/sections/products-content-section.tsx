@@ -32,7 +32,7 @@ export function ProductsContentSection({
 
   return (
     <>
-      <TabsContent value="grid" className="mt-8">
+      <TabsContent value="grid" className="mt-2">
         <ProductsGrid products={products} isMobile={isMobile} onOpenMobileProduct={onOpenMobileProduct} />
       </TabsContent>
 

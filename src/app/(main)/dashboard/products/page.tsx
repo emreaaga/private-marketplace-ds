@@ -34,7 +34,7 @@ export default function ProductsPage() {
 
   return (
     <>
-      <Tabs defaultValue="grid" className="mx-auto max-w-6xl py-10">
+      <Tabs defaultValue="grid" className="mx-auto max-w-6xl py-2">
         <ProductsHeaderSection onCreate={handleCreateProduct} />
 
         <ProductsToolbarSection
