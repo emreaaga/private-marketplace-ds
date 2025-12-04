@@ -22,46 +22,56 @@ export function LoginForm() {
   };
 
   return (
-    <Form {...form}>
-      <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-4">
-        <FormField
-          control={form.control}
-          name="email"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Email</FormLabel>
-              <FormControl>
-                <Input id="email" type="email" placeholder="you@example.com" autoComplete="email" {...field} />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+    <div className="flex w-full justify-center px-4">
+      <Form {...form}>
+        <form onSubmit={form.handleSubmit(onSubmit)} className="w-full max-w-sm space-y-5 p-0 sm:p-2">
+          <FormField
+            control={form.control}
+            name="email"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm sm:text-base">Email</FormLabel>
+                <FormControl>
+                  <Input
+                    id="email"
+                    type="email"
+                    placeholder="you@example.com"
+                    autoComplete="email"
+                    className="h-11 text-sm sm:text-base"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
 
-        <FormField
-          control={form.control}
-          name="password"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Пароль</FormLabel>
-              <FormControl>
-                <Input
-                  id="password"
-                  type="password"
-                  placeholder="••••••••"
-                  autoComplete="current-password"
-                  {...field}
-                />
-              </FormControl>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
+          <FormField
+            control={form.control}
+            name="password"
+            render={({ field }) => (
+              <FormItem>
+                <FormLabel className="text-sm sm:text-base">Пароль</FormLabel>
+                <FormControl>
+                  <Input
+                    id="password"
+                    type="password"
+                    placeholder="••••••••"
+                    autoComplete="current-password"
+                    className="h-11 text-sm sm:text-base"
+                    {...field}
+                  />
+                </FormControl>
+                <FormMessage className="text-xs" />
+              </FormItem>
+            )}
+          />
 
-        <Button className="w-full" type="submit">
-          Войти
-        </Button>
-      </form>
-    </Form>
+          <Button className="h-12 w-full text-sm sm:text-base" type="submit">
+            Войти
+          </Button>
+        </form>
+      </Form>
+    </div>
   );
 }

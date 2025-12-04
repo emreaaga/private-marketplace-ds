@@ -1,8 +1,10 @@
 "use client";
 
+import { useState } from "react";
+
 import Image from "next/image";
 
-import { Coins, MoreVertical, Package, Tag } from "lucide-react";
+import { Coins, MoreVertical, Package, ShoppingCart, Tag } from "lucide-react";
 
 import type { Product } from "@/features/products/types/product.types";
 import { Button } from "@/shared/ui/atoms/button";
@@ -13,6 +15,8 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/shared/ui/atoms/dropdown-menu";
+
+import { AddToCartToggle } from "./add-to-card-toggle";
 
 interface ProductCardProps {
   product: Product;
@@ -25,48 +29,28 @@ export function ProductCard({ product, isMobile, onOpenMobile }: ProductCardProp
     if (!isMobile || !onOpenMobile) return;
     onOpenMobile(product);
   };
+  const [inCart, setInCart] = useState(false);
 
   if (isMobile) {
     return (
       <Card
-        className="group relative cursor-pointer overflow-hidden rounded-2xl border-none bg-white shadow-sm transition-all duration-300 hover:shadow-md active:scale-[0.98]"
+        className="relative overflow-hidden rounded-xl border border-black/5 bg-white p-0 shadow-md transition-all duration-300 hover:shadow-lg active:scale-[0.98]"
         onClick={handleClick}
       >
-        <div className="relative aspect-3/4 w-full overflow-hidden">
-          <Image
-            src={product.photo_url}
-            alt={product.name}
-            fill
-            className="object-cover transition-transform duration-500 group-hover:scale-105"
-          />
-          <div className="absolute inset-0 bg-linear-to-t from-black/60 via-black/0 to-black/0" />
+        <div className="relative aspect-3/4 w-full">
+          <Image src={product.photo_url} alt={product.name} fill className="object-cover" />
+
+          <div className="absolute top-2 left-2 rounded-md bg-white/90 px-2 py-[3px] shadow backdrop-blur">
+            <span className="text-sm leading-none font-bold text-gray-900">{product.price.toLocaleString()} $</span>
+          </div>
 
           {product.quantity > 0 && (
-            <div className="absolute top-2 right-2 rounded-full bg-white/90 px-2.5 py-1 shadow-sm backdrop-blur-sm">
-              <p className="text-[10px] font-semibold text-emerald-600">{product.quantity} шт</p>
+            <div className="absolute top-2 right-2 rounded-md bg-white/90 px-2 py-[3px] shadow backdrop-blur">
+              <span className="text-[11px] leading-none font-semibold text-emerald-600">{product.quantity} шт</span>
             </div>
           )}
-
-          {product.quantity === 0 && (
-            <div className="absolute inset-0 flex items-center justify-center bg-black/50 backdrop-blur-[2px]">
-              <span className="text-sm font-semibold text-white">Нет в наличии</span>
-            </div>
-          )}
-
-          <div className="absolute right-0 bottom-0 left-0 p-3">
-            <div className="flex items-end justify-between">
-              <div className="mr-2 min-w-0 flex-1">
-                <p className="mb-1 line-clamp-2 text-xs font-medium text-white drop-shadow-sm">{product.name}</p>
-                <div className="inline-flex items-baseline gap-1 rounded-lg bg-white/95 px-2 py-1 shadow-sm backdrop-blur-sm">
-                  <span className="text-lg font-bold text-gray-900">{product.price.toLocaleString()}</span>
-                  <span className="text-xs font-semibold text-gray-600">$</span>
-                </div>
-              </div>
-
-              <div className="rounded-lg bg-white/90 px-2 py-1 shadow-sm backdrop-blur-sm">
-                <p className="text-[10px] font-medium text-gray-600">{product.unit}</p>
-              </div>
-            </div>
+          <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 to-transparent p-3">
+            <p className="line-clamp-1 text-[13px] font-medium text-white drop-shadow">{product.name}</p>
           </div>
         </div>
       </Card>

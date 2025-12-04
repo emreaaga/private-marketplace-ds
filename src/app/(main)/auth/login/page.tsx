@@ -21,8 +21,11 @@ export default function LoginV1() {
       <div className="bg-background flex w-full items-center justify-center p-8 lg:w-2/3">
         <div className="w-full max-w-md space-y-10 py-24 lg:py-32">
           <div className="space-y-4 text-center">
-            <div className="font-medium tracking-tight">Вход</div>
-            <div className="text-muted-foreground mx-auto max-w-xl">С возвращением. Введите свой email и пароль.</div>
+            <div className="text-xl font-semibold tracking-tight sm:text-3xl">Вход</div>
+
+            <div className="text-muted-foreground mx-auto hidden max-w-xl sm:block">
+              С возвращением. Введите свой email и пароль.
+            </div>
           </div>
           <div className="space-y-4">
             <LoginForm />
