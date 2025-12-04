@@ -45,7 +45,7 @@ export function MobileBottomNav({ items }: { items: NavGroup[] }) {
       )}
     >
       <div
-        className="relative mb-6 flex w-full max-w-md items-center justify-around gap-1 rounded-2xl border border-gray-200/50 bg-white/80 px-3 py-3 shadow-2xl backdrop-blur-xl"
+        className="relative mb-1 flex w-full max-w-md items-center justify-around gap-1 rounded-2xl border border-gray-200/50 bg-white/80 px-3 py-3 shadow-2xl backdrop-blur-xl"
         style={{
           boxShadow: "0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)",
         }}
