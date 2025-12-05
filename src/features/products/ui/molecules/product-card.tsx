@@ -1,10 +1,8 @@
 "use client";
 
-import { useState } from "react";
-
 import Image from "next/image";
 
-import { Coins, MoreVertical, Package, ShoppingCart, Tag } from "lucide-react";
+import { Coins, MoreVertical, Package, Tag } from "lucide-react";
 
 import type { Product } from "@/features/products/types/product.types";
 import { Button } from "@/shared/ui/atoms/button";
@@ -15,8 +13,6 @@ import {
   DropdownMenuItem,
   DropdownMenuTrigger,
 } from "@/shared/ui/atoms/dropdown-menu";
-
-import { AddToCartToggle } from "./add-to-card-toggle";
 
 interface ProductCardProps {
   product: Product;
@@ -29,7 +25,6 @@ export function ProductCard({ product, isMobile, onOpenMobile }: ProductCardProp
     if (!isMobile || !onOpenMobile) return;
     onOpenMobile(product);
   };
-  const [inCart, setInCart] = useState(false);
 
   if (isMobile) {
     return (
@@ -40,17 +35,14 @@ export function ProductCard({ product, isMobile, onOpenMobile }: ProductCardProp
         <div className="relative aspect-3/4 w-full">
           <Image src={product.photo_url} alt={product.name} fill className="object-cover" />
 
-          <div className="absolute top-2 left-2 rounded-md bg-white/90 px-2 py-[3px] shadow backdrop-blur">
-            <span className="text-sm leading-none font-bold text-gray-900">{product.price.toLocaleString()} $</span>
-          </div>
-
-          {product.quantity > 0 && (
-            <div className="absolute top-2 right-2 rounded-md bg-white/90 px-2 py-[3px] shadow backdrop-blur">
-              <span className="text-[11px] leading-none font-semibold text-emerald-600">{product.quantity} шт</span>
-            </div>
-          )}
           <div className="absolute inset-x-0 bottom-0 bg-linear-to-t from-black/60 to-transparent p-3">
-            <p className="line-clamp-1 text-[13px] font-medium text-white drop-shadow">{product.name}</p>
+            <p className="line-clamp-1 text-[14px] font-semibold tracking-tight text-white/95 drop-shadow-[0_1px_2px_rgba(0,0,0,0.45)]">
+              {product.name}
+            </p>
+
+            <div className="absolute right-2 bottom-2 rounded-xl bg-white/15 px-2 py-[3px] text-[11px] font-medium text-white shadow-[inset_0_0_0.5px_rgba(255,255,255,0.6)] shadow-black/20 backdrop-blur-md">
+              {product.price.toLocaleString()}$ / {product.quantity}
+            </div>
           </div>
         </div>
       </Card>
