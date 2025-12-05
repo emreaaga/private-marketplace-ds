@@ -1,6 +1,6 @@
 "use client";
 
-import { Users, Lock, LayoutDashboard, LayoutDashboardIcon, UserCircle } from "lucide-react";
+import { Users, LayoutDashboard, Package, Contact, ShoppingCart } from "lucide-react";
 
 import { NavGroup } from "@/features/sidebar/types/sidebar.types";
 
@@ -28,18 +28,17 @@ export const sidebarItems: NavGroup[] = [
       {
         title: "Мои продукты",
         url: "/dashboard/products",
-        icon: LayoutDashboardIcon,
+        icon: Package,
       },
       {
         title: "Клиенты",
         url: "/dashboard/clients",
-        icon: UserCircle,
+        icon: Contact,
       },
       {
-        title: "Роли",
-        url: "/dashboard/coming-soon",
-        icon: Lock,
-        comingSoon: true,
+        title: "Корзина",
+        url: "/dashboard/order-cart",
+        icon: ShoppingCart,
       },
     ],
   },

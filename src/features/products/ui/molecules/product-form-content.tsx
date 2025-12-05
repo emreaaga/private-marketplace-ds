@@ -10,6 +10,7 @@ import { DialogFooter } from "@/shared/ui/atoms/dialog";
 import { DrawerFooter } from "@/shared/ui/atoms/drawer";
 import { FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/atoms/form";
 import { Input } from "@/shared/ui/atoms/input";
+import { Select, SelectTrigger, SelectContent, SelectItem, SelectValue } from "@/shared/ui/atoms/select";
 import { Switch } from "@/shared/ui/atoms/switch";
 import { Textarea } from "@/shared/ui/atoms/textarea";
 
@@ -23,6 +24,60 @@ export const productFormDefaultValues = {
   is_public: false,
   photo_url: "",
 };
+
+const CATEGORY_LIST = [
+  "Орехи и сухофрукты",
+  "Овощи",
+  "Фрукты",
+  "Напитки",
+  "Специи",
+  "Сладости",
+  "Бакалея",
+  "Молочная продукция",
+  "Заморозка",
+  "Кондитерка",
+  "Мясо",
+  "Рыба",
+  "Крупы",
+  "Одежда",
+  "Обувь",
+  "Аксессуары",
+  "Бытовая химия",
+  "Дом и кухня",
+  "Текстиль",
+  "Канцтовары",
+  "Игрушки",
+  "Косметика",
+  "Парфюмерия",
+  "Электроника",
+  "Телефоны и аксессуары",
+  "Автотовары",
+  "Стройматериалы",
+  "Сад и огород",
+];
+
+const UNIT_LIST = [
+  "шт",
+  "пара",
+  "комплект",
+  "серия",
+  "упаковка",
+  "коробка",
+  "мешок",
+  "ящик",
+  "кг",
+  "г",
+  "л",
+  "мл",
+  "бутылка",
+  "банка",
+  "рулон",
+  "метр",
+  "см",
+  "пакет",
+  "мешок 25кг",
+  "мешок 50кг",
+];
 
 export type ProductFormValues = typeof productFormDefaultValues;
 
@@ -94,10 +149,23 @@ export function ProductFormContent({
           name="category"
           render={({ field }) => (
             <FormItem>
-              <FormLabel>Категория</FormLabel>
-              <FormControl>
-                <Input placeholder="Орехи" {...field} />
-              </FormControl>
+              <FormLabel>Категория *</FormLabel>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите категорию" />
+                  </SelectTrigger>
+                </FormControl>
+
+                <SelectContent>
+                  {CATEGORY_LIST.map((cat) => (
+                    <SelectItem key={cat} value={cat}>
+                      {cat}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               <FormMessage />
             </FormItem>
           )}
@@ -111,9 +179,22 @@ export function ProductFormContent({
           render={({ field }) => (
             <FormItem>
               <FormLabel>Ед. изм.</FormLabel>
-              <FormControl>
-                <Input placeholder="кг" {...field} />
-              </FormControl>
+              <Select value={field.value} onValueChange={field.onChange}>
+                <FormControl>
+                  <SelectTrigger>
+                    <SelectValue placeholder="Выберите ед. изм." />
+                  </SelectTrigger>
+                </FormControl>
+
+                <SelectContent>
+                  {UNIT_LIST.map((unit) => (
+                    <SelectItem key={unit} value={unit}>
+                      {unit}
+                    </SelectItem>
+                  ))}
+                </SelectContent>
+              </Select>
+
               <FormMessage />
             </FormItem>
           )}
