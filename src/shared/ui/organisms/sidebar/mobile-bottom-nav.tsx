@@ -44,12 +44,7 @@ export function MobileBottomNav({ items }: { items: NavGroup[] }) {
         hidden && "translate-y-full",
       )}
     >
-      <div
-        className="relative mb-1 flex w-full max-w-md items-center justify-around gap-1 rounded-2xl border border-gray-200/50 bg-white/80 px-3 py-1 shadow-2xl backdrop-blur-xl"
-        style={{
-          boxShadow: "0 10px 40px -10px rgba(0, 0, 0, 0.15), 0 0 0 1px rgba(0, 0, 0, 0.05)",
-        }}
-      >
+      <div className="relative mb-1 flex w-full max-w-md items-center justify-around gap-1 rounded-2xl bg-white/15 px-3 py-1 shadow-[inset_0_0_1px_rgba(255,255,255,0.4)] shadow-black/20 backdrop-blur-md">
         {bottomItems.map((item) => {
           const isActive = path === item.url || item.subItems?.some((s) => path.startsWith(s.url));
           const Icon = item.icon;
@@ -59,14 +54,14 @@ export function MobileBottomNav({ items }: { items: NavGroup[] }) {
               key={item.title}
               href={item.url}
               className={cn(
-                "relative flex flex-1 items-center justify-center rounded-xl px-3 py-3 transition-all duration-200 active:scale-95",
-                isActive && "bg-primary",
+                "relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all duration-200 active:scale-95",
+                isActive && "bg-gray-900/95 shadow-[0_4px_12px_rgba(0,0,0,0.15)]",
               )}
             >
               <Icon
                 className={cn(
                   "h-6 w-6 transition-all duration-200",
-                  isActive ? "scale-110 text-white" : "text-gray-500",
+                  isActive ? "scale-110 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]" : "text-gray-900",
                 )}
                 strokeWidth={isActive ? 2.5 : 2}
               />

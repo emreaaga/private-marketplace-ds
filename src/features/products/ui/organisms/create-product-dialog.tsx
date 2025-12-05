@@ -20,14 +20,7 @@ import {
   DialogTitle,
   DialogTrigger,
 } from "@/shared/ui/atoms/dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerDescription,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerTrigger,
-} from "@/shared/ui/atoms/drawer";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/shared/ui/atoms/drawer";
 import { Form } from "@/shared/ui/atoms/form";
 
 interface CreateProductDialogProps {

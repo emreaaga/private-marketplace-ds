@@ -169,7 +169,7 @@ export function ProductFormContent({
           <FormItem className="flex flex-row items-center justify-between rounded-lg border p-4">
             <div className="space-y-0.5">
               <FormLabel className="text-base">Публичный товар</FormLabel>
-              <p className="text-muted-foreground text-sm">Товар будет виден всем пользователям</p>
+              <p className="hide text-muted-foreground hidden text-sm md:block">Товар будет виден всем пользователям</p>
             </div>
             <FormControl>
               <Switch checked={field.value} onCheckedChange={field.onChange} />
