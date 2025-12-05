@@ -15,7 +15,7 @@ import { StatCard } from "./stat-card";
 const recentOrders = [
   {
     id: "ORD-1045",
-    client: "Asat",
+    client: "Client1",
     items: 48,
     total: 3200,
     status: "В пути",
@@ -23,7 +23,7 @@ const recentOrders = [
   },
   {
     id: "ORD-1044",
-    client: "Tarlan",
+    client: "Client2",
     items: 24,
     total: 1800,
     status: "Подтвержден",
@@ -31,10 +31,10 @@ const recentOrders = [
   },
   {
     id: "ORD-1043",
-    client: "Dress House",
+    client: "Client3",
     items: 12,
     total: 950,
-    status: "Emre",
+    status: "Подтвержден",
     createdAt: "Вчера, 10:05",
   },
 ];

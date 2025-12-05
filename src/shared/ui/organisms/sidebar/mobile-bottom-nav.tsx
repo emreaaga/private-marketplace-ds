@@ -4,9 +4,6 @@ import { useEffect, useState } from "react";
 
 import { useRouter, usePathname } from "next/navigation";
 
-import { CheckCircle2 } from "lucide-react";
-import { toast } from "sonner";
-
 import type { NavGroup } from "@/features/sidebar/types/sidebar.types";
 import { cn } from "@/shared/lib/utils";
 
@@ -17,8 +14,6 @@ export function MobileBottomNav({ items }: { items: NavGroup[] }) {
 
   const flatItems = items.flatMap((g) => g.items);
   const bottomItems = flatItems.filter((i) => !i.comingSoon).slice(0, 5);
-
-  const isCartPage = path === "/dashboard/order-cart";
 
   useEffect(() => {
     let lastY = window.scrollY;
@@ -52,21 +47,12 @@ export function MobileBottomNav({ items }: { items: NavGroup[] }) {
         {bottomItems.map((item) => {
           const isActive = path === item.url || item.subItems?.some((s) => path.startsWith(s.url));
 
-          const Icon = isCartPage && item.url === "/dashboard/order-cart" ? CheckCircle2 : item.icon;
-
-          const handleClick = () => {
-            if (isCartPage && item.url === "/dashboard/order-cart") {
-              toast.success("Корзина подтверждена.");
-
-              return;
-            }
-            router.push(item.url);
-          };
+          const Icon = item.icon;
 
           return (
             <button
               key={item.title}
-              onClick={handleClick}
+              onClick={() => router.push(item.url)}
               className={cn(
                 "relative flex flex-1 items-center justify-center rounded-xl px-2 py-2.5 transition-all active:scale-95",
                 isActive && "bg-gray-900/95 shadow-[0_4px_12px_rgba(0,0,0,0.15)]",
@@ -75,11 +61,7 @@ export function MobileBottomNav({ items }: { items: NavGroup[] }) {
               <Icon
                 className={cn(
                   "h-6 w-6 transition-all",
-                  isCartPage && item.url === "/dashboard/order-cart"
-                    ? "text-emerald-500 drop-shadow-[0_0_6px_rgba(34,197,94,0.6)]" // зелёный + glow
-                    : isActive
-                      ? "scale-110 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]"
-                      : "text-gray-900",
+                  isActive ? "scale-110 text-white drop-shadow-[0_2px_6px_rgba(0,0,0,0.3)]" : "text-gray-900",
                 )}
                 strokeWidth={isActive ? 2.5 : 2}
               />

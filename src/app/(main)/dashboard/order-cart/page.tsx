@@ -1,5 +1,7 @@
 "use client";
 
+import { useState } from "react";
+
 import Image from "next/image";
 
 import { Minus, Plus, Trash2, CheckCircle2 } from "lucide-react";
@@ -8,28 +10,81 @@ import { fakeProducts } from "@/features/products/fake-products";
 import { Button } from "@/shared/ui/atoms/button";
 
 export default function OrderCartPage() {
-  const items = fakeProducts;
+  const [items, setItems] = useState(fakeProducts);
   const isEmpty = items.length === 0;
 
-  if (isEmpty) {
-    return (
-      <div className="mx-auto flex min-h-screen max-w-3xl flex-col px-4 py-4">
-        <h1 className="mb-4 text-2xl font-semibold">Корзина</h1>
-        <EmptyState />
-      </div>
+  const updateQuantity = (id: number, delta: number) => {
+    setItems(
+      (prev) =>
+        prev
+          .map((item) => (item.id === id ? { ...item, quantity: Math.max(0, item.quantity + delta) } : item))
+          .filter((item) => item.quantity > 0), // удаляем если стало 0
     );
-  }
+  };
+
+  if (isEmpty) return <EmptyState />;
 
   return (
-    <div className="mx-auto flex min-h-screen max-w-3xl flex-col gap-4 px-4 py-4 pb-6">
+    <div className="w-full space-y-5 pt-4 pb-24">
       <h1 className="text-2xl font-semibold">Корзина</h1>
 
-      <CartSummary items={items} />
-
-      <div className="mt-2 flex-1 space-y-3 md:space-y-4">
-        {items.map((item) => (
-          <CartItem key={item.id} item={item} />
+      <div className="overflow-hidden rounded-3xl border bg-white shadow-sm">
+        {items.map((item, idx) => (
+          <div key={item.id}>
+            <CartItem
+              item={item}
+              onIncrease={() => updateQuantity(item.id, +1)}
+              onDecrease={() => updateQuantity(item.id, -1)}
+            />
+            {idx !== items.length - 1 && <div className="mx-4 border-b" />}
+          </div>
         ))}
+      </div>
+
+      <CartSummary items={items} />
+    </div>
+  );
+}
+
+function CartItem({
+  item,
+  onIncrease,
+  onDecrease,
+}: {
+  item: (typeof fakeProducts)[number];
+  onIncrease: () => void;
+  onDecrease: () => void;
+}) {
+  const isSingle = item.quantity === 1;
+
+  return (
+    <div className="flex items-start justify-between gap-3 px-4 py-3 md:px-5 md:py-4">
+      {/* LEFT */}
+      <div className="flex gap-3">
+        <div className="relative h-16 w-16 overflow-hidden rounded-xl md:h-20 md:w-20">
+          <Image src={item.photo_url} alt={item.name} fill className="object-cover" />
+        </div>
+
+        <div className="flex flex-col space-y-1">
+          <p className="text-[15px] font-medium">{item.name}</p>
+          <p className="text-muted-foreground text-xs md:text-sm">
+            {item.unit} · {item.price.toLocaleString()}$
+          </p>
+          <p className="text-muted-foreground text-[11px]">Всего: {(item.quantity * item.price).toLocaleString()}$</p>
+        </div>
+      </div>
+
+      {/* RIGHT */}
+      <div className="flex shrink-0 items-center gap-2">
+        <Button variant="outline" size="icon" className="h-8 w-8 rounded-lg md:h-9 md:w-9" onClick={onDecrease}>
+          {isSingle ? <Trash2 className="h-4 w-4 text-red-500" /> : <Minus className="h-4 w-4" />}
+        </Button>
+
+        <span className="min-w-[30px] text-center text-sm md:text-base">{item.quantity}</span>
+
+        <Button variant="outline" size="icon" className="h-8 w-8 rounded-lg md:h-9 md:w-9" onClick={onIncrease}>
+          <Plus className="h-4 w-4" />
+        </Button>
       </div>
     </div>
   );
@@ -37,73 +92,32 @@ export default function OrderCartPage() {
 
 function CartSummary({ items }: { items: typeof fakeProducts }) {
   const total = items.reduce((acc, i) => acc + i.quantity * i.price, 0);
-  const count = items.length;
+  const count = items.reduce((acc, i) => acc + i.quantity, 0);
 
   return (
-    <div className="sticky top-2 z-30 flex justify-center">
-      <div className="relative inline-flex w-full max-w-md items-center gap-3 rounded-2xl bg-white/40 px-3 py-2 shadow-[inset_0_0_1px_rgba(255,255,255,0.4)] shadow-black/20 backdrop-blur-md md:max-w-none md:px-4 md:py-3">
+    <div className="rounded-3xl border bg-white px-5 py-5 shadow-lg">
+      <div className="mb-4 flex items-center justify-between">
         <div className="flex items-center gap-2">
           <CheckCircle2 className="h-5 w-5 text-emerald-600" />
-          <div className="flex flex-col">
-            <span className="text-xs font-medium md:text-sm">Выбрано</span>
-            <span className="text-sm font-semibold md:text-base">{count} позиций</span>
-          </div>
+          <span className="text-muted-foreground text-sm">
+            Выбрано: <span className="text-foreground font-semibold">{count}</span>
+          </span>
         </div>
 
-        <div className="ml-auto flex flex-col text-right">
-          <span className="text-xs font-medium md:text-sm">Итого</span>
-          <span className="text-sm font-semibold md:text-base">{total.toLocaleString()}$</span>
-        </div>
-
-        <Button size="sm" className="hidden rounded-xl text-xs font-medium whitespace-nowrap md:inline-flex md:text-sm">
-          Подтвердить
-        </Button>
-      </div>
-    </div>
-  );
-}
-
-function CartItem({ item }: { item: (typeof fakeProducts)[number] }) {
-  return (
-    <div className="bg-card flex w-full items-center gap-3 rounded-2xl border p-3 shadow-sm backdrop-blur-md md:gap-4 md:p-4">
-      <div className="relative h-20 w-20 overflow-hidden rounded-xl md:h-24 md:w-24">
-        <Image src={item.photo_url} alt={item.name} fill className="object-cover" />
-      </div>
-
-      <div className="flex flex-1 flex-col">
-        <p className="text-base font-medium">{item.name}</p>
-        <p className="text-muted-foreground text-xs md:text-sm">
-          {item.quantity} {item.unit} × {item.price.toLocaleString()}$
-        </p>
-
-        <div className="mt-2 flex items-center gap-2">
-          <Button type="button" variant="outline" size="icon" className="h-8 w-8 rounded-lg md:h-9 md:w-9">
-            <Minus className="h-4 w-4" />
-          </Button>
-
-          <span className="min-w-8 text-center text-sm md:text-base">{item.quantity}</span>
-
-          <Button type="button" variant="outline" size="icon" className="h-8 w-8 rounded-lg md:h-9 md:w-9">
-            <Plus className="h-4 w-4" />
-          </Button>
-
-          <Button type="button" variant="ghost" size="icon" className="text-destructive hover:text-destructive ml-auto">
-            <Trash2 className="h-5 w-5" />
-          </Button>
+        <div className="text-right">
+          <span className="text-muted-foreground block text-xs">Итого</span>
+          <span className="block text-xl font-bold tracking-tight">{total.toLocaleString()}$</span>
         </div>
       </div>
+
+      <Button className="w-full rounded-xl py-4 text-base font-semibold">Подтвердить заказ</Button>
     </div>
   );
 }
 
 function EmptyState() {
   return (
-    <div className="flex flex-1 flex-col items-center justify-center text-center">
-      <div className="text-muted-foreground mb-3">
-        <svg className="h-16 w-16" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-          <path strokeWidth="1.5" d="M3 3h2l.4 2M7 13h10l4-8H5.4M7 13L5.4 5M7 13l-2 9m2-9l2 9m10-9l2 9m-2-9l-2 9" />
-        </svg>
-      </div>
+    <div className="mx-auto flex min-h-screen w-full max-w-md flex-col items-center justify-center px-4 text-center">
       <p className="text-lg font-medium">Корзина пустая</p>
       <p className="text-muted-foreground mt-1 text-sm">Добавьте товары, чтобы оформить заказ</p>
     </div>

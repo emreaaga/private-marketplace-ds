@@ -6,7 +6,7 @@ export const fakeProducts: Product[] = [
     name: "Сумка",
     category: "Одежда",
     unit: "Серия",
-    quantity: 500,
+    quantity: 7,
     price: 8,
     photo_url: "/products-photo/bag.jpg",
     comment: "Сумка белый, черный, коричневый только в розницу",
