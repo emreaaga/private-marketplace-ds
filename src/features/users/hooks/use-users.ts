@@ -1,8 +1,8 @@
 import { useEffect, useState } from "react";
 
+import { usersService } from "@/features/users/api/users";
 import { MOCK_USERS } from "@/features/users/fake-users";
 import type { User } from "@/features/users/types/user.types";
-import { usersService } from "@/features/users/api/users";
 
 const IS_DEMO = process.env.NEXT_PUBLIC_DEMO === "true";
 

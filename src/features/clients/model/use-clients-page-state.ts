@@ -1,4 +1,3 @@
-// src/features/clients/model/use-clients-page-state.ts
 "use client";
 
 import { useUserActions } from "@/features/users/hooks/use-user-actions";

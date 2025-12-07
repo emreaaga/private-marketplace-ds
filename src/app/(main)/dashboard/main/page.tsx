@@ -53,7 +53,6 @@ export default function MainPage() {
 
   return (
     <div className="mx-auto flex min-h-screen max-w-5xl flex-col gap-6 px-4 py-6">
-      {/* HEADER */}
       <div className="flex flex-col gap-3 md:flex-row md:items-center md:justify-between">
         <div>
           <h1 className="text-2xl font-semibold md:text-3xl">Панель управления</h1>
@@ -69,7 +68,6 @@ export default function MainPage() {
         </div>
       </div>
 
-      {/* STATS */}
       <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Подтверждено заказов"
@@ -87,9 +85,7 @@ export default function MainPage() {
         />
       </div>
 
-      {/* MAIN CONTENT */}
       <div className="grid gap-6 md:grid-cols-[minmax(0,1.4fr)_minmax(0,1fr)]">
-        {/* ЛЕВАЯ КОЛОНКА — заказы / товары */}
         <div className="bg-background/80 rounded-2xl border p-4 shadow-sm backdrop-blur">
           <Tabs defaultValue="orders">
             <div className="flex items-center justify-between gap-2">
@@ -181,7 +177,6 @@ export default function MainPage() {
           </Tabs>
         </div>
 
-        {/* ПРАВАЯ КОЛОНКА — краткий обзор */}
         <div className="flex flex-col gap-4">
           <div className="bg-background/80 rounded-2xl border p-4 shadow-sm backdrop-blur">
             <h2 className="text-sm font-semibold">Сводка по корзине</h2>
@@ -209,26 +204,12 @@ export default function MainPage() {
               </Link>
             </Button>
           </div>
-
-          <div className="bg-background/80 rounded-2xl border p-4 shadow-sm backdrop-blur">
-            <h2 className="text-sm font-semibold">Замеченные риски</h2>
-            <p className="text-muted-foreground mt-1 text-xs">
-              Позже сюда можно подтянуть аналитику: низкий остаток, зависшие серии и т.п.
-            </p>
-
-            <ul className="text-muted-foreground mt-3 space-y-2 text-xs">
-              <li>• Добавьте клиентов, чтобы видеть статистику по покупателям.</li>
-              <li>• Отмечайте подтвержденные заказы, чтобы считать оборот точнее.</li>
-              <li>• Настройте статусы товаров (активен / скрыт / только опт).</li>
-            </ul>
-          </div>
         </div>
       </div>
     </div>
   );
 }
 
-// простая util, чтобы не тащить cn отовсюду если не хочешь
 function cn(...classes: (string | false | null | undefined)[]) {
   return classes.filter(Boolean).join(" ");
 }
