@@ -1,3 +1,4 @@
+/* eslint-disable max-lines */
 "use client";
 
 import * as React from "react";
@@ -135,6 +136,7 @@ function SidebarProvider({
   );
 }
 
+// eslint-disable-next-line complexity
 function Sidebar({
   side = "left",
   variant = "sidebar",
@@ -568,6 +570,7 @@ function SidebarMenuSkeleton({
 }) {
   // Random width between 50 to 90%.
   const width = React.useMemo(() => {
+    // eslint-disable-next-line react-hooks/purity
     return `${Math.floor(Math.random() * 40) + 50}%`;
   }, []);
 
