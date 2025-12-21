@@ -1,25 +1,5 @@
-import { CircleCheck, Loader, ShieldAlert } from "lucide-react";
-
-import type { UserStatus } from "@/features/users/types/user.types";
+import { type UserStatus, STATUS_CONFIG } from "@/features/users/types/user.types";
 import { Badge } from "@/shared/ui/atoms/badge";
-
-const STATUS_CONFIG: Record<UserStatus, { icon: typeof CircleCheck; color: string; label: string }> = {
-  active: {
-    icon: CircleCheck,
-    color: "#10b981",
-    label: "Активен",
-  },
-  pending: {
-    icon: Loader,
-    color: "#f59e0b",
-    label: "В ожидании",
-  },
-  blocked: {
-    icon: ShieldAlert,
-    color: "#ef4444",
-    label: "Заблокирован",
-  },
-};
 
 interface StatusBadgeProps {
   status: UserStatus;
@@ -27,6 +7,7 @@ interface StatusBadgeProps {
 }
 
 export function StatusBadge({ status, variant = "default" }: StatusBadgeProps) {
+  // eslint-disable-next-line security/detect-object-injection
   const config = STATUS_CONFIG[status];
   const Icon = config.icon;
 

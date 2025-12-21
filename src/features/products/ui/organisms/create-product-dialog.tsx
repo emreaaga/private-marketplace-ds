@@ -5,30 +5,19 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import {
-  ProductFormContent,
-  productFormDefaultValues,
-  type ProductFormValues,
-} from "@/features/products/ui/molecules/product-form-content";
+import { productFormDefaultValues, type ProductFormValues } from "@/features/products/types/product-form.types";
+import { ProductFormContent } from "@/features/products/ui/organisms/create-form";
 import { useMediaQuery } from "@/shared/hooks/use-media-query";
-import { Button } from "@/shared/ui/atoms/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from "@/shared/ui/atoms/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/atoms/dialog";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/shared/ui/atoms/drawer";
 import { Form } from "@/shared/ui/atoms/form";
 
 interface CreateProductDialogProps {
   onCreate: (data: ProductFormValues) => void;
-  buttonClassName?: string;
+  children: React.ReactNode;
 }
 
-export function CreateProductDialog({ onCreate, buttonClassName }: CreateProductDialogProps) {
+export function CreateProductDialog({ onCreate, children }: CreateProductDialogProps) {
   const [open, setOpen] = useState(false);
   const [preview, setPreview] = useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
@@ -66,7 +55,6 @@ export function CreateProductDialog({ onCreate, buttonClassName }: CreateProduct
     setOpen(false);
     form.reset(productFormDefaultValues);
     setPreview(null);
-    toast.success("Продукт успешно создан!");
   };
 
   const handleCancel = () => {
@@ -78,14 +66,11 @@ export function CreateProductDialog({ onCreate, buttonClassName }: CreateProduct
   if (isDesktop) {
     return (
       <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>
-          <Button className={buttonClassName}>Создать продукт</Button>
-        </DialogTrigger>
+        <DialogTrigger asChild>{children}</DialogTrigger>
 
-        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[600px]">
+        <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[400px]">
           <DialogHeader>
             <DialogTitle>Создать продукт</DialogTitle>
-            <DialogDescription>Добавьте оптовый товар в каталог</DialogDescription>
           </DialogHeader>
 
           <Form {...form}>
@@ -107,9 +92,7 @@ export function CreateProductDialog({ onCreate, buttonClassName }: CreateProduct
 
   return (
     <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>
-        <Button className={buttonClassName}>Создать +</Button>
-      </DrawerTrigger>
+      <DrawerTrigger asChild>{children}</DrawerTrigger>
 
       <DrawerContent className="max-h-[90vh]">
         <div className="overflow-y-auto px-4">
@@ -118,7 +101,7 @@ export function CreateProductDialog({ onCreate, buttonClassName }: CreateProduct
           </DrawerHeader>
 
           <Form {...form}>
-            <form onSubmit={form.handleSubmit(handleSave)} className="space-y-4">
+            <form onSubmit={form.handleSubmit(handleSave)} className="space-y-2">
               <ProductFormContent
                 form={form}
                 preview={preview}

@@ -7,26 +7,29 @@ interface StatCardProps {
   value: string | number;
   icon: LucideIcon;
   subtitle?: string;
-  className?: string;
+  variant?: "default" | "warning" | "danger";
 }
 
-export function StatCard({ label, value, icon: Icon, subtitle, className }: StatCardProps) {
+export function StatCard({ label, value, icon: Icon, subtitle, variant = "default" }: StatCardProps) {
+  const variants = {
+    default: "bg-background/60",
+    warning: "bg-yellow-500/5 border-yellow-500/20",
+    danger: "bg-red-500/5 border-red-500/20",
+  };
+
   return (
     <div
-      className={cn(
-        "group bg-background/60 rounded-2xl border p-4 shadow-sm backdrop-blur-md transition hover:shadow-md",
-        className,
-      )}
+      className={cn("rounded-2xl border p-4 shadow-sm backdrop-blur-md transition hover:shadow-md", variants[variant])}
     >
       <div className="flex items-center justify-between">
-        <div className="flex flex-col">
+        <div>
           <span className="text-muted-foreground text-xs font-medium">{label}</span>
-          <span className="mt-1 text-xl font-semibold tracking-tight">{value}</span>
-          {subtitle && <span className="text-muted-foreground mt-1 text-[11px]">{subtitle}</span>}
+          <span className="mt-1 block text-xl font-semibold tracking-tight">{value}</span>
+          {subtitle && <span className="text-muted-foreground mt-1 block text-[11px]">{subtitle}</span>}
         </div>
 
-        <div className="bg-primary/10 text-primary group-hover:bg-primary/15 flex h-10 w-10 items-center justify-center rounded-xl transition-colors">
-          <Icon className="h-5 w-5" strokeWidth={2.2} />
+        <div className="bg-primary/10 text-primary flex h-10 w-10 items-center justify-center rounded-xl">
+          <Icon className="h-5 w-5" />
         </div>
       </div>
     </div>

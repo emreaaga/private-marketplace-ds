@@ -1,8 +1,9 @@
 "use client";
 
-import { Users, LayoutDashboard, Package, Contact, ShoppingCart } from "lucide-react";
+import { Users, Package, ClipboardList, UserCircle, BarChart3, Settings, Store } from "lucide-react";
 
 import { NavGroup } from "@/features/sidebar/types/sidebar.types";
+import { UserRole } from "@/shared/lib/rbac/roles";
 
 export const sidebarItems: NavGroup[] = [
   {
@@ -12,7 +13,8 @@ export const sidebarItems: NavGroup[] = [
       {
         title: "Главная",
         url: "/dashboard/main",
-        icon: LayoutDashboard,
+        icon: BarChart3,
+        roles: [UserRole.ADMIN, UserRole.SELLER, UserRole.CUSTOMER],
       },
     ],
   },
@@ -22,23 +24,33 @@ export const sidebarItems: NavGroup[] = [
     items: [
       {
         title: "Пользователи",
-        url: "/dashboard/users",
+        url: "/dashboard/users/main",
         icon: Users,
+        roles: [UserRole.ADMIN],
       },
       {
-        title: "Мои продукты",
-        url: "/dashboard/products",
+        title: "Почта",
+        url: "/dashboard/logistics/orders",
         icon: Package,
+        roles: [UserRole.ADMIN],
+      },
+      {
+        title: "Продавцы",
+        url: "/dashboard/products/orders",
+        icon: Store,
+        roles: [UserRole.ADMIN],
       },
       {
         title: "Клиенты",
-        url: "/dashboard/clients",
-        icon: Contact,
+        url: "/dashboard/clients/orders",
+        icon: UserCircle,
+        roles: [UserRole.ADMIN],
       },
       {
-        title: "Корзина",
-        url: "/dashboard/order-cart",
-        icon: ShoppingCart,
+        title: "Настройки",
+        url: "/dashboard/settings/roles",
+        icon: Settings,
+        roles: [UserRole.ADMIN],
       },
     ],
   },

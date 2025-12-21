@@ -1,17 +1,13 @@
-/**
- * Роли пользователей в системе
- */
+import { Briefcase, CircleCheck, Loader, ShieldAlert, ShieldCheck, User } from "lucide-react";
+
 export const USER_ROLES = {
   ADMIN: "admin",
-  MANAGER: "manager",
-  USER: "user",
+  SELLER: "seller",
+  CUSTOMER: "customer",
 } as const;
 
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
 
-/**
- * Статусы пользователей
- */
 export const USER_STATUSES = {
   ACTIVE: "active",
   PENDING: "pending",
@@ -20,53 +16,61 @@ export const USER_STATUSES = {
 
 export type UserStatus = (typeof USER_STATUSES)[keyof typeof USER_STATUSES];
 
-/**
- * Основная модель пользователя
- */
 export type User = {
   id: number;
+  public_id: string;
   name: string;
   email: string;
-  role: "admin" | "user" | "manager";
+  role: UserRole;
   status: "active" | "pending" | "blocked";
   created_at: string;
 };
 
-/**
- * DTO для создания пользователя
- */
-export interface CreateUserDto {
+export type Client = {
+  id: number;
+  public_id: string;
   name: string;
-  email: string;
+  status: UserStatus;
+  orders_count: number;
+  total_spent: number;
+  city: string;
+  created_at: string;
+};
+
+export const ROLE_CONFIG: Record<UserRole, { icon: typeof ShieldCheck; label: string }> = {
+  admin: { icon: ShieldCheck, label: "Почта" },
+  seller: { icon: Briefcase, label: "Продавец" },
+  customer: { icon: User, label: "Клиент" },
+};
+
+export const STATUS_CONFIG: Record<UserStatus, { icon: typeof CircleCheck; color: string; label: string }> = {
+  active: {
+    icon: CircleCheck,
+    color: "#10b981",
+    label: "Активен",
+  },
+  pending: {
+    icon: Loader,
+    color: "#f59e0b",
+    label: "В ожидании",
+  },
+  blocked: {
+    icon: ShieldAlert,
+    color: "#ef4444",
+    label: "Заблокирован",
+  },
+};
+
+export interface UserBadgeProps {
   role: UserRole;
-  status?: UserStatus;
+  status: UserStatus;
+  name: string;
 }
 
-/**
- * DTO для обновления пользователя
- */
-export interface UpdateUserDto {
-  name?: string;
-  role?: UserRole;
-  status?: UserStatus;
-}
-
-/**
- * Параметры фильтрации пользователей
- */
-export interface UsersFilterParams {
-  role?: UserRole;
-  status?: UserStatus;
-  search?: string;
-}
-
-/**
- * Type guards для проверки типов
- */
-export function isValidUserRole(role: string): role is UserRole {
-  return Object.values(USER_ROLES).includes(role as UserRole);
-}
-
-export function isValidUserStatus(status: string): status is UserStatus {
-  return Object.values(USER_STATUSES).includes(status as UserStatus);
+export interface UsersListDesktopProps {
+  users: User[];
+  onEdit?: (user: User) => void;
+  onDelete?: (id: number) => void;
+  onRoleChange?: (id: number, role: UserRole) => void;
+  onStatusChange?: (id: number, status: UserStatus) => void;
 }

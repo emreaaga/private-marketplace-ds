@@ -5,8 +5,8 @@ import { useRouter } from "next/navigation";
 import { EllipsisVertical, CircleUser, CreditCard, MessageSquareDot, LogOut } from "lucide-react";
 import { toast } from "sonner";
 
-import { getInitials } from "@/shared/lib/utils";
 import { authService } from "@/features/auth/api/auth";
+import { getInitials } from "@/shared/lib/utils";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/atoms/avatar";
 import {
   DropdownMenu,

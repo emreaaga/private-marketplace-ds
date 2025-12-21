@@ -1,19 +1,12 @@
-import { ShieldCheck, Briefcase, User } from "lucide-react";
-
-import type { UserRole } from "@/features/users/types/user.types";
+import { type UserRole, ROLE_CONFIG } from "@/features/users/types/user.types";
 import { Badge } from "@/shared/ui/atoms/badge";
-
-const ROLE_CONFIG: Record<UserRole, { icon: typeof ShieldCheck; label: string }> = {
-  admin: { icon: ShieldCheck, label: "Админ" },
-  manager: { icon: Briefcase, label: "Продавец" },
-  user: { icon: User, label: "Клиент" },
-};
 
 interface RoleBadgeProps {
   role: UserRole;
 }
 
 export function RoleBadge({ role }: RoleBadgeProps) {
+  // eslint-disable-next-line security/detect-object-injection
   const config = ROLE_CONFIG[role];
   const Icon = config.icon;
 

@@ -2,30 +2,30 @@
 
 import { useRouter } from "next/navigation";
 
+import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 
 import { authService } from "@/features/auth/api/auth";
-
-const IS_DEMO = process.env.NEXT_PUBLIC_DEMO === "true";
+import { useAuthStore } from "@/features/auth/auth.store";
+import { AccessTokenPayload } from "@/features/auth/types/auth.types";
 
 export function useLogin() {
   const router = useRouter();
+  const setUser = useAuthStore.getState().setUser;
 
   const login = async (email: string, password: string) => {
-    if (IS_DEMO) {
-      if (email === "test@gmail.com" && password === "test123") {
-        router.push("/dashboard/main");
-        return;
-      } else {
-        toast.error("Неверный demo логин или пароль");
-        throw new Error("DEMO_INVALID");
-      }
-    }
-
     try {
-      await authService.login({ email, password });
-      toast.success("Вход выполнен успешно!");
+      const res = await authService.login({ email, password });
+
+      const decoded = jwtDecode<AccessTokenPayload>(res.accessToken);
+
+      setUser({
+        id: decoded.sub,
+        role: decoded.role,
+      });
+
       router.push("/dashboard/main");
+      toast.success("Вход выполнен успешно!");
     } catch (err) {
       console.log(err);
       toast.error("Ошибка запроса");

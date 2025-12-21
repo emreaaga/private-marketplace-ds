@@ -2,8 +2,8 @@ import { useState } from "react";
 
 import { toast } from "sonner";
 
-import type { User, UserRole, UserStatus } from "@/features/users/types/user.types";
 import { usersService } from "@/features/users/api/users";
+import type { User, UserRole, UserStatus } from "@/features/users/types/user.types";
 
 const IS_DEMO = process.env.NEXT_PUBLIC_DEMO === "true";
 

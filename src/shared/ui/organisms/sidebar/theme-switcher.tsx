@@ -2,9 +2,9 @@
 
 import { Moon, Sun } from "lucide-react";
 
+import { setValueToCookie } from "@/shared/lib/server-actions";
 import { updateThemeMode } from "@/shared/lib/theme-utils";
 import { usePreferencesStore } from "@/shared/styles/preferences-provider";
-import { setValueToCookie } from "@/shared/lib/server-actions";
 import { Button } from "@/shared/ui/atoms/button";
 
 export function ThemeSwitcher() {

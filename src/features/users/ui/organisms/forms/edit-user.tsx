@@ -65,8 +65,8 @@ export function EditUserForm({ user, open, onOpenChange, onSave }: EditUserFormP
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="admin">Админ</SelectItem>
-                    <SelectItem value="manager">Менеджер</SelectItem>
-                    <SelectItem value="user">Пользователь</SelectItem>
+                    <SelectItem value="seller">Продавец</SelectItem>
+                    <SelectItem value="customer">Клиент</SelectItem>
                   </SelectContent>
                 </Select>
               </Field>

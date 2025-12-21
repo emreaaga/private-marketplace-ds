@@ -39,6 +39,18 @@ export function CartItem({
             {item.unit} · {item.price}$
           </p>
 
+          {(item.unit || item.comment) && (
+            <p className="text-muted-foreground hidden text-xs md:block">
+              {item.unit}
+              {item.comment && (
+                <>
+                  {" · "}
+                  <span className="italic">{item.comment}</span>
+                </>
+              )}
+            </p>
+          )}
+
           <p className="text-muted-foreground text-xs md:text-sm">
             Всего: <span className="text-foreground font-semibold">{total}$</span>
           </p>
