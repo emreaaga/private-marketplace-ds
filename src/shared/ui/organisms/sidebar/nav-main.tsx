@@ -3,11 +3,10 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { PlusCircleIcon, MailIcon, ChevronRight } from "lucide-react";
+import { PlusCircleIcon, ChevronRight } from "lucide-react";
 
 import { useAuthStore } from "@/features/auth/auth.store";
 import { type NavGroup, type NavMainItem } from "@/features/sidebar/types/sidebar.types";
-import { Button } from "@/shared/ui/atoms/button";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/atoms/collapsible";
 import {
   DropdownMenu,
@@ -145,20 +144,43 @@ const NavItemCollapsed = ({
 export function NavMain({ items }: NavMainProps) {
   const path = usePathname();
   const { state, isMobile } = useSidebar();
-
   const user = useAuthStore((s) => s.user);
 
   if (!user) return null;
 
+  const getBasePath = (url: string) => {
+    const segments = url.split("/").filter(Boolean);
+    return segments.length >= 2 ? `/${segments.slice(0, 2).join("/")}` : url;
+  };
+
   const isItemActive = (url: string, subItems?: NavMainItem["subItems"]) => {
+    const itemBasePath = getBasePath(url);
+    const currentBasePath = getBasePath(path);
+
     if (subItems?.length) {
-      return subItems.some((sub) => path.startsWith(sub.url));
+      return subItems.some((sub) => {
+        const subBasePath = getBasePath(sub.url);
+        return path === sub.url || path.startsWith(sub.url + "/") || currentBasePath === subBasePath;
+      });
     }
-    return path === url;
+
+    return (
+      path === url ||
+      currentBasePath === itemBasePath ||
+      path.startsWith(url + "/") ||
+      path.startsWith(itemBasePath + "/")
+    );
   };
 
   const isSubmenuOpen = (subItems?: NavMainItem["subItems"]) => {
-    return subItems?.some((sub) => path.startsWith(sub.url)) ?? false;
+    if (!subItems?.length) return false;
+
+    const currentBasePath = getBasePath(path);
+
+    return subItems.some((sub) => {
+      const subBasePath = getBasePath(sub.url);
+      return path === sub.url || path.startsWith(sub.url + "/") || currentBasePath === subBasePath;
+    });
   };
 
   return (
@@ -201,7 +223,7 @@ export function NavMain({ items }: NavMainProps) {
                             asChild
                             aria-disabled={item.comingSoon}
                             tooltip={item.title}
-                            isActive={isItemActive(item.url)}
+                            isActive={isItemActive(item.url, item.subItems)}
                           >
                             <Link prefetch={false} href={item.url} target={item.newTab ? "_blank" : undefined}>
                               {item.icon && <item.icon />}
@@ -211,10 +233,8 @@ export function NavMain({ items }: NavMainProps) {
                         </SidebarMenuItem>
                       );
                     }
-
                     return <NavItemCollapsed key={item.title} item={item} isActive={isItemActive} />;
                   }
-
                   return (
                     <NavItemExpanded
                       key={item.title}

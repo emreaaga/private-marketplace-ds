@@ -1,3 +1,3 @@
 export default function LogisticsMainPage() {
-  return <div>Логистика</div>;
+  return <div>Здесь будут пользователи почты.</div>;
 }

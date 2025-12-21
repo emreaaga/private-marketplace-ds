@@ -4,7 +4,7 @@ import { LogisticsHeader } from "@/features/logistics/ui/organisms/logistics-hea
 
 export default function LogisticsLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-2 sm:space-y-4">
       <LogisticsHeader />
       {children}
     </div>

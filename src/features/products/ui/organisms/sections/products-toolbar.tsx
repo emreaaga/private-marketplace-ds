@@ -7,48 +7,47 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/atoms/
 
 import { CreateProductDialog } from "../create-product-dialog";
 
+function IconButton({ icon, label }: { icon: React.ReactNode; label: string }) {
+  return (
+    <Button
+      variant="outline"
+      size="sm"
+      className="flex h-9 flex-1 items-center justify-center gap-2 p-0 md:flex-none md:px-3"
+    >
+      {icon}
+      <span className="hidden md:inline">{label}</span>
+    </Button>
+  );
+}
+
 interface ProductsHeaderSectionProps {
   onCreate: (data: any) => void;
 }
 
 export function ProductsToolbar({ onCreate }: ProductsHeaderSectionProps) {
   return (
-    <div className="flex w-full flex-row items-center gap-2 md:justify-between">
-      <div className="flex-[0.8] md:max-w-xs md:flex-1">
-        <InputGroup className="w-full">
-          <InputGroupInput placeholder="Поиск товаров..." className="h-9" />
+    <div className="flex w-full flex-col gap-2 md:flex-row md:items-center md:justify-between">
+      <div className="flex w-full gap-2 md:max-w-xl md:flex-row">
+        <InputGroup className="flex h-9 flex-1">
+          <InputGroupInput placeholder="Поиск" className="h-9 flex-1" />
           <InputGroupAddon>
             <Search className="text-muted-foreground h-4 w-4" />
           </InputGroupAddon>
         </InputGroup>
-      </div>
 
-      <div className="flex flex-[0.2] items-center justify-end gap-2 md:flex-initial">
-        <Button variant="outline" size="sm" className="flex h-9 min-w-9 items-center justify-center p-0 md:px-3">
-          <SlidersHorizontal className="text-muted-foreground h-4 w-4" />
-          <span className="hidden md:inline">Сортировка</span>
-        </Button>
-
-        <Button variant="outline" size="sm" className="flex h-9 min-w-9 items-center justify-center p-0 md:px-3">
-          <ListFilter className="text-muted-foreground h-4 w-4" />
-          <span className="hidden md:inline">Фильтры</span>
-        </Button>
-
-        <Button variant="outline" size="sm" className="flex h-9 min-w-9 items-center justify-center p-0 md:px-3">
-          <RotateCcw className="text-muted-foreground h-4 w-4" />
-          <span className="hidden md:inline">Сбросить</span>
-        </Button>
-
-        <Button variant="outline" size="sm" className="flex h-9 min-w-9 items-center justify-center p-0 md:px-3">
-          <FileDown className="text-muted-foreground h-4 w-4" />
-          <span className="hidden md:inline">Экспорт</span>
-        </Button>
         <CreateProductDialog onCreate={onCreate}>
-          <Button size="sm">
-            <PlusIcon className="mr-2 h-4 w-4" />
-            Добавить товар
+          <Button size="sm" className="h-9 flex-1 md:flex-none">
+            <PlusIcon className="h-4 w-4" />
+            <span className="md:inline">Создать</span>
+            <span className="hidden md:inline">продукт</span>
           </Button>
         </CreateProductDialog>
+      </div>
+
+      <div className="flex w-full gap-2 md:w-auto md:justify-end">
+        <IconButton icon={<SlidersHorizontal />} label="Сортировка" />
+        <IconButton icon={<ListFilter />} label="Фильтры" />
+        <IconButton icon={<RotateCcw />} label="Сбросить" />
       </div>
     </div>
   );

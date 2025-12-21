@@ -1,9 +1,7 @@
 "use client";
-
 import type { Order } from "@/features/orders/types/order.types";
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
-import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/shared/ui/atoms/card";
 
 function StatusBadge({ status }: { status: Order["status"] }) {
   const map = {
@@ -11,13 +9,38 @@ function StatusBadge({ status }: { status: Order["status"] }) {
     confirmed: "bg-green-500/15 text-green-700",
     canceled: "bg-red-500/15 text-red-700",
   };
-
   return (
-    <Badge variant="secondary" className={`rounded-full px-3 py-1 text-xs ${map[status]}`}>
+    <Badge variant="secondary" className={`rounded-full px-2 py-0.5 text-[10px] ${map[status]}`}>
       {status === "pending" && "Ожидание"}
       {status === "confirmed" && "Подтвержден"}
       {status === "canceled" && "Отменён"}
     </Badge>
+  );
+}
+
+interface OrderCardMobileProps {
+  order: Order;
+  onOpenDetails: (order: Order) => void;
+}
+
+function OrderCardMobile({ order, onOpenDetails }: OrderCardMobileProps) {
+  return (
+    <div className="flex flex-col p-3">
+      <div className="mb-3 flex items-start justify-between">
+        <div className="flex flex-1 flex-col space-y-1">
+          <div className="flex items-center justify-between gap-2">
+            <p className="font-mono text-[15px] font-semibold">#{order.id}</p>
+            <StatusBadge status={order.status} />
+          </div>
+          <p className="text-[15px] font-medium">{order.customer}</p>
+          <p className="text-muted-foreground text-sm font-semibold">{order.total.toLocaleString()} $</p>
+          <p className="text-muted-foreground pt-1 text-[10px]">{order.date}</p>
+        </div>
+      </div>
+      <Button variant="secondary" size="sm" className="h-8 w-full text-xs" onClick={() => onOpenDetails(order)}>
+        Детали заказа
+      </Button>
+    </div>
   );
 }
 
@@ -27,30 +50,17 @@ interface OrdersListMobileProps {
 }
 
 export function OrdersListMobile({ orders, onOpenDetails }: OrdersListMobileProps) {
+  if (!orders.length) {
+    return <div className="text-muted-foreground py-8 text-center text-sm">Нет результатов</div>;
+  }
+
   return (
-    <div className="space-y-3">
-      {orders.map((order) => (
-        <Card key={order.id} className="shadow-sm">
-          <CardHeader className="flex flex-row items-center justify-between p-4">
-            <CardTitle className="text-base font-semibold">
-              <span className="font-mono">#{order.id}</span>
-            </CardTitle>
-            <StatusBadge status={order.status} />
-          </CardHeader>
-
-          <CardContent className="p-4 pt-0 text-sm">
-            <div className="font-medium">{order.customer}</div>
-            <div className="text-muted-foreground">{order.total.toLocaleString()} $</div>
-            <div className="text-muted-foreground mt-1 text-xs">{order.date}</div>
-          </CardContent>
-
-          <CardFooter className="p-4 pt-0">
-            <Button variant="secondary" size="sm" className="w-full" onClick={() => onOpenDetails(order)}>
-              Детали заказа
-            </Button>
-          </CardFooter>
-        </Card>
-      ))}
+    <div className="border-border bg-card overflow-hidden rounded-lg border md:hidden">
+      <div className="divide-border divide-y">
+        {orders.map((order) => (
+          <OrderCardMobile key={order.id} order={order} onOpenDetails={onOpenDetails} />
+        ))}
+      </div>
     </div>
   );
 }

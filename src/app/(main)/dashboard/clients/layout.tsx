@@ -4,7 +4,7 @@ import { ClientsHeader } from "@/features/clients/ui/organisms/sections/clients-
 
 export default function ClientsLayout({ children }: { children: ReactNode }) {
   return (
-    <div className="space-y-6">
+    <div className="space-y-2 sm:space-y-4">
       <ClientsHeader />
       {children}
     </div>

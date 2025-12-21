@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useState } from "react";
 
 import { useRouter, usePathname } from "next/navigation";
@@ -36,6 +35,11 @@ export function MobileBottomNav({ items }: { items: NavGroup[] }) {
     return () => window.removeEventListener("scroll", onScroll);
   }, []);
 
+  const getBasePath = (url: string) => {
+    const segments = url.split("/").filter(Boolean);
+    return segments.length >= 2 ? `/${segments.slice(0, 2).join("/")}` : url;
+  };
+
   return (
     <nav
       className={cn(
@@ -43,9 +47,18 @@ export function MobileBottomNav({ items }: { items: NavGroup[] }) {
         hidden && "translate-y-full",
       )}
     >
-      <div className="relative mb-1 flex w-full max-w-md items-center justify-around gap-1 rounded-2xl bg-white/15 px-3 py-1 shadow-[inset_0_0_1px_rgba(255,255,255,0.4)] shadow-black/20 backdrop-blur-md">
+      <div className="relative mb-1 flex w-full max-w-md items-center justify-around gap-1 rounded-2xl border border-white/20 bg-white/80 px-3 py-1 shadow-[0_8px_32px_rgba(0,0,0,0.08)] backdrop-blur-[2px] backdrop-saturate-150">
         {bottomItems.map((item) => {
-          const isActive = path === item.url || item.subItems?.some((s) => path.startsWith(s.url));
+          const itemBasePath = getBasePath(item.url);
+          const currentBasePath = getBasePath(path);
+          const isActive =
+            path === item.url ||
+            currentBasePath === itemBasePath ||
+            path.startsWith(item.url + "/") ||
+            path.startsWith(itemBasePath + "/") ||
+            item.subItems?.some(
+              (s) => path === s.url || path.startsWith(s.url + "/") || currentBasePath === getBasePath(s.url),
+            );
 
           const Icon = item.icon;
 

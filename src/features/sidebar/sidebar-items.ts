@@ -1,6 +1,6 @@
 "use client";
 
-import { Users, Package, ClipboardList, UserCircle, BarChart3, Settings, Store } from "lucide-react";
+import { Users, Package, UserCircle, BarChart3, Settings, Store } from "lucide-react";
 
 import { NavGroup } from "@/features/sidebar/types/sidebar.types";
 import { UserRole } from "@/shared/lib/rbac/roles";
