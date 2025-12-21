@@ -9,7 +9,7 @@ import type { CartItemType } from "../model/types";
 export function useOrderCart() {
   const [items, setItems] = useState<CartItemType[]>(fakeProducts);
 
-  const updateQuantity = (id: number, delta: number) => {
+  const updateQuantity = (id: string, delta: number) => {
     setItems((prev) =>
       prev
         .map((item) => (item.id === id ? { ...item, quantity: Math.max(0, item.quantity + delta) } : item))
