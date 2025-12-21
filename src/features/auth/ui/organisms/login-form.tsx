@@ -37,7 +37,7 @@ export function LoginForm() {
                     type="email"
                     placeholder="you@example.com"
                     autoComplete="email"
-                    className="h-11 text-sm sm:text-base"
+                    className="h-12 text-base"
                     {...field}
                   />
                 </FormControl>
@@ -58,7 +58,7 @@ export function LoginForm() {
                     type="password"
                     placeholder="••••••••"
                     autoComplete="current-password"
-                    className="h-11 text-sm sm:text-base"
+                    className="h-12 text-base"
                     {...field}
                   />
                 </FormControl>
@@ -67,7 +67,7 @@ export function LoginForm() {
             )}
           />
 
-          <Button className="h-12 w-full text-sm sm:text-base" type="submit">
+          <Button className="h-12 w-full text-base" type="submit">
             Войти
           </Button>
         </form>

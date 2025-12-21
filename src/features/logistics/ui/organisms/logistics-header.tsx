@@ -1,12 +1,8 @@
 "use client";
 
-import Link from "next/link";
-import { usePathname, useRouter } from "next/navigation";
-
 import { ClipboardList, User } from "lucide-react";
 
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/atoms/tabs";
+import { ResponsiveTabsHeader } from "@/shared/ui/organisms/responsive-tabs-header";
 
 const items = [
   { href: "/dashboard/logistics/orders", label: "Заказы", icon: ClipboardList },
@@ -14,46 +10,5 @@ const items = [
 ];
 
 export function LogisticsHeader() {
-  const pathname = usePathname();
-  const router = useRouter();
-
-  const activeTab = items.find((item) => pathname.startsWith(item.href))?.href ?? items[0].href;
-
-  return (
-    <>
-      <div className="sm:hidden">
-        <Select value={activeTab} onValueChange={(value) => router.push(value)}>
-          <SelectTrigger className="w-full">
-            <SelectValue />
-          </SelectTrigger>
-          <SelectContent>
-            {items.map((item) => (
-              <SelectItem key={item.href} value={item.href}>
-                {item.label}
-              </SelectItem>
-            ))}
-          </SelectContent>
-        </Select>
-      </div>
-
-      <div className="hidden sm:block">
-        <Tabs value={activeTab}>
-          <TabsList className="flex gap-2">
-            {items.map((item) => {
-              const Icon = item.icon;
-
-              return (
-                <TabsTrigger key={item.href} value={item.href} asChild>
-                  <Link href={item.href} className="flex items-center gap-2">
-                    <Icon className="h-4 w-4" />
-                    <span>{item.label}</span>
-                  </Link>
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
-        </Tabs>
-      </div>
-    </>
-  );
+  return <ResponsiveTabsHeader items={items} />;
 }
