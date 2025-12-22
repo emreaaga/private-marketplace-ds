@@ -37,48 +37,123 @@ const STATUS_MAP: Record<
 
 export const getLogisticsColumns = (): ColumnDef<Order>[] => [
   {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ row }) => <span className="font-mono text-xs">{row.original.id}</span>,
+    id: "counter",
+    header: "№",
+    cell: ({ row }) => row.original.counter,
   },
 
   {
-    id: "recipient",
-    header: "Получатель",
+    id: "id_date",
+    header: "ID / Дата",
     cell: ({ row }) => (
       <div className="flex flex-col">
-        <span className="font-medium">{row.original.recipient.name}</span>
-        <span className="text-muted-foreground text-xs">{row.original.recipient.city}</span>
+        <span className="font-mono text-xs">{row.original.id}</span>
+        <span className="text-muted-foreground text-xs">{row.original.date}</span>
+      </div>
+    ),
+  },
+  {
+    id: "persons",
+    header: "Отпр/Плчт",
+    cell: ({ row }) => (
+      <div className="flex flex-col text-sm leading-snug">
+        <span className="font-medium">{row.original.sender.name}</span>
+        <span className="text-muted-foreground">→ {row.original.recipient.name}</span>
       </div>
     ),
   },
 
   {
+    id: "phones",
+    header: "Телефоны",
+    cell: ({ row }) => (
+      <div className="flex flex-col text-xs leading-snug">
+        <span>
+          <span className="text-muted-foreground">Отпр.:</span> {row.original.sender.phone}
+        </span>
+        <span>
+          <span className="text-muted-foreground">Получ.:</span> {row.original.recipient.phone}
+        </span>
+      </div>
+    ),
+  },
+
+  // {
+  //   id: "sender",
+  //   header: "Отправитель",
+  //   cell: ({ row }) => (
+  //     <div className="flex flex-col">
+  //       <span className="font-medium">{row.original.sender.name}</span>
+  //       <span className="text-muted-foreground text-xs">{row.original.sender.phone}</span>
+  //     </div>
+  //   ),
+  // },
+
+  // {
+  //   id: "recipient",
+  //   header: "Получатель",
+  //   cell: ({ row }) => (
+  //     <div className="flex flex-col">
+  //       <span className="font-medium">{row.original.recipient.name}</span>
+  //       <span className="text-muted-foreground text-xs">{row.original.recipient.phone}</span>
+  //     </div>
+  //   ),
+  // },
+
+  {
     id: "route",
     header: "Маршрут",
     cell: ({ row }) => (
-      <span className="text-sm">
-        {row.original.sender.city} → {row.original.recipient.city}
-      </span>
+      <div className="flex flex-col">
+        <span className="font-medium">{row.original.sender.city}</span>
+        <span className="text-muted-foreground text-xs"> {row.original.recipient.city}</span>
+      </div>
     ),
   },
 
   {
-    accessorKey: "weight",
-    header: "Вес",
-    cell: ({ row }) => `${row.original.weight} кг`,
+    id: "weight_rate",
+    header: "Вес / Ставка",
+    cell: ({ row }) => (
+      <div className="flex flex-col text-xs">
+        <span>{row.original.weight} кг</span>
+        <span className="text-muted-foreground">{row.original.ratePerKg} $ / кг</span>
+      </div>
+    ),
   },
 
   {
-    id: "payment",
+    id: "extras",
+    header: "Доп. оплата",
+    cell: ({ row }) => {
+      const sum = row.original.extraCharges?.reduce((acc, c) => acc + c.amount, 0) ?? 0;
+
+      return sum ? `${sum.toLocaleString()} $` : "—";
+    },
+  },
+
+  {
+    id: "payments",
     header: "Оплата",
     cell: ({ row }) => {
-      const { type, amount } = row.original.payment;
+      const p1 = row.original.payment1;
+      const p2 = row.original.payment2;
+
+      const formatLocation = (loc: "turkey" | "destination") => (loc === "turkey" ? "Турция" : "При получении");
 
       return (
-        <div className="flex flex-col text-xs">
-          <span>{type === "prepaid" ? "Оплачено" : "Наложенный платёж"}</span>
-          <span className="text-muted-foreground">{amount.toLocaleString()} $</span>
+        <div className="flex flex-col text-xs leading-snug">
+          <span>
+            <span className="text-muted-foreground">{formatLocation(p1.location)}:</span>{" "}
+            <span className="font-medium">{p1.amount.toLocaleString()} $</span>
+          </span>
+
+          {p2 && (
+            <span>
+              <span className="text-muted-foreground">{formatLocation(p2.location)}:</span>{" "}
+              <span className="font-medium">{p2.amount.toLocaleString()} $</span>
+            </span>
+          )}
         </div>
       );
     },
@@ -98,11 +173,6 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
         </span>
       );
     },
-  },
-
-  {
-    accessorKey: "date",
-    header: "Дата",
   },
 
   {
