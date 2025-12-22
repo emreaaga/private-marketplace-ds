@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import type { User, UserRole, UserStatus } from "@/features/users/types/user.types";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
 
@@ -6,13 +8,13 @@ import { UsersListMobile } from "./user-mobile";
 
 interface UsersListResponsiveProps {
   users: User[];
-  onEdit?: (user: User) => void;
-  onDelete?: (id: number) => void;
-  onRoleChange?: (id: number, role: UserRole) => void;
-  onStatusChange?: (id: number, status: UserStatus) => void;
+  onEdit: (user: User) => void;
+  onDelete: (id: number) => void;
+  onRoleChange: (id: number, role: UserRole) => void;
+  onStatusChange: (id: number, status: UserStatus) => void;
 }
 
-export function UsersListResponsive(props: UsersListResponsiveProps) {
+export const UsersListResponsive = memo(function UsersListResponsive(props: UsersListResponsiveProps) {
   const isMobile = useIsMobile();
 
   if (isMobile === undefined) {
@@ -24,4 +26,4 @@ export function UsersListResponsive(props: UsersListResponsiveProps) {
   }
 
   return isMobile ? <UsersListMobile {...props} /> : <UsersListDesktop {...props} />;
-}
+});

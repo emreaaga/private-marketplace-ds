@@ -10,7 +10,7 @@ import { OrderDetailsDialog } from "@/features/orders/ui/molecules/order-details
 import { OrdersListResponsive } from "@/features/orders/ui/organisms/lists/orders-responsive";
 import { OrdersToolbar } from "@/features/orders/ui/organisms/sections/orders-toolbar";
 
-export default function ProductsOrdersPage() {
+export default function SellerOrdersPage() {
   const [orders] = useState<Order[]>(fakeOrders);
   const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
   const [isDetailsOpen, setIsDetailsOpen] = useState(false);

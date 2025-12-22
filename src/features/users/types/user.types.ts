@@ -1,9 +1,10 @@
-import { Briefcase, CircleCheck, Loader, ShieldAlert, ShieldCheck, User } from "lucide-react";
+import { Briefcase, CircleCheck, Loader, ShieldAlert, ShieldCheck, Truck, User } from "lucide-react";
 
 export const USER_ROLES = {
   ADMIN: "admin",
   SELLER: "seller",
   CUSTOMER: "customer",
+  CARGO: "cargo",
 } as const;
 
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
@@ -41,6 +42,7 @@ export const ROLE_CONFIG: Record<UserRole, { icon: typeof ShieldCheck; label: st
   admin: { icon: ShieldCheck, label: "Почта" },
   seller: { icon: Briefcase, label: "Продавец" },
   customer: { icon: User, label: "Клиент" },
+  cargo: { icon: Truck, label: "Почта" },
 };
 
 export const STATUS_CONFIG: Record<UserStatus, { icon: typeof CircleCheck; color: string; label: string }> = {
@@ -69,8 +71,8 @@ export interface UserBadgeProps {
 
 export interface UsersListDesktopProps {
   users: User[];
-  onEdit?: (user: User) => void;
-  onDelete?: (id: number) => void;
-  onRoleChange?: (id: number, role: UserRole) => void;
-  onStatusChange?: (id: number, status: UserStatus) => void;
+  onEdit: (user: User) => void;
+  onDelete: (id: number) => void;
+  onRoleChange: (id: number, role: UserRole) => void;
+  onStatusChange: (id: number, status: UserStatus) => void;
 }

@@ -14,7 +14,7 @@ interface EditUserFormProps {
   onSave: (updates: { role: UserRole; status: UserStatus }) => Promise<void>;
 }
 
-export function EditUserForm({ user, open, onOpenChange, onSave }: EditUserFormProps) {
+export default function EditUserForm({ user, open, onOpenChange, onSave }: EditUserFormProps) {
   const [role, setRole] = useState<UserRole>(user.role);
   const [status, setStatus] = useState<UserStatus>(user.status);
   const [isLoading, setIsLoading] = useState(false);

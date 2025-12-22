@@ -1,11 +1,7 @@
-import { useState } from "react";
-
-import { toast } from "sonner";
+import { useState, useCallback } from "react";
 
 import { usersService } from "@/features/users/api/users";
 import type { User, UserRole, UserStatus } from "@/features/users/types/user.types";
-
-const IS_DEMO = process.env.NEXT_PUBLIC_DEMO === "true";
 
 interface UseUserActionsProps {
   onUsersUpdate?: (updater: (users: User[]) => User[]) => void;
@@ -14,71 +10,84 @@ interface UseUserActionsProps {
 export function useUserActions({ onUsersUpdate }: UseUserActionsProps = {}) {
   const [editingUser, setEditingUser] = useState<User | null>(null);
 
-  const handleDelete = async (id: number) => {
-    if (IS_DEMO) {
-      toast.info("Удаление недоступно в демо режиме");
-      return;
-    }
+  const handleDelete = useCallback(
+    async (id: number) => {
+      try {
+        await usersService.deleteUser(id);
+        onUsersUpdate?.((users) => users.filter((u) => u.id !== id));
 
-    try {
-      await usersService.deleteUser(id);
-      onUsersUpdate?.((users) => users.filter((u) => u.id !== id));
-      toast.success("Пользователь удален");
-    } catch {
-      toast.error("Ошибка при удалении пользователя");
-    }
-  };
+        const { toast } = await import("sonner");
+        toast.success("Пользователь удален");
+      } catch (error) {
+        const { toast } = await import("sonner");
+        toast.error("Ошибка при удалении пользователя");
+        console.error("Delete user error:", error);
+      }
+    },
+    [onUsersUpdate],
+  );
 
-  const handleStatusChange = async (id: number, status: UserStatus) => {
-    if (IS_DEMO) {
-      toast.info("Изменение статуса недоступно в демо режиме");
-      return;
-    }
+  const handleStatusChange = useCallback(
+    async (id: number, status: UserStatus) => {
+      try {
+        await usersService.changeStatus(id, status);
+        onUsersUpdate?.((users) => users.map((u) => (u.id === id ? { ...u, status } : u)));
 
-    try {
-      await usersService.changeStatus(id, status);
-      onUsersUpdate?.((users) => users.map((u) => (u.id === id ? { ...u, status } : u)));
-      toast.success("Статус обновлен");
-    } catch {
-      toast.error("Ошибка при изменении статуса");
-    }
-  };
+        const { toast } = await import("sonner");
+        toast.success("Статус обновлен");
+      } catch (error) {
+        const { toast } = await import("sonner");
+        toast.error("Ошибка при изменении статуса");
+        console.error("Change status error:", error);
+      }
+    },
+    [onUsersUpdate],
+  );
 
-  const handleRoleChange = async (id: number, role: UserRole) => {
-    if (IS_DEMO) {
-      toast.info("Изменение роли недоступно в демо режиме");
-      return;
-    }
+  const handleRoleChange = useCallback(
+    async (id: number, role: UserRole) => {
+      try {
+        await usersService.changeRole(id, role);
+        onUsersUpdate?.((users) => users.map((u) => (u.id === id ? { ...u, role } : u)));
 
-    try {
-      await usersService.changeRole(id, role);
-      onUsersUpdate?.((users) => users.map((u) => (u.id === id ? { ...u, role } : u)));
-      toast.success("Роль обновлена");
-    } catch {
-      toast.error("Ошибка при изменении роли");
-    }
-  };
+        const { toast } = await import("sonner");
+        toast.success("Роль обновлена");
+      } catch (error) {
+        const { toast } = await import("sonner");
+        toast.error("Ошибка при изменении роли");
+        console.error("Change role error:", error);
+      }
+    },
+    [onUsersUpdate],
+  );
 
-  const handleEdit = (user: User) => {
+  const handleEdit = useCallback((user: User) => {
     setEditingUser(user);
-  };
+  }, []);
 
-  const handleSaveEdit = async (updates: { role: UserRole; status: UserStatus }) => {
-    if (!editingUser) return;
+  const handleSaveEdit = useCallback(
+    async (updates: { role: UserRole; status: UserStatus }) => {
+      if (!editingUser) return;
 
-    const promises: Promise<void>[] = [];
+      const promises: Promise<void>[] = [];
 
-    if (updates.role !== editingUser.role) {
-      promises.push(handleRoleChange(editingUser.id, updates.role));
-    }
+      if (updates.role !== editingUser.role) {
+        promises.push(handleRoleChange(editingUser.id, updates.role));
+      }
 
-    if (updates.status !== editingUser.status) {
-      promises.push(handleStatusChange(editingUser.id, updates.status));
-    }
+      if (updates.status !== editingUser.status) {
+        promises.push(handleStatusChange(editingUser.id, updates.status));
+      }
 
-    await Promise.all(promises);
-    setEditingUser(null);
-  };
+      try {
+        await Promise.all(promises);
+        setEditingUser(null);
+      } catch (error) {
+        console.error("Save edit error:", error);
+      }
+    },
+    [editingUser, handleRoleChange, handleStatusChange],
+  );
 
   return {
     editingUser,

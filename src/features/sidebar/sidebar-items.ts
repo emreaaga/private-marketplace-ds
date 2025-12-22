@@ -36,7 +36,7 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         title: "Продавцы",
-        url: "/dashboard/products/orders",
+        url: "/dashboard/seller/orders",
         icon: Store,
         roles: [UserRole.ADMIN],
       },

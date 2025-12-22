@@ -1,7 +1,7 @@
 "use client";
 
-import type { Product } from "@/features/products/types/product.types";
-import { ProductCard } from "@/features/products/ui/molecules/product-card";
+import type { Product } from "@/features/seller/types/product.types";
+import { ProductCard } from "@/features/seller/ui/molecules/product-card";
 
 interface ProductsGridProps {
   products: Product[];

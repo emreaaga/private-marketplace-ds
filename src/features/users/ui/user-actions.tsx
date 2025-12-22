@@ -1,3 +1,5 @@
+import { memo } from "react";
+
 import { MoreHorizontal } from "lucide-react";
 
 import type { User, UserRole, UserStatus } from "@/features/users/types/user.types";
@@ -13,13 +15,13 @@ import {
 interface UserActionsProps {
   user: User;
   variant?: "desktop" | "mobile";
-  onEdit?: () => void;
-  onDelete?: () => void;
+  onEdit: (user: User) => void;
+  onDelete: (id: number) => void;
   onRoleChange?: (role: UserRole) => void;
   onStatusChange?: (status: UserStatus) => void;
 }
 
-export function UserActions({ onEdit, onDelete }: UserActionsProps) {
+export const UserActions = memo(function UserActions({ user, onEdit, onDelete }: UserActionsProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -28,22 +30,17 @@ export function UserActions({ onEdit, onDelete }: UserActionsProps) {
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="end" className="w-42">
-        {onEdit && (
-          <>
-            <DropdownMenuItem disabled onClick={onEdit}>
-              Редактировать
-            </DropdownMenuItem>
-            <DropdownMenuSeparator />
-          </>
-        )}
+      <DropdownMenuContent align="end" className="w-44">
+        <DropdownMenuItem disabled onClick={() => onEdit(user)}>
+          Редактировать
+        </DropdownMenuItem>
 
-        {onDelete && (
-          <DropdownMenuItem disabled onClick={onDelete} variant="destructive">
-            Удалить
-          </DropdownMenuItem>
-        )}
+        <DropdownMenuSeparator />
+
+        <DropdownMenuItem disabled onClick={() => onDelete(user.id)} variant="destructive">
+          Удалить
+        </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>
   );
-}
+});

@@ -1,12 +1,12 @@
 "use client";
 
-import { ProductImageCard } from "@/features/products/ui/molecules/card-view-drawer/product-image-card";
-import { ProductActionBar } from "@/features/products/ui/organisms/card-view-drawer/product-action-bar";
-import { ProductDetailsSection } from "@/features/products/ui/organisms/card-view-drawer/product-details-section";
-import { ProductHeader } from "@/features/products/ui/organisms/card-view-drawer/product-header";
+import { ProductImageCard } from "@/features/seller/ui/molecules/card-view-drawer/product-image-card";
+import { ProductActionBar } from "@/features/seller/ui/organisms/card-view-drawer/product-action-bar";
+import { ProductDetailsSection } from "@/features/seller/ui/organisms/card-view-drawer/product-details-section";
+import { ProductHeader } from "@/features/seller/ui/organisms/card-view-drawer/product-header";
 import { Drawer, DrawerContent } from "@/shared/ui/atoms/drawer";
 
-import { Product } from "../../../products/types/product.types";
+import { Product } from "../../../seller/types/product.types";
 
 interface ProductViewDrawerProps {
   open: boolean;

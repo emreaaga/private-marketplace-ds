@@ -1,14 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 
-const IS_DEMO = process.env.NEXT_PUBLIC_DEMO === "true";
-
 export function middleware(req: NextRequest) {
-  if (IS_DEMO) return NextResponse.next();
-
   const { pathname } = req.nextUrl;
 
-  const protectedRoutes = ["/dashboard"];
+  if (pathname.startsWith("/_next") || pathname.startsWith("/api") || pathname.includes(".")) {
+    return NextResponse.next();
+  }
 
+  const protectedRoutes = ["/dashboard"];
   const isProtected = protectedRoutes.some((route) => pathname.startsWith(route));
 
   if (!isProtected) {
@@ -19,6 +18,7 @@ export function middleware(req: NextRequest) {
 
   if (!refreshToken) {
     const loginUrl = new URL("/auth/login", req.url);
+    loginUrl.searchParams.set("from", pathname);
     return NextResponse.redirect(loginUrl);
   }
 
@@ -26,5 +26,5 @@ export function middleware(req: NextRequest) {
 }
 
 export const config = {
-  matcher: ["/dashboard/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|.*\\.(?:svg|png|jpg|jpeg|gif|webp)$).*)"],
 };

@@ -45,7 +45,6 @@ interface OrderDetailsDialogProps {
   onConfirm: () => void;
 }
 
-// Общий контент для Dialog и Drawer
 function OrderDetailsContent({
   order,
   onConfirm,

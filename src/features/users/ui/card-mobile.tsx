@@ -9,17 +9,17 @@ interface UserCardMobileProps {
 
 export function UserCardMobile({ user, actions }: UserCardMobileProps) {
   return (
-    <div className="flex items-start justify-between p-3">
-      <div className="flex flex-col space-y-1">
-        <p className="text-[15px] font-medium">{user.name}</p>
+    <div className="flex items-start justify-between p-2">
+      <div className="flex flex-col space-y-2">
+        <p className="font-mono text-sm">{user.public_id}</p>
         <p className="text-muted-foreground text-xs">{user.email}</p>
 
-        <div className="flex items-center gap-2 pt-1">
+        <div className="flex items-center gap-1">
           <RoleBadge role={user.role} />
           <StatusBadge status={user.status} />
         </div>
 
-        <p className="text-muted-foreground pt-1 text-[10px]">{new Date(user.created_at).toLocaleString()}</p>
+        <p className="text-muted-foreground text-xs">{user.created_at}</p>
       </div>
 
       {actions && <div className="shrink-0">{actions}</div>}

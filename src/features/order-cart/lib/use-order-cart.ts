@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-import { fakeProducts } from "@/features/products/fake-products";
+import { fakeProducts } from "@/features/seller/fake-products";
 
 import type { CartItemType } from "../model/types";
 

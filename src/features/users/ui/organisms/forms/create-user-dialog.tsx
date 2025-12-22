@@ -1,72 +1,110 @@
 "use client";
 
-import type { ReactNode } from "react";
-// eslint-disable-next-line no-duplicate-imports
-import { useState } from "react";
+import { useState, useCallback, useMemo } from "react";
 
 import { Phone, Shield, Store, User } from "lucide-react";
-import { toast } from "sonner";
 
 import { locationData } from "@/features/users/fake-user";
 import { Button } from "@/shared/ui/atoms/button";
-import {
-  Dialog,
-  DialogTrigger,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-} from "@/shared/ui/atoms/dialog";
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/shared/ui/atoms/dialog";
 import { Field } from "@/shared/ui/atoms/field";
 import { Input } from "@/shared/ui/atoms/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/shared/ui/atoms/select";
 import { Textarea } from "@/shared/ui/atoms/textarea";
 
-export function CreateUserDialog({ children }: { children: ReactNode }) {
-  const [open, setOpen] = useState(false);
+interface CreateUserDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
+}
 
+export default function CreateUserDialog({ open, onOpenChange }: CreateUserDialogProps) {
   const [country, setCountry] = useState<string>("");
   const [city, setCity] = useState<string>("");
   const [district, setDistrict] = useState<string>("");
 
-  const selectedCountryData = country ? locationData[country] : null;
-  const selectedCityData = country && city ? locationData[country].cities[city] : null;
+  const selectedCountryData = useMemo(() => (country ? locationData[country] : null), [country]);
+
+  const selectedCityData = useMemo(
+    () => (country && city ? locationData[country]?.cities[city] : null),
+    [country, city],
+  );
+
   const phoneCode = selectedCountryData?.phoneCode ?? "+";
 
-  const handleSubmit = () => {
+  const handleSubmit = useCallback(async () => {
+    const { toast } = await import("sonner");
     toast.success("Пользователь создан");
 
-    setOpen(false);
-    setCountry("");
-    setCity("");
-    setDistrict("");
-  };
+    onOpenChange(false);
 
-  const handleOpenChange = (newOpen: boolean) => {
-    setOpen(newOpen);
-    if (!newOpen) {
+    // Сброс формы после закрытия
+    setTimeout(() => {
       setCountry("");
       setCity("");
       setDistrict("");
-    }
-  };
+    }, 200);
+  }, [onOpenChange]);
 
-  const handleCountryChange = (value: string) => {
+  const handleOpenChange = useCallback(
+    (newOpen: boolean) => {
+      onOpenChange(newOpen);
+      if (!newOpen) {
+        setTimeout(() => {
+          setCountry("");
+          setCity("");
+          setDistrict("");
+        }, 200);
+      }
+    },
+    [onOpenChange],
+  );
+
+  const handleCountryChange = useCallback((value: string) => {
     setCountry(value);
     setCity("");
     setDistrict("");
-  };
+  }, []);
 
-  const handleCityChange = (value: string) => {
+  const handleCityChange = useCallback((value: string) => {
     setCity(value);
     setDistrict("");
-  };
+  }, []);
+
+  // Мемоизация списков для Select
+  const countryOptions = useMemo(
+    () =>
+      Object.entries(locationData).map(([key, data]) => (
+        <SelectItem key={key} value={key}>
+          {data.name}
+        </SelectItem>
+      )),
+    [],
+  );
+
+  const cityOptions = useMemo(
+    () =>
+      selectedCountryData
+        ? Object.entries(selectedCountryData.cities).map(([key, cityData]) => (
+            <SelectItem key={key} value={key}>
+              {cityData.name}
+            </SelectItem>
+          ))
+        : null,
+    [selectedCountryData],
+  );
+
+  const districtOptions = useMemo(
+    () =>
+      selectedCityData?.districts.map((dist) => (
+        <SelectItem key={dist} value={dist}>
+          {dist}
+        </SelectItem>
+      )),
+    [selectedCityData],
+  );
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
-
       <DialogContent className="flex max-h-[85vh] w-full flex-col overflow-hidden p-0 sm:max-w-md">
         <DialogHeader className="px-4 pt-4">
           <DialogTitle>Новый пользователь</DialogTitle>
@@ -129,13 +167,7 @@ export function CreateUserDialog({ children }: { children: ReactNode }) {
                 <SelectTrigger>
                   <SelectValue placeholder="Страна" />
                 </SelectTrigger>
-                <SelectContent>
-                  {Object.entries(locationData).map(([key, data]) => (
-                    <SelectItem key={key} value={key}>
-                      {data.name}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+                <SelectContent>{countryOptions}</SelectContent>
               </Select>
             </Field>
 
@@ -144,14 +176,7 @@ export function CreateUserDialog({ children }: { children: ReactNode }) {
                 <SelectTrigger>
                   <SelectValue placeholder="Город" />
                 </SelectTrigger>
-                <SelectContent>
-                  {selectedCountryData &&
-                    Object.entries(selectedCountryData.cities).map(([key, cityData]) => (
-                      <SelectItem key={key} value={key}>
-                        {cityData.name}
-                      </SelectItem>
-                    ))}
-                </SelectContent>
+                <SelectContent>{cityOptions}</SelectContent>
               </Select>
             </Field>
 
@@ -160,13 +185,7 @@ export function CreateUserDialog({ children }: { children: ReactNode }) {
                 <SelectTrigger>
                   <SelectValue placeholder="Район" />
                 </SelectTrigger>
-                <SelectContent>
-                  {selectedCityData?.districts.map((dist) => (
-                    <SelectItem key={dist} value={dist}>
-                      {dist}
-                    </SelectItem>
-                  ))}
-                </SelectContent>
+                <SelectContent>{districtOptions}</SelectContent>
               </Select>
             </Field>
 
@@ -178,7 +197,6 @@ export function CreateUserDialog({ children }: { children: ReactNode }) {
                 <span className="text-muted-foreground absolute top-1/2 left-3 flex w-8 -translate-y-1/2 items-center justify-center text-sm">
                   {country ? phoneCode : <Phone className="h-4 w-4 opacity-60" />}
                 </span>
-
                 <Input placeholder="Номер телефона" disabled={!country} className="pl-14" />
               </div>
             </Field>
