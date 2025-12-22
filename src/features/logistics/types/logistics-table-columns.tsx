@@ -37,28 +37,47 @@ const STATUS_MAP: Record<
 
 export const getLogisticsColumns = (): ColumnDef<Order>[] => [
   {
-    id: "counter",
-    header: "№",
-    cell: ({ row }) => row.original.counter,
+    id: "counter_date",
+    header: "№ / Дата",
+    cell: ({ row }) => {
+      const counter = String(row.original.counter).padStart(3, "0");
+
+      return (
+        <div className="flex flex-col">
+          <span className="font-medium">{counter}</span>
+          <span className="text-muted-foreground text-xs">{row.original.date}</span>
+        </div>
+      );
+    },
   },
 
   {
-    id: "id_date",
-    header: "ID / Дата",
-    cell: ({ row }) => (
-      <div className="flex flex-col">
-        <span className="font-mono text-xs">{row.original.id}</span>
-        <span className="text-muted-foreground text-xs">{row.original.date}</span>
-      </div>
-    ),
+    id: "id_status",
+    header: "ID / Статус",
+    cell: ({ row }) => {
+      const cfg = STATUS_MAP[row.original.status];
+      const Icon = cfg.icon;
+
+      return (
+        <div className="flex flex-col gap-2">
+          <span className="font-mono text-xs">{row.original.id}</span>
+          <span
+            className={`inline-flex items-center gap-1.5 self-start rounded-md px-2 py-1 text-xs font-medium ${cfg.className}`}
+          >
+            <Icon className="h-3.5 w-3.5" />
+            {cfg.label}
+          </span>
+        </div>
+      );
+    },
   },
   {
     id: "persons",
-    header: "Отпр/Плчт",
+    header: "Отпр / Получ",
     cell: ({ row }) => (
       <div className="flex flex-col text-sm leading-snug">
-        <span className="font-medium">{row.original.sender.name}</span>
-        <span className="text-muted-foreground">→ {row.original.recipient.name}</span>
+        <span className="text-muted-foreground">{row.original.sender.name}</span>
+        <span className="font-medium">{row.original.recipient.name}</span>
       </div>
     ),
   },
@@ -68,45 +87,18 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     header: "Телефоны",
     cell: ({ row }) => (
       <div className="flex flex-col text-xs leading-snug">
-        <span>
-          <span className="text-muted-foreground">Отпр.:</span> {row.original.sender.phone}
-        </span>
-        <span>
-          <span className="text-muted-foreground">Получ.:</span> {row.original.recipient.phone}
-        </span>
+        <span className="text-muted-foreground">{row.original.sender.phone}</span>
+        <span className="font-medium">{row.original.recipient.phone}</span>
       </div>
     ),
   },
-
-  // {
-  //   id: "sender",
-  //   header: "Отправитель",
-  //   cell: ({ row }) => (
-  //     <div className="flex flex-col">
-  //       <span className="font-medium">{row.original.sender.name}</span>
-  //       <span className="text-muted-foreground text-xs">{row.original.sender.phone}</span>
-  //     </div>
-  //   ),
-  // },
-
-  // {
-  //   id: "recipient",
-  //   header: "Получатель",
-  //   cell: ({ row }) => (
-  //     <div className="flex flex-col">
-  //       <span className="font-medium">{row.original.recipient.name}</span>
-  //       <span className="text-muted-foreground text-xs">{row.original.recipient.phone}</span>
-  //     </div>
-  //   ),
-  // },
-
   {
     id: "route",
     header: "Маршрут",
     cell: ({ row }) => (
       <div className="flex flex-col">
-        <span className="font-medium">{row.original.sender.city}</span>
-        <span className="text-muted-foreground text-xs"> {row.original.recipient.city}</span>
+        <span className="text-muted-foreground text-xs">{row.original.sender.city}</span>
+        <span className="font-medium"> {row.original.recipient.city}</span>
       </div>
     ),
   },
@@ -116,8 +108,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     header: "Вес / Ставка",
     cell: ({ row }) => (
       <div className="flex flex-col text-xs">
-        <span>{row.original.weight} кг</span>
-        <span className="text-muted-foreground">{row.original.ratePerKg} $ / кг</span>
+        <span className="text-muted-foreground">{row.original.weight} кг</span>
+        <span className="font-medium">{row.original.ratePerKg} $/кг</span>
       </div>
     ),
   },
@@ -139,38 +131,11 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
       const p1 = row.original.payment1;
       const p2 = row.original.payment2;
 
-      const formatLocation = (loc: "turkey" | "destination") => (loc === "turkey" ? "Турция" : "При получении");
-
       return (
         <div className="flex flex-col text-xs leading-snug">
-          <span>
-            <span className="text-muted-foreground">{formatLocation(p1.location)}:</span>{" "}
-            <span className="font-medium">{p1.amount.toLocaleString()} $</span>
-          </span>
-
-          {p2 && (
-            <span>
-              <span className="text-muted-foreground">{formatLocation(p2.location)}:</span>{" "}
-              <span className="font-medium">{p2.amount.toLocaleString()} $</span>
-            </span>
-          )}
+          <span className="font-medium">{p1.amount.toLocaleString()} $</span>
+          <span className="font-medium">{p1.amount.toLocaleString()} $</span>
         </div>
-      );
-    },
-  },
-
-  {
-    accessorKey: "status",
-    header: "Статус",
-    cell: ({ row }) => {
-      const cfg = STATUS_MAP[row.original.status];
-      const Icon = cfg.icon;
-
-      return (
-        <span className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium ${cfg.className}`}>
-          <Icon className="h-3.5 w-3.5" />
-          {cfg.label}
-        </span>
       );
     },
   },
