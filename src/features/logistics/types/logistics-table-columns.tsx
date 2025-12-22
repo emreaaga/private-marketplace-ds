@@ -76,7 +76,7 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     header: "Отпр / Получ",
     cell: ({ row }) => (
       <div className="flex flex-col text-sm leading-snug">
-        <span className="text-muted-foreground">{row.original.sender.name}</span>
+        <span className="text-muted-foreground text-xs">{row.original.sender.name}</span>
         <span className="font-medium">{row.original.recipient.name}</span>
       </div>
     ),
@@ -86,8 +86,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     id: "phones",
     header: "Телефоны",
     cell: ({ row }) => (
-      <div className="flex flex-col text-xs leading-snug">
-        <span className="text-muted-foreground">{row.original.sender.phone}</span>
+      <div className="flex flex-col leading-snug">
+        <span className="text-muted-foreground text-xs">{row.original.sender.phone}</span>
         <span className="font-medium">{row.original.recipient.phone}</span>
       </div>
     ),
@@ -108,7 +108,7 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     header: "Вес / Ставка",
     cell: ({ row }) => (
       <div className="flex flex-col text-xs">
-        <span className="text-muted-foreground">{row.original.weight} кг</span>
+        <span className="font-medium">{row.original.weight} кг</span>
         <span className="font-medium">{row.original.ratePerKg} $/кг</span>
       </div>
     ),
@@ -116,20 +116,24 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
 
   {
     id: "extras",
-    header: "Доп. оплата",
+    header: "Доп опл 1|2",
     cell: ({ row }) => {
       const sum = row.original.extraCharges?.reduce((acc, c) => acc + c.amount, 0) ?? 0;
 
-      return sum ? `${sum.toLocaleString()} $` : "—";
+      return (
+        <div className="flex flex-col text-xs">
+          <span>{sum ? `${sum.toLocaleString()} $` : "—"}</span>
+          <span>5 $</span>
+        </div>
+      );
     },
   },
 
   {
     id: "payments",
-    header: "Оплата",
+    header: "Оплата 1|2",
     cell: ({ row }) => {
       const p1 = row.original.payment1;
-      const p2 = row.original.payment2;
 
       return (
         <div className="flex flex-col text-xs leading-snug">
