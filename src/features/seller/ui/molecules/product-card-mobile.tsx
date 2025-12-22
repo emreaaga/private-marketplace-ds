@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import { ShoppingCartIcon, Check } from "lucide-react";
 
-import type { Product } from "@/features/products/types/product.types";
+import type { Product } from "@/features/seller/types/product.types";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/atoms/button";
 import { Card } from "@/shared/ui/atoms/card";

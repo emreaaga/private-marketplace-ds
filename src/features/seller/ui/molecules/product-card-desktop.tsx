@@ -6,7 +6,7 @@ import Image from "next/image";
 
 import { ShoppingCart, Heart } from "lucide-react";
 
-import type { Product } from "@/features/products/types/product.types";
+import type { Product } from "@/features/seller/types/product.types";
 
 export function ProductCardDesktop({ product }: { product: Product }) {
   const [isFavorite, setIsFavorite] = useState(false);

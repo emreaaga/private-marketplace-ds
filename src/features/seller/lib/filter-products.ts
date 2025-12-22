@@ -1,4 +1,4 @@
-import type { Product } from "@/features/products/types/product.types";
+import type { Product } from "@/features/seller/types/product.types";
 
 export type ProductSort = "none" | "price_asc" | "price_desc" | "qty_asc" | "qty_desc";
 

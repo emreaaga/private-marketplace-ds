@@ -1,6 +1,6 @@
 "use client";
 
-import type { Product } from "@/features/products/types/product.types";
+import type { Product } from "@/features/seller/types/product.types";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
 
 import { ProductCardDesktop } from "./product-card-desktop";

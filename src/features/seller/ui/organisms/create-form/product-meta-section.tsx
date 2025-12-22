@@ -4,7 +4,7 @@ import { useEffect } from "react";
 
 import { type UseFormReturn, useWatch } from "react-hook-form";
 
-import type { ProductFormValues } from "@/features/products/types/product-form.types";
+import type { ProductFormValues } from "@/features/seller/types/product-form.types";
 import { FormField, FormItem, FormMessage, FormControl } from "@/shared/ui/atoms/form";
 import { NumberStepper } from "@/shared/ui/molecules/number-stepper";
 
