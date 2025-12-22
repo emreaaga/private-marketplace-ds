@@ -73,7 +73,7 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
   },
   {
     id: "persons",
-    header: "Отпр / Получ",
+    header: "Отпр / Полч",
     cell: ({ row }) => (
       <div className="flex flex-col text-sm leading-snug">
         <span className="text-muted-foreground text-xs">{row.original.sender.name}</span>
@@ -86,9 +86,9 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     id: "phones",
     header: "Телефоны",
     cell: ({ row }) => (
-      <div className="flex flex-col leading-snug">
-        <span className="text-muted-foreground text-xs">{row.original.sender.phone}</span>
-        <span className="font-medium">{row.original.recipient.phone}</span>
+      <div className="text-muted-foreground flex flex-col text-xs leading-snug">
+        <span>{row.original.sender.phone}</span>
+        <span>{row.original.recipient.phone}</span>
       </div>
     ),
   },
@@ -96,9 +96,9 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     id: "route",
     header: "Маршрут",
     cell: ({ row }) => (
-      <div className="flex flex-col">
-        <span className="text-muted-foreground text-xs">{row.original.sender.city}</span>
-        <span className="font-medium"> {row.original.recipient.city}</span>
+      <div className="text-muted-foreground flex flex-col text-xs">
+        <span>{row.original.sender.city}</span>
+        <span> {row.original.recipient.city}</span>
       </div>
     ),
   },
