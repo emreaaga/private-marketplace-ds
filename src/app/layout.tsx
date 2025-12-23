@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 
 import type { Metadata } from "next";
 import { Inter } from "next/font/google";
+import { cookies } from "next/headers";
 
 import { Analytics } from "@vercel/analytics/next";
 
@@ -18,8 +19,14 @@ export const metadata: Metadata = {
   description: APP_CONFIG.meta.description,
 };
 
+type ThemeMode = "light" | "dark";
+
 export default async function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
-  const themeMode = "light";
+  const cookieStore = await cookies();
+  const rawTheme = cookieStore.get("theme_mode")?.value;
+
+  const themeMode: ThemeMode = rawTheme === "dark" || rawTheme === "light" ? rawTheme : "light";
+
   const themePreset = "default";
 
   return (

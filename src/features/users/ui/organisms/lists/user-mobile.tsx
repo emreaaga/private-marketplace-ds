@@ -18,22 +18,29 @@ export function UsersListMobile({ users, onEdit, onDelete, onRoleChange, onStatu
   return (
     <div className="border-border bg-card overflow-hidden rounded-lg border md:hidden">
       <div className="divide-border divide-y">
-        {users.map((user) => (
-          <UserCardMobile
-            key={user.id}
-            user={user}
-            actions={
-              <UserActions
-                user={user}
-                variant="mobile"
-                onEdit={() => onEdit?.(user)}
-                onDelete={() => onDelete?.(user.id)}
-                onRoleChange={(role) => onRoleChange?.(user.id, role)}
-                onStatusChange={(status) => onStatusChange?.(user.id, status)}
-              />
-            }
-          />
-        ))}
+        {users.map((user) => {
+          const handleEdit = () => onEdit?.(user);
+          const handleDelete = () => onDelete?.(user.id);
+          const handleRoleChange = (role: UserRole) => onRoleChange?.(user.id, role);
+          const handleStatusChange = (status: UserStatus) => onStatusChange?.(user.id, status);
+
+          return (
+            <UserCardMobile
+              key={user.id}
+              user={user}
+              actions={
+                <UserActions
+                  user={user}
+                  variant="mobile"
+                  onEdit={handleEdit}
+                  onDelete={handleDelete}
+                  onRoleChange={handleRoleChange}
+                  onStatusChange={handleStatusChange}
+                />
+              }
+            />
+          );
+        })}
       </div>
     </div>
   );
