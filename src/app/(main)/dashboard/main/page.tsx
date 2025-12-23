@@ -1,11 +1,11 @@
-import { Users, Store, ShoppingCart, AlertTriangle, TrendingUp, ChevronRight } from "lucide-react";
+import { Users, Store, ShoppingCart, AlertTriangle, TrendingUp } from "lucide-react";
 
 import { AdminHeader } from "@/features/admin/ui/organisms/admin-header";
-import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
-import { Item, ItemContent, ItemTitle, ItemDescription, ItemActions } from "@/shared/ui/atoms/item";
 
-import { StatCard } from "./stat-card";
+import ActivityItem from "./_components/activity-item";
+import { activities } from "./_components/fake-activities";
+import { StatCard } from "./_components/stat-card";
 
 export default function MainPage() {
   return (
@@ -25,21 +25,9 @@ export default function MainPage() {
           <h2 className="text-sm font-semibold">Последняя активность</h2>
 
           <div className="mt-4 space-y-2">
-            <ActivityItem title="Новый продавец" description="A001 зарегистрирован" badge="Новый" icon={Users} />
-            <ActivityItem
-              title="Заказ на модерации"
-              description="A001P10001 ожидает подтверждения"
-              badge="Внимание"
-              tone="warning"
-              icon={ShoppingCart}
-            />
-            <ActivityItem
-              title="Жалоба клиента"
-              description="Client B1001 — спор по заказу"
-              badge="Критично"
-              tone="danger"
-              icon={AlertTriangle}
-            />
+            {activities.map((item, i) => (
+              <ActivityItem key={i} {...item} />
+            ))}
           </div>
         </div>
 
@@ -64,47 +52,5 @@ export default function MainPage() {
         </div>
       </div>
     </div>
-  );
-}
-
-const TONE_STYLES = {
-  default: "bg-muted text-muted-foreground",
-  warning: "bg-yellow-500/15 text-yellow-700",
-  danger: "bg-red-500/15 text-red-700",
-};
-
-function ActivityItem({
-  title,
-  description,
-  badge,
-  tone = "default",
-  icon: Icon,
-}: {
-  title: string;
-  description: string;
-  badge: string;
-  tone?: "default" | "warning" | "danger";
-  icon: React.ElementType;
-}) {
-  return (
-    <Item variant="outline" size="sm" className="hover:bg-muted/40 cursor-pointer transition">
-      <div className="flex items-start gap-3">
-        <div className="bg-muted text-muted-foreground mt-0.5 flex h-8 w-8 items-center justify-center rounded-lg">
-          <Icon className="h-4 w-4" />
-        </div>
-
-        <ItemContent>
-          <ItemTitle>{title}</ItemTitle>
-          <ItemDescription>{description}</ItemDescription>
-        </ItemContent>
-      </div>
-
-      <ItemActions>
-        <Badge variant="secondary" className={TONE_STYLES[tone]}>
-          {badge}
-        </Badge>
-        <ChevronRight className="text-muted-foreground h-4 w-4" />
-      </ItemActions>
-    </Item>
   );
 }

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 
 import type { Order } from "@/features/orders/types/order.types";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
 import {
@@ -119,17 +120,9 @@ function OrderDetailsContent({
 }
 
 export function OrderDetailsDialog({ open, onOpenChange, order, onConfirm }: OrderDetailsDialogProps) {
-  const [isMobile, setIsMobile] = useState(false);
+  const isMobile = useIsMobile();
 
-  useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768);
-    };
-
-    checkMobile();
-    window.addEventListener("resize", checkMobile);
-    return () => window.removeEventListener("resize", checkMobile);
-  }, []);
+  if (isMobile === undefined) return null;
 
   if (!order) return null;
 

@@ -1,17 +1,17 @@
+import { useIsMobile } from "@/shared/hooks/use-mobile";
+
 import { CartTable } from "../organisms/cart-table";
 
 import { CartList } from "./cart-list";
 
 export function ResponsiveCart({ items, updateQuantity }: any) {
-  return (
-    <>
-      <div className="block md:hidden">
-        <CartList items={items} updateQuantity={updateQuantity} />
-      </div>
+  const isMobile = useIsMobile();
 
-      <div className="hidden md:block">
-        <CartTable items={items} updateQuantity={updateQuantity} />
-      </div>
-    </>
+  if (isMobile === undefined) return null;
+
+  return isMobile ? (
+    <CartList items={items} updateQuantity={updateQuantity} />
+  ) : (
+    <CartTable items={items} updateQuantity={updateQuantity} />
   );
 }

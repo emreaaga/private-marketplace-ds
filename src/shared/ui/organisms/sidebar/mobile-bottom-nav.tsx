@@ -15,6 +15,7 @@ interface MobileBottomNavProps {
 export default function MobileBottomNav({ items }: MobileBottomNavProps) {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
+  const [pressed, setPressed] = useState<string | null>(null);
 
   const bottomItems = useMemo(() => {
     return items
@@ -77,6 +78,7 @@ export default function MobileBottomNav({ items }: MobileBottomNavProps) {
           const currentBasePath = getBasePath(pathname);
 
           const isActive =
+            pressed === item.url ||
             pathname === item.url ||
             currentBasePath === itemBasePath ||
             pathname.startsWith(item.url + "/") ||
@@ -89,17 +91,22 @@ export default function MobileBottomNav({ items }: MobileBottomNavProps) {
 
           return (
             <Link
+              onClick={() => setPressed(item.url)}
               key={item.title}
               href={item.url}
               className={cn(
                 "flex flex-1 items-center justify-center",
                 "rounded-xl px-4 py-3",
-                "transition-colors active:opacity-80",
+                "transition-all duration-150",
+                "active:scale-95 active:opacity-70",
                 isActive && "bg-gray-900/95 shadow-md",
               )}
             >
               <Icon
-                className={cn("h-6 w-6 transition-transform", isActive ? "scale-110 text-white" : "text-gray-900")}
+                className={cn(
+                  "h-6 w-6 transition-all duration-200",
+                  isActive ? "scale-110 text-white" : "scale-100 text-gray-900",
+                )}
                 strokeWidth={isActive ? 2.5 : 2}
               />
             </Link>
