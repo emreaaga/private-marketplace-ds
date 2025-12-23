@@ -2,8 +2,6 @@
 
 import { useState } from "react";
 
-import { QrCode } from "lucide-react";
-
 import { Button } from "@/shared/ui/atoms/button";
 import {
   Dialog,
@@ -16,8 +14,6 @@ import {
 import { Input } from "@/shared/ui/atoms/input";
 import { Label } from "@/shared/ui/atoms/label";
 
-import { QRScanner } from "./qr-scanner";
-
 interface SendDialogProps {
   open: boolean;
   onOpenChange: (v: boolean) => void;
@@ -27,24 +23,12 @@ interface SendDialogProps {
 export function SendDialog({ open, onOpenChange, balance }: SendDialogProps) {
   const [recipient, setRecipient] = useState("");
   const [amount, setAmount] = useState("");
-  const [scanOpen, setScanOpen] = useState(false);
 
-  const fee = amount ? Number(amount) * 0.02 : 0;
-  const total = amount ? Number(amount) + fee : 0;
-
-  const disabled = !recipient || !amount || Number(amount) <= 0 || total > balance;
+  const disabled = !recipient || !amount || Number(amount) <= 0 || Number(amount) > balance;
 
   return (
-    <Dialog
-      open={open}
-      onOpenChange={(v) => {
-        onOpenChange(v);
-        if (!v) {
-          setScanOpen(false);
-        }
-      }}
-    >
-      <DialogContent className="sm:max-w-md">
+    <Dialog open={open} onOpenChange={onOpenChange}>
+      <DialogContent>
         <DialogHeader>
           <DialogTitle>Отправить средства</DialogTitle>
           <DialogDescription>Перевод средств другому пользователю</DialogDescription>
@@ -57,37 +41,12 @@ export function SendDialog({ open, onOpenChange, balance }: SendDialogProps) {
 
           <div className="space-y-2">
             <Label>Получатель</Label>
-            <div className="flex gap-2">
-              <Input
-                placeholder="ID, адрес или ссылка"
-                value={recipient}
-                onChange={(e) => setRecipient(e.target.value)}
-              />
-              <Button
-                type="button"
-                size="icon"
-                variant="outline"
-                onClick={() => {
-                  setScanOpen((v) => !v);
-                }}
-              >
-                <QrCode className="h-4 w-4" />
-              </Button>
-            </div>
+            <Input
+              placeholder="ID, адрес или ссылка"
+              value={recipient}
+              onChange={(e) => setRecipient(e.target.value)}
+            />
           </div>
-
-          {scanOpen && (
-            <div className="space-y-2">
-              <QRScanner
-                key="qr-scanner"
-                onResult={(value) => {
-                  setRecipient(value);
-                  setScanOpen(false);
-                }}
-              />
-              <p className="text-muted-foreground text-center text-xs">Наведите камеру на QR-код</p>
-            </div>
-          )}
 
           <div className="space-y-2">
             <Label>Сумма</Label>
@@ -95,7 +54,7 @@ export function SendDialog({ open, onOpenChange, balance }: SendDialogProps) {
           </div>
         </div>
 
-        <DialogFooter>
+        <DialogFooter className="flex-col gap-2 sm:flex-row">
           <Button variant="outline" onClick={() => onOpenChange(false)}>
             Отмена
           </Button>
