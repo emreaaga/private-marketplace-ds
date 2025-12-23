@@ -2,6 +2,8 @@
 
 import { useState } from "react";
 
+import { Coins } from "lucide-react";
+
 import { Button } from "@/shared/ui/atoms/button";
 import {
   Dialog,
@@ -12,6 +14,14 @@ import {
   DialogTitle,
 } from "@/shared/ui/atoms/dialog";
 import { Input } from "@/shared/ui/atoms/input";
+import {
+  InputGroup,
+  InputGroupAddon,
+  InputGroupButton,
+  InputGroupInput,
+  InputGroupText,
+  InputGroupTextarea,
+} from "@/shared/ui/atoms/input-group";
 import { Label } from "@/shared/ui/atoms/label";
 
 interface SendDialogProps {
@@ -50,7 +60,12 @@ export function SendDialog({ open, onOpenChange, balance }: SendDialogProps) {
 
           <div className="space-y-2">
             <Label>Сумма</Label>
-            <Input type="number" value={amount} onChange={(e) => setAmount(e.target.value)} />
+            <InputGroup>
+              <InputGroupInput placeholder="Введите количество" />
+              <InputGroupAddon>
+                <Coins />
+              </InputGroupAddon>
+            </InputGroup>
           </div>
         </div>
 

@@ -2,9 +2,8 @@
 
 import { Copy, QrCode } from "lucide-react";
 
-import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
-import { Input } from "@/shared/ui/atoms/input";
+import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from "@/shared/ui/atoms/input-group";
 import { Label } from "@/shared/ui/atoms/label";
 
 interface ReceiveDialogProps {
@@ -14,10 +13,6 @@ interface ReceiveDialogProps {
 }
 
 export function ReceiveDialog({ open, onOpenChange, receiveUrl }: ReceiveDialogProps) {
-  const copy = async () => {
-    await navigator.clipboard.writeText(receiveUrl);
-  };
-
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="sm:max-w-sm">
@@ -36,12 +31,14 @@ export function ReceiveDialog({ open, onOpenChange, receiveUrl }: ReceiveDialogP
 
           <div className="space-y-2">
             <Label>Ссылка для перевода</Label>
-            <div className="flex gap-2">
-              <Input readOnly value={receiveUrl} />
-              <Button size="icon" variant="outline" onClick={copy}>
-                <Copy className="h-4 w-4" />
-              </Button>
-            </div>
+            <InputGroup>
+              <InputGroupInput readOnly value={receiveUrl} className="pl-1!" />
+              <InputGroupAddon align="inline-end">
+                <InputGroupButton className="rounded-full" size="icon-sm">
+                  <Copy />
+                </InputGroupButton>
+              </InputGroupAddon>
+            </InputGroup>
           </div>
         </div>
       </DialogContent>
