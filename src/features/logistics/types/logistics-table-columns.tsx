@@ -137,8 +137,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
 
       return (
         <div className="flex flex-col text-xs leading-snug">
-          <span className="font-medium">{p1.amount.toLocaleString()} $</span>
-          <span className="font-medium">{p1.amount.toLocaleString()} $</span>
+          <span className="font-medium">{p1.amount} $</span>
+          <span className="font-medium">{p1.amount} $</span>
         </div>
       );
     },

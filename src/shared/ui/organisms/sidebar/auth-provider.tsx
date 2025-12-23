@@ -9,7 +9,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   if (!isInitialized) {
     return (
-      <div className="from-background via-background to-muted/20 fixed inset-0 z-50 flex items-center justify-center bg-gradient-to-br backdrop-blur-md">
+      <div className="from-background via-background to-muted/20 fixed inset-0 z-50 flex items-center justify-center bg-linear-to-br backdrop-blur-md">
         <div className="bg-card flex flex-col items-center gap-4 rounded-lg border p-8 shadow-lg">
           <div className="relative">
             <Spinner />

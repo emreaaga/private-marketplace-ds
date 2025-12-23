@@ -6,7 +6,7 @@ import { useRouter, usePathname } from "next/navigation";
 import type { NavGroup } from "@/features/sidebar/types/sidebar.types";
 import { cn } from "@/shared/lib/utils";
 
-export function MobileBottomNav({ items }: { items: NavGroup[] }) {
+export default function MobileBottomNav({ items }: { items: NavGroup[] }) {
   const path = usePathname();
   const router = useRouter();
   const [hidden, setHidden] = useState(false);

@@ -144,9 +144,9 @@ const NavItemCollapsed = ({
 export function NavMain({ items }: NavMainProps) {
   const path = usePathname();
   const { state, isMobile } = useSidebar();
-  const user = useAuthStore((s) => s.user);
 
-  if (!user) return null;
+  // const user = useAuthStore((s) => s.user);
+  // if (!user) return null;
 
   const getBasePath = (url: string) => {
     const segments = url.split("/").filter(Boolean);
@@ -202,10 +202,7 @@ export function NavMain({ items }: NavMainProps) {
       </SidebarGroup>
 
       {items.map((group) => {
-        const visibleItems = group.items.filter((item) => {
-          if (!item.roles) return true;
-          return item.roles.includes(user.role);
-        });
+        const visibleItems = group.items;
 
         if (visibleItems.length === 0) return null;
 
