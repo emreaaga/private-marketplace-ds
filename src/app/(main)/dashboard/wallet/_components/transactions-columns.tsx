@@ -46,7 +46,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     header: "Отправитель",
     cell: ({ getValue }) => (
       <div className="flex items-center gap-1.5">
-        <ArrowUp className="text-muted-foreground h-3.5 w-3.5" />
+        <ArrowUp className="h-3.5 w-3.5 text-green-600" />
         <span>{getValue<string>()}</span>
       </div>
     ),
@@ -71,7 +71,7 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     header: "Получатель",
     cell: ({ getValue }) => (
       <div className="flex items-center gap-1.5">
-        <ArrowDown className="text-muted-foreground h-3.5 w-3.5" />
+        <ArrowDown className="h-3.5 w-3.5 text-red-600" />
         <span>{getValue<string>()}</span>
       </div>
     ),
