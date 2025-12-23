@@ -37,7 +37,6 @@ export default function CreateUserDialog({ open, onOpenChange }: CreateUserDialo
 
     onOpenChange(false);
 
-    // Сброс формы после закрытия
     setTimeout(() => {
       setCountry("");
       setCity("");

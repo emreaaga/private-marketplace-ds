@@ -25,16 +25,6 @@ export default function UsersMainPage() {
     onUsersUpdate: setUsers,
   });
 
-  if (isLoading) {
-    return (
-      <div className="space-y-6">
-        <div className="flex items-center justify-center py-12">
-          <p className="text-muted-foreground">Загрузка...</p>
-        </div>
-      </div>
-    );
-  }
-
   return (
     <div className="space-y-6">
       <UsersToolbar />
