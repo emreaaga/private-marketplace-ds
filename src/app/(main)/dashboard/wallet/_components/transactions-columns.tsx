@@ -1,7 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Coins } from "lucide-react";
-
-import { cn } from "@/shared/lib/utils";
+import { ArrowDown, ArrowUp, Coins } from "lucide-react";
 
 export interface Transaction {
   id: string;
@@ -33,56 +31,49 @@ export const data: Transaction[] = [
 
 export const transactionColumns: ColumnDef<Transaction>[] = [
   {
+    accessorKey: "date",
+    header: "Дата",
+    cell: ({ getValue }) => <span className="text-muted-foreground">{getValue<string>()}</span>,
+  },
+  {
     accessorKey: "id",
     header: "id",
     cell: ({ getValue }) => <span className="text-muted-foreground font-mono text-xs">{getValue<string>()}</span>,
   },
+
   {
     accessorKey: "sender",
     header: "Отправитель",
-    cell: ({ getValue }) => <span>{getValue<string>()}</span>,
+    cell: ({ getValue }) => (
+      <div className="flex items-center gap-1.5">
+        <ArrowUp className="text-muted-foreground h-3.5 w-3.5" />
+        <span>{getValue<string>()}</span>
+      </div>
+    ),
   },
-  {
-    accessorKey: "receiver",
-    header: "Получатель",
-    cell: ({ getValue }) => <span>{getValue<string>()}</span>,
-  },
-  {
-    accessorKey: "type",
-    header: "Тип",
-    cell: ({ getValue }) => {
-      const type = getValue<"in" | "out">();
-      return (
-        <div className="flex items-center gap-1.5">
-          <span>{type === "in" ? "Поступление" : "Списание"}</span>
-        </div>
-      );
-    },
-  },
+
   {
     accessorKey: "amount",
     header: "Сумма",
     cell: ({ row, getValue }) => {
       const value = getValue<number>();
-      const isIn = row.original.type === "in";
 
       return (
-        <div
-          className={cn(
-            "flex items-center gap-1.5 font-medium tabular-nums",
-            isIn ? "text-emerald-600" : "text-rose-600",
-          )}
-        >
-          <Coins className="h-3.5 w-3.5 opacity-70" />
+        <div className="text-foreground flex items-center gap-1.5 font-medium tabular-nums">
+          <Coins className="h-3.5 w-3.5 text-yellow-500" />
           <span>{value}</span>
         </div>
       );
     },
   },
-
   {
-    accessorKey: "date",
-    header: "Дата",
-    cell: ({ getValue }) => <span className="text-muted-foreground">{getValue<string>()}</span>,
+    accessorKey: "receiver",
+    header: "Получатель",
+    cell: ({ getValue }) => (
+      <div className="flex items-center gap-1.5">
+        <ArrowDown className="text-muted-foreground h-3.5 w-3.5" />
+        <span>{getValue<string>()}</span>
+      </div>
+    ),
   },
 ];
