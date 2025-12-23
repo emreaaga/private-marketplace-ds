@@ -23,13 +23,11 @@ export function OrdersToolbar({ open, onOpenChange }: OrdersHeaderProps) {
           </InputGroupAddon>
         </InputGroup>
 
-        <OrderCreateDialog open={open} onOpenChange={onOpenChange}>
-          <Button size="sm" className="h-9 flex-1 md:flex-none">
-            <PlusIcon className="h-4 w-4" />
-            <span className="md:inline">Создать</span>
-            <span className="hidden md:inline">заказ</span>
-          </Button>
-        </OrderCreateDialog>
+        <Button size="sm" className="h-9 flex-1 md:flex-none" onClick={() => onOpenChange(true)}>
+          <PlusIcon className="h-4 w-4" />
+          <span className="md:inline">Создать</span>
+          <span className="hidden md:inline">заказ</span>
+        </Button>
       </div>
 
       <div className="flex w-full gap-2 md:w-auto md:justify-end">
@@ -37,6 +35,8 @@ export function OrdersToolbar({ open, onOpenChange }: OrdersHeaderProps) {
         <IconButton Icon={ListFilter} label="Фильтры" />
         <IconButton Icon={RotateCcw} label="Сбросить" />
       </div>
+
+      <OrderCreateDialog open={open} onOpenChange={onOpenChange} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Users, Package, UserCircle, BarChart3, Settings, Store } from "lucide-react";
+import { Users, Package, UserCircle, BarChart3, Settings, Store, Wallet } from "lucide-react";
 
 import { NavGroup } from "@/features/sidebar/types/sidebar.types";
 import { UserRole } from "@/shared/lib/rbac/roles";
@@ -26,6 +26,12 @@ export const sidebarItems: NavGroup[] = [
         title: "Пользователи",
         url: "/dashboard/users/main",
         icon: Users,
+        roles: [UserRole.ADMIN],
+      },
+      {
+        title: "Кошелек",
+        url: "/dashboard/wallet",
+        icon: Wallet,
         roles: [UserRole.ADMIN],
       },
       {

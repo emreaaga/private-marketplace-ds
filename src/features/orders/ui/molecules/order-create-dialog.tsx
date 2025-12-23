@@ -30,7 +30,6 @@ import { ProductList } from "./product-list";
 interface OrderCreateDialogProps {
   open: boolean;
   onOpenChange: (v: boolean) => void;
-  children: React.ReactNode;
   sellerId?: string;
 }
 
@@ -64,7 +63,7 @@ function OrderCreateContent({ onClose, onSubmit }: { onClose: () => void; onSubm
   );
 }
 
-export function OrderCreateDialog({ open, onOpenChange, children }: OrderCreateDialogProps) {
+export function OrderCreateDialog({ open, onOpenChange }: OrderCreateDialogProps) {
   const [isMobile, setIsMobile] = React.useState(false);
 
   React.useEffect(() => {
@@ -79,16 +78,12 @@ export function OrderCreateDialog({ open, onOpenChange, children }: OrderCreateD
   if (isMobile) {
     return (
       <Drawer open={open} onOpenChange={onOpenChange}>
-        <DrawerTrigger asChild>{children}</DrawerTrigger>
         <DrawerContent className="max-h-[95vh]">
           <DrawerHeader className="border-b">
             <DrawerTitle>Создать заказ</DrawerTitle>
           </DrawerHeader>
-
           <div className="flex-1 overflow-y-auto px-4 py-4">
-            <div className="space-y-4">
-              <OrderCreateContent onClose={() => onOpenChange(false)} onSubmit={() => console.log("Order created")} />
-            </div>
+            <OrderCreateContent onClose={() => onOpenChange(false)} onSubmit={() => console.log("Order created")} />
           </div>
         </DrawerContent>
       </Drawer>
@@ -97,15 +92,11 @@ export function OrderCreateDialog({ open, onOpenChange, children }: OrderCreateD
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogTrigger asChild>{children}</DialogTrigger>
       <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-2xl">
         <DialogHeader>
           <DialogTitle>Создать заказ</DialogTitle>
         </DialogHeader>
-
-        <div className="space-y-4">
-          <OrderCreateContent onClose={() => onOpenChange(false)} onSubmit={() => console.log("Order created")} />
-        </div>
+        <OrderCreateContent onClose={() => onOpenChange(false)} onSubmit={() => console.log("Order created")} />
       </DialogContent>
     </Dialog>
   );
