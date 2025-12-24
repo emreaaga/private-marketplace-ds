@@ -32,7 +32,7 @@ export function ReceiveDialog({ open, onOpenChange, receiveUrl }: ReceiveDialogP
           <div className="space-y-2">
             <Label>Ссылка для перевода</Label>
             <InputGroup>
-              <InputGroupInput readOnly value={receiveUrl} className="pl-1!" />
+              <InputGroupInput disabled value={receiveUrl} className="pl-1!" />
               <InputGroupAddon align="inline-end">
                 <InputGroupButton className="rounded-full" size="icon-sm">
                   <Copy />

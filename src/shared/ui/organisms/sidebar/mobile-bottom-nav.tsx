@@ -1,5 +1,4 @@
 "use client";
-
 import { useEffect, useMemo, useState } from "react";
 
 import Link from "next/link";
@@ -15,7 +14,6 @@ interface MobileBottomNavProps {
 export default function MobileBottomNav({ items }: MobileBottomNavProps) {
   const pathname = usePathname();
   const [hidden, setHidden] = useState(false);
-  const [pressed, setPressed] = useState<string | null>(null);
 
   const bottomItems = useMemo(() => {
     return items
@@ -30,19 +28,15 @@ export default function MobileBottomNav({ items }: MobileBottomNavProps) {
 
     const onScroll = () => {
       if (ticking) return;
-
       ticking = true;
       requestAnimationFrame(() => {
         const y = window.scrollY;
-
         if (y > lastY && y > 100 && !hidden) {
           setHidden(true);
         }
-
         if (y < lastY && hidden) {
           setHidden(false);
         }
-
         lastY = y;
         ticking = false;
       });
@@ -59,26 +53,20 @@ export default function MobileBottomNav({ items }: MobileBottomNavProps) {
 
   return (
     <nav
-      className={cn(
-        "fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 md:hidden",
-        "transition-transform duration-300",
-        hidden && "translate-y-full",
-      )}
+      className={cn("fixed inset-x-0 bottom-0 z-50 flex justify-center px-4 md:hidden", hidden && "translate-y-full")}
     >
       <div
         className={cn(
           "mb-1 flex w-full max-w-md items-center justify-around gap-1",
           "rounded-2xl border border-white/20",
-          "bg-white/90", // ❌ без backdrop-blur — быстрее на мобилке
+          "bg-white/90",
           "px-3 py-1 shadow-[0_8px_32px_rgba(0,0,0,0.08)]",
         )}
       >
         {bottomItems.map((item) => {
           const itemBasePath = getBasePath(item.url);
           const currentBasePath = getBasePath(pathname);
-
           const isActive =
-            pressed === item.url ||
             pathname === item.url ||
             currentBasePath === itemBasePath ||
             pathname.startsWith(item.url + "/") ||
@@ -91,22 +79,17 @@ export default function MobileBottomNav({ items }: MobileBottomNavProps) {
 
           return (
             <Link
-              onClick={() => setPressed(item.url)}
               key={item.title}
               href={item.url}
+              prefetch={true}
               className={cn(
                 "flex flex-1 items-center justify-center",
                 "rounded-xl px-4 py-3",
-                "transition-all duration-150",
-                "active:scale-95 active:opacity-70",
                 isActive && "bg-gray-900/95 shadow-md",
               )}
             >
               <Icon
-                className={cn(
-                  "h-6 w-6 transition-all duration-200",
-                  isActive ? "scale-110 text-white" : "scale-100 text-gray-900",
-                )}
+                className={cn("h-6 w-6", isActive ? "text-white" : "text-gray-900")}
                 strokeWidth={isActive ? 2.5 : 2}
               />
             </Link>

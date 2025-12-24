@@ -14,14 +14,7 @@ import {
   DialogTitle,
 } from "@/shared/ui/atoms/dialog";
 import { Input } from "@/shared/ui/atoms/input";
-import {
-  InputGroup,
-  InputGroupAddon,
-  InputGroupButton,
-  InputGroupInput,
-  InputGroupText,
-  InputGroupTextarea,
-} from "@/shared/ui/atoms/input-group";
+import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/atoms/input-group";
 import { Label } from "@/shared/ui/atoms/label";
 
 interface SendDialogProps {
@@ -38,7 +31,7 @@ export function SendDialog({ open, onOpenChange, balance }: SendDialogProps) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent>
+      <DialogContent onOpenAutoFocus={(e) => e.preventDefault()}>
         <DialogHeader>
           <DialogTitle>Отправить средства</DialogTitle>
           <DialogDescription>Перевод средств другому пользователю</DialogDescription>
