@@ -1,10 +1,17 @@
-import { memo } from "react";
+import dynamic from "next/dynamic";
 
 import type { User, UserRole, UserStatus } from "@/features/users/types/user.types";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
+import { ListSkeleton } from "@/shared/ui/molecules/list-skeleton";
+import { TableSkeleton } from "@/shared/ui/molecules/table-skeleton";
 
-import { UsersListDesktop } from "./user-desktop";
-import { UsersListMobile } from "./user-mobile";
+const UsersListDesktop = dynamic(() => import("./user-desktop").then((m) => m.UsersListDesktop), {
+  loading: () => <TableSkeleton rows={10} columns={6} />,
+});
+
+const UsersListMobile = dynamic(() => import("./user-mobile").then((m) => m.UsersListMobile), {
+  loading: () => <ListSkeleton rows={6} />,
+});
 
 interface UsersListResponsiveProps {
   users: User[];
@@ -14,7 +21,7 @@ interface UsersListResponsiveProps {
   onStatusChange: (id: number, status: UserStatus) => void;
 }
 
-export const UsersListResponsive = memo(function UsersListResponsive(props: UsersListResponsiveProps) {
+export function UsersListResponsive(props: UsersListResponsiveProps) {
   const isMobile = useIsMobile();
 
   if (isMobile === undefined) {
@@ -26,4 +33,4 @@ export const UsersListResponsive = memo(function UsersListResponsive(props: User
   }
 
   return isMobile ? <UsersListMobile {...props} /> : <UsersListDesktop {...props} />;
-});
+}

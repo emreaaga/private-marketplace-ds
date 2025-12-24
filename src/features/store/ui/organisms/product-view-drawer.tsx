@@ -14,7 +14,7 @@ interface ProductViewDrawerProps {
   product: Product | null;
 }
 
-export function ProductViewDrawer({ open, onOpenChange, product }: ProductViewDrawerProps) {
+export default function ProductViewDrawer({ open, onOpenChange, product }: ProductViewDrawerProps) {
   if (!product) return null;
 
   return (

@@ -16,7 +16,7 @@ interface ProductCardMobileProps {
   onOpen: () => void;
 }
 
-export function ProductCardMobile({ product, onOpen }: ProductCardMobileProps) {
+export default function ProductCardMobile({ product, onOpen }: ProductCardMobileProps) {
   const [added, setAdded] = useState(false);
 
   return (

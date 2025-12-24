@@ -1,6 +1,6 @@
 "use client";
 
-import { lazy, Suspense } from "react";
+import dynamic from "next/dynamic";
 
 import { mockUsers } from "@/features/users/fake-users";
 import { useUserActions } from "@/features/users/hooks/use-user-actions";
@@ -8,7 +8,7 @@ import { useUsers } from "@/features/users/hooks/use-users";
 import { UsersListResponsive } from "@/features/users/ui/organisms/lists/user-responsive";
 import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
 
-const EditUserForm = lazy(() => import("@/features/users/ui/organisms/forms/edit-user"));
+const EditUserForm = dynamic(() => import("@/features/users/ui/organisms/forms/edit-user"), { loading: () => null });
 
 export default function UsersMainPage() {
   const { users, setUsers, isLoading } = useUsers();
@@ -26,7 +26,7 @@ export default function UsersMainPage() {
   });
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <UsersToolbar />
       <UsersListResponsive
         users={mockUsers}
@@ -37,14 +37,12 @@ export default function UsersMainPage() {
       />
 
       {editingUser && (
-        <Suspense fallback={null}>
-          <EditUserForm
-            user={editingUser}
-            open={!!editingUser}
-            onOpenChange={(open) => !open && setEditingUser(null)}
-            onSave={handleSaveEdit}
-          />
-        </Suspense>
+        <EditUserForm
+          user={editingUser}
+          open={true}
+          onOpenChange={(open) => !open && setEditingUser(null)}
+          onSave={handleSaveEdit}
+        />
       )}
     </div>
   );

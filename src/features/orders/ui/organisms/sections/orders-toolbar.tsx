@@ -1,11 +1,19 @@
 "use client";
 
+import dynamic from "next/dynamic";
+
 import { ListFilter, PlusIcon, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
 
-import { OrderCreateDialog } from "@/features/orders/ui/molecules/order-create-dialog";
 import { Button } from "@/shared/ui/atoms/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/atoms/input-group";
 import { IconButton } from "@/shared/ui/molecules/icon-button";
+
+const OrderCreateDialog = dynamic(
+  () => import("@/features/orders/ui/molecules/order-create-dialog").then((m) => m.OrderCreateDialog),
+  {
+    loading: () => null,
+  },
+);
 
 interface OrdersHeaderProps {
   open: boolean;

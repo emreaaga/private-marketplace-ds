@@ -2,12 +2,11 @@ import { ReactNode } from "react";
 
 import { Separator } from "@/shared/ui/atoms/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/shared/ui/atoms/sidebar";
-import { AppSidebar } from "@/shared/ui/organisms/sidebar/app-sidebar";
 import { AppSidebarClient } from "@/shared/ui/organisms/sidebar/app-sidebar-client";
-import { AuthProvider } from "@/shared/ui/organisms/sidebar/auth-provider";
 import { MobileBottomNavClient } from "@/shared/ui/organisms/sidebar/mobile-bottom-nav-client";
 import { SearchDialog } from "@/shared/ui/organisms/sidebar/search-dialog";
 import { ThemeSwitcher } from "@/shared/ui/organisms/sidebar/theme-switcher";
+// import { AuthProvider } from "@/shared/ui/organisms/sidebar/auth-provider";
 
 export default function Layout({ children }: { children: ReactNode }) {
   return (

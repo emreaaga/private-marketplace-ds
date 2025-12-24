@@ -51,7 +51,7 @@ export const productColumns: ColumnDef<ProductRow>[] = [
 
       return (
         <div className="leading-tight">
-          <div className="text-sm font-medium">{totalSum.toLocaleString()} $</div>
+          <div className="text-sm font-medium">{totalSum} $</div>
           <div className="text-muted-foreground text-xs">{row.original.count_of_series} серий</div>
         </div>
       );
@@ -63,7 +63,7 @@ export const productColumns: ColumnDef<ProductRow>[] = [
     header: "Продано",
     cell: ({ row }) => (
       <div className="leading-tight">
-        <div className="text-sm font-medium">{row.original.sold_amount.toLocaleString()} $</div>
+        <div className="text-sm font-medium">{row.original.sold_amount} $</div>
         <div className="text-muted-foreground text-xs">{row.original.sold_series} серий</div>
       </div>
     ),
@@ -83,7 +83,7 @@ export const productColumns: ColumnDef<ProductRow>[] = [
 
       return (
         <div className="leading-tight">
-          <div className={`text-sm font-medium ${color}`}>{remainingSum.toLocaleString()} $</div>
+          <div className={`text-sm font-medium ${color}`}>{remainingSum} $</div>
           <div className="text-muted-foreground text-xs">{remainingSeries} серий</div>
         </div>
       );

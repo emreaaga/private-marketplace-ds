@@ -2,13 +2,16 @@
 
 import { useState } from "react";
 
+import dynamic from "next/dynamic";
+
 import { ArrowDown, ArrowUp, Coins } from "lucide-react";
 
 import { Button } from "@/shared/ui/atoms/button";
 import { ButtonGroup } from "@/shared/ui/atoms/button-group";
 
-import { ReceiveDialog } from "./receive-dialog";
-import { SendDialog } from "./send-dialog";
+const ReceiveDialog = dynamic(() => import("./receive-dialog").then((m) => m.ReceiveDialog), { loading: () => null });
+
+const SendDialog = dynamic(() => import("./send-dialog").then((m) => m.SendDialog), { loading: () => null });
 
 export default function WalletHeader() {
   const balance = 1515;

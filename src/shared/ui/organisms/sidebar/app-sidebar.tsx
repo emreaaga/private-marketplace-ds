@@ -1,8 +1,13 @@
 "use client";
 
+import dynamic from "next/dynamic";
 import Link from "next/link";
 
 import { Command } from "lucide-react";
+
+const NavMain = dynamic(() => import("@/shared/ui/organisms/sidebar/nav-main").then((m) => m.NavMain), {
+  ssr: false,
+});
 
 import { sidebarItems } from "@/features/sidebar/sidebar-items";
 import { rootUser } from "@/features/users/fake-user";
@@ -17,7 +22,6 @@ import {
   SidebarMenuItem,
 } from "@/shared/ui/atoms/sidebar";
 
-import { NavMain } from "./nav-main";
 import { NavUser } from "./nav-user";
 
 export function AppSidebar() {

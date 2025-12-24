@@ -1,6 +1,5 @@
 import { Users, Store, ShoppingCart, AlertTriangle, TrendingUp } from "lucide-react";
 
-import { AdminHeader } from "@/features/admin/ui/organisms/admin-header";
 import { Button } from "@/shared/ui/atoms/button";
 
 import ActivityItem from "./_components/activity-item";
@@ -9,9 +8,7 @@ import { StatCard } from "./_components/stat-card";
 
 export default function MainPage() {
   return (
-    <div className="space-y-6">
-      <AdminHeader />
-
+    <div className="space-y-4">
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
         <StatCard label="Продавцы" value={42} icon={Store} subtitle="активные" />
         <StatCard label="Клиенты" value={318} icon={Users} subtitle="зарегистрированы" />

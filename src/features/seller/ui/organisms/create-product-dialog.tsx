@@ -8,17 +8,17 @@ import { toast } from "sonner";
 import { productFormDefaultValues, type ProductFormValues } from "@/features/seller/types/product-form.types";
 import { ProductFormContent } from "@/features/seller/ui/organisms/create-form";
 import { useMediaQuery } from "@/shared/hooks/use-media-query";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogTrigger } from "@/shared/ui/atoms/dialog";
-import { Drawer, DrawerContent, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/shared/ui/atoms/drawer";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/shared/ui/atoms/drawer";
 import { Form } from "@/shared/ui/atoms/form";
 
 interface CreateProductDialogProps {
+  open: boolean;
+  onOpenChange: (open: boolean) => void;
   onCreate: (data: ProductFormValues) => void;
-  children: React.ReactNode;
 }
 
-export function CreateProductDialog({ onCreate, children }: CreateProductDialogProps) {
-  const [open, setOpen] = useState(false);
+export function CreateProductDialog({ open, onOpenChange, onCreate }: CreateProductDialogProps) {
   const [preview, setPreview] = useState<string | null>(null);
   const isDesktop = useMediaQuery("(min-width: 768px)");
 
@@ -50,24 +50,25 @@ export function CreateProductDialog({ onCreate, children }: CreateProductDialogP
     form.setValue("photo_url", "");
   };
 
-  const handleSave = (values: ProductFormValues) => {
-    onCreate(values);
-    setOpen(false);
+  const resetState = () => {
     form.reset(productFormDefaultValues);
     setPreview(null);
   };
 
+  const handleSave = (values: ProductFormValues) => {
+    onCreate(values);
+    onOpenChange(false);
+    resetState();
+  };
+
   const handleCancel = () => {
-    setOpen(false);
-    form.reset(productFormDefaultValues);
-    setPreview(null);
+    onOpenChange(false);
+    resetState();
   };
 
   if (isDesktop) {
     return (
-      <Dialog open={open} onOpenChange={setOpen}>
-        <DialogTrigger asChild>{children}</DialogTrigger>
-
+      <Dialog open={open} onOpenChange={onOpenChange}>
         <DialogContent className="max-h-[90vh] overflow-y-auto sm:max-w-[400px]">
           <DialogHeader>
             <DialogTitle>Создать продукт</DialogTitle>
@@ -78,7 +79,7 @@ export function CreateProductDialog({ onCreate, children }: CreateProductDialogP
               <ProductFormContent
                 form={form}
                 preview={preview}
-                isDesktop={true}
+                isDesktop
                 onPhotoUpload={handlePhotoUpload}
                 onRemovePhoto={handleRemovePhoto}
                 onCancel={handleCancel}
@@ -91,9 +92,7 @@ export function CreateProductDialog({ onCreate, children }: CreateProductDialogP
   }
 
   return (
-    <Drawer open={open} onOpenChange={setOpen}>
-      <DrawerTrigger asChild>{children}</DrawerTrigger>
-
+    <Drawer open={open} onOpenChange={onOpenChange}>
       <DrawerContent className="max-h-[90vh]">
         <div className="overflow-y-auto px-4">
           <DrawerHeader>

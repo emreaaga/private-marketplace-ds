@@ -2,13 +2,21 @@
 
 import { useState } from "react";
 
+import dynamic from "next/dynamic";
+
 import { toast } from "sonner";
 
 import { fakeOrders } from "@/features/orders/fake-orders";
 import type { Order } from "@/features/orders/types/order.types";
-import { OrderDetailsDialog } from "@/features/orders/ui/molecules/order-details-dialog";
 import { OrdersListResponsive } from "@/features/orders/ui/organisms/lists/orders-responsive";
 import { OrdersToolbar } from "@/features/orders/ui/organisms/sections/orders-toolbar";
+
+const OrderDetailsDialog = dynamic(
+  () => import("@/features/orders/ui/molecules/order-details-dialog").then((m) => m.OrderDetailsDialog),
+  {
+    loading: () => null,
+  },
+);
 
 export default function SellerOrdersPage() {
   const [orders] = useState<Order[]>(fakeOrders);

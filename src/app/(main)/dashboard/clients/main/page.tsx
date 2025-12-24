@@ -3,7 +3,7 @@ import { ClientsUsersSection } from "@/features/clients/ui/organisms/sections/cl
 
 export default function ClientsMainPage() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <ClientsToolbar />
       <ClientsUsersSection />
     </div>

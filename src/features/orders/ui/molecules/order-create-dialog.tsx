@@ -2,24 +2,8 @@
 import * as React from "react";
 
 import { Button } from "@/shared/ui/atoms/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogFooter,
-  DialogClose,
-  DialogTrigger,
-} from "@/shared/ui/atoms/dialog";
-import {
-  Drawer,
-  DrawerContent,
-  DrawerHeader,
-  DrawerTitle,
-  DrawerFooter,
-  DrawerClose,
-  DrawerTrigger,
-} from "@/shared/ui/atoms/drawer";
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
+import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/shared/ui/atoms/drawer";
 import { EntitySearch } from "@/shared/ui/molecules/entity-search";
 
 import { CLIENTS } from "../../fake-clients";

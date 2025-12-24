@@ -1,6 +1,6 @@
+import { token } from "@/features/auth/api/token";
 import { RegisterPayload, LoginPayload } from "@/features/auth/types/auth.types";
 import { api } from "@/shared/lib/api";
-import { token } from "@/features/auth/api/token";
 
 export const authService = {
   async register(payload: RegisterPayload) {
