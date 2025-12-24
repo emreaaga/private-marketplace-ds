@@ -44,8 +44,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
 
       return (
         <div className="flex flex-col">
-          <span className="font-medium">{counter}</span>
-          <span className="text-muted-foreground text-xs">{row.original.date}</span>
+          <span className="text-xs">{counter}</span>
+          <span className="text-xs">{row.original.date}</span>
         </div>
       );
     },
@@ -61,10 +61,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
       return (
         <div className="flex flex-col gap-2">
           <span className="font-mono text-xs">{row.original.id}</span>
-          <span
-            className={`inline-flex items-center gap-1.5 self-start rounded-md px-2 py-1 text-xs font-medium ${cfg.className}`}
-          >
-            <Icon className="h-3.5 w-3.5" />
+          <span className={`inline-flex items-center gap-1 self-start rounded-md px-1 py-1 text-xs ${cfg.className}`}>
+            <Icon className="h-3 w-3" />
             {cfg.label}
           </span>
         </div>
@@ -76,8 +74,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     header: "Отпр / Полч",
     cell: ({ row }) => (
       <div className="flex flex-col text-sm leading-snug">
-        <span className="text-muted-foreground text-xs">{row.original.sender.name}</span>
-        <span className="font-medium">{row.original.recipient.name}</span>
+        <span className="text-xs">{row.original.sender.name}</span>
+        <span className="text-xs">{row.original.recipient.name}</span>
       </div>
     ),
   },
@@ -86,7 +84,7 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     id: "phones",
     header: "Телефоны",
     cell: ({ row }) => (
-      <div className="text-muted-foreground flex flex-col text-xs leading-snug">
+      <div className="flex flex-col text-xs leading-snug">
         <span>{row.original.sender.phone}</span>
         <span>{row.original.recipient.phone}</span>
       </div>
@@ -96,7 +94,7 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     id: "route",
     header: "Маршрут",
     cell: ({ row }) => (
-      <div className="text-muted-foreground flex flex-col text-xs">
+      <div className="flex flex-col text-xs">
         <span>{row.original.sender.city}</span>
         <span> {row.original.recipient.city}</span>
       </div>
@@ -108,8 +106,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     header: "Вес / Ставка",
     cell: ({ row }) => (
       <div className="flex flex-col text-xs">
-        <span className="font-medium">{row.original.weight} кг</span>
-        <span className="font-medium">{row.original.ratePerKg} $/кг</span>
+        <span className="font-medium">{row.original.weight},00 кг</span>
+        <span className="font-medium">{row.original.ratePerKg},00 $/кг</span>
       </div>
     ),
   },
@@ -122,8 +120,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
 
       return (
         <div className="flex flex-col text-xs">
-          <span>{sum ? `${sum.toLocaleString()} $` : "—"}</span>
-          <span>5 $</span>
+          <span>{sum ? `${sum.toLocaleString()},00$` : "—"}</span>
+          <span>5,00$</span>
         </div>
       );
     },
@@ -137,8 +135,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
 
       return (
         <div className="flex flex-col text-xs leading-snug">
-          <span className="font-medium">{p1.amount} $</span>
-          <span className="font-medium">{p1.amount} $</span>
+          <span className="font-medium">{p1.amount},00$</span>
+          <span className="font-medium">{p1.amount},00$</span>
         </div>
       );
     },

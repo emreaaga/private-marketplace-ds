@@ -8,7 +8,10 @@ import { useUsers } from "@/features/users/hooks/use-users";
 import { UsersListResponsive } from "@/features/users/ui/organisms/lists/user-responsive";
 import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
 
-const EditUserForm = dynamic(() => import("@/features/users/ui/organisms/forms/edit-user"), { loading: () => null });
+const EditUserForm = dynamic(() => import("@/features/users/ui/organisms/forms/edit-user"), {
+  ssr: false,
+  loading: () => null,
+});
 
 export default function UsersMainPage() {
   const { users, setUsers, isLoading } = useUsers();
