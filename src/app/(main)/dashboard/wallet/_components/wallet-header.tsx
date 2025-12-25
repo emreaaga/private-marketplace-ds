@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 
 import dynamic from "next/dynamic";
@@ -10,13 +9,14 @@ import { Button } from "@/shared/ui/atoms/button";
 import { ButtonGroup } from "@/shared/ui/atoms/button-group";
 
 const ReceiveDialog = dynamic(() => import("./receive-dialog").then((m) => m.ReceiveDialog), { loading: () => null });
-
 const SendDialog = dynamic(() => import("./send-dialog").then((m) => m.SendDialog), { loading: () => null });
 
 export default function WalletHeader() {
   const balance = 1515;
   const [depositOpen, setDepositOpen] = useState(false);
   const [withdrawOpen, setWithdrawOpen] = useState(false);
+  const [shouldLoadReceive, setShouldLoadReceive] = useState(false);
+  const [shouldLoadSend, setShouldLoadSend] = useState(false);
   const receiveUrl = "https://example.com/pay/123";
 
   return (
@@ -29,7 +29,6 @@ export default function WalletHeader() {
           <span className="text-foreground font-semibold tabular-nums">{balance}</span>
         </span>
       </div>
-
       <div className="bg-background inline-flex w-full items-center justify-between rounded-md border shadow-sm sm:w-auto">
         <ButtonGroup className="flex w-full sm:w-auto">
           <Button
@@ -37,24 +36,29 @@ export default function WalletHeader() {
             variant="ghost"
             className="hover:bg-muted h-8 flex-1 px-3 text-sm sm:flex-none"
             onClick={() => setWithdrawOpen(true)}
+            onMouseEnter={() => setShouldLoadSend(true)}
           >
             <ArrowUp className="mr-1.5 h-4 w-4" />
             <span className="sm:inline">Отправить</span>
           </Button>
-
           <Button
             size="sm"
             variant="ghost"
             className="hover:bg-muted h-8 flex-1 px-3 text-sm sm:flex-none"
             onClick={() => setDepositOpen(true)}
+            onMouseEnter={() => setShouldLoadReceive(true)}
           >
             <ArrowDown className="mr-1.5 h-4 w-4" />
             <span className="sm:inline">Получить</span>
           </Button>
         </ButtonGroup>
       </div>
-      <ReceiveDialog open={depositOpen} onOpenChange={setDepositOpen} receiveUrl={receiveUrl} />
-      <SendDialog open={withdrawOpen} onOpenChange={setWithdrawOpen} balance={balance} />
+      {(depositOpen || shouldLoadReceive) && (
+        <ReceiveDialog open={depositOpen} onOpenChange={setDepositOpen} receiveUrl={receiveUrl} />
+      )}
+      {(withdrawOpen || shouldLoadSend) && (
+        <SendDialog open={withdrawOpen} onOpenChange={setWithdrawOpen} balance={balance} />
+      )}
     </div>
   );
 }

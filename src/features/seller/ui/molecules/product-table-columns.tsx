@@ -5,6 +5,7 @@ import { MoreHorizontal } from "lucide-react";
 
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
+import { CountBadge } from "@/shared/ui/atoms/count-badge";
 
 import type { ProductRow } from "../../fake-products";
 
@@ -26,12 +27,10 @@ export const productColumns: ColumnDef<ProductRow>[] = [
           />
 
           <div className="leading-tight">
-            <div className="flex items-center gap-1">
+            <div className="flex items-center gap-0.5">
               <span className="text-sm font-medium">{row.original.sub_category}</span>
 
-              <Badge variant="secondary" className="text-xs">
-                {sizesCount} р.
-              </Badge>
+              <CountBadge value={sizesCount} />
             </div>
 
             <div className="text-muted-foreground font-mono text-xs">{row.original.id}</div>
@@ -51,7 +50,7 @@ export const productColumns: ColumnDef<ProductRow>[] = [
 
       return (
         <div className="leading-tight">
-          <div className="text-sm font-medium">{totalSum} $</div>
+          <div className="text-sm font-medium">${totalSum}</div>
           <div className="text-muted-foreground text-xs">{row.original.count_of_series} серий</div>
         </div>
       );
@@ -63,7 +62,7 @@ export const productColumns: ColumnDef<ProductRow>[] = [
     header: "Продано",
     cell: ({ row }) => (
       <div className="leading-tight">
-        <div className="text-sm font-medium">{row.original.sold_amount} $</div>
+        <div className="text-sm font-medium">${row.original.sold_amount}</div>
         <div className="text-muted-foreground text-xs">{row.original.sold_series} серий</div>
       </div>
     ),
@@ -83,7 +82,7 @@ export const productColumns: ColumnDef<ProductRow>[] = [
 
       return (
         <div className="leading-tight">
-          <div className={`text-sm font-medium ${color}`}>{remainingSum} $</div>
+          <div className={`text-sm font-medium ${color}`}>${remainingSum}</div>
           <div className="text-muted-foreground text-xs">{remainingSeries} серий</div>
         </div>
       );

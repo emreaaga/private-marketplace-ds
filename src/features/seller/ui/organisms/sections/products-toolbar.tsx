@@ -1,5 +1,4 @@
 "use client";
-
 import { useState } from "react";
 
 import dynamic from "next/dynamic";
@@ -16,6 +15,7 @@ const CreateProductDialog = dynamic(() => import("../create-product-dialog").the
 
 export function ProductsToolbar({ onCreate }: { onCreate: (data: any) => void }) {
   const [open, setOpen] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(false);
 
   return (
     <>
@@ -27,21 +27,18 @@ export function ProductsToolbar({ onCreate }: { onCreate: (data: any) => void })
               <Search className="text-muted-foreground h-4 w-4" />
             </InputGroupAddon>
           </InputGroup>
-
-          <Button size="sm" className="h-9" onClick={() => setOpen(true)}>
+          <Button size="sm" className="h-9" onClick={() => setOpen(true)} onMouseEnter={() => setShouldLoad(true)}>
             <PlusIcon className="h-4 w-4" />
             Создать продукт
           </Button>
         </div>
-
         <div className="flex gap-2">
           <IconButton Icon={SlidersHorizontal} label="Сортировка" />
           <IconButton Icon={ListFilter} label="Фильтры" />
           <IconButton Icon={RotateCcw} label="Сбросить" />
         </div>
       </div>
-
-      <CreateProductDialog open={open} onOpenChange={setOpen} onCreate={onCreate} />
+      {(open || shouldLoad) && <CreateProductDialog open={open} onOpenChange={setOpen} onCreate={onCreate} />}
     </>
   );
 }

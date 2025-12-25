@@ -5,6 +5,7 @@ import dynamic from "next/dynamic";
 import type { Order } from "@/features/orders/types/order.types";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { ListSkeleton } from "@/shared/ui/molecules/list-skeleton";
+import { LoadingPlaceholder } from "@/shared/ui/molecules/loading-placeholder";
 import { TableSkeleton } from "@/shared/ui/molecules/table-skeleton";
 
 interface OrdersListResponsiveProps {
@@ -24,11 +25,7 @@ export function OrdersListResponsive(props: OrdersListResponsiveProps) {
   const isMobile = useIsMobile();
 
   if (isMobile === undefined) {
-    return (
-      <div className="bg-muted/30 text-muted-foreground rounded-md border py-8 text-center text-sm">
-        Подготовка списка заказов…
-      </div>
-    );
+    return <LoadingPlaceholder />;
   }
 
   return isMobile ? <OrdersListMobile {...props} /> : <OrdersListDesktop {...props} />;

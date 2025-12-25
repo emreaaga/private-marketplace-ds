@@ -35,7 +35,7 @@ export default function ProductsOrdersPage() {
   };
 
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <OrdersToolbar open={isCreateOpen} onOpenChange={setIsCreateOpen} />
 
       <OrdersListResponsive orders={orders} onOpenDetails={handleOpenDetails} />

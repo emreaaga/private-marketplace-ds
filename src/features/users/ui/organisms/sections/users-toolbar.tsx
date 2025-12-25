@@ -1,5 +1,4 @@
 "use client";
-
 import { useState, useCallback } from "react";
 
 import dynamic from "next/dynamic";
@@ -14,6 +13,7 @@ const CreateUserDialog = dynamic(() => import("../forms/create-user-dialog"), { 
 
 export function UsersToolbar() {
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false);
+  const [shouldLoad, setShouldLoad] = useState(false);
 
   const handleOpenDialog = useCallback(() => {
     setIsCreateDialogOpen(true);
@@ -21,6 +21,10 @@ export function UsersToolbar() {
 
   const handleCloseDialog = useCallback((open: boolean) => {
     setIsCreateDialogOpen(open);
+  }, []);
+
+  const handlePreload = useCallback(() => {
+    setShouldLoad(true);
   }, []);
 
   return (
@@ -33,21 +37,26 @@ export function UsersToolbar() {
               <Search className="text-muted-foreground h-4 w-4" />
             </InputGroupAddon>
           </InputGroup>
-
-          <Button size="sm" className="h-9 flex-1 md:flex-none" onClick={handleOpenDialog}>
+          <Button
+            size="sm"
+            className="h-9 flex-1 md:flex-none"
+            onClick={handleOpenDialog}
+            onMouseEnter={handlePreload}
+            onFocus={handlePreload}
+          >
             <PlusIcon className="h-4 w-4" />
             <span>Создать</span>
           </Button>
         </div>
-
         <div className="flex w-full gap-2 md:w-auto md:justify-end">
           <IconButton Icon={SlidersHorizontal} label="Сортировка" />
           <IconButton Icon={ListFilter} label="Фильтры" />
           <IconButton Icon={RotateCcw} label="Сбросить" />
         </div>
       </div>
-
-      {isCreateDialogOpen && <CreateUserDialog open={isCreateDialogOpen} onOpenChange={handleCloseDialog} />}
+      {(isCreateDialogOpen || shouldLoad) && (
+        <CreateUserDialog open={isCreateDialogOpen} onOpenChange={handleCloseDialog} />
+      )}
     </>
   );
 }

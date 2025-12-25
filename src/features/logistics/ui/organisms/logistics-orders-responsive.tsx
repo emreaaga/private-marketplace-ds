@@ -8,7 +8,7 @@ import { LoadingPlaceholder } from "@/shared/ui/molecules/loading-placeholder";
 import { TableSkeleton } from "@/shared/ui/molecules/table-skeleton";
 
 const LogisticsOrdersTable = dynamic(() => import("@/shared/ui/organisms/table/data-table").then((m) => m.DataTable), {
-  loading: () => <TableSkeleton rows={8} columns={6} />,
+  loading: () => <TableSkeleton rows={10} columns={8} />,
 });
 
 interface OrdersResponsiveProps {

@@ -19,7 +19,7 @@ const TransactionsMobileList = dynamic(
 const TransactionsDesktopTable = dynamic(
   () => import("@/shared/ui/organisms/table/data-table").then((m) => m.DataTable),
   {
-    loading: () => <TableSkeleton rows={6} columns={2} />,
+    loading: () => <TableSkeleton rows={2} columns={5} />,
   },
 );
 

@@ -1,15 +1,7 @@
 import { Button } from "@/shared/ui/atoms/button";
 import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "@/shared/ui/atoms/card";
 
-interface CartItem {
-  price: number;
-  quantity: number;
-}
-
-export function CartSummary({ items }: { items: CartItem[] }) {
-  const total = items.reduce((acc, i) => acc + i.price * i.quantity, 0);
-  const count = items.reduce((acc, i) => acc + i.quantity, 0);
-
+export function CartSummary() {
   return (
     <Card className="w-full rounded-3xl shadow-md">
       <CardHeader className="pb-4">
@@ -18,15 +10,15 @@ export function CartSummary({ items }: { items: CartItem[] }) {
 
       <CardContent className="space-y-4 text-sm">
         <div className="text-muted-foreground flex items-center justify-between">
-          <span>Товары, {count} шт.</span>
-          <span>{total}$</span>
+          <span>Товары, 10 шт.</span>
+          <span>$245</span>
         </div>
 
         <div className="bg-border h-px" />
 
         <div className="flex items-end justify-between">
           <span className="text-lg font-semibold">Итого</span>
-          <span className="text-2xl font-bold tracking-tight">{total}$</span>
+          <span className="text-2xl font-bold tracking-tight">$245</span>
         </div>
       </CardContent>
 

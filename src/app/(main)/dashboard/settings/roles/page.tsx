@@ -34,7 +34,7 @@ const mockData: User[] = [
 
 export default function Test1Page() {
   return (
-    <div className="space-y-6">
+    <div className="space-y-4">
       <GeneralSettingsRoleToolbar />
       <DataTable columns={columns} data={mockData} emptyMessage="Пока нет записей" />
     </div>

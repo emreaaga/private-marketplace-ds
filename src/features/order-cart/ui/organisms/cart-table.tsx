@@ -6,7 +6,7 @@ import { Minus, Plus } from "lucide-react";
 import { Button } from "@/shared/ui/atoms/button";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
-export function CartTable({ items, updateQuantity }: any) {
+export function CartTable({ items }: any) {
   const columns: ColumnDef<any>[] = [
     {
       header: "Товар",
@@ -37,13 +37,13 @@ export function CartTable({ items, updateQuantity }: any) {
 
         return (
           <div className="flex items-center gap-1">
-            <Button variant="outline" className="h-6 w-6" onClick={() => updateQuantity(item.id, -1)}>
+            <Button variant="outline" className="h-6 w-6">
               <Minus className="h-6 w-6" />
             </Button>
 
             <span className="w-4 text-center text-sm">{item.quantity}</span>
 
-            <Button variant="outline" className="h-6 w-6" onClick={() => updateQuantity(item.id, +1)}>
+            <Button variant="outline" className="h-6 w-6">
               <Plus className="h-6 w-6" />
             </Button>
           </div>

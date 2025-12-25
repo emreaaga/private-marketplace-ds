@@ -36,7 +36,7 @@ export const getOrderColumns = (handlers: { onOpenDetails: (order: Order) => voi
   {
     accessorKey: "total",
     header: "Сумма",
-    cell: ({ row }) => `${row.original.total} $`,
+    cell: ({ row }) => <span>${row.original.total}</span>,
   },
 
   {

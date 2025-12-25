@@ -1,26 +1,33 @@
 import { Skeleton } from "@/shared/ui/atoms/skeleton";
+import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/atoms/table";
 
 export function TableSkeleton({ rows = 10, columns = 6 }: { rows?: number; columns?: number }) {
   return (
-    <div className="overflow-hidden rounded-md border">
-      <div className="bg-muted/40 grid border-b px-3 py-2" style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}>
-        {Array.from({ length: columns }).map((_, i) => (
-          <Skeleton key={i} className="h-2.5 w-20" />
-        ))}
-      </div>
+    <div className="space-y-2">
+      <div className="overflow-x-auto rounded-lg border">
+        <Table>
+          <TableHeader>
+            <TableRow>
+              {Array.from({ length: columns }).map((_, i) => (
+                <TableHead key={i}>
+                  <Skeleton className="h-4 w-20" />
+                </TableHead>
+              ))}
+            </TableRow>
+          </TableHeader>
 
-      <div className="divide-y">
-        {Array.from({ length: rows }).map((_, rowIdx) => (
-          <div
-            key={rowIdx}
-            className="grid items-center px-3 py-2"
-            style={{ gridTemplateColumns: `repeat(${columns}, 1fr)` }}
-          >
-            {Array.from({ length: columns }).map((_, colIdx) => (
-              <Skeleton key={colIdx} className="h-3 w-full" />
+          <TableBody>
+            {Array.from({ length: rows }).map((_, rowIdx) => (
+              <TableRow key={rowIdx}>
+                {Array.from({ length: columns }).map((_, colIdx) => (
+                  <TableCell key={colIdx}>
+                    <Skeleton className="h-4 w-full" />
+                  </TableCell>
+                ))}
+              </TableRow>
             ))}
-          </div>
-        ))}
+          </TableBody>
+        </Table>
       </div>
     </div>
   );

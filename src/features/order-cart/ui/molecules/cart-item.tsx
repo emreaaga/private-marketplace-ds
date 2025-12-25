@@ -7,15 +7,7 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 import type { CartItemType } from "../../model/types";
 import { CartQuantityButton } from "../atoms/cart-quantity-button";
 
-export function CartItem({
-  item,
-  onIncrease,
-  onDecrease,
-}: {
-  item: CartItemType;
-  onIncrease: () => void;
-  onDecrease: () => void;
-}) {
+export function CartItem({ item }: { item: CartItemType }) {
   const isSingle = item.quantity === 1;
   const total = item.quantity * item.price;
 
@@ -36,7 +28,7 @@ export function CartItem({
           <p className="text-[15px] leading-snug font-medium md:text-base">{item.name}</p>
 
           <p className="text-muted-foreground text-xs md:text-sm">
-            {item.unit} · {item.price}$
+            {item.unit} · ${item.price}
           </p>
 
           {(item.unit || item.comment) && (
@@ -52,19 +44,19 @@ export function CartItem({
           )}
 
           <p className="text-muted-foreground text-xs md:text-sm">
-            Всего: <span className="text-foreground font-semibold">{total}$</span>
+            Всего: <span className="text-foreground font-semibold">${total}</span>
           </p>
         </div>
       </div>
 
       <div className="flex shrink-0 items-center gap-2">
-        <CartQuantityButton onClick={onDecrease}>
+        <CartQuantityButton>
           {isSingle ? <Trash2 className="h-4 w-4 text-red-500" /> : <Minus className="h-4 w-4" />}
         </CartQuantityButton>
 
         <span className="min-w-8 text-center text-sm font-medium md:text-base">{item.quantity}</span>
 
-        <CartQuantityButton onClick={onIncrease}>
+        <CartQuantityButton>
           <Plus className="h-4 w-4" />
         </CartQuantityButton>
       </div>

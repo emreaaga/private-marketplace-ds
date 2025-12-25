@@ -1,39 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye, Clock, Truck, CheckCircle2, XCircle } from "lucide-react";
+import { Eye } from "lucide-react";
 
 import { Button } from "@/shared/ui/atoms/button";
 
-import type { Order } from "./orders.type";
-
-const STATUS_MAP: Record<
-  Order["status"],
-  {
-    label: string;
-    className: string;
-    icon: React.ElementType;
-  }
-> = {
-  created: {
-    label: "Создан",
-    className: "bg-slate-500/10 text-slate-700",
-    icon: Clock,
-  },
-  in_transit: {
-    label: "В пути",
-    className: "bg-blue-500/10 text-blue-700",
-    icon: Truck,
-  },
-  delivered: {
-    label: "Доставлен",
-    className: "bg-green-500/10 text-green-700",
-    icon: CheckCircle2,
-  },
-  canceled: {
-    label: "Отменён",
-    className: "bg-red-500/10 text-red-700",
-    icon: XCircle,
-  },
-};
+import { type Order, STATUS_MAP } from "./orders.type";
 
 export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
@@ -48,78 +18,77 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
     id: "order",
     header: "Заказ",
+    size: 140,
     cell: ({ row }) => (
-      <span className="text-sm whitespace-nowrap">
-        <span className="font-mono">{row.original.id}</span>
-      </span>
-    ),
-  },
-
-  {
-    id: "date",
-    header: "Дата",
-    cell: ({ row }) => (
-      <span className="text-sm whitespace-nowrap">
-        <span className="text-muted-foreground">{row.original.date}</span>
-      </span>
+      <div className="flex flex-col leading-tight">
+        <span className="font-mono text-sm">{row.original.id}</span>
+        <span className="text-muted-foreground text-xs">{row.original.date}</span>
+      </div>
     ),
   },
   {
     id: "recipient",
     header: "Получатель",
-    cell: ({ row }) => <span className="text-sm whitespace-nowrap">{row.original.recipient.name}</span>,
+    size: 220,
+    cell: ({ row }) => <span className="text-sm font-medium">{row.original.recipient.name}</span>,
   },
-
   {
     id: "route",
     header: "Маршрут",
+    size: 140,
     cell: ({ row }) => (
-      <span className="text-sm whitespace-nowrap">
-        {row.original.sender.city}→{row.original.recipient.city}
-      </span>
+      <div className="text-muted-foreground text-sm whitespace-nowrap">
+        {row.original.sender.city}
+        <span className="mx-1">→</span>
+        {row.original.recipient.city}
+      </div>
     ),
   },
-
   {
     id: "payment",
     header: "Оплата",
     cell: ({ row }) => {
-      const paid = row.original.payment1.amount + (row.original.payment2?.amount ?? 0);
-
-      const base = row.original.weight * row.original.ratePerKg;
-      const extras = row.original.extraCharges?.reduce((a, c) => a + c.amount, 0) ?? 0;
-
-      const total = Math.round((base + extras) * 100) / 100;
-      const debt = total - paid;
-
       return <span className="text-sm">15.00-5.00-100.00-200.00-25.00</span>;
     },
   },
-
   {
     id: "status",
     header: "Статус",
+    size: 120,
     cell: ({ row }) => {
       const cfg = STATUS_MAP[row.original.status];
       const Icon = cfg.icon;
-
       return (
-        <span
-          className={`inline-flex items-center gap-1.5 rounded-md px-2 py-1 text-xs font-medium whitespace-nowrap ${cfg.className}`}
+        <div
+          className={`inline-flex items-center gap-1.5 rounded-md border px-2 py-1 text-xs font-medium ${cfg.className}`}
         >
-          <Icon className="h-3.5 w-3.5" />
+          <Icon className="h-3.5 w-3.5 opacity-80" />
           {cfg.label}
-        </span>
+        </div>
       );
     },
   },
-
+  {
+    id: "expand",
+    header: "",
+    size: 32,
+    enableSorting: false,
+    cell: ({ row }) => (
+      <button
+        onClick={row.getToggleExpandedHandler()}
+        className="text-muted-foreground hover:text-foreground text-lg leading-none"
+      >
+        {row.getIsExpanded() ? "−" : "+"}
+      </button>
+    ),
+  },
   {
     id: "actions",
     header: "",
     size: 40,
+    enableSorting: false,
     cell: () => (
-      <Button variant="ghost" size="icon" className="h-6 w-6">
+      <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-7 w-7">
         <Eye className="h-4 w-4" />
       </Button>
     ),

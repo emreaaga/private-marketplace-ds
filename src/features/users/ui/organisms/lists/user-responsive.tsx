@@ -6,7 +6,7 @@ import { ListSkeleton } from "@/shared/ui/molecules/list-skeleton";
 import { TableSkeleton } from "@/shared/ui/molecules/table-skeleton";
 
 const UsersListDesktop = dynamic(() => import("./user-desktop").then((m) => m.UsersListDesktop), {
-  loading: () => <TableSkeleton rows={10} columns={6} />,
+  loading: () => <TableSkeleton rows={10} columns={4} />,
 });
 
 const UsersListMobile = dynamic(() => import("./user-mobile").then((m) => m.UsersListMobile), {
