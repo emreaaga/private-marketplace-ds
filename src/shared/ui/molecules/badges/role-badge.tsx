@@ -11,7 +11,7 @@ export function RoleBadge({ role }: RoleBadgeProps) {
   const Icon = config.icon;
 
   return (
-    <Badge variant="outline" className="flex items-center gap-1 px-2 py-0.5 text-xs">
+    <Badge className="h-5 min-w-5 rounded-full px-1 font-mono tabular-nums" variant="outline">
       <Icon className="text-muted-foreground size-3.5" />
       {config.label}
     </Badge>

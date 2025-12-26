@@ -32,7 +32,7 @@ interface OrderDetailsDialogProps {
   onConfirm: () => void;
 }
 
-function OrderDetailsContent({
+export default function OrderDetailsContent({
   order,
   onConfirm,
   onClose,

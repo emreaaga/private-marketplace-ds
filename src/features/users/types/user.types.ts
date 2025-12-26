@@ -49,17 +49,17 @@ export const STATUS_CONFIG: Record<UserStatus, { icon: typeof CircleCheck; color
   active: {
     icon: CircleCheck,
     color: "#10b981",
-    label: "Активен",
+    label: "акт.",
   },
   pending: {
     icon: Loader,
     color: "#f59e0b",
-    label: "В ожидании",
+    label: "ожд.",
   },
   blocked: {
     icon: ShieldAlert,
     color: "#ef4444",
-    label: "Заблокирован",
+    label: "збл.",
   },
 };
 

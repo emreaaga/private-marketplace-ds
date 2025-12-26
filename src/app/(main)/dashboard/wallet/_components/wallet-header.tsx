@@ -3,13 +3,13 @@ import { useState } from "react";
 
 import dynamic from "next/dynamic";
 
-import { ArrowDown, ArrowUp, Coins } from "lucide-react";
+import { PlusCircle, Coins, Send } from "lucide-react";
 
 import { Button } from "@/shared/ui/atoms/button";
 import { ButtonGroup } from "@/shared/ui/atoms/button-group";
 
-const ReceiveDialog = dynamic(() => import("./receive-dialog").then((m) => m.ReceiveDialog), { loading: () => null });
-const SendDialog = dynamic(() => import("./send-dialog").then((m) => m.SendDialog), { loading: () => null });
+import ReceiveOverlay from "./receive-overlay";
+import SendOverlay from "./send-overlay";
 
 export default function WalletHeader() {
   const balance = 1515;
@@ -38,8 +38,8 @@ export default function WalletHeader() {
             onClick={() => setWithdrawOpen(true)}
             onMouseEnter={() => setShouldLoadSend(true)}
           >
-            <ArrowUp className="mr-1.5 h-4 w-4" />
-            <span className="sm:inline">Отправить</span>
+            <Send className="h-4 w-4" />
+            <span className="sm:inline">Перевести</span>
           </Button>
           <Button
             size="sm"
@@ -48,16 +48,17 @@ export default function WalletHeader() {
             onClick={() => setDepositOpen(true)}
             onMouseEnter={() => setShouldLoadReceive(true)}
           >
-            <ArrowDown className="mr-1.5 h-4 w-4" />
-            <span className="sm:inline">Получить</span>
+            <PlusCircle className="h-4 w-4" />
+            <span className="sm:inline">Пополнить</span>
           </Button>
         </ButtonGroup>
       </div>
       {(depositOpen || shouldLoadReceive) && (
-        <ReceiveDialog open={depositOpen} onOpenChange={setDepositOpen} receiveUrl={receiveUrl} />
+        <ReceiveOverlay open={depositOpen} onOpenChange={setDepositOpen} receiveUrl={receiveUrl} />
       )}
+
       {(withdrawOpen || shouldLoadSend) && (
-        <SendDialog open={withdrawOpen} onOpenChange={setWithdrawOpen} balance={balance} />
+        <SendOverlay open={withdrawOpen} onOpenChange={setWithdrawOpen} userBalance={balance} />
       )}
     </div>
   );
