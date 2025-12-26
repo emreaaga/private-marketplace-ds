@@ -29,7 +29,7 @@ export function TransactionCard({ tx }: TransactionCardProps) {
             <td className="w-[90px] px-2 py-1.5">
               <div className="flex items-center gap-1">
                 <ArrowUp className="h-3 w-3 shrink-0 text-rose-600" />
-                <span className="truncate text-[10px]" title={tx.sender}>
+                <span className="truncate text-[10px] font-medium" title={tx.sender}>
                   {tx.sender}
                 </span>
               </div>
@@ -38,7 +38,7 @@ export function TransactionCard({ tx }: TransactionCardProps) {
             <td className="w-[90px] px-2 py-1.5">
               <div className="flex items-center gap-1">
                 <ArrowDown className="h-3 w-3 shrink-0 text-emerald-600" />
-                <span className="truncate text-[10px]" title={tx.receiver}>
+                <span className="truncate text-[10px] font-medium" title={tx.receiver}>
                   {tx.receiver}
                 </span>
               </div>

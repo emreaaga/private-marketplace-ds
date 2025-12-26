@@ -79,27 +79,10 @@ export const data: Transaction[] = [
 
 export const transactionColumns: ColumnDef<Transaction>[] = [
   {
-    accessorKey: "date",
-    header: "Дата",
-    cell: ({ getValue }) => <span className="text-muted-foreground">{getValue<string>()}</span>,
-  },
-  {
     accessorKey: "id",
     header: "id",
     cell: ({ getValue }) => <span className="text-muted-foreground font-mono text-xs">{getValue<string>()}</span>,
   },
-
-  {
-    accessorKey: "sender",
-    header: "Отправитель",
-    cell: ({ getValue }) => (
-      <div className="flex items-center gap-1.5">
-        <ArrowUp className="h-3.5 w-3.5 text-red-600" />
-        <span>{getValue<string>()}</span>
-      </div>
-    ),
-  },
-
   {
     accessorKey: "amount",
     header: "Сумма",
@@ -115,6 +98,16 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
     },
   },
   {
+    accessorKey: "sender",
+    header: "Отправитель",
+    cell: ({ getValue }) => (
+      <div className="flex items-center gap-1.5">
+        <ArrowUp className="h-3.5 w-3.5 text-red-600" />
+        <span>{getValue<string>()}</span>
+      </div>
+    ),
+  },
+  {
     accessorKey: "receiver",
     header: "Получатель",
     cell: ({ getValue }) => (
@@ -123,5 +116,10 @@ export const transactionColumns: ColumnDef<Transaction>[] = [
         <span>{getValue<string>()}</span>
       </div>
     ),
+  },
+  {
+    accessorKey: "date",
+    header: "Дата",
+    cell: ({ getValue }) => <span className="text-muted-foreground">{getValue<string>()}</span>,
   },
 ];
