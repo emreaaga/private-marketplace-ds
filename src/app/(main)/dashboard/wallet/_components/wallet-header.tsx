@@ -1,8 +1,6 @@
 "use client";
 import { useState } from "react";
 
-import dynamic from "next/dynamic";
-
 import { PlusCircle, Coins, Send } from "lucide-react";
 
 import { Button } from "@/shared/ui/atoms/button";
@@ -33,7 +31,7 @@ export default function WalletHeader() {
         <ButtonGroup className="flex w-full sm:w-auto">
           <Button
             size="sm"
-            variant="ghost"
+            variant="outline"
             className="hover:bg-muted h-8 flex-1 px-3 text-sm sm:flex-none"
             onClick={() => setWithdrawOpen(true)}
             onMouseEnter={() => setShouldLoadSend(true)}
@@ -43,7 +41,7 @@ export default function WalletHeader() {
           </Button>
           <Button
             size="sm"
-            variant="ghost"
+            variant="outline"
             className="hover:bg-muted h-8 flex-1 px-3 text-sm sm:flex-none"
             onClick={() => setDepositOpen(true)}
             onMouseEnter={() => setShouldLoadReceive(true)}
