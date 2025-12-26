@@ -10,6 +10,8 @@ import { TableSkeleton } from "@/shared/ui/molecules/table-skeleton";
 
 import type { ProductRow } from "../../fake-products";
 
+import { ProductsMobileList } from "./product-mobile-list";
+
 const ProductsTable = dynamic(() => import("./products-table").then((m) => m.ProductsTable), {
   loading: () => <TableSkeleton rows={10} columns={6} />,
 });
@@ -26,5 +28,9 @@ export function ProductsResponsive({ data, columns }: ProductsResponsiveProps) {
     return <LoadingPlaceholder label="Подготовка списка товаров…" />;
   }
 
-  return <ProductsTable data={data} columns={columns} pageSize={isMobile ? 5 : 10} />;
+  if (isMobile) {
+    return <ProductsMobileList data={data} />;
+  }
+
+  return <ProductsTable data={data} columns={columns} pageSize={10} />;
 }

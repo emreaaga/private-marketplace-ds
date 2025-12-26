@@ -28,9 +28,8 @@ export const productColumns: ColumnDef<ProductRow>[] = [
 
           <div className="leading-tight">
             <div className="flex items-center gap-0.5">
-              <span className="text-sm font-medium">{row.original.sub_category}</span>
-
               <CountBadge value={sizesCount} />
+              <span className="text-sm font-medium">{row.original.sub_category}</span>
             </div>
 
             <div className="text-muted-foreground font-mono text-xs">{row.original.id}</div>
