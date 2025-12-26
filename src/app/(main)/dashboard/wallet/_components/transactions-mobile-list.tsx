@@ -15,10 +15,12 @@ export function TransactionsMobileList({ data }: Props) {
   }
 
   return (
-    <div className="space-y-3">
-      {data.map((tx) => (
-        <TransactionCard key={tx.id} tx={tx} />
-      ))}
+    <div className="border-border bg-card overflow-hidden rounded-lg border md:hidden">
+      <div className="divide-border divide-y">
+        {data.map((tx) => (
+          <TransactionCard key={tx.id} tx={tx} />
+        ))}
+      </div>
     </div>
   );
 }

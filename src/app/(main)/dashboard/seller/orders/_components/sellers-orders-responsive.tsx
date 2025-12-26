@@ -11,6 +11,7 @@ import type { DataTableProps } from "@/shared/ui/organisms/table/data-table";
 
 import { OrderPaymentDetails } from "./order-payment-details";
 import { Order } from "./orders.type";
+import { SellersOrdersMobileList } from "./sellers-orders-mobile-list";
 
 const LogisticsOrdersTable = dynamic<DataTableProps<Order>>(
   () =>
@@ -34,11 +35,15 @@ export default function SellersOrdersResponsive({ data, columns }: OrdersRespons
     return <LoadingPlaceholder />;
   }
 
+  if (isMobile) {
+    return <SellersOrdersMobileList data={data} />;
+  }
+
   return (
     <LogisticsOrdersTable
       data={data}
       columns={columns}
-      pageSize={isMobile ? 5 : 10}
+      pageSize={10}
       renderExpandedRow={(order: Order) => <OrderPaymentDetails order={order} />}
     />
   );
