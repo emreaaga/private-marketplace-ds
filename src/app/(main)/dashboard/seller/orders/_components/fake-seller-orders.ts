@@ -14,7 +14,7 @@ export const fakeOrders: Order[] = [
     recipient: {
       name: "Client1",
       phone: "+998 90 123 45 67",
-      city: "UZ-TAS",
+      city: "TAS",
     },
 
     pricing: {
@@ -57,7 +57,7 @@ export const fakeOrders: Order[] = [
     recipient: {
       name: "Client3",
       phone: "+998 91 222 33 44",
-      city: "UZ-SKD",
+      city: "SKD",
     },
 
     pricing: {

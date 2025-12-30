@@ -19,12 +19,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     id: "order",
     header: "Заказ",
     size: 140,
-    cell: ({ row }) => (
-      <div className="flex flex-col leading-tight">
-        <span className="font-mono text-sm">{row.original.id}</span>
-        <span className="text-muted-foreground text-xs">{row.original.date}</span>
-      </div>
-    ),
+    cell: ({ row }) => <span className="font-mono text-sm">{row.original.id}</span>,
   },
   {
     id: "recipient",
@@ -33,22 +28,30 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     cell: ({ row }) => <span className="text-sm font-medium">{row.original.recipient.name}</span>,
   },
   {
-    id: "route",
-    header: "Маршрут",
+    id: "city",
+    header: "Город",
     size: 140,
-    cell: ({ row }) => (
-      <div className="text-muted-foreground text-sm whitespace-nowrap">
-        {row.original.sender.city}
-        <span className="mx-1">→</span>
-        {row.original.recipient.city}
-      </div>
-    ),
+    cell: ({ row }) => <span className="mx-1">{row.original.recipient.city}</span>,
   },
   {
     id: "payment",
     header: "Оплата",
     cell: ({ row }) => {
-      return <span className="text-sm">15.00-5.00-100.00-200.00-25.00</span>;
+      return <span className="text-sm">$150.50</span>;
+    },
+  },
+  {
+    id: "weight",
+    header: "Вес",
+    cell: ({ row }) => {
+      return <span className="text-sm">кг 120.50</span>;
+    },
+  },
+  {
+    id: "date",
+    header: "Дата",
+    cell: ({ row }) => {
+      return <span className="text-muted-foreground">{row.original.date}</span>;
     },
   },
   {

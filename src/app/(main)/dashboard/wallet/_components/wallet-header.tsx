@@ -31,7 +31,7 @@ export default function WalletHeader() {
         <ButtonGroup className="flex w-full sm:w-auto">
           <Button
             size="sm"
-            variant="outline"
+            variant="ghost"
             className="hover:bg-muted h-8 flex-1 px-3 text-sm sm:flex-none"
             onClick={() => setWithdrawOpen(true)}
             onMouseEnter={() => setShouldLoadSend(true)}
@@ -41,7 +41,7 @@ export default function WalletHeader() {
           </Button>
           <Button
             size="sm"
-            variant="outline"
+            variant="ghost"
             className="hover:bg-muted h-8 flex-1 px-3 text-sm sm:flex-none"
             onClick={() => setDepositOpen(true)}
             onMouseEnter={() => setShouldLoadReceive(true)}

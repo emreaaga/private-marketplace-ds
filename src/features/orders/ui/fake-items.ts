@@ -10,10 +10,10 @@ export interface OrderItem {
 export const MOCK_ITEMS: OrderItem[] = [
   {
     id: "A001Z100001",
-    name: "Футболки",
+    name: "Брюки",
     series: 2,
     units: 10,
-    price: 15,
+    price: 2,
     quantity: 1,
   },
   {
@@ -26,7 +26,7 @@ export const MOCK_ITEMS: OrderItem[] = [
   },
   {
     id: "A001Z100003",
-    name: "Пальто",
+    name: "Сумка",
     series: 4,
     units: 11,
     price: 6,

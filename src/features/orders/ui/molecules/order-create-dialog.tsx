@@ -1,6 +1,8 @@
 "use client";
 import * as React from "react";
 
+import { UserPlus } from "lucide-react";
+
 import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/shared/ui/atoms/drawer";
@@ -9,7 +11,7 @@ import { EntitySearch } from "@/shared/ui/molecules/entity-search";
 import { CLIENTS } from "../../fake-clients";
 import { SELLERS } from "../../fake-sellers";
 
-import { ProductList } from "./product-list";
+import { ProductList } from "./order-create-stepper/steps/product-list";
 
 interface OrderCreateDialogProps {
   open: boolean;
@@ -17,9 +19,14 @@ interface OrderCreateDialogProps {
   sellerId?: string;
 }
 
+type PartyInputMode = "search" | "manual";
+
 function OrderCreateContent({ onClose, onSubmit }: { onClose: () => void; onSubmit: () => void }) {
-  const [seller, setSeller] = React.useState<any | null>(null);
-  const [client, setClient] = React.useState<any | null>(null);
+  const [sender, setSender] = React.useState<any | null>(null);
+  const [receiver, setReceiver] = React.useState<any | null>(null);
+
+  const [senderMode, setSenderMode] = React.useState<PartyInputMode>("search");
+  const [receiverMode, setReceiverMode] = React.useState<PartyInputMode>("search");
 
   const handleSubmit = () => {
     onSubmit();
@@ -28,10 +35,7 @@ function OrderCreateContent({ onClose, onSubmit }: { onClose: () => void; onSubm
 
   return (
     <>
-      <div className="space-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0">
-        <EntitySearch label="Продавец" placeholder="ID продавца" data={SELLERS} onChange={setSeller} />
-        <EntitySearch label="Клиент" placeholder="ID клиента" data={CLIENTS} onChange={setClient} />
-      </div>
+      <div className="space-y-4 md:grid md:grid-cols-2 md:gap-4 md:space-y-0"></div>
 
       <ProductList />
 

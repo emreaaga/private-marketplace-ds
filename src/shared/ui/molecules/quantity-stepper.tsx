@@ -33,7 +33,7 @@ export function QuantityStepper({
     onChange(value + 1);
   };
 
-  const btnSize = size === "sm" ? "h-6 w-6" : "h-7 w-7";
+  const btnSize = size === "sm" ? "h-6 w-6" : "h-5 w-5";
 
   return (
     <div className="flex items-center">

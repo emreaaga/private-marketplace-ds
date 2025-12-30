@@ -10,10 +10,11 @@ import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/atoms/
 import { IconButton } from "@/shared/ui/molecules/icon-button";
 
 const OrderCreateDialog = dynamic(
-  () => import("@/features/orders/ui/molecules/order-create-dialog").then((m) => m.OrderCreateDialog),
-  {
-    loading: () => null,
-  },
+  () =>
+    import("@/features/orders/ui/molecules/order-create-stepper/order-create-stepper-dialog").then(
+      (m) => m.OrderCreateStepperDialog,
+    ),
+  { loading: () => null },
 );
 
 interface OrdersHeaderProps {

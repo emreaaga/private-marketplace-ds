@@ -106,8 +106,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
     header: "Вес / Ставка",
     cell: ({ row }) => (
       <div className="flex flex-col text-xs">
-        <span className="font-medium">{row.original.weight},00 кг</span>
-        <span className="font-medium">{row.original.ratePerKg},00 $/кг</span>
+        <span className="font-medium">кг {row.original.weight},00</span>
+        <span className="font-medium">$/кг {row.original.ratePerKg},00</span>
       </div>
     ),
   },
@@ -120,8 +120,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
 
       return (
         <div className="flex flex-col text-xs">
-          <span>{sum ? `${sum.toLocaleString()},00$` : "—"}</span>
-          <span>5,00$</span>
+          <span>{sum ? `$${sum.toLocaleString()},00` : "—"}</span>
+          <span>$5,00</span>
         </div>
       );
     },
@@ -135,8 +135,8 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
 
       return (
         <div className="flex flex-col text-xs leading-snug">
-          <span className="font-medium">{p1.amount},00$</span>
-          <span className="font-medium">{p1.amount},00$</span>
+          <span className="font-medium">${p1.amount},00</span>
+          <span className="font-medium">${p1.amount},00</span>
         </div>
       );
     },

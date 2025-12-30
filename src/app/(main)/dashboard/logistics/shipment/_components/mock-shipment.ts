@@ -1,0 +1,22 @@
+export const MOCK_SHIPMENTS = [
+  {
+    id: "1",
+    code: "CARGO-001",
+    route: "TR → UZ",
+    ordersCount: 5,
+    weightKg: 120,
+    total: 1800,
+    status: "В пути",
+    locked: false,
+  },
+  {
+    id: "2",
+    code: "CARGO-002",
+    route: "CH → UZ",
+    ordersCount: 3,
+    weightKg: 70,
+    total: 950,
+    status: "Ожидание",
+    locked: true,
+  },
+];
