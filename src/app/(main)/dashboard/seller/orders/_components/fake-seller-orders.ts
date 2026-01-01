@@ -2,7 +2,7 @@ import type { Order } from "./orders.type";
 
 export const fakeOrders: Order[] = [
   {
-    id: "A001Z100001",
+    id: "Z100001A001",
     counter: 1,
     test: "001",
 
@@ -45,9 +45,9 @@ export const fakeOrders: Order[] = [
   },
 
   {
-    id: "A002Z100001",
+    id: "Z100001A002",
     counter: 3,
-    test: "003",
+    test: "002",
 
     sender: {
       name: "Prodavec3",
@@ -90,5 +90,89 @@ export const fakeOrders: Order[] = [
 
     status: "canceled",
     date: "2025-02-09",
+  },
+  {
+    id: "Z100001A003",
+    counter: 1,
+    test: "003",
+
+    sender: {
+      name: "Prodavec1",
+      phone: "+90 555 123 45 67",
+      city: "TR-IST",
+    },
+    recipient: {
+      name: "Client1",
+      phone: "+998 90 123 45 67",
+      city: "TAS",
+    },
+
+    pricing: {
+      weightKg: 2.4,
+      ratePerKg: 6.5,
+      extraCharges: [{ title: "Упаковка", amount: 5 }],
+    },
+
+    payments: [
+      {
+        method: "prepaid",
+        amount: 15.6,
+        location: "origin",
+      },
+    ],
+
+    paymentSummary: {
+      cargoCost: 15.6,
+      extrasTotal: 5,
+      total: 20.6,
+      paidOrigin: 15.6,
+      paidDestination: 0,
+      currency: "USD",
+    },
+
+    status: "delivered",
+    date: "2025-02-10",
+  },
+  {
+    id: "Z100001A004",
+    counter: 1,
+    test: "004",
+
+    sender: {
+      name: "Prodavec1",
+      phone: "+90 555 123 45 67",
+      city: "TR-IST",
+    },
+    recipient: {
+      name: "Client1",
+      phone: "+998 90 123 45 67",
+      city: "TAS",
+    },
+
+    pricing: {
+      weightKg: 2.4,
+      ratePerKg: 6.5,
+      extraCharges: [{ title: "Упаковка", amount: 5 }],
+    },
+
+    payments: [
+      {
+        method: "prepaid",
+        amount: 15.6,
+        location: "origin",
+      },
+    ],
+
+    paymentSummary: {
+      cargoCost: 15.6,
+      extrasTotal: 5,
+      total: 20.6,
+      paidOrigin: 15.6,
+      paidDestination: 0,
+      currency: "USD",
+    },
+
+    status: "created",
+    date: "2025-02-10",
   },
 ];

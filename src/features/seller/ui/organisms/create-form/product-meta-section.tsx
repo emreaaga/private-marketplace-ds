@@ -63,6 +63,7 @@ export function ProductMetaSection({ form }: ProductMetaSectionProps) {
                 min={1}
                 step={1}
                 placeholder="Количество серий"
+                startAddon={"Шт."}
                 onChange={field.onChange}
               />
             </FormControl>
@@ -82,6 +83,7 @@ export function ProductMetaSection({ form }: ProductMetaSectionProps) {
                 min={0}
                 step={1}
                 placeholder="Цена"
+                startAddon="$"
                 onChange={field.onChange}
               />
             </FormControl>

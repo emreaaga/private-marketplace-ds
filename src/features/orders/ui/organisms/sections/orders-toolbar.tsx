@@ -40,7 +40,7 @@ export function OrdersToolbar({ open, onOpenChange }: OrdersHeaderProps) {
           onClick={() => onOpenChange(true)}
           onMouseEnter={() => setShouldLoad(true)}
         >
-          <PlusIcon className="h-4 w-4" />
+          <PlusIcon className="h-3 w-3" />
           <span className="md:inline">Создать</span>
           <span className="hidden md:inline">заказ</span>
         </Button>

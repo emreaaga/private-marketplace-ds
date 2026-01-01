@@ -1,6 +1,6 @@
 import { Clock, Truck, CheckCircle2, XCircle } from "lucide-react";
 
-export type OrderStatus = "created" | "in_transit" | "delivered" | "canceled";
+export type OrderStatus = "created" | "in_transit" | "at_hub" | "with_courier" | "delivered" | "canceled";
 
 export type PaymentType = "prepaid" | "cod";
 export type PaymentLocation = "origin" | "destination";
@@ -90,4 +90,25 @@ export const STATUS_MAP: Record<
     className: "bg-red-500/10 text-red-700",
     icon: XCircle,
   },
+  at_hub: {
+    label: "",
+    className: "",
+    icon: "symbol",
+  },
+  with_courier: {
+    label: "",
+    className: "",
+    icon: "symbol",
+  },
+};
+
+export const STATUS_FLOW: Order["status"][] = ["created", "in_transit", "delivered"];
+
+export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
+  created: "Создан",
+  in_transit: "В пути",
+  at_hub: "На складе",
+  with_courier: "У курьера",
+  delivered: "Доставлен",
+  canceled: "Отменён",
 };
