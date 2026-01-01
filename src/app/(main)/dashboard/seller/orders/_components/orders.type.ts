@@ -104,11 +104,11 @@ export const STATUS_MAP: Record<
 
 export const STATUS_FLOW: Order["status"][] = ["created", "in_transit", "delivered"];
 
-export const ORDER_STATUS_LABELS: Record<OrderStatus, string> = {
+export const STEP_LABELS: Record<OrderStatus, string> = {
   created: "Создан",
   in_transit: "В пути",
-  at_hub: "На складе",
-  with_courier: "У курьера",
-  delivered: "Доставлен",
+  at_hub: "Склад",
+  with_courier: "Курьера",
+  delivered: "Дост",
   canceled: "Отменён",
 };

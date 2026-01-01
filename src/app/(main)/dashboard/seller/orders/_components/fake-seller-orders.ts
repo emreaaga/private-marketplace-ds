@@ -41,7 +41,7 @@ export const fakeOrders: Order[] = [
     },
 
     status: "in_transit",
-    date: "2025-02-10",
+    date: "2025-02-10 14:32",
   },
 
   {
@@ -89,7 +89,7 @@ export const fakeOrders: Order[] = [
     },
 
     status: "canceled",
-    date: "2025-02-09",
+    date: "2025-02-10 11:23",
   },
   {
     id: "Z100001A003",
@@ -173,6 +173,6 @@ export const fakeOrders: Order[] = [
     },
 
     status: "created",
-    date: "2025-02-10",
+    date: "2025-02-10 18:00",
   },
 ];
