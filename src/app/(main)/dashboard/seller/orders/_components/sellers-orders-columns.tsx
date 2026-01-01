@@ -43,7 +43,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
       const [int, frac] = "120.50".split(".");
 
       return (
-        <span className="font-mono text-sm">
+        <span className="text-sm">
           {int}
           <span className="text-muted-foreground text-xs">.{frac}</span>
           <span className="text-muted-foreground ml-1 text-xs">кг</span>
@@ -58,7 +58,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
       const [int, frac] = "150.50".split(".");
 
       return (
-        <span className="font-mono text-sm">
+        <span className="text-sm">
           ${int}
           <span className="text-muted-foreground text-xs">.{frac}</span>
         </span>
