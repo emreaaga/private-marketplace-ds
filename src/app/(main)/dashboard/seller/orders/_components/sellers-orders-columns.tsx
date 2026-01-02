@@ -95,7 +95,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     cell: () => (
       <div className="flex flex-col gap-0.5">
         <Badge variant="secondary" className="text-xs">
-          test4
+          A03
         </Badge>
         <span className="text-muted-foreground text-[10px]">TAS-12.00kg</span>
       </div>
