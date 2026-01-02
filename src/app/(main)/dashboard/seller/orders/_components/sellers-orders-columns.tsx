@@ -3,32 +3,17 @@ import { Eye } from "lucide-react";
 
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
+import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/atoms/tooltip";
 
 import { type Order } from "./orders.type";
 import { StatusStepper } from "./status-stepper";
 
 export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
-    id: "sent",
-    header: "Отправка",
-    cell: ({ row }) => (
-      <span className="text-sm whitespace-nowrap">
-        <span className="font-mono">{row.original.test}</span>
-      </span>
-    ),
-  },
-  {
     id: "order",
     header: "Заказ",
     size: 140,
-    cell: ({ row }) => (
-      <div className="flex flex-col leading-tight">
-        <span className="font-mono text-sm">{row.original.id}</span>
-        <div style={{ fontSize: 9 }} className="text-muted-foreground">
-          25.70-150.30-6.50-5.00-120.00-20.00
-        </div>
-      </div>
-    ),
+    cell: ({ row }) => <span className="font-mono text-sm">{row.original.id}-001</span>,
   },
   // {
   //   id: "weight",
@@ -64,7 +49,17 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     header: "Кол1",
     cell: () => (
       <div className="flex flex-col gap-0.5">
-        <Badge className="text-xs">B100</Badge>
+        <TooltipProvider>
+          <Tooltip>
+            <TooltipTrigger asChild>
+              <Badge className="cursor-default text-xs">B100</Badge>
+            </TooltipTrigger>
+            <TooltipContent side="top">
+              <span className="text-[11px]">12.09.2025 · 14:32</span>
+            </TooltipContent>
+          </Tooltip>
+        </TooltipProvider>
+
         <span className="text-muted-foreground text-[10px]">IST</span>
       </div>
     ),
@@ -125,22 +120,22 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
       </div>
     ),
   },
-  {
-    id: "status",
-    header: "Статус",
-    size: 120,
-    minSize: 120,
-    maxSize: 120,
-    enableResizing: false,
-    cell: ({ row }) => (
-      <StatusStepper
-        status={row.original.status}
-        dates={{
-          created: "12.09.2025 · 14:32",
-        }}
-      />
-    ),
-  },
+  // {
+  //   id: "status",
+  //   header: "Статус",
+  //   size: 120,
+  //   minSize: 120,
+  //   maxSize: 120,
+  //   enableResizing: false,
+  //   cell: ({ row }) => (
+  //     <StatusStepper
+  //       status={row.original.status}
+  //       dates={{
+  //         created: "12.09.2025 · 14:32",
+  //       }}
+  //     />
+  //   ),
+  // },
 
   {
     id: "expand",
