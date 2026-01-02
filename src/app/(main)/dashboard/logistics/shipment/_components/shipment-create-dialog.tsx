@@ -4,6 +4,7 @@ import { useState } from "react";
 
 import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
+import { Input } from "@/shared/ui/atoms/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 
 interface ShipmentCreateDialogProps {
@@ -21,10 +22,12 @@ const COUNTRIES = [
 ];
 
 export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialogProps) {
-  const [originCountry, setOriginCountry] = useState<string | undefined>();
-  const [destinationCountry, setDestinationCountry] = useState<string | undefined>();
+  const [originCountry, setOriginCountry] = useState<string>();
+  const [destinationCountry, setDestinationCountry] = useState<string>();
+  const [departureDate, setDepartureDate] = useState<string>();
+  const [capacityKg, setCapacityKg] = useState<string>();
 
-  const canSubmit = originCountry && destinationCountry;
+  const canSubmit = originCountry && destinationCountry && departureDate && capacityKg;
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
@@ -59,6 +62,21 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
               ))}
             </SelectContent>
           </Select>
+
+          <Input
+            type="date"
+            value={departureDate}
+            onChange={(e) => setDepartureDate(e.target.value)}
+            placeholder="Дата вылета"
+          />
+
+          <Input
+            type="number"
+            min={1}
+            value={capacityKg}
+            onChange={(e) => setCapacityKg(e.target.value)}
+            placeholder="Лимит веса (кг)"
+          />
         </div>
 
         <div className="flex justify-end gap-2 pt-2">

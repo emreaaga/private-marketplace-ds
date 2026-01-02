@@ -5,9 +5,9 @@ import { Input } from "@/shared/ui/atoms/input";
 import { Party } from "./types";
 
 const ghostInput =
-  "border-0 shadow-none bg-transparent " +
+  "border-0 shadow-none bg-transparent transition-colors " +
   "focus-visible:ring-0 focus-visible:ring-offset-0 " +
-  "hover:bg-muted/50 focus:bg-muted/70";
+  "hover:bg-muted/40 focus:bg-muted/40";
 
 export function PartyFields({
   title,
