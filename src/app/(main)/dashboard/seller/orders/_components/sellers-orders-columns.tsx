@@ -94,7 +94,9 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     header: "Кол4",
     cell: () => (
       <div className="flex flex-col gap-0.5">
-        <Badge variant="secondary" className="text-xs">test4</Badge>
+        <Badge variant="secondary" className="text-xs">
+          test4
+        </Badge>
         <span className="text-muted-foreground text-[10px]">Склад</span>
       </div>
     ),
@@ -104,7 +106,9 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     header: "Кол5",
     cell: () => (
       <div className="flex flex-col gap-0.5">
-        <Badge variant="secondary" className="text-xs">test5</Badge>
+        <Badge variant="secondary" className="text-xs">
+          test5
+        </Badge>
         <span className="text-muted-foreground text-[10px]">У курьера</span>
       </div>
     ),
@@ -112,10 +116,10 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "col6",
     header: "Кол6",
-    cell: () => (
+    cell: ({ row }) => (
       <div className="flex flex-col gap-0.5">
         <Badge variant="secondary" className="text-xs">
-          test6
+          {row.original.recipient.name}
         </Badge>
         <span className="text-muted-foreground text-[10px]">Доставлено</span>
       </div>
