@@ -65,7 +65,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     cell: () => (
       <div className="flex flex-col gap-0.5">
         <Badge className="text-xs">test1</Badge>
-        <span className="text-muted-foreground text-[10px]">Создан</span>
+        <span className="text-muted-foreground text-[10px]">IST</span>
       </div>
     ),
   },
@@ -97,7 +97,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
         <Badge variant="secondary" className="text-xs">
           test4
         </Badge>
-        <span className="text-muted-foreground text-[10px]">Склад</span>
+        <span className="text-muted-foreground text-[10px]">TAS-12.00kg</span>
       </div>
     ),
   },
@@ -121,7 +121,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
         <Badge variant="secondary" className="text-xs">
           {row.original.recipient.name}
         </Badge>
-        <span className="text-muted-foreground text-[10px]">Доставлено</span>
+        <span className="text-muted-foreground text-[10px]">SKD-$20.00</span>
       </div>
     ),
   },
