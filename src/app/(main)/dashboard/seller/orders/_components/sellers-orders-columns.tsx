@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 
+import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
 
 import { type Order } from "./orders.type";
@@ -24,7 +25,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
       <div className="flex flex-col leading-tight">
         <span className="font-mono text-sm">{row.original.id}</span>
         <div style={{ fontSize: 9 }} className="text-muted-foreground">
-          25.70кг-150.30$-$6.5./кг-5.00$-120.00$-20.00$
+          25.70-150.30-6.50-5.00-120.00-20.00
         </div>
       </div>
     ),
@@ -36,34 +37,64 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     size: 220,
     cell: ({ row }) => <span className="text-sm font-medium">{row.original.recipient.name}</span>,
   },
-  {
-    id: "weight",
-    header: "Вес",
-    cell: ({ row }) => {
-      const [int, frac] = "120.50".split(".");
+  // {
+  //   id: "weight",
+  //   header: "Вес",
+  //   cell: ({ row }) => {
+  //     const [int, frac] = "120.50".split(".");
 
-      return (
-        <span className="text-sm">
-          {int}
-          <span className="text-muted-foreground text-xs">.{frac}</span>
-          <span className="text-muted-foreground ml-1 text-xs">кг</span>
-        </span>
-      );
-    },
+  //     return (
+  //       <span className="text-sm">
+  //         {int}
+  //         <span className="text-muted-foreground text-xs">.{frac}</span>
+  //         <span className="text-muted-foreground ml-1 text-xs">кг</span>
+  //       </span>
+  //     );
+  //   },
+  // },
+  // {
+  //   id: "payment",
+  //   header: "Оплата",
+  //   cell: ({ row }) => {
+  //     const [int, frac] = "150.50".split(".");
+
+  //     return (
+  //       <span className="text-sm">
+  //         ${int}
+  //         <span className="text-muted-foreground text-xs">.{frac}</span>
+  //       </span>
+  //     );
+  //   },
+  // },
+  {
+    accessorKey: "col1",
+    header: "Колонка 1",
+    cell: ({ row }) => <Badge>test1</Badge>,
   },
   {
-    id: "payment",
-    header: "Оплата",
-    cell: ({ row }) => {
-      const [int, frac] = "150.50".split(".");
-
-      return (
-        <span className="text-sm">
-          ${int}
-          <span className="text-muted-foreground text-xs">.{frac}</span>
-        </span>
-      );
-    },
+    accessorKey: "col2",
+    header: "Колонка 2",
+    cell: ({ row }) => <Badge>test2</Badge>,
+  },
+  {
+    accessorKey: "col3",
+    header: "Колонка 3",
+    cell: ({ row }) => <Badge>test3</Badge>,
+  },
+  {
+    accessorKey: "col4",
+    header: "Колонка 4",
+    cell: ({ row }) => <Badge>test4</Badge>,
+  },
+  {
+    accessorKey: "col5",
+    header: "Колонка 5",
+    cell: ({ row }) => <Badge>test5</Badge>,
+  },
+  {
+    accessorKey: "col6",
+    header: "Колонка 6",
+    cell: ({ row }) => <Badge>test6</Badge>,
   },
   {
     id: "status",
