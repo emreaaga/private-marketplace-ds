@@ -24,7 +24,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
       <div className="flex flex-col leading-tight">
         <span className="font-mono text-sm">{row.original.id}</span>
         <div style={{ fontSize: 9 }} className="text-muted-foreground">
-          {row.original.date}
+          25.70кг-150.30$-$6.5./кг-5.00$-120.00$-20.00$
         </div>
       </div>
     ),
@@ -72,7 +72,14 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     minSize: 120,
     maxSize: 120,
     enableResizing: false,
-    cell: ({ row }) => <StatusStepper status={row.original.status} />,
+    cell: ({ row }) => (
+      <StatusStepper
+        status={row.original.status}
+        dates={{
+          created: "12.09.2025 · 14:32",
+        }}
+      />
+    ),
   },
 
   {
