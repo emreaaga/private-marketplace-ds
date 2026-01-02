@@ -1,6 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 
+import { StatusStepper } from "@/app/(main)/dashboard/seller/orders/_components/status-stepper";
 import type { Order } from "@/features/orders/types/order.types";
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
@@ -44,24 +45,20 @@ export const getOrderColumns = (handlers: { onOpenDetails: (order: Order) => voi
     header: "Статус",
     cell: ({ row }) => <StatusBadge status={row.original.status} />,
   },
-
   {
-    accessorKey: "date",
-    header: "Дата",
-  },
-
-  {
-    id: "actions",
-    header: "",
-    size: 44,
-    minSize: 44,
-    maxSize: 44,
+    id: "status2",
+    header: "Статусы",
+    size: 120,
+    minSize: 120,
+    maxSize: 120,
+    enableResizing: false,
     cell: ({ row }) => (
-      <div className="flex justify-center">
-        <Button variant="ghost" size="icon" className="h-6 w-6" onClick={() => handlers.onOpenDetails(row.original)}>
-          <Eye className="h-4 w-4" />
-        </Button>
-      </div>
+      <StatusStepper
+        status={row.original.status2}
+        dates={{
+          created: "12.09.2025 · 14:32",
+        }}
+      />
     ),
   },
 ];

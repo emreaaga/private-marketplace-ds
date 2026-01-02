@@ -1,7 +1,5 @@
 "use client";
 
-import { useEffect, useState } from "react";
-
 import type { Order } from "@/features/orders/types/order.types";
 import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { Badge } from "@/shared/ui/atoms/badge";

@@ -6,6 +6,7 @@ export const fakeOrders: Order[] = [
     customer: "Client1",
     total: 24500,
     status: "confirmed",
+    status2: "in_transit",
     date: "2025-02-10",
     items: [
       { name: "Футболка Basic White (M)", sku: "TS-WH-M-001", price: 7500, qty: 2 },
@@ -17,6 +18,7 @@ export const fakeOrders: Order[] = [
     customer: "Client2",
     total: 17800,
     status: "pending",
+    status2: "in_transit",
     date: "2025-02-10",
     items: [{ name: "Худи Oversize Black (L)", sku: "HD-BLK-L-400", price: 8900, qty: 2 }],
   },
@@ -25,15 +27,8 @@ export const fakeOrders: Order[] = [
     customer: "Client3",
     total: 12900,
     status: "canceled",
+    status2: "delivered",
     date: "2025-02-09",
     items: [{ name: "Куртка Lightweight Windbreaker (M)", sku: "JK-WND-M-550", price: 12900, qty: 1 }],
-  },
-  {
-    id: "A002Z100002",
-    customer: "Client4",
-    total: 16400,
-    status: "confirmed",
-    date: "2025-02-09",
-    items: [{ name: "Свитшот Classic Grey (L)", sku: "SW-GRY-L-330", price: 8200, qty: 2 }],
   },
 ];
