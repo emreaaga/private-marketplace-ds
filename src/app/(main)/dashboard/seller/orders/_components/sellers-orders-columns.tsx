@@ -30,13 +30,6 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
       </div>
     ),
   },
-
-  {
-    id: "recipient",
-    header: "Получатель",
-    size: 220,
-    cell: ({ row }) => <span className="text-sm font-medium">{row.original.recipient.name}</span>,
-  },
   // {
   //   id: "weight",
   //   header: "Вес",
@@ -69,43 +62,63 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "col1",
     header: "Кол1",
-    cell: ({ row }) => <Badge className="text-xs">test1</Badge>,
+    cell: () => (
+      <div className="flex flex-col gap-0.5">
+        <Badge className="text-xs">test1</Badge>
+        <span className="text-muted-foreground text-[10px]">Создан</span>
+      </div>
+    ),
   },
   {
     accessorKey: "col2",
     header: "Кол2",
-    cell: ({ row }) => <Badge className="text-xs">test2</Badge>,
+    cell: () => (
+      <div className="flex flex-col gap-0.5">
+        <Badge className="text-xs">test2</Badge>
+        <span className="text-muted-foreground text-[10px]">В пути</span>
+      </div>
+    ),
   },
   {
     accessorKey: "col3",
     header: "Кол3",
-    cell: ({ row }) => <Badge className="text-xs">test3</Badge>,
+    cell: () => (
+      <div className="flex flex-col gap-0.5">
+        <Badge className="text-xs">test3</Badge>
+        <span className="text-muted-foreground text-[10px]">Таможня</span>
+      </div>
+    ),
   },
   {
     accessorKey: "col4",
     header: "Кол4",
-    cell: ({ row }) => (
-      <Badge className="text-xs" variant="secondary">
-        test4
-      </Badge>
+    cell: () => (
+      <div className="flex flex-col gap-0.5">
+        <Badge variant="secondary" className="text-xs">test4</Badge>
+        <span className="text-muted-foreground text-[10px]">Склад</span>
+      </div>
     ),
   },
   {
     accessorKey: "col5",
     header: "Кол5",
-    cell: ({ row }) => (
-      <Badge className="text-xs" variant="secondary">
-        test5
-      </Badge>
+    cell: () => (
+      <div className="flex flex-col gap-0.5">
+        <Badge variant="secondary" className="text-xs">test5</Badge>
+        <span className="text-muted-foreground text-[10px]">У курьера</span>
+      </div>
     ),
   },
   {
     accessorKey: "col6",
     header: "Кол6",
-    cell: ({ row }) => (
-      <Badge className="text-xs" variant="secondary">
-        test6
-      </Badge>
+    cell: () => (
+      <div className="flex flex-col gap-0.5">
+        <Badge variant="secondary" className="text-xs">
+          test6
+        </Badge>
+        <span className="text-muted-foreground text-[10px]">Доставлено</span>
+      </div>
     ),
   },
   {
