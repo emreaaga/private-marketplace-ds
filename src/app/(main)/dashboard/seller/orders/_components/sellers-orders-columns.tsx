@@ -68,33 +68,45 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   // },
   {
     accessorKey: "col1",
-    header: "Колонка 1",
-    cell: ({ row }) => <Badge>test1</Badge>,
+    header: "Кол1",
+    cell: ({ row }) => <Badge className="text-xs">test1</Badge>,
   },
   {
     accessorKey: "col2",
-    header: "Колонка 2",
-    cell: ({ row }) => <Badge>test2</Badge>,
+    header: "Кол2",
+    cell: ({ row }) => <Badge className="text-xs">test2</Badge>,
   },
   {
     accessorKey: "col3",
-    header: "Колонка 3",
-    cell: ({ row }) => <Badge>test3</Badge>,
+    header: "Кол3",
+    cell: ({ row }) => <Badge className="text-xs">test3</Badge>,
   },
   {
     accessorKey: "col4",
-    header: "Колонка 4",
-    cell: ({ row }) => <Badge>test4</Badge>,
+    header: "Кол4",
+    cell: ({ row }) => (
+      <Badge className="text-xs" variant="secondary">
+        test4
+      </Badge>
+    ),
   },
   {
     accessorKey: "col5",
-    header: "Колонка 5",
-    cell: ({ row }) => <Badge>test5</Badge>,
+    header: "Кол5",
+    cell: ({ row }) => (
+      <Badge className="text-xs" variant="secondary">
+        test5
+      </Badge>
+    ),
   },
   {
     accessorKey: "col6",
-    header: "Колонка 6",
-    cell: ({ row }) => <Badge>test6</Badge>,
+    header: "Кол6",
+    cell: ({ row }) => (
+      <Badge className="text-xs" variant="secondary">
+        test6
+      </Badge>
+    ),
   },
   {
     id: "status",
