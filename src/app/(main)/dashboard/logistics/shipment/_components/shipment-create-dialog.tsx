@@ -62,21 +62,6 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
               ))}
             </SelectContent>
           </Select>
-
-          <Input
-            type="date"
-            value={departureDate}
-            onChange={(e) => setDepartureDate(e.target.value)}
-            placeholder="Дата вылета"
-          />
-
-          <Input
-            type="number"
-            min={1}
-            value={capacityKg}
-            onChange={(e) => setCapacityKg(e.target.value)}
-            placeholder="Лимит веса (кг)"
-          />
         </div>
 
         <div className="flex justify-end gap-2 pt-2">
