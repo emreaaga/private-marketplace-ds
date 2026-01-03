@@ -104,14 +104,30 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
   {
     id: "weight_rate",
     header: "Вес / Ставка",
-    cell: ({ row }) => (
-      <div className="flex flex-col text-xs">
-        <span className="font-medium">кг {row.original.weight},00</span>
-        <span className="font-medium">$/кг {row.original.ratePerKg},00</span>
-      </div>
-    ),
-  },
+    cell: ({ row }) => {
+      const { weight, ratePerKg } = row.original;
 
+      return (
+        <div className="flex flex-col text-xs leading-tight">
+          <span>
+            <span className="text-muted-foreground mr-1 text-[10px]">кг</span>
+            <span className="font-medium tabular-nums">
+              {weight}
+              <span className="align-top text-[10px]">.00</span>
+            </span>
+          </span>
+
+          <span>
+            <span className="text-muted-foreground mr-1 text-[10px]">$/кг</span>
+            <span className="font-medium tabular-nums">
+              {ratePerKg}
+              <span className="align-top text-[10px]">.00</span>
+            </span>
+          </span>
+        </div>
+      );
+    },
+  },
   {
     id: "extras",
     header: "Доп опл 1|2",
@@ -119,9 +135,25 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
       const sum = row.original.extraCharges?.reduce((acc, c) => acc + c.amount, 0) ?? 0;
 
       return (
-        <div className="flex flex-col text-xs">
-          <span>{sum ? `$${sum.toLocaleString()},00` : "—"}</span>
-          <span>$5,00</span>
+        <div className="flex flex-col text-xs leading-tight">
+          <span>
+            <span className="text-muted-foreground mr-1 text-[10px]">$</span>
+            {sum ? (
+              <span className="font-medium tabular-nums">
+                {sum.toLocaleString()}
+                <span className="align-top text-[10px]">,00</span>
+              </span>
+            ) : (
+              <span className="text-muted-foreground">—</span>
+            )}
+          </span>
+
+          <span>
+            <span className="text-muted-foreground mr-1">$</span>
+            <span className="font-medium tabular-nums">
+              5<span className="align-top text-[10px]">,00</span>
+            </span>
+          </span>
         </div>
       );
     },
