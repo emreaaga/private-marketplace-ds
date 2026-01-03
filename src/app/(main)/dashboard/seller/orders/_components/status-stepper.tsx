@@ -75,7 +75,7 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
             const isFirst = i === 0;
             const isLast = i === STEPS.length - 1;
 
-            let dotColor = "#d1d5db";
+            let dotColor = "white";
             let labelColor = "#4a4a4a";
 
             if (isCurrent) {
@@ -96,6 +96,8 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
                   rx={DOT_RADIUS_X}
                   ry={DOT_RADIUS_X}
                   fill={dotColor}
+                  stroke={i > activeIndex ? "#8a8a8a" : "none"}
+                  strokeWidth={i > activeIndex ? 1 : 0}
                 />
 
                 {isCompleted &&
