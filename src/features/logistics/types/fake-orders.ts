@@ -24,7 +24,7 @@ export const fakeOrders: Order[] = [
 
     payment1: {
       type: "prepaid",
-      amount: 15.6,
+      amount: 15,
       location: "turkey",
     },
 
@@ -61,7 +61,7 @@ export const fakeOrders: Order[] = [
 
     payment1: {
       type: "prepaid",
-      amount: 11.7,
+      amount: 11,
       location: "turkey",
     },
 
@@ -92,7 +92,7 @@ export const fakeOrders: Order[] = [
 
     payment1: {
       type: "prepaid",
-      amount: 23.4,
+      amount: 23,
       location: "turkey",
     },
 

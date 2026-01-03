@@ -22,7 +22,9 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
         <TooltipProvider>
           <Tooltip>
             <TooltipTrigger asChild>
-              <Badge className="cursor-default rounded-sm text-xs">B100</Badge>
+              <Badge variant="table" className="cursor-default rounded-sm text-xs">
+                B100
+              </Badge>
             </TooltipTrigger>
             <TooltipContent side="top">
               <span className="text-[11px]">12.09.2025 · 14:32</span>
@@ -39,7 +41,9 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     header: "Кол2",
     cell: () => (
       <div className="flex flex-col gap-0.5">
-        <Badge className="rounded-sm text-xs">S001</Badge>
+        <Badge variant="table" className="rounded-sm text-xs">
+          S001
+        </Badge>
         <span className="text-muted-foreground text-[10px]">В пути</span>
       </div>
     ),
@@ -49,8 +53,10 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     header: "Кол3",
     cell: () => (
       <div className="flex flex-col gap-0.5">
-        <Badge className="rounded-sm text-xs">UZB</Badge>
-        <span className="text-muted-foreground text-[10px]">Таможня</span>
+        <Badge variant="table" className="rounded-sm text-xs">
+          Таможня
+        </Badge>
+        <span className="text-muted-foreground text-[10px]">UZ</span>
       </div>
     ),
   },

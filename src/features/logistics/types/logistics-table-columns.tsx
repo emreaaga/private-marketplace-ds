@@ -141,7 +141,7 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
             {sum ? (
               <span className="font-medium tabular-nums">
                 {sum.toLocaleString()}
-                <span className="align-top text-[10px]">,00</span>
+                <span className="align-top text-[10px]">.00</span>
               </span>
             ) : (
               <span className="text-muted-foreground">—</span>
@@ -151,14 +151,13 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
           <span>
             <span className="text-muted-foreground mr-1">$</span>
             <span className="font-medium tabular-nums">
-              5<span className="align-top text-[10px]">,00</span>
+              5<span className="align-top text-[10px]">.00</span>
             </span>
           </span>
         </div>
       );
     },
   },
-
   {
     id: "payments",
     header: "Оплата 1|2",
@@ -167,13 +166,12 @@ export const getLogisticsColumns = (): ColumnDef<Order>[] => [
 
       return (
         <div className="flex flex-col text-xs leading-snug">
-          <span className="font-medium">${p1.amount},00</span>
-          <span className="font-medium">${p1.amount},00</span>
+          <span className="font-medium">${p1.amount}.00</span>
+          <span className="font-medium">${p1.amount}.00</span>
         </div>
       );
     },
   },
-
   {
     id: "actions",
     header: "",

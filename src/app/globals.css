@@ -49,6 +49,8 @@
 /* Default theme styles (used when no data-theme-preset is set or when 'default' is selected).
 These serve as the fallback; there is no separate default.css file. */
 :root {
+   --table-badge-bg: oklch(0.88 0 0);
+  --table-badge-fg: oklch(0.2 0 0);
   --radius: 0.625rem;
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
@@ -84,6 +86,8 @@ These serve as the fallback; there is no separate default.css file. */
 }
 
 .dark {
+  --table-badge-bg: oklch(0.35 0 0);
+  --table-badge-fg: oklch(0.98 0 0);
   --background: oklch(0.145 0 0);
   --foreground: oklch(0.985 0 0);
   --card: oklch(0.205 0 0);
