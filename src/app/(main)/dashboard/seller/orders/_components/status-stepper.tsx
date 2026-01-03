@@ -76,14 +76,14 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
             const isLast = i === STEPS.length - 1;
 
             let dotColor = "#d1d5db";
-            let labelColor = "#9ca3af";
+            let labelColor = "#4a4a4a";
 
             if (isCurrent) {
-              dotColor = "#c4c4c4";
-              labelColor = "#000000";
+              dotColor = "#d8d8d8";
+              labelColor = "#4a4a4a";
             } else if (isPast) {
-              dotColor = "#c4c4c4";
-              labelColor = "#525252";
+              dotColor = "#d8d8d8";
+              labelColor = "#4a4a4a";
             }
 
             return (
@@ -106,7 +106,7 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
                       textAnchor="middle"
                       fontSize="8"
                       fontWeight="600"
-                      fill="white"
+                      fill="black"
                       className="pointer-events-none select-none"
                     >
                       {STEP_CODES[step]}
@@ -117,7 +117,7 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
                         d={`M ${cx - 2.5} ${DOT_Y}
                             L ${cx - 0.8} ${DOT_Y + 2}
                             L ${cx + 2.8} ${DOT_Y - 2.2}`}
-                        stroke="white"
+                        stroke="#4a4a4a"
                         strokeWidth={1.2}
                         strokeLinecap="round"
                         strokeLinejoin="round"
