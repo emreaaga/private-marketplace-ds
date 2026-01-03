@@ -12,9 +12,13 @@ type StatusStepperProps = {
 const DOT_RADIUS = 8;
 const STEP_GAP = 50;
 
-const HEIGHT = 34;
-const DOT_Y = 18;
-const LABEL_Y = 32;
+const HEIGHT = 36;
+const DOT_Y = 16;
+const LABEL_Y = 34;
+
+const DOT_WIDTH = 28;
+const DOT_HEIGHT = 16;
+const DOT_RADIUS_X = 8;
 
 const STEPS: OrderStatus[] = ["created", "in_transit", "at_hub", "with_courier", "delivered"];
 
@@ -84,15 +88,23 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
 
             return (
               <g key={step}>
-                <circle cx={cx} cy={DOT_Y} r={DOT_RADIUS} fill={dotColor} />
+                <rect
+                  x={cx - DOT_WIDTH / 2}
+                  y={DOT_Y - DOT_HEIGHT / 2}
+                  width={DOT_WIDTH}
+                  height={DOT_HEIGHT}
+                  rx={DOT_RADIUS_X}
+                  ry={DOT_RADIUS_X}
+                  fill={dotColor}
+                />
 
                 {isCompleted &&
                   (STEP_CODES[step] ? (
                     <text
                       x={cx}
-                      y={DOT_Y + 4}
+                      y={DOT_Y + 3}
                       textAnchor="middle"
-                      fontSize="8"
+                      fontSize="10"
                       fontWeight="600"
                       fill="white"
                       className="pointer-events-none select-none"
@@ -134,8 +146,8 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
           const date = dates?.[step];
           if (!date) return null;
 
-          const left = DOT_RADIUS * 2 + i * STEP_GAP - DOT_RADIUS;
-          const top = DOT_Y - DOT_RADIUS;
+          const left = DOT_RADIUS * 2 + i * STEP_GAP - DOT_WIDTH / 2;
+          const top = DOT_Y - DOT_HEIGHT / 2;
 
           return (
             <Tooltip key={`tooltip-${step}`}>
@@ -145,8 +157,8 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
                   style={{
                     left,
                     top,
-                    width: DOT_RADIUS * 2,
-                    height: DOT_RADIUS * 2,
+                    width: DOT_WIDTH,
+                    height: DOT_HEIGHT,
                   }}
                 />
               </TooltipTrigger>

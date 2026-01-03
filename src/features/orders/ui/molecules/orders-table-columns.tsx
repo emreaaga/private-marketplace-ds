@@ -37,12 +37,11 @@ export const getOrderColumns = (handlers: { onOpenDetails: (order: Order) => voi
     header: "Сумма",
     cell: ({ row }) => <span>${row.original.total}</span>,
   },
-
-  {
-    accessorKey: "status",
-    header: "Статус",
-    cell: ({ row }) => <StatusBadge status={row.original.status} />,
-  },
+  // {
+  //   accessorKey: "status",
+  //   header: "Статус",
+  //   cell: ({ row }) => <StatusBadge status={row.original.status} />,
+  // },
   {
     id: "status2",
     header: "Статусы",
