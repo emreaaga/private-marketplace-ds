@@ -6,8 +6,8 @@ import { Party } from "./types";
 
 const ghostInput =
   "border-0 shadow-none bg-transparent transition-colors " +
-  "focus-visible:ring-0 focus-visible:ring-offset-0 " +
-  "hover:bg-muted/40 focus:bg-muted/40";
+  "hover:bg-muted/50 focus:bg-background " +
+  "focus-visible:ring-0 focus-visible:ring-offset-0";
 
 export function PartyFields({
   title,
@@ -19,7 +19,7 @@ export function PartyFields({
   onChange: (patch: Partial<Party>) => void;
 }) {
   return (
-    <div className="space-y-2">
+    <div className="bg-muted/60 space-y-2 rounded-md">
       <h3 className="text-sm font-medium">{title}</h3>
 
       <Input placeholder="TR" disabled />

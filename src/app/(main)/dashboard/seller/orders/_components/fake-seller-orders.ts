@@ -2,7 +2,7 @@ import type { Order } from "./orders.type";
 
 export const fakeOrders: Order[] = [
   {
-    id: "Z100001A001",
+    id: "Z100001A01",
     counter: 1,
     test: "001",
 
@@ -45,7 +45,7 @@ export const fakeOrders: Order[] = [
   },
 
   {
-    id: "Z100001A002",
+    id: "Z100002A02",
     counter: 3,
     test: "002",
 
@@ -92,7 +92,7 @@ export const fakeOrders: Order[] = [
     date: "2025-02-10 11:23",
   },
   {
-    id: "Z100001A003",
+    id: "Z100003A03",
     counter: 1,
     test: "003",
 
@@ -134,7 +134,7 @@ export const fakeOrders: Order[] = [
     date: "2025-02-10",
   },
   {
-    id: "Z100001A004",
+    id: "Z100004A04",
     counter: 1,
     test: "004",
 

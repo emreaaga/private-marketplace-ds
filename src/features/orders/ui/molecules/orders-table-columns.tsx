@@ -1,10 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye } from "lucide-react";
 
 import { StatusStepper } from "@/app/(main)/dashboard/seller/orders/_components/status-stepper";
 import type { Order } from "@/features/orders/types/order.types";
 import { Badge } from "@/shared/ui/atoms/badge";
-import { Button } from "@/shared/ui/atoms/button";
 
 function StatusBadge({ status }: { status: Order["status"] }) {
   const map: Record<Order["status"], string> = {

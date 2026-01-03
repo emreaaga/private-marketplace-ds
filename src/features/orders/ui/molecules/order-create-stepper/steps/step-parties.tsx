@@ -14,7 +14,7 @@ export function StepParties({
   onReceiverChange: (patch: Partial<Party>) => void;
 }) {
   return (
-    <div className="bg-muted/60 grid gap-2 rounded-md p-2 md:grid-cols-2">
+    <div className="grid gap-3 md:grid-cols-2">
       <PartyFields title="Отправитель" value={sender} onChange={onSenderChange} />
       <PartyFields title="Получатель" value={receiver} onChange={onReceiverChange} />
     </div>

@@ -6,7 +6,6 @@ import { Button } from "@/shared/ui/atoms/button";
 import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/atoms/tooltip";
 
 import { type Order } from "./orders.type";
-import { StatusStepper } from "./status-stepper";
 
 export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
@@ -15,35 +14,6 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     size: 140,
     cell: ({ row }) => <span className="font-mono text-sm">{row.original.id}-001</span>,
   },
-  // {
-  //   id: "weight",
-  //   header: "Вес",
-  //   cell: ({ row }) => {
-  //     const [int, frac] = "120.50".split(".");
-
-  //     return (
-  //       <span className="text-sm">
-  //         {int}
-  //         <span className="text-muted-foreground text-xs">.{frac}</span>
-  //         <span className="text-muted-foreground ml-1 text-xs">кг</span>
-  //       </span>
-  //     );
-  //   },
-  // },
-  // {
-  //   id: "payment",
-  //   header: "Оплата",
-  //   cell: ({ row }) => {
-  //     const [int, frac] = "150.50".split(".");
-
-  //     return (
-  //       <span className="text-sm">
-  //         ${int}
-  //         <span className="text-muted-foreground text-xs">.{frac}</span>
-  //       </span>
-  //     );
-  //   },
-  // },
   {
     accessorKey: "col1",
     header: "Кол1",
@@ -60,7 +30,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
           </Tooltip>
         </TooltipProvider>
 
-        <span className="text-muted-foreground text-[10px]">IST</span>
+        <span className="text-muted-foreground text-[10px]">IST-$15.</span>
       </div>
     ),
   },
@@ -120,23 +90,6 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
       </div>
     ),
   },
-  // {
-  //   id: "status",
-  //   header: "Статус",
-  //   size: 120,
-  //   minSize: 120,
-  //   maxSize: 120,
-  //   enableResizing: false,
-  //   cell: ({ row }) => (
-  //     <StatusStepper
-  //       status={row.original.status}
-  //       dates={{
-  //         created: "12.09.2025 · 14:32",
-  //       }}
-  //     />
-  //   ),
-  // },
-
   {
     id: "expand",
     header: "",
