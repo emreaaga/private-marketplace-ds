@@ -9,32 +9,32 @@ type StatusStepperProps = {
   dates?: Partial<Record<OrderStatus, string>>;
 };
 
-const DOT_RADIUS = 8;
+const DOT_RADIUS = 10;
 const STEP_GAP = 50;
 
 const HEIGHT = 36;
 const DOT_Y = 16;
 const LABEL_Y = 34;
 
-const DOT_WIDTH = 28;
+const DOT_WIDTH = 40;
 const DOT_HEIGHT = 16;
-const DOT_RADIUS_X = 8;
+const DOT_RADIUS_X = 4;
 
 const STEPS: OrderStatus[] = ["created", "in_transit", "at_hub", "with_courier", "delivered"];
 
 const STEP_LABELS: Record<OrderStatus, string> = {
-  created: "Создан",
+  created: "TR-IST",
   in_transit: "В пути",
-  at_hub: "Склад",
+  at_hub: "UZ-TAS",
   with_courier: "Курьер",
-  delivered: "Готов",
+  delivered: "UZ-SKD",
   canceled: "Отменён",
 };
 
 const STEP_CODES: Partial<Record<OrderStatus, string>> = {
-  created: "IST",
+  created: "CLIENT-2",
   at_hub: "TAS",
-  delivered: "SKD",
+  delivered: "CLIENT-1",
 };
 
 export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
@@ -104,7 +104,7 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
                       x={cx}
                       y={DOT_Y + 3}
                       textAnchor="middle"
-                      fontSize="10"
+                      fontSize="8"
                       fontWeight="600"
                       fill="white"
                       className="pointer-events-none select-none"

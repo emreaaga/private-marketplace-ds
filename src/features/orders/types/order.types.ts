@@ -1,7 +1,7 @@
 export type Order = {
   id: string;
   customer: string;
-  total: number;
+  total: string;
   status: "pending" | "confirmed" | "canceled";
   status2: "created" | "in_transit" | "at_hub" | "with_courier" | "delivered" | "canceled";
   date: string;

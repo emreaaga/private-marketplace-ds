@@ -4,7 +4,7 @@ export const fakeOrders: Order[] = [
   {
     id: "A001Z100001",
     customer: "Client1",
-    total: 24500,
+    total: "24.500",
     status: "confirmed",
     status2: "in_transit",
     date: "2025-02-10",
@@ -16,7 +16,7 @@ export const fakeOrders: Order[] = [
   {
     id: "A001Z100002",
     customer: "Client2",
-    total: 17800,
+    total: "17.500",
     status: "pending",
     status2: "in_transit",
     date: "2025-02-10",
@@ -25,7 +25,7 @@ export const fakeOrders: Order[] = [
   {
     id: "A002Z100001",
     customer: "Client3",
-    total: 12900,
+    total: "12.900",
     status: "canceled",
     status2: "delivered",
     date: "2025-02-09",
