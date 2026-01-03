@@ -79,10 +79,10 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
             let labelColor = "#9ca3af";
 
             if (isCurrent) {
-              dotColor = "#000000";
+              dotColor = "#9e9e9e";
               labelColor = "#000000";
             } else if (isPast) {
-              dotColor = "#4a4a4a";
+              dotColor = "#c4c4c4";
               labelColor = "#525252";
             }
 
