@@ -71,19 +71,19 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
 
             const isPast = i < activeIndex;
             const isCurrent = i === activeIndex;
-            const isCompleted = i <= activeIndex;
+            const isFuture = i > activeIndex;
             const isFirst = i === 0;
             const isLast = i === STEPS.length - 1;
 
-            let dotColor = "white";
-            let labelColor = "#4a4a4a";
+            let dotColor = "#d1d5db";
+            let labelColor = "#9ca3af";
 
             if (isCurrent) {
-              dotColor = "#d8d8d8";
-              labelColor = "#4a4a4a";
+              dotColor = "#000000";
+              labelColor = "#000000";
             } else if (isPast) {
-              dotColor = "#d8d8d8";
-              labelColor = "#4a4a4a";
+              dotColor = "#000000";
+              labelColor = "#525252";
             }
 
             return (
@@ -96,37 +96,23 @@ export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
                   rx={DOT_RADIUS_X}
                   ry={DOT_RADIUS_X}
                   fill={dotColor}
-                  stroke={i > activeIndex ? "#8a8a8a" : "none"}
-                  strokeWidth={i > activeIndex ? 1 : 0}
+                  stroke={isFuture ? "#d1d5db" : "none"}
+                  strokeWidth={isFuture ? 1 : 0}
                 />
 
-                {isCompleted &&
-                  (STEP_CODES[step] ? (
-                    <text
-                      x={cx}
-                      y={DOT_Y + 3}
-                      textAnchor="middle"
-                      fontSize="8"
-                      fontWeight="600"
-                      fill="black"
-                      className="pointer-events-none select-none"
-                    >
-                      {STEP_CODES[step]}
-                    </text>
-                  ) : (
-                    isPast && (
-                      <path
-                        d={`M ${cx - 2.5} ${DOT_Y}
-                            L ${cx - 0.8} ${DOT_Y + 2}
-                            L ${cx + 2.8} ${DOT_Y - 2.2}`}
-                        stroke="#4a4a4a"
-                        strokeWidth={1.2}
-                        strokeLinecap="round"
-                        strokeLinejoin="round"
-                        fill="none"
-                      />
-                    )
-                  ))}
+                {STEP_CODES[step] && (
+                  <text
+                    x={cx}
+                    y={DOT_Y + 3}
+                    textAnchor="middle"
+                    fontSize="8"
+                    fontWeight="600"
+                    fill={isCurrent || isPast ? "white" : "#4a4a4a"}
+                    className="pointer-events-none select-none"
+                  >
+                    {STEP_CODES[step]}
+                  </text>
+                )}
 
                 <text
                   x={isFirst ? cx - DOT_RADIUS * 2 : isLast ? cx + DOT_RADIUS * 2 : cx}
