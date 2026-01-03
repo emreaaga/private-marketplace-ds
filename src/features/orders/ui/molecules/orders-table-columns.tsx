@@ -26,12 +26,6 @@ export const getOrderColumns = (handlers: { onOpenDetails: (order: Order) => voi
     header: "ID",
     cell: ({ row }) => <span className="font-mono text-xs">{row.original.id}</span>,
   },
-
-  {
-    accessorKey: "customer",
-    header: "Покупатель",
-  },
-
   {
     id: "status2",
     header: "Статусы",
