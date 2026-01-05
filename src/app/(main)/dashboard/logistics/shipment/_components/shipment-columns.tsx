@@ -46,7 +46,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
   {
     accessorKey: "col4",
     header: "Самолет",
-    cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
+    cell: () => <Badge className="rounded-sm text-xs">TR-UZ</Badge>,
   },
   {
     accessorKey: "col5",
