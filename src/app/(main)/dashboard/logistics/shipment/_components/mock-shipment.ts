@@ -7,7 +7,7 @@ export const MOCK_SHIPMENTS = [
     weightKg: 120,
     total: 1800,
     status: "В пути",
-    locked: false,
+    locked: true,
   },
   {
     id: "2",
@@ -17,6 +17,6 @@ export const MOCK_SHIPMENTS = [
     weightKg: 70,
     total: 950,
     status: "Ожидание",
-    locked: true,
+    locked: false,
   },
 ];
