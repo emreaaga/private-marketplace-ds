@@ -18,11 +18,7 @@ const TABLE_BADGE_CLASS = "h-5 px-1.5 rounded-[4px] text-[10px] leading-none fon
 ========================= */
 
 const TableBadge = ({ children, tooltip }: { children: React.ReactNode; tooltip?: string }) => {
-  const badge = (
-    <Badge variant="table" className={TABLE_BADGE_CLASS}>
-      {children}
-    </Badge>
-  );
+  const badge = <Badge className={TABLE_BADGE_CLASS}>{children}</Badge>;
 
   if (!tooltip) return badge;
 
