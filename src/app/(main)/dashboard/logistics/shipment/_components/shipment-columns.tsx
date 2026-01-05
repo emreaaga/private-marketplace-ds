@@ -29,27 +29,67 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
     },
   },
   {
-    accessorKey: "route",
-    header: "Маршрут",
+    accessorKey: "col2",
+    header: "Кол2",
+    cell: () => (
+      <Badge variant="table" className="rounded-sm text-xs">
+        S001
+      </Badge>
+    ),
   },
   {
-    accessorKey: "ordersCount",
-    header: "Заказов",
+    accessorKey: "col3",
+    header: "Кол3",
+    cell: () => (
+      <Badge variant="table" className="rounded-sm text-xs">
+        Таможня
+      </Badge>
+    ),
   },
   {
-    accessorKey: "weightKg",
-    header: "Вес",
-    cell: ({ getValue }) => `${getValue<number>()} кг`,
+    accessorKey: "col4",
+    header: "Кол4",
+    cell: () => (
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        A03
+      </Badge>
+    ),
   },
   {
-    accessorKey: "total",
-    header: "Сумма",
-    cell: ({ getValue }) => `$${getValue<number>()}`,
+    accessorKey: "col5",
+    header: "Кол5",
+    cell: () => (
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        A01K001
+      </Badge>
+    ),
   },
   {
-    accessorKey: "status",
-    header: "Статус",
-    cell: ({ getValue }) => <Badge variant="secondary">{getValue<string>()}</Badge>,
+    accessorKey: "col6",
+    header: "Кол6",
+    cell: ({ row }) => (
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        client1
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "col7",
+    header: "Кол6",
+    cell: ({ row }) => (
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        client1
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "col8",
+    header: "Кол6",
+    cell: ({ row }) => (
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        client1
+      </Badge>
+    ),
   },
 
   {
