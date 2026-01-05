@@ -1,24 +1,56 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useState } from "react";
 
-import { getLogisticsColumns } from "@/features/logistics/types/logistics-table-columns";
+import dynamic from "next/dynamic";
+
+import { toast } from "sonner";
+
+import { fakeOrders } from "@/features/orders/fake-orders";
+import type { Order } from "@/features/orders/types/order.types";
+import { OrdersListResponsive } from "@/features/orders/ui/organisms/lists/orders-responsive";
 import { OrdersToolbar } from "@/features/orders/ui/organisms/sections/orders-toolbar";
 
-import { fakeOrders } from "./_components/fake-seller-orders";
-import { Order } from "./_components/orders.type";
-import { getSellersOrdersColumns } from "./_components/sellers-orders-columns";
-import SellersOrdersResponsive from "./_components/sellers-orders-responsive";
+const OrderDetailsDialog = dynamic(
+  () => import("@/features/orders/ui/molecules/order-details-dialog").then((m) => m.OrderDetailsDialog),
+  {
+    ssr: false,
+  },
+);
 
-export default function SellerOrdersPage() {
+export default function ProductsOrdersPage() {
   const [orders] = useState<Order[]>(fakeOrders);
+  const [selectedOrder, setSelectedOrder] = useState<Order | null>(null);
+  const [isDetailsOpen, setIsDetailsOpen] = useState(false);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
-  const columns = useMemo(() => getSellersOrdersColumns(), []);
+
+  const handleOpenDetails = (order: Order) => {
+    setSelectedOrder(order);
+    setIsDetailsOpen(true);
+  };
+
+  const handleConfirm = () => {
+    if (!selectedOrder) return;
+
+    if (selectedOrder.status !== "pending") {
+      toast.info("Этот заказ уже обработан.");
+      setIsDetailsOpen(false);
+      return;
+    }
+
+    toast.success(`Заказ #${selectedOrder.id} подтверждён`);
+    setIsDetailsOpen(false);
+  };
 
   return (
     <div className="space-y-4">
       <OrdersToolbar open={isCreateOpen} onOpenChange={setIsCreateOpen} />
-      <SellersOrdersResponsive data={orders} columns={columns} />
+
+      <OrdersListResponsive orders={orders} onOpenDetails={handleOpenDetails} />
+
+      {isDetailsOpen && selectedOrder && (
+        <OrderDetailsDialog open onOpenChange={setIsDetailsOpen} order={selectedOrder} onConfirm={handleConfirm} />
+      )}
     </div>
   );
 }

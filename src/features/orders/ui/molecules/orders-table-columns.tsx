@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
-import { StatusStepper } from "@/app/(main)/dashboard/seller/orders/_components/status-stepper";
+import { StatusStepper } from "@/app/(main)/dashboard/logistics/orders/_components/status-stepper";
 import type { Order } from "@/features/orders/types/order.types";
 import { Button } from "@/shared/ui/atoms/button";
 import {
