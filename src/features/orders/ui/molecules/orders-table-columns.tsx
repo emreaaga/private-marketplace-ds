@@ -29,7 +29,7 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
           status="post_a_1"
           dates={{
             post_a_1: "12.09.2025 · 14:32",
-            tas: "13.09.2025 · 10:20",
+            tas2: "13.09.2025 · 10:20",
             client_2: "15.09.2025 · 18:45",
           }}
         />
