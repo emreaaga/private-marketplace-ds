@@ -2,6 +2,7 @@
 
 import { useState, useMemo } from "react";
 
+import { getLogisticsColumns } from "@/features/logistics/types/logistics-table-columns";
 import { OrdersToolbar } from "@/features/orders/ui/organisms/sections/orders-toolbar";
 
 import { fakeOrders } from "./_components/fake-seller-orders";

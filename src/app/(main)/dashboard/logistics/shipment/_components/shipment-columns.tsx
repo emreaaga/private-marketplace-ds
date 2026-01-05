@@ -14,7 +14,7 @@ import { Shipment } from "./types";
 export const ShipmentColumns: ColumnDef<Shipment>[] = [
   {
     accessorKey: "code",
-    header: "Код",
+    header: "NO отп",
     cell: ({ row }) => {
       const shipment = row.original;
 
@@ -51,38 +51,22 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
   {
     accessorKey: "col5",
     header: "Таможня",
-    cell: () => (
-      <Badge variant="outline" className="rounded-sm text-xs">
-        38 - 2800K
-      </Badge>
-    ),
+    cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
   {
     accessorKey: "col6",
     header: "Пункт 2",
-    cell: ({ row }) => (
-      <Badge variant="outline" className="rounded-sm text-xs">
-        38 - 2800K
-      </Badge>
-    ),
+    cell: ({ row }) => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
   {
     accessorKey: "col7",
     header: "Курьер",
-    cell: ({ row }) => (
-      <Badge variant="outline" className="rounded-sm text-xs">
-        38 - 2800K
-      </Badge>
-    ),
+    cell: ({ row }) => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
   {
     accessorKey: "col8",
     header: "Пол. клиент",
-    cell: ({ row }) => (
-      <Badge variant="outline" className="rounded-sm text-xs">
-        38 - 2800K
-      </Badge>
-    ),
+    cell: ({ row }) => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
 
   {

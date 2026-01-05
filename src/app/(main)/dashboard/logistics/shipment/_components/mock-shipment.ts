@@ -1,7 +1,7 @@
 export const MOCK_SHIPMENTS = [
   {
     id: "1",
-    code: "CARGO-001",
+    code: "001",
     route: "TR → UZ",
     ordersCount: 5,
     weightKg: 120,
@@ -11,7 +11,7 @@ export const MOCK_SHIPMENTS = [
   },
   {
     id: "2",
-    code: "CARGO-002",
+    code: "002",
     route: "CH → UZ",
     ordersCount: 3,
     weightKg: 70,
