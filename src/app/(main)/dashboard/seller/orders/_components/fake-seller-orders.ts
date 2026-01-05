@@ -18,7 +18,7 @@ export const fakeOrders: Order[] = [
     },
 
     pricing: {
-      weightKg: 2.40,
+      weightKg: 2.4,
       ratePerKg: 6.5,
       extraCharges: [{ title: "Упаковка", amount: 5 }],
     },
@@ -61,7 +61,7 @@ export const fakeOrders: Order[] = [
     },
 
     pricing: {
-      weightKg: 3.60,
+      weightKg: 3.6,
       ratePerKg: 6.5,
       extraCharges: [{ title: "Штраф (таможня)", amount: 12 }],
     },
@@ -108,7 +108,7 @@ export const fakeOrders: Order[] = [
     },
 
     pricing: {
-      weightKg: 2.30,
+      weightKg: 2.3,
       ratePerKg: 6.5,
       extraCharges: [{ title: "Упаковка", amount: 5 }],
     },
@@ -172,7 +172,7 @@ export const fakeOrders: Order[] = [
       currency: "USD",
     },
 
-    status: "created",
+    status: "delivered",
     date: "2025-02-10 18:00",
   },
 ];
