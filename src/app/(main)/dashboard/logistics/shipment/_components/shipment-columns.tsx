@@ -29,6 +29,15 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
     },
   },
   {
+    accessorKey: "col1",
+    header: "Кол1",
+    cell: () => (
+      <Badge variant="table" className="rounded-sm text-xs">
+        test
+      </Badge>
+    ),
+  },
+  {
     accessorKey: "col2",
     header: "Кол2",
     cell: () => (
@@ -75,7 +84,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
   },
   {
     accessorKey: "col7",
-    header: "Кол6",
+    header: "Кол7",
     cell: ({ row }) => (
       <Badge variant="secondary" className="rounded-sm text-xs">
         client1
@@ -84,7 +93,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
   },
   {
     accessorKey: "col8",
-    header: "Кол6",
+    header: "Кол8",
     cell: ({ row }) => (
       <Badge variant="secondary" className="rounded-sm text-xs">
         client1
