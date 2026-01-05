@@ -18,82 +18,99 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     accessorKey: "col1",
     header: "Кол1",
     cell: () => (
-      <div className="flex flex-col gap-0.5">
-        <TooltipProvider>
-          <Tooltip>
-            <TooltipTrigger asChild>
-              <Badge variant="table" className="cursor-default rounded-sm text-xs">
-                B100
-              </Badge>
-            </TooltipTrigger>
-            <TooltipContent side="top">
-              <span className="text-[11px]">12.09.2025 · 14:32</span>
-            </TooltipContent>
-          </Tooltip>
-        </TooltipProvider>
-
-        <span className="text-muted-foreground text-[10px]">IST-$15.</span>
-      </div>
+      <TooltipProvider>
+        <Tooltip>
+          <TooltipTrigger asChild>
+            <Badge variant="table" className="cursor-default rounded-sm text-xs">
+              Client-1
+            </Badge>
+          </TooltipTrigger>
+          <TooltipContent side="top">
+            <span className="text-[11px]">12.09.2025 · 14:32</span>
+          </TooltipContent>
+        </Tooltip>
+      </TooltipProvider>
     ),
   },
   {
     accessorKey: "col2",
     header: "Кол2",
     cell: () => (
-      <div className="flex flex-col gap-0.5">
-        <Badge variant="table" className="rounded-sm text-xs">
-          S001
-        </Badge>
-        <span className="text-muted-foreground text-[10px]">В пути</span>
-      </div>
+      <Badge variant="table" className="rounded-sm text-xs">
+        Курьер
+      </Badge>
     ),
   },
   {
     accessorKey: "col3",
     header: "Кол3",
     cell: () => (
-      <div className="flex flex-col gap-0.5">
-        <Badge variant="table" className="rounded-sm text-xs">
-          Таможня
-        </Badge>
-        <span className="text-muted-foreground text-[10px]">UZ</span>
-      </div>
+      <Badge variant="table" className="rounded-sm text-xs">
+        IST-A01
+      </Badge>
     ),
   },
   {
     accessorKey: "col4",
     header: "Кол4",
     cell: () => (
-      <div className="flex flex-col gap-0.5">
-        <Badge variant="secondary" className="rounded-sm text-xs">
-          A03
-        </Badge>
-        <span className="text-muted-foreground text-[10px]">TAS-12.00kg</span>
-      </div>
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        IST-Таможня
+      </Badge>
     ),
   },
   {
     accessorKey: "col5",
     header: "Кол5",
     cell: () => (
-      <div className="flex flex-col gap-0.5">
-        <Badge variant="secondary" className="rounded-sm text-xs">
-          A01K001
-        </Badge>
-        <span className="text-muted-foreground text-[10px]">У курьера</span>
-      </div>
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        TR-UZ
+      </Badge>
     ),
   },
   {
     accessorKey: "col6",
     header: "Кол6",
     cell: ({ row }) => (
-      <div className="flex flex-col gap-0.5">
-        <Badge variant="secondary" className="rounded-sm text-xs">
-          {row.original.recipient.name}
-        </Badge>
-        <span className="text-muted-foreground text-[10px]">SKD-$20.00</span>
-      </div>
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        TAS-Таможня
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "col7",
+    header: "Кол6",
+    cell: ({ row }) => (
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        TAS-A02
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "col8",
+    header: "Кол6",
+    cell: ({ row }) => (
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        Курьер
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "col9",
+    header: "Кол6",
+    cell: ({ row }) => (
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        SKD-client2
+      </Badge>
+    ),
+  },
+  {
+    accessorKey: "col10",
+    header: "Кол6",
+    cell: ({ row }) => (
+      <Badge variant="secondary" className="rounded-sm text-xs">
+        12.00кг6.00$/кг15.00$12.00$4.00$
+      </Badge>
     ),
   },
   {
