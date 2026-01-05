@@ -33,7 +33,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
     header: "Кол1",
     cell: () => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        test
+        client-1
       </Badge>
     ),
   },
@@ -42,7 +42,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
     header: "Кол2",
     cell: () => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        S001
+        Курьер
       </Badge>
     ),
   },
@@ -51,7 +51,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
     header: "Кол3",
     cell: () => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        Таможня
+        IST-A01
       </Badge>
     ),
   },
@@ -60,7 +60,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
     header: "Кол4",
     cell: () => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        A03
+        TR-UZ
       </Badge>
     ),
   },
@@ -69,7 +69,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
     header: "Кол5",
     cell: () => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        A01K001
+        TAS-Таможня
       </Badge>
     ),
   },
@@ -78,7 +78,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
     header: "Кол6",
     cell: ({ row }) => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        client1
+        TAS-A02
       </Badge>
     ),
   },
@@ -87,7 +87,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
     header: "Кол7",
     cell: ({ row }) => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        client1
+        Курьер
       </Badge>
     ),
   },
@@ -96,7 +96,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
     header: "Кол8",
     cell: ({ row }) => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        client1
+        SKD-client1
       </Badge>
     ),
   },
