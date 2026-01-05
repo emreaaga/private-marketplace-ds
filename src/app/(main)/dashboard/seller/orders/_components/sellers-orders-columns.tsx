@@ -1,21 +1,19 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye } from "lucide-react";
+import { Eye, MoreHorizontal } from "lucide-react";
 
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
-import { Tooltip, TooltipContent, TooltipProvider, TooltipTrigger } from "@/shared/ui/atoms/tooltip";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/shared/ui/atoms/dropdown-menu";
+import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/atoms/tooltip";
 
 import { type Order } from "./orders.type";
 
-/* =========================
-   TABLE TOKENS
-========================= */
-
 const TABLE_BADGE_CLASS = "h-5 px-1.5 rounded-[4px] text-[10px] leading-none font-medium whitespace-nowrap";
-
-/* =========================
-   HELPERS
-========================= */
 
 const TableBadge = ({ children, tooltip }: { children: React.ReactNode; tooltip?: string }) => {
   const badge = <Badge className={TABLE_BADGE_CLASS}>{children}</Badge>;
@@ -26,15 +24,11 @@ const TableBadge = ({ children, tooltip }: { children: React.ReactNode; tooltip?
     <Tooltip>
       <TooltipTrigger asChild>{badge}</TooltipTrigger>
       <TooltipContent side="top">
-        <span className="text-[10px]">{tooltip}</span>
+        <span className="text-[8px]">{tooltip}</span>
       </TooltipContent>
     </Tooltip>
   );
 };
-
-/* =========================
-   COLUMNS
-========================= */
 
 export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
@@ -46,55 +40,55 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
 
   {
     accessorKey: "col1",
-    header: "1",
+    header: "Отп. клиент",
     cell: () => <TableBadge tooltip="12.09.2025 · 14:32">Client-1</TableBadge>,
   },
 
   {
     accessorKey: "col2",
-    header: "2",
+    header: "Курьер",
     cell: () => <TableBadge>Курьер</TableBadge>,
   },
 
   {
     accessorKey: "col3",
-    header: "3",
+    header: "Пункт 1",
     cell: () => <TableBadge>IST-A01</TableBadge>,
   },
 
   {
     accessorKey: "col4",
-    header: "4",
+    header: "Таможня",
     cell: () => <TableBadge>IST-таможня</TableBadge>,
   },
 
   {
     accessorKey: "col5",
-    header: "5",
+    header: "Самолет",
     cell: () => <TableBadge>TR–UZ</TableBadge>,
   },
 
   {
     accessorKey: "col6",
-    header: "6",
+    header: "Таможня",
     cell: () => <TableBadge>TAS-таможня</TableBadge>,
   },
 
   {
     accessorKey: "col7",
-    header: "7",
+    header: "Пункт 2",
     cell: () => <TableBadge>TAS-A02</TableBadge>,
   },
 
   {
     accessorKey: "col8",
-    header: "8",
+    header: "Курьер",
     cell: () => <TableBadge>Курьер</TableBadge>,
   },
 
   {
     accessorKey: "col9",
-    header: "9",
+    header: "Пол. клиент",
     cell: () => <TableBadge>SKD-client</TableBadge>,
   },
 
@@ -152,9 +146,19 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     size: 32,
     enableSorting: false,
     cell: () => (
-      <Button variant="ghost" size="icon" className="text-muted-foreground hover:text-foreground h-6 w-6">
-        <Eye className="h-3.5 w-3.5" />
-      </Button>
+      <DropdownMenu>
+        <DropdownMenuTrigger asChild>
+          <Button variant="ghost" size="icon" className="h-6 w-6">
+            <MoreHorizontal className="h-3.5 w-3.5" />
+          </Button>
+        </DropdownMenuTrigger>
+
+        <DropdownMenuContent align="end">
+          <DropdownMenuItem>Изменить</DropdownMenuItem>
+
+          <DropdownMenuItem className="text-destructive">Удалить</DropdownMenuItem>
+        </DropdownMenuContent>
+      </DropdownMenu>
     ),
   },
 ];
