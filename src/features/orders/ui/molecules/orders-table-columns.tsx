@@ -30,12 +30,12 @@ export const getOrderColumns = (handlers: { onOpenDetails: (order: Order) => voi
     header: "Расчёт",
     enableResizing: false,
     cell: ({ row }) => (
-      <div className="grid grid-cols-5 gap-0.5">
-        <div className="flex h-4 items-center justify-center rounded-sm border text-[11px]">12кг</div>
-        <div className="flex h-4 items-center justify-center rounded-sm border text-[11px]">6$/кг</div>
-        <div className="flex h-4 items-center justify-center rounded-sm border text-[11px]">15$</div>
-        <div className="flex h-4 items-center justify-center rounded-sm border text-[11px]">12$</div>
-        <div className="flex h-4 items-center justify-center rounded-sm border text-[11px]">4$</div>
+      <div className="flex h-5 items-center justify-between rounded-sm border text-[11px]">
+        <span className="font-medium">12</span>
+        <span className="font-medium">6</span>
+        <span className="font-medium">15</span>
+        <span className="font-medium">12</span>
+        <span className="font-medium">4</span>
       </div>
     ),
   },

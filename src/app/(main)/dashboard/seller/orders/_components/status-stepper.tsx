@@ -9,19 +9,15 @@ type StatusStepperProps = {
   dates?: Partial<Record<StepKey, string>>;
 };
 
-/* ================== layout ================== */
-
-const STEP_GAP = 56;
+const STEP_GAP = 64;
 const HEIGHT = 36;
 
 const DOT_Y = 16;
 
-const DOT_WIDTH = 52;
+const DOT_WIDTH = 58;
 const DOT_HEIGHT = 18;
 const DOT_RADIUS_X = 5;
-const DOT_PADDING = 28;
-
-/* ================== steps ================== */
+const DOT_PADDING = 30;
 
 const STEPS: StepKey[] = [
   "client_1",
@@ -34,31 +30,25 @@ const STEPS: StepKey[] = [
   "client_2",
 ];
 
-/* ================== labels ================== */
-
 const STEP_BADGE_TEXT: Record<StepKey, { top: string; bottom?: string }> = {
   client_1: { top: "CLIENT-1" },
   courier_1: { top: "КУРЬЕР" },
 
-  post_a_1: { top: "A01-IST" },
+  post_a_1: { top: "IST-A01" },
   in_transit: { top: "TR–UZ" },
-  tas: { top: "TAS" },
-  post_a_2: { top: "A02-TAS" },
+  tas: { top: "TAS-таможня" },
+  post_a_2: { top: "TAS-A02" },
 
   courier_2: { top: "КУРЬЕР" },
-  client_2: { top: "CLIENT-SKD" },
+  client_2: { top: "SKD-CLIENT" },
 };
 
-/* ================== colors (calm / neutral) ================== */
-
-const ACTIVE_FILL = "#1f2937"; // slate-800
+const ACTIVE_FILL = "#1f2937";
 const ACTIVE_LINE = "#1f2937";
 
 const FUTURE_FILL = "#ffffff";
-const FUTURE_STROKE = "#e5e7eb"; // slate-200
-const FUTURE_TEXT = "#6b7280"; // slate-500
-
-/* ================== component ================== */
+const FUTURE_STROKE = "#e5e7eb";
+const FUTURE_TEXT = "#6b7280";
 
 export const StatusStepper = ({ status, dates }: StatusStepperProps) => {
   const activeIndex = STEPS.indexOf(status);
