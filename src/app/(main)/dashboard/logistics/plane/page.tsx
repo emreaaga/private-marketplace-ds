@@ -1,6 +1,6 @@
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
-import { ShipmentToolbar } from "../logistics/shipment/_components/shipment-toolbar";
+import { ShipmentToolbar } from "../shipment/_components/shipment-toolbar";
 
 import { MOCK_PLANE } from "./_components/mock-plane";
 import { PlaneColumns, Plane } from "./_components/plane-columns";

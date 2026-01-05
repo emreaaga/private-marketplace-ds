@@ -35,12 +35,6 @@ export const sidebarItems: NavGroup[] = [
         roles: [UserRole.ADMIN],
       },
       {
-        title: "Самолет",
-        url: "/dashboard/plane",
-        icon: Plane,
-        roles: [UserRole.ADMIN],
-      },
-      {
         title: "Почта",
         url: "/dashboard/logistics/shipment",
         icon: Package,
