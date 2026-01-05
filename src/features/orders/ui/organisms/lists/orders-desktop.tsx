@@ -12,7 +12,7 @@ interface OrdersListDesktopProps {
 }
 
 export function OrdersListDesktop({ orders, onOpenDetails }: OrdersListDesktopProps) {
-  const columns = useMemo(() => getOrderColumns({ onOpenDetails }), [onOpenDetails]);
+  const columns = useMemo(() => getOrderColumns(), [onOpenDetails]);
 
   return <DataTable columns={columns} data={orders} pageSize={10} />;
 }
