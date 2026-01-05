@@ -3,7 +3,7 @@ export type Order = {
   customer: string;
   total: string;
   status: "pending" | "confirmed" | "canceled";
-  status2: "created" | "in_transit" | "at_hub" | "with_courier" | "delivered" | "canceled";
+  status2: "client_1" | "courier_1" | "post_a_1" | "in_transit" | "tas" | "post_a_2" | "courier_2" | "client_2";
   date: string;
   items: Array<{
     name: string;

@@ -35,9 +35,11 @@ export const getOrderColumns = (handlers: { onOpenDetails: (order: Order) => voi
     enableResizing: false,
     cell: ({ row }) => (
       <StatusStepper
-        status={row.original.status2}
+        status="post_a_1"
         dates={{
-          created: "12.09.2025 · 14:32",
+          post_a_1: "12.09.2025 · 14:32",
+          tas: "13.09.2025 · 10:20",
+          client_2: "15.09.2025 · 18:45",
         }}
       />
     ),

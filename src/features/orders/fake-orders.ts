@@ -2,7 +2,7 @@ import type { Order } from "@/features/orders/types/order.types";
 
 export const fakeOrders: Order[] = [
   {
-    id: "A001Z100001",
+    id: "Z100001A01-001",
     customer: "Client1",
     total: "24.500",
     status: "confirmed",
@@ -14,7 +14,7 @@ export const fakeOrders: Order[] = [
     ],
   },
   {
-    id: "A001Z100002",
+    id: "Z100002A01-001",
     customer: "Client2",
     total: "17.500",
     status: "pending",
@@ -23,11 +23,11 @@ export const fakeOrders: Order[] = [
     items: [{ name: "Худи Oversize Black (L)", sku: "HD-BLK-L-400", price: 8900, qty: 2 }],
   },
   {
-    id: "A002Z100001",
+    id: "Z100001A02-001",
     customer: "Client3",
     total: "12.900",
     status: "canceled",
-    status2: "delivered",
+    status2: "client_2",
     date: "2025-02-09",
     items: [{ name: "Куртка Lightweight Windbreaker (M)", sku: "JK-WND-M-550", price: 12900, qty: 1 }],
   },

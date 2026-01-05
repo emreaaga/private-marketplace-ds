@@ -1,6 +1,6 @@
-import { Clock, Truck, CheckCircle2, XCircle } from "lucide-react";
+import { Truck, CheckCircle2, XCircle, Warehouse, User } from "lucide-react";
 
-export type OrderStatus = "created" | "in_transit" | "at_hub" | "with_courier" | "delivered" | "canceled";
+export type OrderStatus = "client" | "courier" | "in_transit" | "at_hub" | "with_courier" | "delivered" | "canceled";
 
 export type PaymentType = "prepaid" | "cod";
 export type PaymentLocation = "origin" | "destination";
@@ -63,52 +63,52 @@ export type Order = {
 };
 
 export const STATUS_MAP: Record<
-  Order["status"],
+  OrderStatus,
   {
     label: string;
     className: string;
     icon: React.ElementType;
   }
 > = {
-  created: {
-    label: "Создан",
+  client: {
+    label: "Создан клиентом",
     className: "bg-slate-500/10 text-slate-700",
-    icon: Clock,
+    icon: User,
   },
+
+  courier: {
+    label: "Забрал курьер",
+    className: "bg-indigo-500/10 text-indigo-700",
+    icon: Truck,
+  },
+
   in_transit: {
     label: "В пути",
     className: "bg-blue-500/10 text-blue-700",
     icon: Truck,
   },
+
+  at_hub: {
+    label: "На почте",
+    className: "bg-amber-500/10 text-amber-700",
+    icon: Warehouse,
+  },
+
+  with_courier: {
+    label: "У курьера",
+    className: "bg-purple-500/10 text-purple-700",
+    icon: Truck,
+  },
+
   delivered: {
     label: "Доставлен",
     className: "bg-green-500/10 text-green-700",
     icon: CheckCircle2,
   },
+
   canceled: {
     label: "Отменён",
     className: "bg-red-500/10 text-red-700",
     icon: XCircle,
   },
-  at_hub: {
-    label: "",
-    className: "",
-    icon: "symbol",
-  },
-  with_courier: {
-    label: "",
-    className: "",
-    icon: "symbol",
-  },
-};
-
-export const STATUS_FLOW: Order["status"][] = ["created", "in_transit", "delivered"];
-
-export const STEP_LABELS: Record<OrderStatus, string> = {
-  created: "Создан",
-  in_transit: "В пути",
-  at_hub: "Склад",
-  with_courier: "Курьера",
-  delivered: "Дост",
-  canceled: "Отменён",
 };
