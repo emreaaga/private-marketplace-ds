@@ -30,73 +30,57 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
   },
   {
     accessorKey: "col1",
-    header: "Кол1",
-    cell: () => (
-      <Badge variant="outline" className="rounded-sm text-xs">
-        client-1
-      </Badge>
-    ),
+    header: "Отп. клиент",
+    cell: () => <Badge className="rounded-sm text-xs">38 – 2800K</Badge>,
   },
   {
     accessorKey: "col2",
-    header: "Кол2",
-    cell: () => (
-      <Badge variant="outline" className="rounded-sm text-xs">
-        Курьер
-      </Badge>
-    ),
+    header: "Курьер",
+    cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
   {
     accessorKey: "col3",
-    header: "Кол3",
-    cell: () => (
-      <Badge variant="outline" className="rounded-sm text-xs">
-        IST-A01
-      </Badge>
-    ),
+    header: "Пункт 1",
+    cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
   {
     accessorKey: "col4",
-    header: "Кол4",
-    cell: () => (
-      <Badge variant="outline" className="rounded-sm text-xs">
-        TR-UZ
-      </Badge>
-    ),
+    header: "Самолет",
+    cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
   {
     accessorKey: "col5",
-    header: "Кол5",
+    header: "Таможня",
     cell: () => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        TAS-Таможня
+        38 - 2800K
       </Badge>
     ),
   },
   {
     accessorKey: "col6",
-    header: "Кол6",
+    header: "Пункт 2",
     cell: ({ row }) => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        TAS-A02
+        38 - 2800K
       </Badge>
     ),
   },
   {
     accessorKey: "col7",
-    header: "Кол7",
+    header: "Курьер",
     cell: ({ row }) => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        Курьер
+        38 - 2800K
       </Badge>
     ),
   },
   {
     accessorKey: "col8",
-    header: "Кол8",
+    header: "Пол. клиент",
     cell: ({ row }) => (
       <Badge variant="outline" className="rounded-sm text-xs">
-        SKD-client1
+        38 - 2800K
       </Badge>
     ),
   },
