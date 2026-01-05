@@ -45,26 +45,31 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
   },
   {
     accessorKey: "col4",
-    header: "Самолет",
-    cell: () => <Badge className="rounded-sm text-xs">TR-UZ</Badge>,
-  },
-  {
-    accessorKey: "col5",
     header: "Таможня",
     cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
   {
+    accessorKey: "col5",
+    header: "Самолет",
+    cell: () => <Badge className="rounded-sm text-xs">TR-UZ</Badge>,
+  },
+  {
     accessorKey: "col6",
+    header: "Таможня",
+    cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
+  },
+  {
+    accessorKey: "col7",
     header: "Пункт 2",
     cell: ({ row }) => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
   {
-    accessorKey: "col7",
+    accessorKey: "col8",
     header: "Курьер",
     cell: ({ row }) => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
   {
-    accessorKey: "col8",
+    accessorKey: "col9",
     header: "Пол. клиент",
     cell: ({ row }) => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
   },
