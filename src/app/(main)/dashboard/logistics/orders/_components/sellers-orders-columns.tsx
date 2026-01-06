@@ -13,10 +13,21 @@ import { Tooltip, TooltipContent, TooltipTrigger } from "@/shared/ui/atoms/toolt
 
 import { type Order } from "./orders.type";
 
-const TABLE_BADGE_CLASS = "h-5 px-1.5 rounded-[4px] text-[10px] leading-none font-medium whitespace-nowrap";
+const TableBadge = ({
+  children,
+  tooltip,
+  variant = "filled",
+}: {
+  children: React.ReactNode;
+  tooltip?: string;
+  variant?: "filled" | "outline";
+}) => {
+  const className =
+    variant === "outline"
+      ? "h-5 px-1.5 text-[10px] border border-slate-300 bg-background text-slate-800 leading-none font-medium whitespace-nowrap"
+      : "h-5 px-1.5 text-[10px] bg-slate-500/15 text-slate-700 leading-none font-medium whitespace-nowrap";
 
-const TableBadge = ({ children, tooltip }: { children: React.ReactNode; tooltip?: string }) => {
-  const badge = <Badge className={TABLE_BADGE_CLASS}>{children}</Badge>;
+  const badge = <Badge className={className}>{children}</Badge>;
 
   if (!tooltip) return badge;
 
@@ -89,7 +100,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "col9",
     header: "Пол. клиент",
-    cell: () => <TableBadge>SKD-client</TableBadge>,
+    cell: () => <TableBadge variant="outline">SKD-client</TableBadge>,
   },
 
   {
