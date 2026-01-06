@@ -5,7 +5,7 @@ export const logisticsHeaderItems = [
     icon: "flights",
   },
   {
-    href: "/dashboard/logistics/shipments",
+    href: "/dashboard/logistics/shipment",
     label: "Отправления",
     icon: "shipments",
   },
