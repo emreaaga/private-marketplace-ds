@@ -8,6 +8,7 @@ import { ArrowRight } from "lucide-react";
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
 import { Switch } from "@/shared/ui/atoms/switch";
+import { TableBadge } from "@/shared/ui/molecules/table-badge";
 
 import { Shipment } from "./types";
 
@@ -28,63 +29,74 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
       );
     },
   },
+
   {
     accessorKey: "col1",
     header: "Отп. клиент",
-    cell: () => <Badge className="rounded-sm text-xs">38 – 2800K</Badge>,
+    cell: () => <TableBadge tooltip="12.09.2025 · 14:32">Client-1</TableBadge>,
   },
+
   {
     accessorKey: "col2",
     header: "Курьер",
-    cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
+    cell: () => <TableBadge>Курьер</TableBadge>,
   },
+
   {
     accessorKey: "col3",
     header: "Пункт 1",
-    cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
+    cell: () => <TableBadge>IST-A01</TableBadge>,
   },
+
   {
     accessorKey: "col4",
     header: "Таможня",
-    cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
+    cell: () => <TableBadge>IST-таможня</TableBadge>,
   },
+
   {
     accessorKey: "col5",
     header: "Самолет",
-    cell: () => <Badge className="rounded-sm text-xs">TR-UZ</Badge>,
+    cell: () => <TableBadge>TR–UZ</TableBadge>,
   },
+
   {
     accessorKey: "col6",
     header: "Таможня",
-    cell: () => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
+    cell: () => <TableBadge>TAS-таможня</TableBadge>,
   },
+
   {
     accessorKey: "col7",
     header: "Пункт 2",
-    cell: ({ row }) => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
+    cell: () => <TableBadge>TAS-A02</TableBadge>,
   },
+
   {
     accessorKey: "col8",
     header: "Курьер",
-    cell: ({ row }) => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
+    cell: () => <TableBadge>Курьер</TableBadge>,
   },
+
   {
     accessorKey: "col9",
     header: "Пол. клиент",
-    cell: ({ row }) => <Badge className="rounded-sm text-xs">38 - 2800K</Badge>,
+    cell: () => (
+      <TableBadge variant="outline" tooltip="Получено клиентом">
+        SKD-client
+      </TableBadge>
+    ),
   },
 
   {
     id: "actions",
     header: "",
-    cell: ({ row }) => {
-      return (
-        <Link href={"/dashboard/logistics/orders"}>
-          <Button variant="ghost" size="icon" className="h-6 w-6">
-            <ArrowRight className="h-4 w-4" />
-          </Button>
-        </Link>
-      );
-    },
+    cell: () => (
+      <Link href="/dashboard/logistics/orders">
+        <Button variant="ghost" size="icon" className="h-6 w-6">
+          <ArrowRight className="h-4 w-4" />
+        </Button>
+      </Link>
+    ),
   },
 ];
