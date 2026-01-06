@@ -1,7 +1,5 @@
 "use client";
 
-import dynamic from "next/dynamic";
-
 import { useOrderCart } from "@/features/order-cart/lib/use-order-cart";
 import { EmptyState } from "@/features/order-cart/ui/molecules/empty-state";
 import { CartSummary } from "@/features/order-cart/ui/organisms/cart-summary";

@@ -3,19 +3,30 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import type { LucideIcon } from "lucide-react";
+import { Users, ClipboardList, Link as LinkIcon, Package, Plane, ShoppingCart } from "lucide-react";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/atoms/tabs";
 
+const ICON_MAP = {
+  users: Users,
+  orders: ClipboardList,
+  access: LinkIcon,
+  shipments: Package,
+  flights: Plane,
+  cart: ShoppingCart,
+} as const;
+
+export type HeaderIconKey = keyof typeof ICON_MAP;
+
 export interface HeaderTabItem {
   href: string;
   label: string;
-  icon?: LucideIcon;
+  icon?: HeaderIconKey;
 }
 
 interface ResponsiveTabsHeaderProps {
-  items: HeaderTabItem[];
+  items: readonly HeaderTabItem[];
 }
 
 export function ResponsiveTabsHeader({ items }: ResponsiveTabsHeaderProps) {
@@ -47,7 +58,7 @@ export function ResponsiveTabsHeader({ items }: ResponsiveTabsHeaderProps) {
         <Tabs value={activeTab}>
           <TabsList className="flex gap-2 overflow-x-auto whitespace-nowrap sm:overflow-visible">
             {items.map((item) => {
-              const Icon = item.icon;
+              const Icon = item.icon ? ICON_MAP[item.icon] : null;
 
               return (
                 <TabsTrigger key={item.href} value={item.href} asChild>

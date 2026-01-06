@@ -1,5 +1,3 @@
-"use client";
-
 import { ResponsiveTabsHeader } from "@/shared/ui/organisms/responsive-tabs-header";
 
 const items = [

@@ -2,12 +2,10 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 
-import { FAKE_CLIENTS } from "@/features/clients/fake-clients";
 import type { UserStatus, Client } from "@/features/users/types/user.types";
 import { Badge } from "@/shared/ui/atoms/badge";
-import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
-export const columns: ColumnDef<Client>[] = [
+export const clientsColumns: ColumnDef<Client>[] = [
   {
     accessorKey: "public_id",
     header: "ID",
@@ -36,18 +34,9 @@ export const columns: ColumnDef<Client>[] = [
     header: "Статус",
     cell: ({ row }) => {
       const STATUS_MAP: Record<UserStatus, { label: string; className: string }> = {
-        active: {
-          label: "Акт.",
-          className: "bg-green-500/15 text-green-700",
-        },
-        pending: {
-          label: "Ожд.",
-          className: "bg-yellow-500/15 text-yellow-700",
-        },
-        blocked: {
-          label: "Заб.",
-          className: "bg-red-500/15 text-red-700",
-        },
+        active: { label: "Акт.", className: "bg-green-500/15 text-green-700" },
+        pending: { label: "Ожд.", className: "bg-yellow-500/15 text-yellow-700" },
+        blocked: { label: "Заб.", className: "bg-red-500/15 text-red-700" },
       };
 
       const status = row.original.status;
@@ -65,11 +54,3 @@ export const columns: ColumnDef<Client>[] = [
     cell: ({ row }) => new Date(row.original.created_at).toLocaleDateString("ru-RU"),
   },
 ];
-
-export function ClientsUsersSection() {
-  return (
-    <div className="space-y-4">
-      <DataTable data={FAKE_CLIENTS} columns={columns} pageSize={10} emptyMessage="Пользователи не найдены" />
-    </div>
-  );
-}

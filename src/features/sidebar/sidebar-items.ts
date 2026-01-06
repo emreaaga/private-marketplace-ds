@@ -36,7 +36,7 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         title: "Почта",
-        url: "/dashboard/logistics/shipment",
+        url: "/dashboard/logistics/plane",
         icon: Package,
         roles: [UserRole.ADMIN],
       },

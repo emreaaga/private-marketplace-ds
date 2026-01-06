@@ -3,33 +3,35 @@ import { useEffect, useState } from "react";
 import { usersService } from "@/features/users/api/users";
 import type { User } from "@/features/users/types/user.types";
 
-export function useUsers() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [isLoading, setIsLoading] = useState(true);
+export function useUsers(initialUsers: User[]) {
+  const [users, setUsers] = useState<User[]>(initialUsers);
+  const [isLoading, setIsLoading] = useState<boolean>(initialUsers.length === 0);
   const [error, setError] = useState<Error | null>(null);
 
   useEffect(() => {
-    let isCancelled = false;
+    if (initialUsers.length > 0) return;
+
+    let cancelled = false;
 
     usersService
       .getUsers()
       .then((data) => {
-        if (!isCancelled) {
+        if (!cancelled) {
           setUsers(data);
           setError(null);
         }
       })
       .catch((err) => {
-        if (!isCancelled) setError(err);
+        if (!cancelled) setError(err);
       })
       .finally(() => {
-        if (!isCancelled) setIsLoading(false);
+        if (!cancelled) setIsLoading(false);
       });
 
     return () => {
-      isCancelled = true;
+      cancelled = true;
     };
-  }, []);
+  }, [initialUsers]);
 
   return { users, setUsers, isLoading, error };
 }

@@ -1,15 +1,12 @@
-import { DataTable } from "@/shared/ui/organisms/table/data-table";
-
-import { ShipmentToolbar } from "../shipment/_components/shipment-toolbar";
-
-import { MOCK_PLANE } from "./_components/mock-plane";
-import { PlaneColumns, Plane } from "./_components/plane-columns";
+import { FlightBoard } from "./_components/flight-board";
+import { MOCK_FLIGHTS } from "./_components/mock-flights";
 
 export default function ShipmentPage() {
   return (
-    <div className="space-y-4">
-      <ShipmentToolbar />
-      <DataTable<Plane> columns={PlaneColumns} data={MOCK_PLANE} />
+    <div className="max-w-3xl space-y-6">
+      <h1 className="text-2xl font-semibold">Расписание авиапочты</h1>
+
+      <FlightBoard flights={MOCK_FLIGHTS} />
     </div>
   );
 }

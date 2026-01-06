@@ -1,9 +1,9 @@
+"use client";
 import Image from "next/image";
 
 import { ColumnDef } from "@tanstack/react-table";
 import { MoreHorizontal } from "lucide-react";
 
-import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
 import { CountBadge } from "@/shared/ui/atoms/count-badge";
 

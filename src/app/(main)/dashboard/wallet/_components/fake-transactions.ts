@@ -1,0 +1,68 @@
+import { Transaction } from "./transactions-columns";
+
+export const FakeTransactions: Transaction[] = [
+  {
+    id: "T10001",
+    sender: "C1001",
+    receiver: "C1002",
+    type: "in",
+    amount: 100,
+    date: "12.09.2025",
+  },
+  {
+    id: "T10002",
+    sender: "B100",
+    receiver: "C1001",
+    type: "out",
+    amount: 350,
+    date: "13.09.2025",
+  },
+  {
+    id: "T10003",
+    sender: "C1003",
+    receiver: "C1001",
+    type: "in",
+    amount: 121,
+    date: "14.09.2025",
+  },
+  {
+    id: "T10004",
+    sender: "B101",
+    receiver: "B1003",
+    type: "out",
+    amount: 155,
+    date: "14.09.2025",
+  },
+  {
+    id: "T10005",
+    sender: "C1012",
+    receiver: "C1112",
+    type: "in",
+    amount: 375,
+    date: "15.09.2025",
+  },
+  {
+    id: "T10006",
+    sender: "B112",
+    receiver: "B185",
+    type: "out",
+    amount: 420,
+    date: "16.09.2025",
+  },
+  {
+    id: "T10007",
+    sender: "C1111",
+    receiver: "C7777",
+    type: "in",
+    amount: 777,
+    date: "16.09.2025",
+  },
+  {
+    id: "T10008",
+    sender: "B123",
+    receiver: "B321",
+    type: "out",
+    amount: 199,
+    date: "17.09.2025",
+  },
+];

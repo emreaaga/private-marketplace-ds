@@ -4,7 +4,6 @@ import { useState } from "react";
 
 import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
-import { Input } from "@/shared/ui/atoms/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 
 interface ShipmentCreateDialogProps {

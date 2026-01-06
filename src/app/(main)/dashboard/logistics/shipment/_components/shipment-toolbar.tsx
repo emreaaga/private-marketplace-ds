@@ -2,16 +2,24 @@
 
 import { useState } from "react";
 
+import dynamic from "next/dynamic";
+
 import { PlusIcon, Search, SlidersHorizontal, ListFilter, RotateCcw } from "lucide-react";
 
 import { Button } from "@/shared/ui/atoms/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/atoms/input-group";
 import { IconButton } from "@/shared/ui/molecules/icon-button";
 
-import { ShipmentCreateDialog } from "./shipment-create-dialog";
+const ShipmentCreateDialog = dynamic(() => import("./shipment-create-dialog").then((m) => m.ShipmentCreateDialog), {
+  ssr: false,
+  loading: () => null,
+});
 
 export function ShipmentToolbar() {
   const [open, setOpen] = useState(false);
+  const preloadDialog = () => {
+    import("./shipment-create-dialog");
+  };
 
   return (
     <>
@@ -24,7 +32,13 @@ export function ShipmentToolbar() {
             </InputGroupAddon>
           </InputGroup>
 
-          <Button size="sm" className="h-9" onClick={() => setOpen(true)}>
+          <Button
+            size="sm"
+            className="h-9"
+            onMouseEnter={preloadDialog}
+            onFocus={preloadDialog}
+            onClick={() => setOpen(true)}
+          >
             <PlusIcon className="h-4 w-4" />
             Создать отправку
           </Button>

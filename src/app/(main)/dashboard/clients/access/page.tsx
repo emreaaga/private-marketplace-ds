@@ -1,5 +1,3 @@
-"use client";
-
 import { AccessSettingsCard } from "@/features/clients/ui/organisms/access-settings-card";
 import { StoreLinkCard } from "@/features/clients/ui/organisms/store-link-card";
 
