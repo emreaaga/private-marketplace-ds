@@ -29,12 +29,6 @@ export const sidebarItems: NavGroup[] = [
         roles: [UserRole.ADMIN],
       },
       {
-        title: "Кошелек",
-        url: "/dashboard/wallet",
-        icon: Wallet,
-        roles: [UserRole.ADMIN],
-      },
-      {
         title: "Почта",
         url: "/dashboard/logistics/flights",
         icon: Package,
@@ -50,6 +44,12 @@ export const sidebarItems: NavGroup[] = [
         title: "Клиенты",
         url: "/dashboard/clients/orders",
         icon: UserCircle,
+        roles: [UserRole.ADMIN],
+      },
+      {
+        title: "Кошелек",
+        url: "/dashboard/wallet",
+        icon: Wallet,
         roles: [UserRole.ADMIN],
       },
       {
