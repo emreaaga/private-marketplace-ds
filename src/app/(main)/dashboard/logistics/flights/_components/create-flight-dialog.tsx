@@ -1,5 +1,6 @@
 "use client";
 
+import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/atoms/tabs";
 
@@ -16,14 +17,20 @@ export function FlightsDialog({ open, onOpenChange }: FlightsDialogProps) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="max-w-xl">
         <DialogHeader>
-          <DialogTitle></DialogTitle>
+          <DialogTitle />
         </DialogHeader>
 
         <Tabs defaultValue="create" className="mt-2">
-          <TabsList className="grid w-full grid-cols-2">
-            <TabsTrigger value="create">Участники</TabsTrigger>
-            <TabsTrigger value="filters">Отправки</TabsTrigger>
-          </TabsList>
+          <div className="flex justify-center">
+            <div className="flex items-center gap-3">
+              <TabsList className="grid w-fit grid-cols-2">
+                <TabsTrigger value="create">Участники</TabsTrigger>
+                <TabsTrigger value="filters">Отправки</TabsTrigger>
+              </TabsList>
+
+              <Button size="sm">Сохранить</Button>
+            </div>
+          </div>
 
           <TabsContent value="create" className="mt-4">
             <FlightPartiesForm />
