@@ -1,12 +1,16 @@
-import { FlightBoard } from "./_components/flight-board";
-import { MOCK_FLIGHTS } from "./_components/mock-flights";
+import { DataTable } from "@/shared/ui/organisms/table/data-table";
+
+import { ShipmentToolbar } from "../shipments/_components/shipment-toolbar";
+
+import { FakeFlights } from "./_components/fake-flights";
+import { FlightsColumns } from "./_components/flights-columns";
+import { Flight } from "./_components/types";
 
 export default function ShipmentPage() {
   return (
-    <div className="max-w-3xl space-y-6">
-      <h1 className="text-2xl font-semibold">Расписание авиапочты</h1>
-
-      <FlightBoard flights={MOCK_FLIGHTS} />
+    <div className="space-y-4">
+      <ShipmentToolbar />
+      <DataTable<Flight> columns={FlightsColumns} data={FakeFlights} />
     </div>
   );
 }

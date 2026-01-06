@@ -1,17 +1,10 @@
-export type FlightStatus = "confirmed" | "planned" | "cancelled";
-
-export interface Flight {
+export type Flight = {
   id: string;
-
-  fromCode: string;
-  toCode: string;
-
-  fromCountryCode: string;
-  toCountryCode: string;
-
-  date: string;
-  departureTime: string;
-  cutoffTime: string;
-
-  status: FlightStatus;
-}
+  code: string;
+  route: string;
+  ordersCount: number;
+  weightKg: number;
+  total: number;
+  status: string;
+  locked: boolean;
+};
