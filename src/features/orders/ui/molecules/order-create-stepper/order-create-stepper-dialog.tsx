@@ -42,7 +42,7 @@ export function OrderCreateStepperDialog({ open, onOpenChange }: Props) {
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="flex h-[70vh] max-h-[600px] w-full max-w-xl flex-col">
         <Tabs value={step} onValueChange={(v) => setStep(v as Step)} className="flex h-full flex-col">
-          <DialogTitle className=""></DialogTitle>
+          <DialogTitle></DialogTitle>
           <div className="mt-0 flex justify-center">
             <TabsList className="mb-3 grid grid-cols-2">
               <TabsTrigger value="parties">Участники</TabsTrigger>

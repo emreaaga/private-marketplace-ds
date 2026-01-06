@@ -1,10 +1,13 @@
-export type Flight = {
+export interface Flight {
   id: string;
   code: string;
-  route: string;
-  ordersCount: number;
-  weightKg: number;
-  total: number;
-  status: string;
-  locked: boolean;
-};
+  route: string[];
+  participantsCount: number;
+  shipmentsCount: number;
+  totalWeightKg: number;
+  totalAmount: number;
+  currency: "USD" | "EUR";
+  status: "planned" | "in_transit" | "customs" | "delivered";
+  departureAt: string;
+  arrivalEta: string;
+}

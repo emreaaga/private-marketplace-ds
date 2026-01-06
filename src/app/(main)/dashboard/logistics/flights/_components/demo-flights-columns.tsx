@@ -8,19 +8,7 @@ import { ArrowRight } from "lucide-react";
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
 
-export interface Flight {
-  id: string;
-  code: string;
-  route: string[];
-  participantsCount: number;
-  shipmentsCount: number;
-  totalWeightKg: number;
-  totalAmount: number;
-  currency: "USD" | "EUR";
-  status: "planned" | "in_transit" | "customs" | "delivered";
-  departureAt: string;
-  arrivalEta: string;
-}
+import { Flight } from "./types";
 
 export const DemoFlightsColumns: ColumnDef<Flight>[] = [
   {
@@ -28,20 +16,26 @@ export const DemoFlightsColumns: ColumnDef<Flight>[] = [
     header: "Рейс",
     cell: ({ row }) => <span className="text-muted-foreground font-mono text-xs">{row.original.id}</span>,
   },
-
   {
     accessorKey: "route",
     header: "Маршрут",
     cell: ({ row }) => {
-      const route = row.original.route;
+      const [from, to] = row.original.route;
+
+      const [fromCountry, fromCity] = from.split("-");
+      const [toCountry, toCity] = to.split("-");
+
       return (
         <span className="text-xs whitespace-nowrap">
-          {route[0]} → {route[route.length - 1]}
+          <span className="font-medium">{fromCountry}</span>
+          <span className="text-muted-foreground ml-0.5 text-[10px]">{fromCity}</span>
+          <span className="text-muted-foreground mx-0.5 opacity-70">→</span>
+          <span className="font-medium">{toCountry}</span>
+          <span className="text-muted-foreground ml-0.5 text-[10px]">{toCity}</span>
         </span>
       );
     },
   },
-
   {
     accessorKey: "participantsCount",
     header: "Участн.",
@@ -51,20 +45,32 @@ export const DemoFlightsColumns: ColumnDef<Flight>[] = [
   {
     accessorKey: "shipmentsCount",
     header: "Посылки",
-    cell: ({ row }) => <span className="text-xs">{row.original.shipmentsCount}</span>,
+    cell: ({ row }) => (
+      <span className="text-xs whitespace-nowrap">
+        <span className="font-medium">{row.original.shipmentsCount}</span>
+        <span className="text-muted-foreground ml-0.5 text-[10px]">шт</span>
+      </span>
+    ),
   },
 
   {
     accessorKey: "totalWeightKg",
     header: "Вес",
-    cell: ({ row }) => <span className="text-xs whitespace-nowrap">{row.original.totalWeightKg} кг</span>,
+    cell: ({ row }) => (
+      <span className="text-xs whitespace-nowrap">
+        <span className="font-medium">{row.original.totalWeightKg}</span>
+        <span className="text-muted-foreground ml-0.5 text-[10px]">кг</span>
+      </span>
+    ),
   },
-
   {
     accessorKey: "totalAmount",
     header: "Оборот",
     cell: ({ row }) => (
-      <span className="text-xs whitespace-nowrap">${row.original.totalAmount.toLocaleString("ru-RU")}</span>
+      <span className="text-xs whitespace-nowrap">
+        <span className="font-medium">{row.original.totalAmount.toLocaleString("ru-RU")}</span>
+        <span className="text-muted-foreground ml-0.5 text-[10px]">$</span>
+      </span>
     ),
   },
 
@@ -94,7 +100,7 @@ export const DemoFlightsColumns: ColumnDef<Flight>[] = [
       const status = row.original.status;
 
       return (
-        <Badge variant="outline" className={STATUS_MAP[status].className}>
+        <Badge variant="outline" className={`${STATUS_MAP[status].className} px-1.5 py-0 leading-tight`}>
           {STATUS_MAP[status].label}
         </Badge>
       );
@@ -109,8 +115,8 @@ export const DemoFlightsColumns: ColumnDef<Flight>[] = [
 
       return (
         <span className="text-xs whitespace-nowrap">
-          {departure.toLocaleDateString("ru-RU")}{" "}
-          {departure.toLocaleTimeString("ru-RU", { hour: "2-digit", minute: "2-digit" })}
+          <span className="text-muted-foreground">{departure.toLocaleDateString("ru-RU")}</span>{" "}
+          <span className="font-medium">12:30</span>
         </span>
       );
     },
@@ -121,7 +127,7 @@ export const DemoFlightsColumns: ColumnDef<Flight>[] = [
     header: "",
     cell: ({ row }) => (
       <Link href={`/dashboard/logistics/shipments`}>
-        <Button variant="ghost" size="icon" className="h-6 w-6">
+        <Button variant="ghost" size="icon" className="h-6 w-6 opacity-60 hover:opacity-100">
           <ArrowRight className="h-3.5 w-3.5" />
         </Button>
       </Link>
