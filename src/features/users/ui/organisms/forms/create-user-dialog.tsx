@@ -69,7 +69,6 @@ export default function CreateUserDialog({ open, onOpenChange }: CreateUserDialo
     setDistrict("");
   }, []);
 
-  // Мемоизация списков для Select
   const countryOptions = useMemo(
     () =>
       Object.entries(locationData).map(([key, data]) => (
