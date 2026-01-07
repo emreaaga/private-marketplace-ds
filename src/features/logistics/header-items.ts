@@ -11,12 +11,12 @@ export const logisticsHeaderItems = [
   },
   {
     href: "/dashboard/logistics/orders",
-    label: "Заказы",
+    label: "Отп. Заказы",
     icon: "orders",
   },
   {
     href: "/dashboard/logistics/main",
-    label: "Пользователи",
-    icon: "users",
+    label: "Пол. Заказы",
+    icon: "orders",
   },
 ] as const;

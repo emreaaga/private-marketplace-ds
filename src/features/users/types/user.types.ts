@@ -1,10 +1,13 @@
-import { Briefcase, CircleCheck, Loader, ShieldAlert, ShieldCheck, Truck, User } from "lucide-react";
+import { Briefcase, CircleCheck, Loader, ShieldAlert, Plane, BoxIcon, ShieldCheck, Truck, User } from "lucide-react";
 
 export const USER_ROLES = {
   ADMIN: "admin",
   SELLER: "seller",
   CUSTOMER: "customer",
   CARGO: "cargo",
+  COURIER: "courier",
+  PLANE: "plane",
+  DECLARANT: "declarant",
 } as const;
 
 export type UserRole = (typeof USER_ROLES)[keyof typeof USER_ROLES];
@@ -20,6 +23,13 @@ export type UserStatus = (typeof USER_STATUSES)[keyof typeof USER_STATUSES];
 export type User = {
   id: number;
   public_id: string;
+  total: string;
+  services_given?: string;
+  services_taken?: string;
+  services_lent?: string;
+  services_borrowed?: string;
+  services_received?: string;
+  services_provided?: string;
   name: string;
   email: string;
   role: UserRole;
@@ -39,10 +49,13 @@ export type Client = {
 };
 
 export const ROLE_CONFIG: Record<UserRole, { icon: typeof ShieldCheck; label: string }> = {
-  admin: { icon: ShieldCheck, label: "Почта" },
-  seller: { icon: Briefcase, label: "Продавец" },
-  customer: { icon: User, label: "Клиент" },
-  cargo: { icon: Truck, label: "Почта" },
+  admin: { icon: ShieldCheck, label: "Админ." },
+  seller: { icon: Briefcase, label: "Прод." },
+  customer: { icon: User, label: "Клнт." },
+  cargo: { icon: BoxIcon, label: "Почт." },
+  courier: { icon: Truck, label: "Курь." },
+  plane: { icon: Plane, label: "Самл." },
+  declarant: { icon: ShieldCheck, label: "Декл." },
 };
 
 export const STATUS_CONFIG: Record<UserStatus, { icon: typeof CircleCheck; color: string; label: string }> = {

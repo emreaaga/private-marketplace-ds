@@ -30,6 +30,9 @@ const mockData: User[] = [
   { id: 1, role: "A", name: "Почта" },
   { id: 2, role: "B", name: "Продавец" },
   { id: 3, role: "C", name: "Клиент" },
+  { id: 4, role: "D", name: "Курьер" },
+  { id: 5, role: "E", name: "Самолет" },
+  { id: 6, role: "F", name: "Деклорант" },
 ];
 
 export default function Test1Page() {
