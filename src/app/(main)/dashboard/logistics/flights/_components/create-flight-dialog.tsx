@@ -24,7 +24,7 @@ export function FlightsDialog({ open, onOpenChange }: FlightsDialogProps) {
           <div className="flex justify-center">
             <div className="flex items-center gap-3">
               <TabsList className="grid w-fit grid-cols-2">
-                <TabsTrigger value="create">Участники</TabsTrigger>
+                <TabsTrigger value="create">Рейс</TabsTrigger>
                 <TabsTrigger value="filters">Отправки</TabsTrigger>
               </TabsList>
 
