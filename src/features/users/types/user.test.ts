@@ -1,6 +1,6 @@
 import { LucideIcon, Briefcase, Shield, User, Truck } from "lucide-react";
 
-export type UserRole = "admin" | "customer" | "seller" | "cargo";
+export type UserRole = "admin" | "customer" | "seller" | "cargo" | "courier" | "plane" | "declarant";
 export type UserStatus = "active" | "pending" | "blocked";
 
 export const ROLE_CONFIG: Record<UserRole, { icon: LucideIcon; label: string }> = {
@@ -10,15 +10,27 @@ export const ROLE_CONFIG: Record<UserRole, { icon: LucideIcon; label: string }> 
   },
   cargo: {
     icon: Truck,
-    label: "Почта",
+    label: "Почт.",
   },
   customer: {
     icon: Briefcase,
-    label: "Продавец",
+    label: "Клнт.",
   },
   seller: {
     icon: User,
-    label: "Пользователь",
+    label: "Прод.",
+  },
+  courier: {
+    icon: Truck,
+    label: "Курь.",
+  },
+  plane: {
+    icon: Truck,
+    label: "Самл.",
+  },
+  declarant: {
+    icon: Truck,
+    label: "Декл.",
   },
 };
 
