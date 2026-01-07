@@ -5,7 +5,6 @@ import Link from "next/link";
 import { ColumnDef } from "@tanstack/react-table";
 import { ArrowRight } from "lucide-react";
 
-import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
 import { Switch } from "@/shared/ui/atoms/switch";
 import { TableBadge } from "@/shared/ui/molecules/table-badge";

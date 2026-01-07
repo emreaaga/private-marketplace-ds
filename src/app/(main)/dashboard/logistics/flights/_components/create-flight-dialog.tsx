@@ -15,7 +15,7 @@ interface FlightsDialogProps {
 export function FlightsDialog({ open, onOpenChange }: FlightsDialogProps) {
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="max-w-xl">
+      <DialogContent className="flex h-[600px] w-[560px] max-w-none flex-col">
         <DialogHeader>
           <DialogTitle />
         </DialogHeader>

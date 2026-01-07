@@ -1,45 +1,93 @@
 "use client";
 
-export interface Shipment {
-  id: string;
-  code: string;
-}
+import { useState } from "react";
 
-export interface CompanyShipments {
-  companyId: string;
-  companyName: string;
-  shipments: Shipment[];
-}
+import { NativeSelect, NativeSelectOption } from "@/shared/ui/atoms/native-select";
 
-const MOCK_DATA: CompanyShipments[] = [
-  {
-    companyId: "c1",
-    companyName: "Faravon express",
-    shipments: [{ id: "s1", code: "001" }],
-  },
-  {
-    companyId: "c2",
-    companyName: "Zamon express",
-    shipments: [{ id: "s3", code: "002" }],
-  },
-];
+import { AVAILABLE_COMPANIES, CompanyShipment } from "./fake-shipment-list";
 
 export function ShipmentList() {
-  return (
-    <div className="divide-y rounded-md text-xs">
-      {MOCK_DATA.map((company) => (
-        <div key={company.companyId} className="flex items-center gap-3 px-3 py-2">
-          <span className="w-40 shrink-0 truncate font-medium">{company.companyName}</span>
+  const [list, setList] = useState<CompanyShipment[]>([]);
+  const [companyId, setCompanyId] = useState<string>("");
 
-          <div className="flex min-w-0 flex-wrap gap-x-2 gap-y-0.5">
-            {company.shipments.map((shipment) => (
-              <span key={shipment.id} className="text-muted-foreground font-mono text-[11px] whitespace-nowrap">
-                {shipment.code}
-              </span>
-            ))}
+  const selectedCompany = AVAILABLE_COMPANIES.find((c) => c.companyId === companyId);
+
+  function addShipment(shipmentId: string) {
+    if (!selectedCompany) return;
+
+    const shipment = selectedCompany.shipments.find((s) => s.id === shipmentId);
+    if (!shipment) return;
+
+    setList((prev) => [
+      ...prev,
+      {
+        companyId: selectedCompany.companyId,
+        companyName: selectedCompany.companyName,
+        hasDebt: selectedCompany.hasDebt,
+        debtAmount: selectedCompany.debtAmount,
+        shipment,
+      },
+    ]);
+
+    setCompanyId("");
+  }
+
+  return (
+    <div className="max-w-xl divide-y rounded-md border text-xs">
+      {list.map((item) => (
+        <div key={item.companyId} className="flex items-center gap-3 px-3 py-2">
+          <span className="w-40 truncate font-medium">{item.companyName}</span>
+
+          <div className="text-muted-foreground flex gap-2 font-mono text-[11px]">
+            <span>{item.shipment.code}</span>
+            <span>{item.shipment.boxesCount} кор.</span>
+            <span>{item.shipment.weightKg} кг</span>
+          </div>
+
+          <div className="ml-auto text-[11px] font-medium">
+            <span className={item.hasDebt ? "text-red-600" : "text-muted-foreground"}>${item.debtAmount}</span>
           </div>
         </div>
       ))}
+
+      <div className="bg-muted/30 flex items-center gap-1 px-1 py-1">
+        <NativeSelect
+          value={companyId}
+          onChange={(e) => setCompanyId(e.target.value)}
+          className="h-7 w-36 text-[10px] leading-tight"
+        >
+          <NativeSelectOption value="" disabled>
+            Компания
+          </NativeSelectOption>
+
+          {AVAILABLE_COMPANIES.map((c) => (
+            <NativeSelectOption
+              key={c.companyId}
+              value={c.companyId}
+              disabled={list.some((i) => i.companyId === c.companyId)}
+            >
+              {c.companyName}
+            </NativeSelectOption>
+          ))}
+        </NativeSelect>
+
+        <NativeSelect
+          disabled={!selectedCompany}
+          value=""
+          onChange={(e) => addShipment(e.target.value)}
+          className="h-7 w-40 text-[10px] leading-tight"
+        >
+          <NativeSelectOption value="" disabled>
+            Отправка
+          </NativeSelectOption>
+
+          {selectedCompany?.shipments.map((s) => (
+            <NativeSelectOption key={s.id} value={s.id}>
+              {s.code} · {s.boxesCount} · {s.weightKg} кг
+            </NativeSelectOption>
+          ))}
+        </NativeSelect>
+      </div>
     </div>
   );
 }
