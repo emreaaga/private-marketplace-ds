@@ -26,14 +26,29 @@ export const getUserColumns = (handlers: UserColumnHandlers): ColumnDef<User>[] 
     cell: ({ row }) => <RoleBadge role={row.original.role} />,
   },
   {
-    accessorKey: "email",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Email" />,
-    cell: ({ row }) => <span className="text-muted-foreground">{row.original.email}</span>,
+    accessorKey: "test_col_1",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Test 1" />,
+    cell: () => <span className="text-muted-foreground">—</span>,
   },
   {
-    accessorKey: "created_at_formatted",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Дата создания" />,
-    cell: ({ row }) => <span className="text-muted-foreground">{row.original.created_at}</span>,
+    accessorKey: "test_col_2",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Test 2" />,
+    cell: () => <span className="text-muted-foreground">—</span>,
+  },
+  {
+    accessorKey: "test_col_3",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Test 3" />,
+    cell: () => <span className="text-muted-foreground">—</span>,
+  },
+  {
+    accessorKey: "test_col_4",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Test 4" />,
+    cell: () => <span className="text-muted-foreground">—</span>,
+  },
+  {
+    accessorKey: "test_col_5",
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Test 5" />,
+    cell: () => <span className="text-muted-foreground">—</span>,
   },
   {
     id: "actions",
