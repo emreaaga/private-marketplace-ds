@@ -28,37 +28,44 @@ export const getUserColumns = (handlers: UserColumnHandlers): ColumnDef<User>[] 
   {
     accessorKey: "test_col_1",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Итог" />,
-    cell: ({ row }) => <span className="text-muted-foreground">{row.original.total}</span>,
+    cell: ({ row }) => {
+      const total = row.original.total;
+
+      const colorClass = total > 0 ? "text-green-600" : total < 0 ? "text-red-600" : "text-muted-foreground";
+
+      return <span className={`${colorClass}`}>${total}</span>;
+    },
   },
+
   {
     accessorKey: "test_col_2",
-    header: ({ column }) => <DataTableColumnHeader column={column} title="Дал услугу" />,
-    cell: ({ row }) => <span className="text-muted-foreground">{row.original.services_given}</span>,
+    header: ({ column }) => <DataTableColumnHeader column={column} title="Дал услуг" />,
+    cell: ({ row }) => <span className="text-muted-foreground">${row.original.services_given}</span>,
   },
   {
     accessorKey: "test_col_3",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Взл услуг" />,
-    cell: ({ row }) => <span className="text-muted-foreground">{row.original.services_taken}</span>,
+    cell: ({ row }) => <span className="text-muted-foreground">${row.original.services_taken}</span>,
   },
   {
     accessorKey: "test_col_4",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Отдал" />,
-    cell: ({ row }) => <span className="text-muted-foreground">{row.original.services_lent}</span>,
+    cell: ({ row }) => <span className="text-muted-foreground">${row.original.services_lent}</span>,
   },
   {
     accessorKey: "test_col_5",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Взял" />,
-    cell: ({ row }) => <span className="text-muted-foreground">{row.original.services_borrowed}</span>,
+    cell: ({ row }) => <span className="text-muted-foreground">${row.original.services_borrowed}</span>,
   },
   {
     accessorKey: "test_col_6",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Дал" />,
-    cell: ({ row }) => <span className="text-muted-foreground">{row.original.services_received}</span>,
+    cell: ({ row }) => <span className="text-muted-foreground">${row.original.services_received}</span>,
   },
   {
     accessorKey: "test_col_7",
     header: ({ column }) => <DataTableColumnHeader column={column} title="Взял" />,
-    cell: ({ row }) => <span className="text-muted-foreground">{row.original.services_provided}</span>,
+    cell: ({ row }) => <span className="text-muted-foreground">${row.original.services_provided}</span>,
   },
   {
     id: "actions",

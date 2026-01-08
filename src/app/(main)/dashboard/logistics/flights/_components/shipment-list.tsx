@@ -10,6 +10,10 @@ export function ShipmentList() {
   const [list, setList] = useState<CompanyShipment[]>([]);
   const [companyId, setCompanyId] = useState<string>("");
 
+  function removeShipment(companyId: string) {
+    setList((prev) => prev.filter((item) => item.companyId !== companyId));
+  }
+
   const selectedCompany = AVAILABLE_COMPANIES.find((c) => c.companyId === companyId);
 
   function addShipment(shipmentId: string) {
@@ -44,17 +48,26 @@ export function ShipmentList() {
             <span>{item.shipment.weightKg} кг</span>
           </div>
 
-          <div className="ml-auto text-[11px] font-medium">
+          <div className="ml-auto flex items-center gap-2 text-[11px] font-medium">
             <span className={item.hasDebt ? "text-red-600" : "text-muted-foreground"}>${item.debtAmount}</span>
+
+            <button
+              type="button"
+              onClick={() => removeShipment(item.companyId)}
+              className="text-muted-foreground hover:text-red-600"
+              title="Удалить"
+            >
+              ✕
+            </button>
           </div>
         </div>
       ))}
 
-      <div className="bg-muted/30 flex items-center gap-1 px-1 py-1">
+      <div className="bg-muted/30 flex items-center gap-1 px-0.5 py-0.5">
         <NativeSelect
           value={companyId}
           onChange={(e) => setCompanyId(e.target.value)}
-          className="h-7 w-36 text-[10px] leading-tight"
+          className="h-8 w-36 text-xs leading-tight"
         >
           <NativeSelectOption value="" disabled>
             Компания
@@ -75,7 +88,7 @@ export function ShipmentList() {
           disabled={!selectedCompany}
           value=""
           onChange={(e) => addShipment(e.target.value)}
-          className="h-7 w-40 text-[10px] leading-tight"
+          className="h-8 w-40 text-xs leading-tight"
         >
           <NativeSelectOption value="" disabled>
             Отправка

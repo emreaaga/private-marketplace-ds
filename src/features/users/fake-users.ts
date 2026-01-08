@@ -5,7 +5,7 @@ export const mockUsers: User[] = [
     id: 1,
     public_id: "A01",
     name: "pochta1",
-    total: "13 825",
+    total: 13825,
     services_given: "5 000",
     services_taken: "2 500",
     services_lent: "325",
@@ -20,7 +20,7 @@ export const mockUsers: User[] = [
   {
     id: 2,
     public_id: "A02",
-    total: "11 000",
+    total: 0,
     name: "pochta2",
     services_given: "5 000",
     services_taken: "2 500",
@@ -36,7 +36,7 @@ export const mockUsers: User[] = [
   {
     id: 3,
     public_id: "B01",
-    total: "5 400",
+    total: -100,
     services_given: "2 000",
     services_taken: "2 500",
     services_lent: "435",
@@ -52,7 +52,7 @@ export const mockUsers: User[] = [
   {
     id: 4,
     public_id: "B02",
-    total: "7 250",
+    total: 7250,
     services_given: "1 753",
     services_taken: "1 350",
     services_lent: "127",
@@ -68,7 +68,7 @@ export const mockUsers: User[] = [
   {
     id: 5,
     public_id: "C01",
-    total: "3 900",
+    total: 3900,
     services_given: "900",
     services_taken: "1 200",
     services_lent: "310",
@@ -84,7 +84,7 @@ export const mockUsers: User[] = [
   {
     id: 6,
     public_id: "C02",
-    total: "9 750",
+    total: -9750,
     services_given: "5 000",
     services_taken: "4 000",
     services_lent: "1 100",
@@ -100,7 +100,7 @@ export const mockUsers: User[] = [
   {
     id: 7,
     public_id: "E01",
-    total: "4 300",
+    total: 4300,
     services_given: "2 000",
     services_taken: "1 500",
     services_lent: "420",
@@ -116,7 +116,7 @@ export const mockUsers: User[] = [
   {
     id: 8,
     public_id: "E02",
-    total: "6 120",
+    total: 6120,
     services_given: "3 000",
     services_taken: "2 000",
     services_lent: "650",
@@ -132,7 +132,7 @@ export const mockUsers: User[] = [
   {
     id: 9,
     public_id: "F01",
-    total: "2 580",
+    total: -2580,
     services_given: "1 000",
     services_taken: "800",
     services_lent: "240",
@@ -148,7 +148,7 @@ export const mockUsers: User[] = [
   {
     id: 10,
     public_id: "F02",
-    total: "8 430",
+    total: 8430,
     services_given: "4 000",
     services_taken: "3 000",
     services_lent: "900",

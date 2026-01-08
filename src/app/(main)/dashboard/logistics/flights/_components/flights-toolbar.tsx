@@ -2,13 +2,18 @@
 
 import { useState } from "react";
 
+import dynamic from "next/dynamic";
+
 import { ListFilter, PlusIcon, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/shared/ui/atoms/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/atoms/input-group";
 import { IconButton } from "@/shared/ui/molecules/icon-button";
 
-import { FlightsDialog } from "./create-flight-dialog";
+const loadFlightsDialog = () => import("./create-flight-dialog").then((m) => m.FlightsDialog);
+const FlightsDialog = dynamic(loadFlightsDialog, {
+  ssr: false,
+});
 
 export function FlightsToolbar() {
   const [open, setOpen] = useState(false);
@@ -24,7 +29,7 @@ export function FlightsToolbar() {
             </InputGroupAddon>
           </InputGroup>
 
-          <Button size="sm" className="h-9" onClick={() => setOpen(true)}>
+          <Button size="sm" className="h-9" onMouseEnter={loadFlightsDialog} onClick={() => setOpen(true)}>
             <PlusIcon className="h-3 w-3" />
             <span>Создать рейс</span>
           </Button>
@@ -37,7 +42,7 @@ export function FlightsToolbar() {
         </div>
       </div>
 
-      <FlightsDialog open={open} onOpenChange={setOpen} />
+      {open && <FlightsDialog open={open} onOpenChange={setOpen} />}
     </>
   );
 }

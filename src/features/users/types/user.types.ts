@@ -23,7 +23,7 @@ export type UserStatus = (typeof USER_STATUSES)[keyof typeof USER_STATUSES];
 export type User = {
   id: number;
   public_id: string;
-  total: string;
+  total: number;
   services_given?: string;
   services_taken?: string;
   services_lent?: string;
