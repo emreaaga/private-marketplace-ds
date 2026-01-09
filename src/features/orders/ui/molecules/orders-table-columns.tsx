@@ -66,6 +66,7 @@ export const getOrderColumns = (): ColumnDef<Order>[] => [
     size: 36,
     maxSize: 36,
     enableResizing: false,
+    enableHiding: false,
     cell: ({ row }) => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

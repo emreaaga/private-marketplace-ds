@@ -2,9 +2,19 @@
 
 import { Fragment, useState } from "react";
 
-import { ColumnDef, flexRender, getCoreRowModel, getExpandedRowModel, useReactTable } from "@tanstack/react-table";
-import { Table as TableIcon } from "lucide-react";
+import {
+  ColumnDef,
+  VisibilityState,
+  flexRender,
+  getCoreRowModel,
+  getExpandedRowModel,
+  useReactTable,
+} from "@tanstack/react-table";
+import { Table as TableIcon, Columns as ColumnsIcon } from "lucide-react";
 
+import { Button } from "@/shared/ui/atoms/button";
+import { Checkbox } from "@/shared/ui/atoms/checkbox";
+import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "@/shared/ui/atoms/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/atoms/table";
 import { DataTablePagination } from "@/shared/ui/organisms/table/data-table-pagination";
 
@@ -26,10 +36,16 @@ export function DataTable<TData>({
   renderExpandedRow,
 }: DataTableProps<TData>) {
   const [page] = useState(1);
+  const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
 
   const table = useReactTable({
     data,
     columns,
+    state: {
+      columnVisibility,
+    },
+    onColumnVisibilityChange: setColumnVisibility,
+
     getCoreRowModel: getCoreRowModel(),
 
     ...(renderExpandedRow && {
@@ -47,6 +63,33 @@ export function DataTable<TData>({
 
   return (
     <div className="space-y-2">
+      <div className="flex items-center justify-end">
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <Button variant="outline" size="sm" className="gap-2">
+              <ColumnsIcon size={16} />
+              Редактировать
+            </Button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end" className="w-56">
+            {table
+              .getAllLeafColumns()
+              .filter((column) => column.getCanHide())
+              .map((column) => (
+                <label key={column.id} className="flex cursor-pointer items-center gap-2 px-2 py-1.5 text-sm">
+                  <Checkbox
+                    checked={column.getIsVisible()}
+                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
+                  />
+                  <span className="truncate">{flexRender(column.columnDef.header, {} as any)}</span>
+                </label>
+              ))}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      </div>
+
+      {/* Table */}
       <div className="overflow-x-auto rounded-lg border">
         <Table>
           <TableHeader>
@@ -73,7 +116,7 @@ export function DataTable<TData>({
 
                   {renderExpandedRow && row.getIsExpanded() && (
                     <TableRow className="bg-muted/40">
-                      <TableCell colSpan={row.getVisibleCells().length} className="p-4">
+                      <TableCell colSpan={table.getVisibleLeafColumns().length} className="p-4">
                         {renderExpandedRow(row.original)}
                       </TableCell>
                     </TableRow>
@@ -82,7 +125,7 @@ export function DataTable<TData>({
               ))
             ) : (
               <TableRow>
-                <TableCell colSpan={columns.length} className="h-24 text-center">
+                <TableCell colSpan={table.getVisibleLeafColumns().length} className="h-24 text-center">
                   <Empty className="border border-dashed">
                     <EmptyHeader>
                       <EmptyMedia>

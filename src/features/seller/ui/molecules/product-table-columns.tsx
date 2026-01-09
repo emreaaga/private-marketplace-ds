@@ -91,6 +91,7 @@ export const productColumns: ColumnDef<ProductRow>[] = [
   {
     id: "actions",
     header: "",
+    enableHiding: false,
     cell: () => (
       <div className="flex justify-end">
         <Button

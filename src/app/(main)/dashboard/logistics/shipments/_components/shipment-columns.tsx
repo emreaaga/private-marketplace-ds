@@ -14,14 +14,17 @@ import { Shipment } from "./types";
 export const ShipmentColumns: ColumnDef<Shipment>[] = [
   {
     accessorKey: "code",
-    header: "NO отп",
+    header: "ID",
     cell: ({ row }) => {
       const shipment = row.original;
 
       return (
         <div className="flex items-center gap-1">
           <Switch checked={!shipment.locked} />
-          <span className={shipment.locked ? "text-muted-foreground line-through" : "font-medium"}>
+          001
+          <span
+            className={shipment.locked ? "text-muted-foreground text-[10px] line-through" : "text-[10px] font-medium"}
+          >
             {shipment.code}
           </span>
         </div>
@@ -90,6 +93,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
   {
     id: "actions",
     header: "",
+    enableHiding: false,
     cell: () => (
       <Link href="/dashboard/logistics/orders">
         <Button variant="ghost" size="icon" className="h-6 w-6">

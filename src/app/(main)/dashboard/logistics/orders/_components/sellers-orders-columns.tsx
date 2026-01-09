@@ -76,7 +76,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
 
   {
     accessorKey: "col10",
-    header: "Σ",
+    header: "Финансы",
     cell: () => (
       <div className="flex items-center gap-1 rounded-md border whitespace-nowrap">
         <span className="text-[10px] font-medium">
@@ -112,6 +112,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     header: "",
     size: 28,
     enableSorting: false,
+    enableHiding: false,
     cell: ({ row }) => (
       <button
         onClick={row.getToggleExpandedHandler()}
@@ -127,6 +128,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     header: "",
     size: 32,
     enableSorting: false,
+    enableHiding: false,
     cell: () => (
       <DropdownMenu>
         <DropdownMenuTrigger asChild>

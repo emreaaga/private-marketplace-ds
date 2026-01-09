@@ -118,6 +118,7 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
   {
     id: "actions",
     header: "",
+    enableHiding: false,
     cell: () => (
       <Link href="/dashboard/logistics/orders">
         <Button variant="ghost" size="icon" className="h-6 w-6">
