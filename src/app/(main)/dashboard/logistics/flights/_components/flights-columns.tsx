@@ -46,7 +46,7 @@ export type Flight = {
 export const FlightsColumns: ColumnDef<Flight>[] = [
   {
     accessorKey: "code",
-    header: "NO отп",
+    header: "ID",
     cell: ({ row }) => {
       const shipment = row.original;
 

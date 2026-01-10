@@ -83,8 +83,8 @@ export function FlightPartiesForm() {
               <SelectValue placeholder="Получатель (таможня)" />
             </SelectTrigger>
             <SelectContent>
-              <SelectItem value="customs-a">Таможня A</SelectItem>
-              <SelectItem value="customs-b">Таможня B</SelectItem>
+              <SelectItem value="customs-a">Таможня 1</SelectItem>
+              <SelectItem value="customs-b">Таможня 2</SelectItem>
             </SelectContent>
           </Select>
         </Field>
