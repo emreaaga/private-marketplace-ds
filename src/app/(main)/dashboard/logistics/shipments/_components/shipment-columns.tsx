@@ -9,12 +9,15 @@ import { Button } from "@/shared/ui/atoms/button";
 import { Switch } from "@/shared/ui/atoms/switch";
 import { TableBadge } from "@/shared/ui/molecules/table-badge";
 
+import { HeaderWithIcon } from "../../orders/_components/header-icon";
+import { stageIcons } from "../../orders/_components/stage-icons";
+
 import { Shipment } from "./types";
 
 export const ShipmentColumns: ColumnDef<Shipment>[] = [
   {
     accessorKey: "code",
-    header: "ID",
+    header: () => <HeaderWithIcon icon={stageIcons.order} label="ID" />,
     cell: ({ row }) => {
       const shipment = row.original;
 
@@ -34,58 +37,62 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
 
   {
     accessorKey: "col1",
-    header: "Отп. клиент",
-    cell: () => <TableBadge tooltip="12.09.2025 · 14:32">Client-1</TableBadge>,
+    header: () => <HeaderWithIcon icon={stageIcons.client} label="Клиент" />,
+    cell: () => (
+      <TableBadge icon={stageIcons.client} tooltip="12.09.2025 · 14:32">
+        Клнт.
+      </TableBadge>
+    ),
   },
 
   {
     accessorKey: "col2",
-    header: "Курьер",
-    cell: () => <TableBadge>Курьер</TableBadge>,
+    header: () => <HeaderWithIcon icon={stageIcons.courier} label="Курьер" />,
+    cell: () => <TableBadge icon={stageIcons.courier}>Курь.</TableBadge>,
   },
 
   {
     accessorKey: "col3",
-    header: "Пункт 1",
-    cell: () => <TableBadge>IST-A01</TableBadge>,
+    header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт1" />,
+    cell: () => <TableBadge icon={stageIcons.point}>Почт.</TableBadge>,
   },
 
   {
     accessorKey: "col4",
-    header: "Таможня",
-    cell: () => <TableBadge>IST-таможня</TableBadge>,
+    header: () => <HeaderWithIcon icon={stageIcons.customs} label="Таможня" />,
+    cell: () => <TableBadge icon={stageIcons.customs}>Тамж.</TableBadge>,
   },
 
   {
     accessorKey: "col5",
-    header: "Самолет",
-    cell: () => <TableBadge>TR–UZ</TableBadge>,
+    header: () => <HeaderWithIcon icon={stageIcons.flight} label="Самолет" />,
+    cell: () => <TableBadge icon={stageIcons.flight}>Самл.</TableBadge>,
   },
 
   {
     accessorKey: "col6",
-    header: "Таможня",
-    cell: () => <TableBadge>TAS-таможня</TableBadge>,
+    header: () => <HeaderWithIcon icon={stageIcons.customs} label="Таможня" />,
+    cell: () => <TableBadge icon={stageIcons.customs}>Тамж.</TableBadge>,
   },
 
   {
     accessorKey: "col7",
-    header: "Пункт 2",
-    cell: () => <TableBadge>TAS-A02</TableBadge>,
+    header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт 2" />,
+    cell: () => <TableBadge icon={stageIcons.point}>Почт.</TableBadge>,
   },
 
   {
     accessorKey: "col8",
-    header: "Курьер",
-    cell: () => <TableBadge>Курьер</TableBadge>,
+    header: () => <HeaderWithIcon icon={stageIcons.courier} label="Курьер" />,
+    cell: () => <TableBadge icon={stageIcons.courier}>Курь.</TableBadge>,
   },
 
   {
     accessorKey: "col9",
-    header: "Пол. клиент",
+    header: () => <HeaderWithIcon icon={stageIcons.client} label="Клиент" />,
     cell: () => (
-      <TableBadge variant="outline" tooltip="Получено клиентом">
-        SKD-client
+      <TableBadge icon={stageIcons.client} variant="outline">
+        Клнт.
       </TableBadge>
     ),
   },

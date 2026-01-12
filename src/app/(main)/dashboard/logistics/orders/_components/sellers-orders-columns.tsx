@@ -10,19 +10,20 @@ import {
 } from "@/shared/ui/atoms/dropdown-menu";
 import { TableBadge } from "@/shared/ui/molecules/table-badge";
 
+import { HeaderWithIcon } from "./header-icon";
 import { type Order } from "./orders.type";
 import { stageIcons } from "./stage-icons";
 
 export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
     id: "order",
-    header: "Заказ",
+    header: () => <HeaderWithIcon icon={stageIcons.order} label="Заказ" />,
     size: 120,
     cell: ({ row }) => <span className="font-mono text-[11px] whitespace-nowrap">{row.original.id}-001</span>,
   },
   {
     accessorKey: "col1",
-    header: "Клиент",
+    header: () => <HeaderWithIcon icon={stageIcons.client} label="Клиент" />,
     cell: () => (
       <TableBadge icon={stageIcons.client} tooltip="12.09.2025 · 14:32">
         Клнт.
@@ -31,42 +32,42 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   },
   {
     accessorKey: "col2",
-    header: "Курьер",
+    header: () => <HeaderWithIcon icon={stageIcons.courier} label="Курьер" />,
     cell: () => <TableBadge icon={stageIcons.courier}>Курь.</TableBadge>,
   },
   {
     accessorKey: "col3",
-    header: "Пункт1",
+    header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт1" />,
     cell: () => <TableBadge icon={stageIcons.point}>Почт.</TableBadge>,
   },
   {
     accessorKey: "col4",
-    header: "Таможня",
+    header: () => <HeaderWithIcon icon={stageIcons.customs} label="Таможня" />,
     cell: () => <TableBadge icon={stageIcons.customs}>Тамж.</TableBadge>,
   },
   {
     accessorKey: "col5",
-    header: "Самолет",
+    header: () => <HeaderWithIcon icon={stageIcons.flight} label="Самолет" />,
     cell: () => <TableBadge icon={stageIcons.flight}>Самл.</TableBadge>,
   },
   {
     accessorKey: "col6",
-    header: "Таможня",
+    header: () => <HeaderWithIcon icon={stageIcons.customs} label="Таможня" />,
     cell: () => <TableBadge icon={stageIcons.customs}>Тамж.</TableBadge>,
   },
   {
     accessorKey: "col7",
-    header: "Пункт2",
+    header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт 2" />,
     cell: () => <TableBadge icon={stageIcons.point}>Почт.</TableBadge>,
   },
   {
     accessorKey: "col8",
-    header: "Курьер",
+    header: () => <HeaderWithIcon icon={stageIcons.courier} label="Курьер" />,
     cell: () => <TableBadge icon={stageIcons.courier}>Курь.</TableBadge>,
   },
   {
     accessorKey: "col9",
-    header: "Клиент",
+    header: () => <HeaderWithIcon icon={stageIcons.client} label="Клиент" />,
     cell: () => (
       <TableBadge icon={stageIcons.client} variant="outline">
         Клнт.
@@ -75,7 +76,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   },
   {
     accessorKey: "col10",
-    header: "Финансы",
+    header: () => <HeaderWithIcon icon={stageIcons.finance} label="Финансы" />,
     cell: () => (
       <div className="flex items-center gap-1 rounded-md whitespace-nowrap">
         <span className="text-xs font-medium">
