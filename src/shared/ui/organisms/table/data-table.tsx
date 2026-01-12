@@ -89,7 +89,6 @@ export function DataTable<TData>({
         </DropdownMenu>
       </div>
 
-      {/* Table */}
       <div className="overflow-x-auto rounded-lg border">
         <Table>
           <TableHeader>

@@ -11,6 +11,7 @@ import {
 import { TableBadge } from "@/shared/ui/molecules/table-badge";
 
 import { type Order } from "./orders.type";
+import { stageIcons } from "./stage-icons";
 
 export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
@@ -19,94 +20,91 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     size: 120,
     cell: ({ row }) => <span className="font-mono text-[11px] whitespace-nowrap">{row.original.id}-001</span>,
   },
-
   {
     accessorKey: "col1",
-    header: "Отп. клиент",
-    cell: () => <TableBadge tooltip="12.09.2025 · 14:32">Client-1</TableBadge>,
+    header: "Клиент",
+    cell: () => (
+      <TableBadge icon={stageIcons.client} tooltip="12.09.2025 · 14:32">
+        Клнт.
+      </TableBadge>
+    ),
   },
-
   {
     accessorKey: "col2",
     header: "Курьер",
-    cell: () => <TableBadge>Курьер</TableBadge>,
+    cell: () => <TableBadge icon={stageIcons.courier}>Курь.</TableBadge>,
   },
-
   {
     accessorKey: "col3",
-    header: "Пункт 1",
-    cell: () => <TableBadge>IST-A01</TableBadge>,
+    header: "Пункт1",
+    cell: () => <TableBadge icon={stageIcons.point}>Почт.</TableBadge>,
   },
-
   {
     accessorKey: "col4",
     header: "Таможня",
-    cell: () => <TableBadge>IST-таможня</TableBadge>,
+    cell: () => <TableBadge icon={stageIcons.customs}>Тамж.</TableBadge>,
   },
-
   {
     accessorKey: "col5",
     header: "Самолет",
-    cell: () => <TableBadge>TR–UZ</TableBadge>,
+    cell: () => <TableBadge icon={stageIcons.flight}>Самл.</TableBadge>,
   },
-
   {
     accessorKey: "col6",
     header: "Таможня",
-    cell: () => <TableBadge>TAS-таможня</TableBadge>,
+    cell: () => <TableBadge icon={stageIcons.customs}>Тамж.</TableBadge>,
   },
-
   {
     accessorKey: "col7",
-    header: "Пункт 2",
-    cell: () => <TableBadge>TAS-A02</TableBadge>,
+    header: "Пункт2",
+    cell: () => <TableBadge icon={stageIcons.point}>Почт.</TableBadge>,
   },
-
   {
     accessorKey: "col8",
     header: "Курьер",
-    cell: () => <TableBadge>Курьер</TableBadge>,
+    cell: () => <TableBadge icon={stageIcons.courier}>Курь.</TableBadge>,
   },
-
   {
     accessorKey: "col9",
-    header: "Пол. клиент",
-    cell: () => <TableBadge variant="outline">SKD-client</TableBadge>,
+    header: "Клиент",
+    cell: () => (
+      <TableBadge icon={stageIcons.client} variant="outline">
+        Клнт.
+      </TableBadge>
+    ),
   },
-
   {
     accessorKey: "col10",
     header: "Финансы",
     cell: () => (
-      <div className="flex items-center gap-1 rounded-md border whitespace-nowrap">
-        <span className="text-[10px] font-medium">
-          12<span className="text-[8px]">.00</span>
+      <div className="flex items-center gap-1 rounded-md whitespace-nowrap">
+        <span className="text-xs font-medium">
+          12<span className="text-[10px]">.00</span>
           <span className="text-muted-foreground ml-0.5 text-[8px]">кг</span>
         </span>
 
-        <span className="text-[10px] font-medium">
-          6<span className="text-[8px]">.00</span>
+        <span className="text-xs font-medium">
+          6<span className="text-[10px]">.00</span>
           <span className="text-muted-foreground ml-0.5 text-[8px]">$/кг</span>
         </span>
 
-        <span className="text-[10px] font-medium">
-          15<span className="text-[8px]">.00</span>
+        <span className="text-xs font-medium">
+          15<span className="text-[10px]">.00</span>
           <span className="text-muted-foreground ml-0.5 text-[8px]">$</span>
         </span>
 
-        <span className="text-[10px] font-medium">
-          12<span className="text-[8px]">.00</span>
+        <span className="text-xs font-medium">
+          12<span className="text-[10px]">.00</span>
           <span className="text-muted-foreground ml-0.5 text-[8px]">$</span>
         </span>
 
-        <span className="text-[10px] font-medium">
-          4<span className="text-[8px]">.00</span>
+        <span className="text-xs font-medium">
+          4<span className="text-[10px]">.00</span>
           <span className="text-muted-foreground ml-0.5 text-[8px]">$</span>
         </span>
       </div>
     ),
   },
-
   {
     id: "expand",
     header: "",

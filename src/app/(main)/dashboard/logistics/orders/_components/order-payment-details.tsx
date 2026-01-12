@@ -1,4 +1,4 @@
-import { PlusSquare, Package, Calculator, Receipt, CheckCircle, Clock } from "lucide-react";
+import { PlusSquare, Package, Calculator, CheckCircle, Clock } from "lucide-react";
 
 import { mapOrderPayment } from "./mpordep";
 import type { Order } from "./orders.type";
@@ -14,26 +14,9 @@ export function OrderPaymentDetails({ order }: { order: Order }) {
     <div className="w-full">
       <div className="text-muted-foreground flex items-center justify-between text-sm whitespace-nowrap tabular-nums">
         <InlineItem>
-          <Package className="text-muted-foreground h-4 w-4" />
-          Вес:
-          <span className="text-foreground font-semibold">{p.weightKg} кг</span>
-        </InlineItem>
-        <InlineItem>
-          <Calculator className="text-muted-foreground h-4 w-4" />
-          Тариф:
-          <span className="text-foreground font-semibold">${p.ratePerKg} / кг</span>
-        </InlineItem>
-
-        <InlineItem>
           <PlusSquare className="text-muted-foreground h-4 w-4" />
           Доп. услуги:
           <span className="text-foreground font-semibold">{p.extrasTotal}$</span>
-        </InlineItem>
-
-        <InlineItem>
-          <Receipt className="text-muted-foreground h-4 w-4" />
-          Итого:
-          <span className="text-foreground font-semibold">${p.total}</span>
         </InlineItem>
 
         {p.paidOrigin > 0 && (
@@ -43,6 +26,18 @@ export function OrderPaymentDetails({ order }: { order: Order }) {
             <span className="font-semibold text-green-600">${p.paidOrigin}</span>
           </InlineItem>
         )}
+
+        <InlineItem>
+          <Calculator className="text-muted-foreground h-4 w-4" />
+          Тариф:
+          <span className="text-foreground font-semibold">${p.ratePerKg} / кг</span>
+        </InlineItem>
+
+        <InlineItem>
+          <Package className="text-muted-foreground h-4 w-4" />
+          Вес:
+          <span className="text-foreground font-semibold">{p.weightKg} кг</span>
+        </InlineItem>
 
         {p.remaining > 0 && (
           <InlineItem>

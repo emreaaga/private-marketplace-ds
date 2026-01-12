@@ -63,7 +63,7 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
 
   {
     accessorKey: "col1",
-    header: "Отп. клиент",
+    header: "Клиент",
     cell: () => "Client - 1",
   },
 
@@ -75,7 +75,7 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
 
   {
     accessorKey: "col3",
-    header: "Пункт 1",
+    header: "Пункт1",
     cell: () => "IST-A01",
   },
 
@@ -87,7 +87,7 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
 
   {
     accessorKey: "col5",
-    header: "Самолет",
+    header: "Рейс",
     cell: () => "TR–UZ",
   },
 
@@ -99,7 +99,7 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
 
   {
     accessorKey: "col7",
-    header: "Пункт 2",
+    header: "Пункт2",
     cell: () => "TAS-A02",
   },
 
@@ -111,7 +111,7 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
 
   {
     accessorKey: "col9",
-    header: "Пол. клиент",
+    header: "Клиент",
     cell: () => "SKD-client",
   },
 
