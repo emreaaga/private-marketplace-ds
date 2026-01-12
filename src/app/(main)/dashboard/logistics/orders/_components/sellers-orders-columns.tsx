@@ -19,7 +19,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     accessorKey: "col1",
     header: () => <HeaderWithIcon icon={stageIcons.client} label="Клиент" />,
     cell: () => (
-      <TableBadge icon={stageIcons.client} tooltip="12.09.2025 · 14:32">
+      <TableBadge innerBadge="283.00$" tooltip="12.09.2025 · 14:32">
         Клнт.
       </TableBadge>
     ),
@@ -27,12 +27,12 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "col2",
     header: () => <HeaderWithIcon icon={stageIcons.courier} label="Курьер" />,
-    cell: () => <TableBadge innerBadge="123456">Курь.</TableBadge>,
+    cell: () => <TableBadge innerBadge="128.03$">Курь.</TableBadge>,
   },
   {
     accessorKey: "col3",
     header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт1" />,
-    cell: ({ row }) => <TableBadge innerBadge="123456">{row.original.id}</TableBadge>,
+    cell: ({ row }) => <TableBadge innerBadge="6.00$/кг">{row.original.id}</TableBadge>,
   },
   {
     accessorKey: "col4",
@@ -52,12 +52,12 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "col7",
     header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт 2" />,
-    cell: () => <TableBadge innerBadge="123456">Почт.</TableBadge>,
+    cell: () => <TableBadge innerBadge="12.00кг">Почт.</TableBadge>,
   },
   {
     accessorKey: "col8",
     header: () => <HeaderWithIcon icon={stageIcons.courier} label="Курьер" />,
-    cell: () => <TableBadge innerBadge="123456">Курь.</TableBadge>,
+    cell: () => <TableBadge innerBadge="18.05$">Курь.</TableBadge>,
   },
   {
     accessorKey: "col9",
