@@ -16,12 +16,6 @@ import { stageIcons } from "./stage-icons";
 
 export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
-    id: "order",
-    header: () => <HeaderWithIcon icon={stageIcons.order} label="Заказ" />,
-    size: 120,
-    cell: ({ row }) => <span className="font-mono text-[11px] whitespace-nowrap">{row.original.id}-001</span>,
-  },
-  {
     accessorKey: "col1",
     header: () => <HeaderWithIcon icon={stageIcons.client} label="Клиент" />,
     cell: () => (
@@ -33,43 +27,43 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "col2",
     header: () => <HeaderWithIcon icon={stageIcons.courier} label="Курьер" />,
-    cell: () => <TableBadge icon={stageIcons.courier}>Курь.</TableBadge>,
+    cell: () => <TableBadge innerBadge="123456">Курь.</TableBadge>,
   },
   {
     accessorKey: "col3",
     header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт1" />,
-    cell: () => <TableBadge icon={stageIcons.point}>Почт.</TableBadge>,
+    cell: ({ row }) => <TableBadge innerBadge="123456">{row.original.id}</TableBadge>,
   },
   {
     accessorKey: "col4",
     header: () => <HeaderWithIcon icon={stageIcons.customs} label="Таможня" />,
-    cell: () => <TableBadge icon={stageIcons.customs}>Тамж.</TableBadge>,
+    cell: () => <TableBadge innerBadge="123456">Тамж.</TableBadge>,
   },
   {
     accessorKey: "col5",
     header: () => <HeaderWithIcon icon={stageIcons.flight} label="Самолет" />,
-    cell: () => <TableBadge icon={stageIcons.flight}>Самл.</TableBadge>,
+    cell: () => <TableBadge innerBadge="123456">001</TableBadge>,
   },
   {
     accessorKey: "col6",
     header: () => <HeaderWithIcon icon={stageIcons.customs} label="Таможня" />,
-    cell: () => <TableBadge icon={stageIcons.customs}>Тамж.</TableBadge>,
+    cell: () => <TableBadge innerBadge="123456">Тамж.</TableBadge>,
   },
   {
     accessorKey: "col7",
     header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт 2" />,
-    cell: () => <TableBadge icon={stageIcons.point}>Почт.</TableBadge>,
+    cell: () => <TableBadge innerBadge="123456">Почт.</TableBadge>,
   },
   {
     accessorKey: "col8",
     header: () => <HeaderWithIcon icon={stageIcons.courier} label="Курьер" />,
-    cell: () => <TableBadge icon={stageIcons.courier}>Курь.</TableBadge>,
+    cell: () => <TableBadge innerBadge="123456">Курь.</TableBadge>,
   },
   {
     accessorKey: "col9",
     header: () => <HeaderWithIcon icon={stageIcons.client} label="Клиент" />,
     cell: () => (
-      <TableBadge icon={stageIcons.client} variant="outline">
+      <TableBadge innerBadge="123456" variant="outline">
         Клнт.
       </TableBadge>
     ),

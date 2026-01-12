@@ -9,11 +9,13 @@ export function TableBadge({
   tooltip,
   variant = "filled",
   icon: Icon,
+  innerBadge,
 }: {
   children: React.ReactNode;
   tooltip?: string;
   variant?: "filled" | "outline";
   icon?: LucideIcon;
+  innerBadge?: React.ReactNode;
 }) {
   const className =
     variant === "outline"
@@ -21,9 +23,16 @@ export function TableBadge({
       : "h-5 px-1.5 text-[10px] bg-slate-500/15 text-slate-700 leading-none font-medium whitespace-nowrap";
 
   const content = (
-    <Badge className={cn(className, Icon && "gap-1")}>
+    <Badge className={cn(className, "flex items-center", Icon && "gap-1")}>
       {Icon && <Icon className="h-3 w-3 shrink-0" />}
+
       <span>{children}</span>
+
+      {innerBadge && (
+        <span className="ml-1 rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] leading-none font-medium text-slate-700">
+          {innerBadge}
+        </span>
+      )}
     </Badge>
   );
 
