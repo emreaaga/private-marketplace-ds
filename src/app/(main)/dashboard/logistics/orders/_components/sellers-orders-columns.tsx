@@ -75,23 +75,28 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
       <TableBadge>
         <div className="flex items-center gap-1">
           <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
-            12<span className="ml-0.5 text-slate-400">кг</span>
+            183<span className="align-bottom text-[6px]">.42</span>
+            <span className="ml-0.5 text-slate-400">кг</span>
           </span>
 
           <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
-            6<span className="ml-0.5 text-slate-400">$/кг</span>
+            6<span className="align-bottom text-[6px]">.15</span>
+            <span className="ml-0.5 text-slate-400">$/кг</span>
           </span>
 
           <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
-            15<span className="ml-0.5 text-slate-400">$</span>
+            155<span className="align-bottom text-[6px]">.80</span>
+            <span className="ml-0.5 text-slate-400">$</span>
           </span>
 
           <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
-            12<span className="ml-0.5 text-slate-400">$</span>
+            340<span className="align-bottom text-[6px]">.27</span>
+            <span className="ml-0.5 text-slate-400">$</span>
           </span>
 
           <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium tabular-nums">
-            4<span className="ml-0.5 text-slate-400">$</span>
+            160<span className="align-bottom text-[6px]">.94</span>
+            <span className="ml-0.5 text-slate-400">$</span>
           </span>
         </div>
       </TableBadge>
