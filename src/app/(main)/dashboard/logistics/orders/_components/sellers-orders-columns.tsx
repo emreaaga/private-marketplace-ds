@@ -69,40 +69,32 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     ),
   },
   {
-    accessorKey: "col11",
-    header: () => <HeaderWithIcon icon={stageIcons.client} label="TEST" />,
-    cell: () => <TableBadge>Test.</TableBadge>,
-  },
-  {
     accessorKey: "col10",
     header: () => <HeaderWithIcon icon={stageIcons.finance} label="Финансы" />,
     cell: () => (
-      <div className="flex items-center gap-1 rounded-md whitespace-nowrap">
-        <span className="text-xs font-medium">
-          12<span className="text-[10px]">.00</span>
-          <span className="text-muted-foreground ml-0.5 text-[8px]">кг</span>
-        </span>
+      <TableBadge>
+        <div className="flex items-center gap-1">
+          <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
+            12<span className="ml-0.5 text-slate-400">кг</span>
+          </span>
 
-        <span className="text-xs font-medium">
-          6<span className="text-[10px]">.00</span>
-          <span className="text-muted-foreground ml-0.5 text-[8px]">$/кг</span>
-        </span>
+          <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
+            6<span className="ml-0.5 text-slate-400">$/кг</span>
+          </span>
 
-        <span className="text-xs font-medium">
-          15<span className="text-[10px]">.00</span>
-          <span className="text-muted-foreground ml-0.5 text-[8px]">$</span>
-        </span>
+          <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
+            15<span className="ml-0.5 text-slate-400">$</span>
+          </span>
 
-        <span className="text-xs font-medium">
-          12<span className="text-[10px]">.00</span>
-          <span className="text-muted-foreground ml-0.5 text-[8px]">$</span>
-        </span>
+          <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
+            12<span className="ml-0.5 text-slate-400">$</span>
+          </span>
 
-        <span className="text-xs font-medium">
-          4<span className="text-[10px]">.00</span>
-          <span className="text-muted-foreground ml-0.5 text-[8px]">$</span>
-        </span>
-      </div>
+          <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium tabular-nums">
+            4<span className="ml-0.5 text-slate-400">$</span>
+          </span>
+        </div>
+      </TableBadge>
     ),
   },
   {
