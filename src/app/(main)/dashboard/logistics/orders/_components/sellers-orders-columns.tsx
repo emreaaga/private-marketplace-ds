@@ -42,7 +42,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   {
     accessorKey: "col5",
     header: () => <HeaderWithIcon icon={stageIcons.flight} label="Самолет" />,
-    cell: () => <TableBadge innerBadge="123456">001</TableBadge>,
+    cell: () => <TableBadge innerBadge="001">TR-UZ</TableBadge>,
   },
   {
     accessorKey: "col6",
@@ -67,6 +67,11 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
         Клнт.
       </TableBadge>
     ),
+  },
+  {
+    accessorKey: "col11",
+    header: () => <HeaderWithIcon icon={stageIcons.client} label="TEST" />,
+    cell: () => <TableBadge>Test.</TableBadge>,
   },
   {
     accessorKey: "col10",
