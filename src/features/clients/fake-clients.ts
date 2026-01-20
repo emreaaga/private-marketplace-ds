@@ -1,4 +1,4 @@
-import type { Client } from "@/features/users/types/user.types";
+import type { Client } from "@/features/clients/types/client.types";
 
 export const FAKE_CLIENTS: Client[] = [
   {

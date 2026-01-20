@@ -2,33 +2,32 @@
 
 import { useRouter } from "next/navigation";
 
-import { jwtDecode } from "jwt-decode";
 import { toast } from "sonner";
 
 import { authService } from "@/features/auth/api/auth";
 import { useAuthStore } from "@/features/auth/auth.store";
-import { AccessTokenPayload } from "@/features/auth/types/auth.types";
 
 export function useLogin() {
   const router = useRouter();
-  const setUser = useAuthStore.getState().setUser;
+  const setSession = useAuthStore.getState().setSession;
 
   const login = async (email: string, password: string) => {
     try {
       const res = await authService.login({ email, password });
 
-      const decoded = jwtDecode<AccessTokenPayload>(res.accessToken);
-
-      setUser({
-        id: decoded.sub,
-        role: decoded.role,
+      setSession({
+        user: {
+          id: String(res.user.id),
+          role: res.user.role,
+        },
+        accessToken: res.accessToken,
       });
 
-      router.push("/dashboard/main");
       toast.success("Вход выполнен успешно!");
+      router.push("/dashboard/main");
     } catch (err) {
-      console.log(err);
-      toast.error("Ошибка запроса");
+      console.error(err);
+      toast.error("Ошибка входа");
       throw err;
     }
   };

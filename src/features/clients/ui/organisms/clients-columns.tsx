@@ -2,7 +2,7 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 
-import type { UserStatus, Client } from "@/features/users/types/user.types";
+import type { UserStatus, Client } from "@/features/clients/types/client.types";
 import { Badge } from "@/shared/ui/atoms/badge";
 
 export const clientsColumns: ColumnDef<Client>[] = [

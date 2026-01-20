@@ -4,4 +4,9 @@ export const usersHeaderItems = [
     label: "Пользователи",
     icon: "users",
   },
+  {
+    href: "/dashboard/users/companies",
+    label: "Фирмы",
+    icon: "company",
+  },
 ] as const;

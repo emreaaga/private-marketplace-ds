@@ -1,12 +1,19 @@
 "use client";
 
-import type { User } from "@/features/users/types/user.types";
 import { api } from "@/shared/lib/api";
+import type { User } from "@/shared/types/users/user.model";
+
+import { CreateUserDto } from "../types/create-user.dto";
 
 export const usersService = {
   async getUsers(): Promise<User[]> {
     const { data } = await api.get("/users");
     return data.users;
+  },
+
+  async createUser(payload: CreateUserDto): Promise<User> {
+    const { data } = await api.post("/users", payload);
+    return data.user;
   },
 
   async deleteUser(userId: number) {

@@ -1,17 +1,20 @@
 "use client";
+
 import axios from "axios";
 
-import { token } from "@/features/auth/api/token";
+import { useAuthStore } from "@/features/auth/auth.store";
 
 export const api = axios.create({
-  baseURL: process.env.NEXT_PUBLIC_API_URL ?? "/api",
+  baseURL: process.env.NEXT_PUBLIC_API_URL,
   withCredentials: true,
 });
 
 api.interceptors.request.use((config) => {
-  const accessToken = token.get();
-  if (accessToken) {
-    config.headers.Authorization = `Bearer ${accessToken}`;
+  const token = useAuthStore.getState().accessToken;
+
+  if (token) {
+    config.headers.Authorization = `Bearer ${token}`;
   }
+
   return config;
 });

@@ -3,7 +3,16 @@
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
-import { Users, ClipboardList, Link as LinkIcon, Package, Plane, ShoppingCart, Banknote } from "lucide-react";
+import {
+  Users,
+  ClipboardList,
+  Building2,
+  Link as LinkIcon,
+  Package,
+  Plane,
+  ShoppingCart,
+  Banknote,
+} from "lucide-react";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/atoms/tabs";
@@ -16,6 +25,7 @@ const ICON_MAP = {
   flights: Plane,
   cart: ShoppingCart,
   finance: Banknote,
+  company: Building2,
 } as const;
 
 export type HeaderIconKey = keyof typeof ICON_MAP;

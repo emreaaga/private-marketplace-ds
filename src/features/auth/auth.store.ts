@@ -1,18 +1,20 @@
 import { create } from "zustand";
 
-import { UserRole } from "@/shared/lib/rbac/roles";
-
-interface User {
+export interface AuthUser {
   id: string;
-  role: UserRole;
+  role: string;
 }
 
 interface AuthState {
-  user: User | null;
-  setUser: (user: User | null) => void;
+  user: AuthUser | null;
+  accessToken: string | null;
+  setSession: (data: { user: AuthUser; accessToken: string } | null) => void;
 }
 
 export const useAuthStore = create<AuthState>()((set) => ({
   user: null,
-  setUser: (user) => set({ user }),
+  accessToken: null,
+
+  setSession: (data) =>
+    set(data ? { user: data.user, accessToken: data.accessToken } : { user: null, accessToken: null }),
 }));
