@@ -13,18 +13,10 @@ export function MinimalBadge({ children }: { children: ReactNode }) {
   );
 }
 
-export function StatusText({ active }: { active: boolean }) {
-  return (
-    <span className={`text-sm font-medium ${active ? "text-green-600" : "text-red-600"}`}>
-      {active ? "Активна" : "Неактивна"}
-    </span>
-  );
-}
-
 export function StatusIndicator({ active }: { active: boolean }) {
   return (
     <div className="flex items-center gap-2">
-      <span className={`h-2 w-2 rounded-full ${active ? "bg-green-500" : "bg-red-500"}`} />
+      <span className={`h-2 w-2 rounded-full ${active ? "bg-green-400" : "bg-red-400"}`} />
       <span className="text-sm">{active ? "Активна" : "Неактивна"}</span>
     </div>
   );
@@ -34,7 +26,23 @@ export const companiesColumns: ColumnDef<Company>[] = [
   {
     accessorKey: "name",
     header: "Название",
+    cell: ({ row, getValue }) => {
+      const isActive = row.original.is_active;
+
+      return (
+        <div className="flex items-center gap-1.5">
+          <span
+            aria-hidden
+            className={["inline-flex h-1.5 w-1.5 shrink-0 rounded-full", isActive ? "bg-green-500" : "bg-red-500"].join(
+              " ",
+            )}
+          />
+          <span className="leading-none">{getValue<string>()}</span>
+        </div>
+      );
+    },
   },
+
   {
     accessorKey: "type",
     header: "Тип",
@@ -51,26 +59,18 @@ export const companiesColumns: ColumnDef<Company>[] = [
     },
   },
   {
-    accessorKey: "employee",
-    header: "Сотрудники",
-    cell: () => {
-      return <span className="text-sm">1</span>;
-    },
-  },
-  {
-    accessorKey: "country",
-    header: "Страна",
-    cell: ({ getValue }) => {
-      const value = getValue<string>();
-      return <span className="text-sm uppercase">{value}</span>;
-    },
-  },
-  {
-    accessorKey: "is_active",
-    header: "Статус",
-    cell: ({ getValue }) => {
-      const isActive = getValue<boolean>();
-      return <StatusText active={isActive} />;
+    id: "location",
+    header: "Локация",
+    cell: ({ row }) => {
+      const { country, city } = row.original;
+
+      if (!country && !city) return "—";
+
+      return (
+        <span className="text-sm uppercase">
+          {country}-<span className="text-muted-foreground">{city}</span>
+        </span>
+      );
     },
   },
   {

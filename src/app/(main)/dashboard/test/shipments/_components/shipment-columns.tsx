@@ -1,10 +1,9 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import { Badge } from "@/shared/ui/atoms/badge";
-
-import { formatMoney, formatWeight } from "../../_components/finance";
-
-import { Shipment, SHIPMENT_STATUS_META } from "./shipment-types";
+import type { Shipment } from "@/shared/types/shipment/shipment.model";
+import { formatMoney } from "@/shared/ui/molecules/format-money";
+import { formatQuantity } from "@/shared/ui/molecules/format-quantity";
+import { formatWeight } from "@/shared/ui/molecules/format-weight";
 
 export const ShipmentsColumns: ColumnDef<Shipment>[] = [
   {
@@ -12,60 +11,31 @@ export const ShipmentsColumns: ColumnDef<Shipment>[] = [
     header: "Отправка",
     cell: ({ row }) => <span className="font-mono text-sm">{row.original.id}</span>,
   },
+
   {
-    accessorKey: "postCompany",
+    accessorKey: "company_name",
     header: "Почта",
   },
+
   {
-    accessorKey: "ordersCount",
+    accessorKey: "route",
+    header: "Маршрут",
+  },
+
+  {
+    accessorKey: "orders_count",
     header: "Заказы",
-    meta: { align: "right" },
+    cell: ({ getValue }) => formatQuantity(getValue<string | number>(), { unit: "шт" }),
   },
+
   {
-    accessorKey: "totalWeightKg",
+    accessorKey: "total_weight_kg",
     header: "Вес",
-    meta: { align: "right" },
-    cell: ({ row }) => formatWeight(row.original.totalWeightKg),
+    cell: ({ getValue }) => formatWeight(getValue<number>()),
   },
-  {
-    accessorKey: "tariffPerKgUsd",
-    header: "Тариф",
-    meta: { align: "right" },
-    cell: ({ row }) => formatMoney(row.original.tariffPerKgUsd),
-  },
-  {
-    accessorKey: "incomeUsd",
-    header: "Доход",
-    meta: { align: "right" },
-    cell: ({ row }) => formatMoney(row.original.incomeUsd),
-  },
-  {
-    accessorKey: "expensesUsd",
-    header: "Расходы",
-    meta: { align: "right" },
-    cell: ({ row }) => formatMoney(row.original.expensesUsd),
-  },
-  {
-    id: "balance",
-    header: "Баланс",
-    cell: ({ row }) => {
-      const balance = row.original.incomeUsd - row.original.expensesUsd;
-      return <span className={balance < 0 ? "text-red-600" : "text-green-600"}>{formatMoney(balance)}</span>;
-    },
-  },
+
   {
     accessorKey: "status",
     header: "Статус",
-    cell: ({ row }) => {
-      const meta = SHIPMENT_STATUS_META[row.original.status];
-      const Icon = meta.icon;
-
-      return (
-        <Badge variant={meta.variant} className="gap-1">
-          <Icon size={14} className="opacity-70" />
-          {meta.label}
-        </Badge>
-      );
-    },
   },
 ];

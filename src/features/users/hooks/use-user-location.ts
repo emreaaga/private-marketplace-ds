@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback } from "react";
 
-import { COUNTRY_META } from "@/shared/types/company/country.meta";
-import type { CountryCode } from "@/shared/types/company/country.types";
+import { COUNTRY_META } from "@/shared/types/geography/country.meta";
+import type { CountryCode } from "@/shared/types/geography/country.types";
 
 export function useUserLocation() {
   const [country, setCountry] = useState<CountryCode | "">("");

@@ -1,8 +1,13 @@
 "use client";
+import { useEffect, useState } from "react";
+
 import { Package, Layers, Weight, DollarSign, Scale } from "lucide-react";
 
+import { ShipmentsService } from "@/features/shipments/api/shipment";
+import { Shipment } from "@/shared/types/shipment/shipment.model";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
+import { ShipmentToolbar } from "../../logistics/shipments/_components/shipment-toolbar";
 import { StatCard } from "../../main/_components/stat-card";
 
 import { MOCK_SHIPMENTS } from "./_components/mock-shipments";
@@ -11,10 +16,18 @@ import { getShipmentsStats } from "./_components/shipments-stats";
 
 export default function FlightShipmentsPage() {
   const stats = getShipmentsStats(MOCK_SHIPMENTS);
+  const [shipments, setShipments] = useState<Shipment[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    ShipmentsService.getShipments()
+      .then(setShipments)
+      .finally(() => setLoading(false));
+  }, []);
 
   return (
-    <div className="space-y-4">
-      <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+    <div className="space-y-6">
+      {/* <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard label="Отправки" value={stats.totalShipments} icon={Layers} />
 
         <StatCard label="Общий вес" value={`${stats.totalWeight} кг`} icon={Weight} />
@@ -27,9 +40,11 @@ export default function FlightShipmentsPage() {
           icon={Scale}
           variant={stats.balance < 0 ? "danger" : "default"}
         />
-      </div>
+      </div> */}
 
-      <DataTable columns={ShipmentsColumns} data={MOCK_SHIPMENTS} />
+      <ShipmentToolbar />
+
+      <DataTable columns={ShipmentsColumns} data={shipments} />
     </div>
   );
 }

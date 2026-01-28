@@ -1,27 +1,23 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Calendar, ShieldCheck, ArrowUpRight, Plane, ArrowDownLeft, CheckCircle } from "lucide-react";
+import { Calendar, Plane, CheckCircle, MoreHorizontal } from "lucide-react";
 
+import { Flight } from "@/shared/types/flight/flight.model";
 import { Badge } from "@/shared/ui/atoms/badge";
+import {
+  DropdownMenu,
+  DropdownMenuTrigger,
+  DropdownMenuContent,
+  DropdownMenuItem,
+} from "@/shared/ui/atoms/dropdown-menu";
 
 import { formatMoney, formatWeight } from "./finance";
-import { Flight } from "./flight-types";
 
-export const STATUS_META: Record<
-  Flight["status"],
-  {
-    label: string;
-    icon: React.ElementType;
-    variant: "default" | "secondary" | "destructive";
-  }
-> = {
-  PLANNED: { label: "План", icon: Calendar, variant: "secondary" },
-  READY_FOR_CUSTOMS: { label: "К таможне", icon: ShieldCheck, variant: "secondary" },
-  CUSTOMS_OUT: { label: "Таможня", icon: ArrowUpRight, variant: "default" },
-  IN_AIR: { label: "В пути", icon: Plane, variant: "default" },
-  CUSTOMS_IN: { label: "Таможня", icon: ArrowDownLeft, variant: "default" },
-  ARRIVED: { label: "Прибыл", icon: CheckCircle, variant: "secondary" },
-  CLOSED: { label: "Закрыт", icon: CheckCircle, variant: "secondary" },
-};
+export const STATUS_META = {
+  planned: { label: "План", icon: Calendar, variant: "secondary" },
+  departed: { label: "В пути", icon: Plane, variant: "default" },
+  arrived: { label: "Прибыл", icon: CheckCircle, variant: "default" },
+  closed: { label: "Закрыт", icon: CheckCircle, variant: "secondary" },
+} as const;
 
 export const FlightsColumns: ColumnDef<Flight>[] = [
   {
@@ -29,14 +25,30 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
     header: "Рейс",
     cell: ({ row }) => <span className="font-mono text-sm">{row.original.id}</span>,
   },
+
   {
     accessorKey: "route",
     header: "Маршрут",
   },
+
   {
-    accessorKey: "departureDate",
-    header: "Вылет",
+    accessorKey: "air_partner_name",
+    header: "Авиапартнер",
+    cell: ({ row }) => {
+      const name = row.original.air_partner_name;
+      const price = row.original.air_kg_price;
+
+      if (!name) return "—";
+
+      return (
+        <span>
+          {name}
+          {price && <span className="text-muted-foreground ml-2 text-xs">${Number(price).toFixed(2)}/кг</span>}
+        </span>
+      );
+    },
   },
+
   {
     accessorKey: "status",
     header: "Статус",
@@ -54,37 +66,68 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
   },
 
   {
-    accessorKey: "shipmentsCount",
+    accessorKey: "shipments_count",
     header: "Отправки",
     meta: { align: "right" },
   },
+
   {
-    accessorKey: "totalWeightKg",
+    accessorKey: "final_gross_weight_kg",
     header: "Вес",
     meta: { align: "right" },
-    cell: ({ row }) => formatWeight(row.original.totalWeightKg),
-  },
-
-  {
-    accessorKey: "expensesUsd",
-    header: "Расходы",
-    meta: { align: "right" },
-    cell: ({ row }) => formatMoney(row.original.expensesUsd),
-  },
-
-  {
-    accessorKey: "incomeUsd",
-    header: "Доход",
-    meta: { align: "right" },
-    cell: ({ row }) => formatMoney(row.original.incomeUsd),
-  },
-
-  {
-    id: "balance",
-    header: "Баланс",
     cell: ({ row }) => {
-      const balance = row.original.incomeUsd - row.original.expensesUsd;
-      return <span className={balance < 0 ? "text-red-600" : "text-green-600"}>{formatMoney(balance)}</span>;
+      const value = row.original.final_gross_weight_kg;
+
+      if (value == null) {
+        return <span className="text-muted-foreground text-xs">Ожд.</span>;
+      }
+
+      return formatWeight(Number(value));
+    },
+  },
+
+  {
+    accessorKey: "arrival_at",
+    header: "Прибытие",
+    cell: ({ row }) => {
+      const value = row.original.arrival_at;
+      if (!value) return "—";
+
+      const date = new Date(value);
+
+      return (
+        <span className="text-muted-foreground text-xs">
+          {date.toLocaleDateString("ru-RU", {
+            day: "2-digit",
+            month: "2-digit",
+            year: "numeric",
+          })}
+        </span>
+      );
+    },
+  },
+  {
+    id: "actions",
+    header: "",
+    meta: { align: "right" },
+    cell: ({ row }) => {
+      return (
+        <DropdownMenu>
+          <DropdownMenuTrigger asChild>
+            <button className="hover:bg-muted rounded p-0.5">
+              <MoreHorizontal size={16} />
+            </button>
+          </DropdownMenuTrigger>
+
+          <DropdownMenuContent align="end">
+            <DropdownMenuItem>Редактировать</DropdownMenuItem>
+
+            {row.original.status !== "closed" && (
+              <DropdownMenuItem className="text-red-600">Закрыть рейс</DropdownMenuItem>
+            )}
+          </DropdownMenuContent>
+        </DropdownMenu>
+      );
     },
   },
 ];

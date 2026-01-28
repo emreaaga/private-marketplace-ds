@@ -30,13 +30,13 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         title: "Почта",
-        url: "/dashboard/logistics/flights",
+        url: "/dashboard/test/flights",
         icon: Package,
         roles: [UserRole.ADMIN],
       },
       {
         title: "Почта 2.0",
-        url: "/dashboard/test/flights",
+        url: "/dashboard/logistics/flights",
         icon: Package,
         roles: [UserRole.ADMIN],
       },

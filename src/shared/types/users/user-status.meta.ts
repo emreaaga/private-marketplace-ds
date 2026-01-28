@@ -1,16 +1,16 @@
 import { UserStatuses } from "./user.model";
 
-export const USER_STATUS_META: Record<UserStatuses, { label: string; colorClass: string }> = {
+export const USER_STATUS_META: Record<UserStatuses, { label: string; dotClass: string }> = {
   active: {
     label: "Активен",
-    colorClass: "text-green-600",
+    dotClass: "bg-green-400",
   },
   blocked: {
     label: "Заблокирован",
-    colorClass: "text-red-600",
+    dotClass: "bg-red-400",
   },
   pending: {
     label: "Ожидание",
-    colorClass: "text-muted-foreground",
+    dotClass: "bg-muted-foreground",
   },
 };

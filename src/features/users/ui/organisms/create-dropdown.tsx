@@ -1,6 +1,6 @@
 "use client";
 
-import { PlusIcon, User, Building2, UserCircle } from "lucide-react";
+import { PlusIcon, User, Building2, UserCircle, LucideTextSelection } from "lucide-react";
 
 import { Button } from "@/shared/ui/atoms/button";
 import {
@@ -13,10 +13,11 @@ import {
 type CreateDropdownProps = {
   onCreateUser: () => void;
   onCreateCompany: () => void;
+  onCreateService: () => void;
   onPreload?: () => void;
 };
 
-export function CreateDropdown({ onCreateUser, onCreateCompany, onPreload }: CreateDropdownProps) {
+export function CreateDropdown({ onCreateUser, onCreateCompany, onCreateService, onPreload }: CreateDropdownProps) {
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -29,7 +30,7 @@ export function CreateDropdown({ onCreateUser, onCreateCompany, onPreload }: Cre
       <DropdownMenuContent align="start">
         <DropdownMenuItem onClick={onCreateCompany}>
           <Building2 className="mr-2 h-4 w-4" />
-          Фирму
+          Фирма
         </DropdownMenuItem>
 
         <DropdownMenuItem onClick={onCreateUser}>
@@ -40,6 +41,11 @@ export function CreateDropdown({ onCreateUser, onCreateCompany, onPreload }: Cre
         <DropdownMenuItem onClick={onCreateCompany}>
           <UserCircle className="mr-2 h-4 w-4" />
           Клиент
+        </DropdownMenuItem>
+
+        <DropdownMenuItem onClick={onCreateService}>
+          <LucideTextSelection className="mr-2 h-4 w-4" />
+          Услуга
         </DropdownMenuItem>
       </DropdownMenuContent>
     </DropdownMenu>

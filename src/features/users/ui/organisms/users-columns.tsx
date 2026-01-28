@@ -19,6 +19,17 @@ export const usersColumns: ColumnDef<User>[] = [
   {
     accessorKey: "name",
     header: "Имя",
+    cell: ({ row, getValue }) => {
+      const status = row.original.status;
+      const meta = USER_STATUS_META[status];
+
+      return (
+        <div className="flex items-center gap-1">
+          <span aria-hidden className={`inline-flex h-1.5 w-1.5 shrink-0 rounded-full ${meta.dotClass}`} />
+          <span className="leading-none">{getValue<string>()}</span>
+        </div>
+      );
+    },
   },
   {
     accessorKey: "email",
@@ -26,7 +37,7 @@ export const usersColumns: ColumnDef<User>[] = [
   },
   {
     accessorKey: "company_name",
-    header: "Компания",
+    header: "Фирма",
   },
   {
     accessorKey: "company_type",
@@ -56,16 +67,6 @@ export const usersColumns: ColumnDef<User>[] = [
           {meta.label}
         </MinimalBadge>
       );
-    },
-  },
-  {
-    accessorKey: "status",
-    header: "Статус",
-    cell: ({ getValue }) => {
-      const status = getValue<User["status"]>();
-      const meta = USER_STATUS_META[status];
-
-      return <span className={`text-sm font-medium ${meta.colorClass}`}>{meta.label}</span>;
     },
   },
   {

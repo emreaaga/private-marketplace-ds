@@ -12,6 +12,7 @@ import {
   Plane,
   ShoppingCart,
   Banknote,
+  LucideTextSelection,
 } from "lucide-react";
 
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
@@ -26,6 +27,7 @@ const ICON_MAP = {
   cart: ShoppingCart,
   finance: Banknote,
   company: Building2,
+  service: LucideTextSelection,
 } as const;
 
 export type HeaderIconKey = keyof typeof ICON_MAP;

@@ -1,4 +1,4 @@
-import { Plane, ShieldCheck, LayoutDashboard, Warehouse } from "lucide-react";
+import { Plane, ShieldCheck, LayoutDashboard, Warehouse, PlaneTakeoff } from "lucide-react";
 
 import { CompanyType } from "@/shared/types/company/company.types";
 
@@ -14,6 +14,10 @@ export const COMPANY_TYPE_META: Record<CompanyType, { label: string; Icon: React
   air_partner: {
     label: "Авиа",
     Icon: Plane,
+  },
+  airline: {
+    label: "Авиалиния",
+    Icon: PlaneTakeoff,
   },
   customs_broker: {
     label: "Таможня",

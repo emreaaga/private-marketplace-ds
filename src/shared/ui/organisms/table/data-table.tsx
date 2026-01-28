@@ -63,7 +63,7 @@ export function DataTable<TData>({
 
   return (
     <div className="space-y-2">
-      <div className="flex items-center justify-end">
+      {/* <div className="flex items-center justify-end">
         <DropdownMenu>
           <DropdownMenuTrigger asChild>
             <Button variant="outline" size="sm" className="gap-2">
@@ -87,7 +87,7 @@ export function DataTable<TData>({
               ))}
           </DropdownMenuContent>
         </DropdownMenu>
-      </div>
+      </div> */}
 
       <div className="overflow-x-auto rounded-lg border">
         <Table>

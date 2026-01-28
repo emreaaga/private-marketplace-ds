@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback } from "react";
+import { useState } from "react";
 
 import dynamic from "next/dynamic";
 
@@ -12,27 +12,25 @@ import { IconButton } from "@/shared/ui/molecules/icon-button";
 import { CreateDropdown } from "../create-dropdown";
 
 const CreateUserDialog = dynamic(() => import("../forms/create-user-dialog"), { ssr: false });
-const CreateCompanyDialog = dynamic(() => import("../forms/create-company-dialog"), { ssr: false });
+const CreateCompanyDialog = dynamic(() => import("../../../../companies/ui/organisms/create-company-dialog"), {
+  ssr: false,
+});
+const CreateServiceDialog = dynamic(() => import("@/features/services/ui/organisms/create-service-dialog"), {
+  ssr: false,
+});
+
+type DialogType = "user" | "company" | "service" | null;
+
+const DIALOGS = {
+  user: CreateUserDialog,
+  company: CreateCompanyDialog,
+  service: CreateServiceDialog,
+} as const;
 
 export function UsersToolbar() {
-  const [dialog, setDialog] = useState<"user" | "company" | null>(null);
-  const [shouldLoad, setShouldLoad] = useState(false);
+  const [dialog, setDialog] = useState<DialogType>(null);
 
-  const handleUserDialogChange = (open: boolean) => {
-    if (!open) {
-      setDialog(null);
-    }
-  };
-
-  const handleCompanyDialogChange = (open: boolean) => {
-    if (!open) {
-      setDialog(null);
-    }
-  };
-
-  const preload = useCallback(() => {
-    setShouldLoad(true);
-  }, []);
+  const ActiveDialog = dialog ? DIALOGS[dialog] : null;
 
   return (
     <>
@@ -46,9 +44,9 @@ export function UsersToolbar() {
           </InputGroup>
 
           <CreateDropdown
-            onPreload={preload}
             onCreateUser={() => setDialog("user")}
             onCreateCompany={() => setDialog("company")}
+            onCreateService={() => setDialog("service")}
           />
         </div>
 
@@ -59,12 +57,13 @@ export function UsersToolbar() {
         </div>
       </div>
 
-      {(dialog === "user" || shouldLoad) && (
-        <CreateUserDialog open={dialog === "user"} onOpenChange={handleUserDialogChange} />
-      )}
-
-      {(dialog === "company" || shouldLoad) && (
-        <CreateCompanyDialog open={dialog === "company"} onOpenChange={handleCompanyDialogChange} />
+      {ActiveDialog && (
+        <ActiveDialog
+          open
+          onOpenChange={(open: boolean) => {
+            if (!open) setDialog(null);
+          }}
+        />
       )}
     </>
   );

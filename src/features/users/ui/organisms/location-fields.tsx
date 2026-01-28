@@ -1,7 +1,7 @@
 import { Phone } from "lucide-react";
 
 import { cn } from "@/shared/lib/utils";
-import type { CountryCode } from "@/shared/types/company/country.types";
+import type { CountryCode } from "@/shared/types/geography/country.types";
 import { Input } from "@/shared/ui/atoms/input";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/shared/ui/atoms/select";
 import { Textarea } from "@/shared/ui/atoms/textarea";

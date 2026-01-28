@@ -16,6 +16,7 @@ export function DataTablePagination({ table }: Props) {
         <Select
           value={`${table.getState().pagination.pageSize}`}
           onValueChange={(value) => table.setPageSize(Number(value))}
+          disabled
         >
           <SelectTrigger size="sm" className="w-20">
             <SelectValue />
