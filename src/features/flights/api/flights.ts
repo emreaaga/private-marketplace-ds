@@ -21,4 +21,10 @@ export const flightsService = {
     const { data } = await api.get<ApiResponse<FlightDetails>>(`/flights/${id}`);
     return data.data;
   },
+
+  async updateFlight(id: number, payload: unknown) {
+    console.log(id, payload);
+    // const { data } = await api.put(`/flights/${id}`, payload);
+    // return data;
+  },
 };
