@@ -10,7 +10,7 @@ import {
   DropdownMenuItem,
 } from "@/shared/ui/atoms/dropdown-menu";
 
-import { formatMoney, formatWeight } from "./finance";
+import { formatWeight } from "./finance";
 
 export const STATUS_META = {
   planned: { label: "План", icon: Calendar, variant: "secondary" },

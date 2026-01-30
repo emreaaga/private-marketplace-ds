@@ -38,22 +38,22 @@ export const usersColumns: ColumnDef<User>[] = [
   {
     accessorKey: "company_name",
     header: "Фирма",
-  },
-  {
-    accessorKey: "company_type",
-    header: "Тип компании",
-    cell: ({ getValue }) => {
-      const type = getValue<User["company_type"]>();
+    cell: ({ row }) => {
+      const type = row.original.company_type;
       const meta = COMPANY_TYPE_META[type];
 
       return (
-        <MinimalBadge>
-          <meta.Icon className="text-muted-foreground h-3.5 w-3.5" />
-          {meta.label}
-        </MinimalBadge>
+        <div className="inline-flex items-center gap-1">
+          <span title={meta.label}>
+            <meta.Icon className="text-muted-foreground h-3.5 w-3.5" />
+          </span>
+
+          <span className="truncate">{row.original.company_name}</span>
+        </div>
       );
     },
   },
+
   {
     accessorKey: "role",
     header: "Роль",
