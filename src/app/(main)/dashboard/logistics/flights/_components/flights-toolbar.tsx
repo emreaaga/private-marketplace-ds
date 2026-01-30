@@ -42,7 +42,7 @@ export function FlightsToolbar() {
         </div>
       </div>
 
-      {open && <FlightsDialog open={open} onOpenChange={setOpen} />}
+      {open && <FlightsDialog open={open} onOpenChangeAction={setOpen} />}
     </>
   );
 }

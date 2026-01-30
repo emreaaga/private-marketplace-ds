@@ -1,201 +1,215 @@
 "use client";
 
-import { forwardRef, useEffect, useImperativeHandle, useMemo, useState } from "react";
+import { useState } from "react";
+
+import { Controller, useFormContext } from "react-hook-form";
+import { toast } from "sonner";
 
 import { servicesService } from "@/features/services/api/services";
 import { CompanySelect } from "@/features/users/ui/organisms/company-select";
-import type { CountryCode } from "@/shared/types/geography/country.types";
+import type { FlightFormValues } from "@/shared/types/flight/flight-create.schema";
 import type { Service } from "@/shared/types/services/services.model";
 import { DateTimePicker } from "@/shared/ui/atoms/date-picker";
 import { Field } from "@/shared/ui/atoms/field";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/shared/ui/atoms/select";
 import CountryCityPopoverSelect from "@/shared/ui/atoms/select-with-flags";
 
-type CountryCityValue = {
-  country: CountryCode | null;
-  city: string | null;
-};
-
-export type FlightFormValues = {
-  departure_location: CountryCityValue;
-  arrival_location: CountryCityValue;
-
-  air_partner_id?: number;
-  sender_customs_id?: number;
-  receiver_customs_id?: number;
-
-  air_service_id?: number;
-  air_kg_price?: string;
-
-  loading_at?: Date;
-  departure_at?: Date;
-  arrival_at?: Date;
-  unloading_at?: Date;
-};
-
-export type FlightPartiesFormHandle = {
-  getValues: () => FlightFormValues;
-};
-
-type PricedService = Service & { price: number | string };
-
-function toMoney2(v: unknown): string | undefined {
+function money2(v: unknown): string {
   const n = Number(v);
-  if (!Number.isFinite(n)) return undefined;
-  return n.toFixed(2);
+  return Number.isFinite(n) ? n.toFixed(2) : "—";
 }
 
-export const FlightPartiesForm = forwardRef<FlightPartiesFormHandle, object>(function FlightPartiesForm(_props, ref) {
-  const [airPartnerId, setAirPartnerId] = useState<number | undefined>();
-  const [senderCustomsId, setSenderCustomsId] = useState<number | undefined>();
-  const [receiverCustomsId, setReceiverCustomsId] = useState<number | undefined>();
+export function FlightPartiesForm() {
+  const { control, setValue, watch } = useFormContext<FlightFormValues>();
 
-  const [airServices, setAirServices] = useState<PricedService[]>([]);
-  const [airServiceId, setAirServiceId] = useState<number | undefined>();
+  const airPartnerId = watch("air_partner_id"); // number | undefined
+  const [services, setServices] = useState<Service[]>([]);
+  const [loadingServices, setLoadingServices] = useState(false);
 
-  const selectedAirService = useMemo(() => airServices.find((s) => s.id === airServiceId), [airServices, airServiceId]);
-
-  const [departureLocation, setDepartureLocation] = useState<CountryCityValue>({ country: null, city: null });
-  const [arrivalLocation, setArrivalLocation] = useState<CountryCityValue>({ country: null, city: null });
-
-  const [loadingAt, setLoadingAt] = useState<Date>();
-  const [departureAt, setDepartureAt] = useState<Date>();
-  const [arrivalAt, setArrivalAt] = useState<Date>();
-  const [unloadingAt, setUnloadingAt] = useState<Date>();
-
-  useImperativeHandle(
-    ref,
-    () => ({
-      getValues: () => ({
-        departure_location: departureLocation,
-        arrival_location: arrivalLocation,
-
-        air_partner_id: airPartnerId,
-        sender_customs_id: senderCustomsId,
-        receiver_customs_id: receiverCustomsId,
-
-        air_service_id: airServiceId,
-        air_kg_price: selectedAirService ? toMoney2(selectedAirService.price) : undefined,
-
-        loading_at: loadingAt,
-        departure_at: departureAt,
-        arrival_at: arrivalAt,
-        unloading_at: unloadingAt,
-      }),
-    }),
-    [
-      departureLocation,
-      arrivalLocation,
-      airPartnerId,
-      senderCustomsId,
-      receiverCustomsId,
-      airServiceId,
-      selectedAirService,
-      loadingAt,
-      departureAt,
-      arrivalAt,
-      unloadingAt,
-    ],
-  );
-
-  const handleAirPartnerChange = (id?: number) => {
-    setAirPartnerId(id);
-    setAirServices([]);
-    setAirServiceId(undefined);
-  };
-
-  useEffect(() => {
-    if (!airPartnerId) return;
-
-    servicesService
-      .getServices({
-        company_id: airPartnerId,
+  async function loadServices(companyId: number) {
+    setLoadingServices(true);
+    try {
+      const data = await servicesService.getServices({
+        company_id: companyId,
         type: "flight",
         pricing_type: "per_kg",
-      })
-      .then((services) => {
-        const priced = services as PricedService[];
-        setAirServices(priced);
-        if (priced.length === 1) setAirServiceId(priced[0].id);
       });
-  }, [airPartnerId]);
+      setServices(data);
+    } catch {
+      setServices([]);
+      toast.error("Не удалось загрузить услуги");
+    } finally {
+      setLoadingServices(false);
+    }
+  }
+
+  const serviceSelectDisabled = !airPartnerId || loadingServices;
 
   return (
     <div className="space-y-4 text-xs">
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
         <Field>
-          <CompanySelect
-            type="air_partner"
-            placeholder="Авиапартнёр"
-            value={airPartnerId}
-            onChange={handleAirPartnerChange}
+          <Controller
+            name="air_partner_id"
+            control={control}
+            render={({ field }) => (
+              <CompanySelect
+                type="air_partner"
+                placeholder="Авиапартнёр"
+                value={field.value}
+                onChange={(id) => {
+                  field.onChange(id);
+                  setServices([]);
+                  setValue("air_service_id", undefined, { shouldValidate: true, shouldDirty: true });
+                  setValue("air_kg_price", "", { shouldValidate: true, shouldDirty: true });
+
+                  if (id) void loadServices(id);
+                }}
+              />
+            )}
           />
         </Field>
 
         <Field>
-          <Select
-            value={airServiceId ? String(airServiceId) : undefined}
-            onValueChange={(v) => setAirServiceId(Number(v))}
-            disabled={!airPartnerId || airServices.length === 0}
-          >
-            <SelectTrigger>
-              <SelectValue placeholder="Услуга авиапартнёра" />
-            </SelectTrigger>
+          <Controller
+            name="air_service_id"
+            control={control}
+            render={({ field }) => (
+              <Select
+                value={field.value ? String(field.value) : undefined}
+                onValueChange={(v) => {
+                  const serviceId = Number(v);
+                  field.onChange(serviceId);
 
-            <SelectContent>
-              {airServices.map((service) => (
-                <SelectItem key={service.id} value={String(service.id)}>
-                  ${Number(service.price).toFixed(2)} / кг
-                </SelectItem>
-              ))}
-            </SelectContent>
-          </Select>
+                  const s = services.find((x) => x.id === serviceId);
+                  setValue("air_kg_price", s ? money2(s.price) : "", {
+                    shouldValidate: true,
+                    shouldDirty: true,
+                  });
+                }}
+                disabled={serviceSelectDisabled}
+              >
+                <SelectTrigger>
+                  <SelectValue
+                    placeholder={
+                      !airPartnerId
+                        ? "Услуга авиапартнёра"
+                        : loadingServices
+                          ? "Загрузка..."
+                          : services.length === 0
+                            ? "Нет услуг"
+                            : "Услуга авиапартнёра"
+                    }
+                  />
+                </SelectTrigger>
+
+                <SelectContent>
+                  {services.length === 0 && airPartnerId && !loadingServices ? (
+                    <SelectItem value="__empty__" disabled>
+                      Нет услуг
+                    </SelectItem>
+                  ) : (
+                    services.map((s) => (
+                      <SelectItem key={s.id} value={String(s.id)}>
+                        ${money2(s.price)} / кг
+                      </SelectItem>
+                    ))
+                  )}
+                </SelectContent>
+              </Select>
+            )}
+          />
         </Field>
       </div>
 
       <div className="flex gap-2">
         <Field className="flex-1">
-          <CountryCityPopoverSelect value={departureLocation} onChange={setDepartureLocation} />
+          <Controller
+            name="departure_location"
+            control={control}
+            render={({ field }) => <CountryCityPopoverSelect value={field.value} onChange={field.onChange} />}
+          />
         </Field>
 
         <Field className="flex-1">
-          <CountryCityPopoverSelect value={arrivalLocation} onChange={setArrivalLocation} />
-        </Field>
-      </div>
-
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-        <Field>
-          <DateTimePicker placeholder="Дата/время погрузки" value={loadingAt} onChange={setLoadingAt} />
-        </Field>
-        <Field>
-          <DateTimePicker placeholder="Дата/время разгрузки" value={unloadingAt} onChange={setUnloadingAt} />
-        </Field>
-      </div>
-
-      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-        <Field>
-          <CompanySelect
-            type="customs_broker"
-            placeholder="Отпр. (таможня)"
-            value={senderCustomsId}
-            onChange={setSenderCustomsId}
-          />
-        </Field>
-
-        <Field>
-          <CompanySelect
-            type="customs_broker"
-            placeholder="Получ. (таможня)"
-            value={receiverCustomsId}
-            onChange={setReceiverCustomsId}
+          <Controller
+            name="arrival_location"
+            control={control}
+            render={({ field }) => <CountryCityPopoverSelect value={field.value} onChange={field.onChange} />}
           />
         </Field>
       </div>
 
       <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
-        <DateTimePicker placeholder="Дата/время вылета" value={departureAt} onChange={setDepartureAt} />
-        <DateTimePicker placeholder="Дата/время прилёта" value={arrivalAt} onChange={setArrivalAt} />
+        <Field>
+          <Controller
+            name="loading_at"
+            control={control}
+            render={({ field }) => (
+              <DateTimePicker placeholder="Дата/время погрузки" value={field.value} onChange={field.onChange} />
+            )}
+          />
+        </Field>
+
+        <Field>
+          <Controller
+            name="unloading_at"
+            control={control}
+            render={({ field }) => (
+              <DateTimePicker placeholder="Дата/время разгрузки" value={field.value} onChange={field.onChange} />
+            )}
+          />
+        </Field>
+      </div>
+
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+        <Field>
+          <Controller
+            name="sender_customs_id"
+            control={control}
+            render={({ field }) => (
+              <CompanySelect
+                type="customs_broker"
+                placeholder="Отпр. (таможня)"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </Field>
+
+        <Field>
+          <Controller
+            name="receiver_customs_id"
+            control={control}
+            render={({ field }) => (
+              <CompanySelect
+                type="customs_broker"
+                placeholder="Получ. (таможня)"
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
+          />
+        </Field>
+      </div>
+
+      <div className="grid grid-cols-1 gap-2 md:grid-cols-2">
+        <Controller
+          name="departure_at"
+          control={control}
+          render={({ field }) => (
+            <DateTimePicker placeholder="Дата/время вылета" value={field.value} onChange={field.onChange} />
+          )}
+        />
+        <Controller
+          name="arrival_at"
+          control={control}
+          render={({ field }) => (
+            <DateTimePicker placeholder="Дата/время прилёта" value={field.value} onChange={field.onChange} />
+          )}
+        />
       </div>
     </div>
   );
-});
+}

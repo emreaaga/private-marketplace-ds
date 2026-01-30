@@ -9,6 +9,6 @@ export type Service = {
   company_type: CompanyType;
   type: ServiceType;
   pricing_type: ServicePrice;
-  price: number;
+  price: string;
   is_active: boolean;
 };
