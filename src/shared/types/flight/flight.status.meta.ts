@@ -1,3 +1,5 @@
+import type React from "react";
+
 import { Calendar, Plane, CheckCircle } from "lucide-react";
 
 import type { Flight } from "@/shared/types/flight/flight.model";
@@ -9,25 +11,11 @@ export const FLIGHT_STATUS_META: Record<
   {
     label: string;
     Icon: React.FC<{ className?: string }>;
+    variant: "default" | "secondary" | "destructive" | "outline";
   }
 > = {
-  planned: {
-    label: "Создан",
-    Icon: Calendar,
-  },
-
-  departed: {
-    label: "В пути",
-    Icon: Plane,
-  },
-
-  arrived: {
-    label: "Прибыл",
-    Icon: CheckCircle,
-  },
-
-  closed: {
-    label: "Закрыт",
-    Icon: CheckCircle,
-  },
+  planned: { label: "Создан", Icon: Calendar, variant: "secondary" },
+  departed: { label: "В пути", Icon: Plane, variant: "default" },
+  arrived: { label: "Прибыл", Icon: CheckCircle, variant: "default" },
+  closed: { label: "Закрыт", Icon: CheckCircle, variant: "secondary" },
 };
