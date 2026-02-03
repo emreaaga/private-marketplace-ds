@@ -1,7 +1,7 @@
 import { ColumnDef } from "@tanstack/react-table";
 
 import type { Shipment } from "@/shared/types/shipment/shipment.model";
-import { formatMoney } from "@/shared/ui/molecules/format-money";
+import { SHIPMENT_STATUS_META } from "@/shared/types/shipment/shipment.status.meta";
 import { formatQuantity } from "@/shared/ui/molecules/format-quantity";
 import { formatWeight } from "@/shared/ui/molecules/format-weight";
 
@@ -37,5 +37,17 @@ export const ShipmentsColumns: ColumnDef<Shipment>[] = [
   {
     accessorKey: "status",
     header: "Статус",
+    cell: ({ row }) => {
+      const status = row.original.status;
+      const meta = SHIPMENT_STATUS_META[status];
+      const Icon = meta.Icon;
+
+      return (
+        <div className="text-muted-foreground flex items-center gap-1.5 text-sm">
+          <Icon className="h-4 w-4" />
+          <span>{meta.label}</span>
+        </div>
+      );
+    },
   },
 ];

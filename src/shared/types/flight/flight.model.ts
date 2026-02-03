@@ -1,4 +1,4 @@
-import { type FlightStatuses } from "./flight.statuses";
+import { type FlightStatuses } from "./flight.status";
 
 export type Flight = {
   id: number;

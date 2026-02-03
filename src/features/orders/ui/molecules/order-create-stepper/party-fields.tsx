@@ -1,93 +1,111 @@
 "use client";
+
+import { Phone } from "lucide-react";
+
 import { cn } from "@/shared/lib/utils";
+import type { ClientForm } from "@/shared/types/client/client.form";
+import { COUNTRY_META } from "@/shared/types/geography/country.meta";
 import { Input } from "@/shared/ui/atoms/input";
-
-import { Party } from "./types";
-
-const ghostInput =
-  "border-0 shadow-none bg-transparent transition-colors " +
-  "hover:bg-muted/50 focus:bg-background " +
-  "focus-visible:ring-0 focus-visible:ring-offset-0";
+import CountryCityPopoverSelect from "@/shared/ui/atoms/select-with-flags";
 
 export function PartyFields({
   title,
   value,
-  onChange,
+  onChangeAction,
 }: {
   title: string;
-  value: Party;
-  onChange: (patch: Partial<Party>) => void;
+  value: ClientForm;
+  onChangeAction: (patch: Partial<ClientForm>) => void;
 }) {
+  const phoneCode = value.country ? COUNTRY_META[value.country].phoneCode : null;
+
   return (
-    <div className="bg-muted/60 space-y-2 rounded-md">
-      <h3 className="text-sm font-medium">{title}</h3>
+    <section className="bg-background space-y-2 p-2">
+      <div className="flex items-center justify-between gap-2">
+        <h3 className="text-sm font-medium">{title}</h3>
 
-      <Input placeholder="TR" disabled />
-      <Input
-        className={cn(ghostInput)}
-        placeholder="Код"
-        value={value.code}
-        onChange={(e) => onChange({ code: e.target.value })}
-      />
-
-      <div className="flex">
         <Input
-          className={cn("flex-1", ghostInput)}
+          className="h-6 w-30"
+          placeholder="Код клиента"
+          value={value.code}
+          onChange={(e) => onChangeAction({ code: e.target.value })}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <Input
+          className="h-9"
           placeholder="Имя"
           value={value.firstName}
-          onChange={(e) => onChange({ firstName: e.target.value })}
+          onChange={(e) => onChangeAction({ firstName: e.target.value })}
         />
-
         <Input
-          className={cn("flex-1", ghostInput)}
+          className="h-9"
           placeholder="Фамилия"
           value={value.lastName}
-          onChange={(e) => onChange({ lastName: e.target.value })}
+          onChange={(e) => onChangeAction({ lastName: e.target.value })}
         />
       </div>
 
-      <div className="flex">
+      <div className="grid grid-cols-2 gap-2">
         <Input
-          className={cn("flex-1", ghostInput)}
+          className="h-9"
           placeholder="Паспорт"
-          value={value.passport1}
-          onChange={(e) => onChange({ passport1: e.target.value })}
+          value={value.passports[0] ?? ""}
+          onChange={(e) =>
+            onChangeAction({
+              passports: [e.target.value, value.passports[1] ?? ""],
+            })
+          }
         />
+
         <Input
-          className={cn("flex-1", ghostInput)}
+          className="h-9"
           placeholder="Паспорт 2"
-          value={value.passport2 ?? ""}
-          onChange={(e) => onChange({ passport2: e.target.value })}
+          value={value.passports[1] ?? ""}
+          onChange={(e) =>
+            onChangeAction({
+              passports: [value.passports[0] ?? "", e.target.value],
+            })
+          }
         />
       </div>
 
-      <div className="flex">
-        <Input
-          className={cn("flex-1", ghostInput)}
-          placeholder="Город"
-          value={value.city}
-          onChange={(e) => onChange({ city: e.target.value })}
-        />
-        <Input
-          className={cn("flex-1", ghostInput)}
-          placeholder="Район"
-          value={value.district}
-          onChange={(e) => onChange({ district: e.target.value })}
-        />
-      </div>
+      <CountryCityPopoverSelect
+        mode="country-city-district"
+        value={{ country: value.country, city: value.city, district: value.district }}
+        onChange={({ country, city, district }) => {
+          const nextPhoneCode = country ? COUNTRY_META[country].phoneCode : "";
 
-      <Input
-        className={cn(ghostInput)}
-        placeholder="Телефон"
-        value={value.phone}
-        onChange={(e) => onChange({ phone: e.target.value })}
+          onChangeAction({
+            country,
+            city,
+            district,
+            phone_country_code: nextPhoneCode,
+          });
+        }}
       />
       <Input
-        className={cn(ghostInput)}
+        className="h-9"
         placeholder="Адрес"
         value={value.address}
-        onChange={(e) => onChange({ address: e.target.value })}
+        onChange={(e) => onChangeAction({ address: e.target.value })}
       />
-    </div>
+
+      <div className="relative">
+        <span className="text-muted-foreground absolute top-1/2 left-2 -translate-y-1/2 text-sm">
+          {phoneCode ?? <Phone className="h-4 w-4 opacity-60" />}
+        </span>
+
+        <Input
+          className={cn("h-9 pl-12")}
+          placeholder="Номер телефона"
+          disabled={!value.country}
+          value={value.phone_number}
+          onChange={(e) => onChangeAction({ phone_number: e.target.value })}
+          inputMode="tel"
+        />
+      </div>
+    </section>
   );
 }

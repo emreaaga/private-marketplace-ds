@@ -1,22 +1,24 @@
 "use client";
+
+import type { ClientForm } from "@/shared/types/client/client.form";
+
 import { PartyFields } from "../party-fields";
-import { Party } from "../types";
 
 export function StepParties({
   sender,
   receiver,
-  onSenderChange,
-  onReceiverChange,
+  onSenderChangeAction,
+  onReceiverChangeAction,
 }: {
-  sender: Party;
-  receiver: Party;
-  onSenderChange: (patch: Partial<Party>) => void;
-  onReceiverChange: (patch: Partial<Party>) => void;
+  sender: ClientForm;
+  receiver: ClientForm;
+  onSenderChangeAction: (patch: Partial<ClientForm>) => void;
+  onReceiverChangeAction: (patch: Partial<ClientForm>) => void;
 }) {
   return (
-    <div className="grid gap-3 md:grid-cols-2">
-      <PartyFields title="Отправитель" value={sender} onChange={onSenderChange} />
-      <PartyFields title="Получатель" value={receiver} onChange={onReceiverChange} />
+    <div className="space-y-4">
+      <PartyFields title="Отправитель" value={sender} onChangeAction={onSenderChangeAction} />
+      <PartyFields title="Получатель" value={receiver} onChangeAction={onReceiverChangeAction} />
     </div>
   );
 }

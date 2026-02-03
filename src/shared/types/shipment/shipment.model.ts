@@ -1,4 +1,4 @@
-import { ShipmentStatuses } from "./shipment.statuses";
+import { ShipmentStatuses } from "./shipment.status";
 
 export type Shipment = {
   id: number;

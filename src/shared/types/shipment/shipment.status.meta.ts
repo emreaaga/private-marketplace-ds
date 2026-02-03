@@ -1,6 +1,6 @@
 import { Calendar, PackageCheck, Plane, MapPinCheck, Lock } from "lucide-react";
 
-import type { ShipmentStatuses } from "@/shared/types/shipment/shipment.statuses";
+import type { ShipmentStatuses } from "@/shared/types/shipment/shipment.status";
 
 export const SHIPMENT_STATUS_META: Record<
   ShipmentStatuses,

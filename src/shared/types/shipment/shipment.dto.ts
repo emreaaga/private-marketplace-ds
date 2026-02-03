@@ -1,6 +1,6 @@
 import type { CountryCode } from "@/shared/types/geography/country.types";
 
-import type { ShipmentStatuses } from "./shipment.statuses";
+import type { ShipmentStatuses } from "./shipment.status";
 
 export type CreateShipmentDto = {
   company_id: number;

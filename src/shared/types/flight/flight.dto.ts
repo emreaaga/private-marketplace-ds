@@ -1,6 +1,6 @@
 import type { CountryCode } from "@/shared/types/geography/country.types";
 
-import { FlightStatuses } from "./flight.statuses";
+import { FlightStatuses } from "./flight.status";
 
 export type CountryCityDto = {
   country: CountryCode;

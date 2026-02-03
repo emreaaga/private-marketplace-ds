@@ -123,7 +123,7 @@ export function LocationFields({
       />
 
       <div className="relative">
-        <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2">
+        <span className="text-muted-foreground absolute top-1/2 left-3 -translate-y-1/2 text-sm">
           {country ? phoneCode : <Phone className="h-4 w-4 opacity-60" />}
         </span>
 

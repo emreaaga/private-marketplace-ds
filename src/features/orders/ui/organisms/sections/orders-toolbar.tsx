@@ -12,9 +12,7 @@ import { IconButton } from "@/shared/ui/molecules/icon-button";
 
 const OrderCreateDialog = dynamic(
   () =>
-    import("@/features/orders/ui/molecules/order-create-stepper/order-create-stepper-dialog").then(
-      (m) => m.OrderCreateStepperDialog,
-    ),
+    import("@/features/orders/ui/molecules/order-create-stepper/create-order-dialog").then((m) => m.CreateOrderDialog),
   { loading: () => null },
 );
 

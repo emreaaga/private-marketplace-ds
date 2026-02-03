@@ -11,7 +11,7 @@ import { EntitySearch } from "@/shared/ui/molecules/entity-search";
 import { CLIENTS } from "../../fake-clients";
 import { SELLERS } from "../../fake-sellers";
 
-import { ProductList } from "./order-create-stepper/steps/product-list";
+import { ProductList } from "./product-list/product-list";
 
 interface OrderCreateDialogProps {
   open: boolean;
