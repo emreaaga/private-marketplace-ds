@@ -21,8 +21,8 @@ import { StepParties } from "./steps/step-parties";
 
 function mapClientToApi(value: ClientForm) {
   return {
-    firstName: value.firstName,
-    lastName: value.lastName,
+    name: value.firstName,
+    surname: value.lastName,
     country: value.country ?? null,
     city: value.city ?? null,
     district: value.district ?? null,
@@ -56,7 +56,6 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
     onOpenChange(next);
   };
 
-  // ---- money math (bigint-safe) ----
   const weightMilli = React.useMemo(() => toMilli(summary.weight_kg), [summary.weight_kg]);
 
   const rateCents = React.useMemo(() => toCents(summary.rate_per_kg), [summary.rate_per_kg]);
@@ -79,7 +78,7 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
     const payload = {
       sender: mapClientToApi(sender),
       receiver: mapClientToApi(receiver),
-      items: itemsDto,
+      order_items: itemsDto,
       summary: {
         shipment_id: summary.shipment_id ? Number(summary.shipment_id) : null,
         weight_kg: toFixedScaleForApi(summary.weight_kg, 2),
@@ -91,7 +90,6 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
 
     console.log("ORDER_CREATE_PAYLOAD:", payload);
     toast.success("Payload выведен в консоль");
-    handleOpenChange(false);
   };
 
   return (
