@@ -27,7 +27,7 @@ async function getAuthSession() {
   const refresh = cookieStore.get("refresh_token");
   if (!refresh) return null;
 
-  const res = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {
+  const res = await fetch(`${process.env.INTERNAL_API_URL}/auth/refresh`, {
     method: "POST",
     headers: {
       Cookie: `refresh_token=${refresh.value}`,

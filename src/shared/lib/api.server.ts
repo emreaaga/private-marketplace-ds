@@ -3,7 +3,7 @@ import { cookies } from "next/headers";
 import axios from "axios";
 
 export const apiServer = axios.create({
-  baseURL: process.env.INTERNAL_API_URL ?? process.env.NEXT_PUBLIC_API_URL,
+  baseURL: process.env.INTERNAL_API_URL,
   withCredentials: true,
 });
 
