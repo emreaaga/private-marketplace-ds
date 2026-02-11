@@ -18,6 +18,6 @@ export const companiesService = {
       params,
     });
 
-    return data;
+    return data.data;
   },
 };

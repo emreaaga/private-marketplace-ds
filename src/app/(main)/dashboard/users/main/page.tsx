@@ -3,7 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 
 import { usersService } from "@/features/users/api/users";
-import { DeleteUserDialog } from "@/features/users/ui/organisms/delete-user-dialog";
+import { DeleteUserDialog } from "@/features/users/ui/organisms/dialogs/delete-user/delete-user-dialog";
 import { EditUserDialog } from "@/features/users/ui/organisms/dialogs/edit-user/edit-user-dialog";
 import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
 import { createUsersColumns } from "@/features/users/ui/organisms/users-columns";
@@ -19,6 +19,9 @@ export default function UsersMainPage() {
   const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
   const [selectedUserName, setSelectedUserName] = useState<string | undefined>(undefined);
   const [mode, setMode] = useState<UserActionMode>(null);
+
+  const [deleting, setDeleting] = useState(false);
+  const [deleteError, setDeleteError] = useState<string | null>(null);
 
   useEffect(() => {
     usersService
@@ -38,13 +41,42 @@ export default function UsersMainPage() {
         onDelete: (user) => {
           setSelectedUserId(user.id);
           setSelectedUserName(user.name);
+          setDeleteError(null);
           setMode("delete");
         },
       }),
     [],
   );
 
-  const close = () => setMode(null);
+  const close = () => {
+    if (deleting) return;
+    setMode(null);
+    setSelectedUserId(null);
+    setSelectedUserName(undefined);
+    setDeleteError(null);
+  };
+
+  const handleDeleteConfirm = async (id: number) => {
+    if (deleting) return;
+
+    setDeleting(true);
+    setDeleteError(null);
+
+    const prev = users;
+    setUsers((cur) => cur.filter((u) => u.id !== id));
+
+    try {
+      await usersService.deleteUser(id);
+      setMode(null);
+      setSelectedUserId(null);
+      setSelectedUserName(undefined);
+    } catch {
+      setUsers(prev);
+      setDeleteError("Не удалось удалить пользователя. Попробуйте снова.");
+    } finally {
+      setDeleting(false);
+    }
+  };
 
   return (
     <div className="space-y-4">
@@ -58,7 +90,6 @@ export default function UsersMainPage() {
         onOpenChange={(open) => !open && setMode(null)}
         onSubmit={(id, values) => {
           console.log("submit edit", id, values);
-          // TODO: usersService.updateUser(id, values)
         }}
       />
 
@@ -67,11 +98,9 @@ export default function UsersMainPage() {
         userId={selectedUserId}
         userName={selectedUserName}
         onOpenChange={(open) => !open && close()}
-        onConfirm={(id) => {
-          // TODO: usersService.deleteUser(id)
-          // пока заглушка
-          console.log("delete user id:", id);
-        }}
+        onConfirm={handleDeleteConfirm}
+        pending={deleting}
+        error={deleteError}
       />
     </div>
   );

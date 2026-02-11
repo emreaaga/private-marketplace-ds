@@ -5,10 +5,24 @@ import type { User, UserDetail } from "@/shared/types/users";
 
 import { CreateUserDto } from "../types/create-user.dto";
 
+export type UsersPagination = {
+  page: number;
+  limit: number;
+  total: number;
+  totalPages: number;
+  hasNext: boolean;
+  hasPrev: boolean;
+};
+
+export type UsersListResponse = {
+  data: User[];
+  pagination: UsersPagination;
+};
+
 export const usersService = {
   async getUsers(): Promise<User[]> {
     const { data } = await api.get("/users");
-    return data.users;
+    return data.data;
   },
 
   async createUser(payload: CreateUserDto): Promise<User> {

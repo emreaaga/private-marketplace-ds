@@ -1,14 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/ui/atoms/button";
-import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-} from "@/shared/ui/atoms/dialog";
+import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
 
 export function DeleteUserDialog({
   open,
@@ -16,21 +9,24 @@ export function DeleteUserDialog({
   userName,
   onOpenChange,
   onConfirm,
+  pending = false,
+  error,
 }: {
   open: boolean;
   userId: number | null;
   userName?: string;
   onOpenChange(open: boolean): void;
   onConfirm?(userId: number): void;
+  pending?: boolean;
+  error?: string | null;
 }) {
-  const disabled = userId == null;
+  const disabled = userId == null || pending;
 
   return (
-    <Dialog open={open} onOpenChange={onOpenChange}>
+    <Dialog open={open} onOpenChange={(next) => (!pending ? onOpenChange(next) : undefined)}>
       <DialogContent>
         <DialogHeader>
           <DialogTitle>Удалить пользователя</DialogTitle>
-          <DialogDescription>Действие необратимо.</DialogDescription>
         </DialogHeader>
 
         <div className="text-sm">
@@ -38,20 +34,22 @@ export function DeleteUserDialog({
           <span className="font-medium">{userId ?? "—"}</span>)?
         </div>
 
+        {error ? <div className="text-destructive text-sm">{error}</div> : null}
+
         <DialogFooter>
-          <Button variant="secondary" onClick={() => onOpenChange(false)}>
+          <Button variant="secondary" disabled={pending} onClick={() => onOpenChange(false)}>
             Отмена
           </Button>
+
           <Button
             variant="destructive"
             disabled={disabled}
             onClick={() => {
               if (userId == null) return;
               onConfirm?.(userId);
-              onOpenChange(false);
             }}
           >
-            Удалить (пока заглушка)
+            {pending ? "Удаление…" : "Удалить"}
           </Button>
         </DialogFooter>
       </DialogContent>
