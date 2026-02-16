@@ -24,6 +24,10 @@ export type UsersTableActions = {
 export function createUsersColumns(actions: UsersTableActions): ColumnDef<User>[] {
   return [
     {
+      accessorKey: "id",
+      header: "ID",
+    },
+    {
       accessorKey: "name",
       header: "Имя",
       cell: ({ row, getValue }) => {

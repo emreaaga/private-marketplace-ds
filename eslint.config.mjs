@@ -37,6 +37,7 @@ export default defineConfig([
     rules: {
       // Prettier integration rules
       "prettier/prettier": "warn",
+      "security/detect-object-injection": "off",
 
       // File Naming
       "unicorn/filename-case": [

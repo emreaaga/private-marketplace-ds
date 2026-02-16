@@ -16,26 +16,23 @@ export function DeleteDialog({ open, entityId, pending = false, onOpenChange, on
     <Dialog open={open} onOpenChange={(next) => !pending && onOpenChange(next)}>
       <DialogContent>
         <DialogHeader>
-          <DialogTitle>Удалить</DialogTitle>
+          <DialogTitle className="text-md">
+            Вы действительно хотите удалить
+            {entityId ? (
+              <>
+                {" "}
+                ID: <span className="font-medium">{entityId}</span>
+              </>
+            ) : null}
+            ?
+          </DialogTitle>
         </DialogHeader>
-
-        <div className="text-sm">
-          Удалить
-          {entityId ? (
-            <>
-              {" "}
-              (ID: <span className="font-medium">{entityId}</span>)
-            </>
-          ) : null}
-          ?
-        </div>
-
         <DialogFooter>
-          <Button variant="secondary" disabled={pending} onClick={() => onOpenChange(false)}>
+          <Button size="sm" variant="secondary" disabled={pending} onClick={() => onOpenChange(false)}>
             Отмена
           </Button>
 
-          <Button variant="destructive" disabled={pending} onClick={() => !pending && onConfirm()}>
+          <Button size="sm" variant="destructive" disabled={pending} onClick={() => !pending && onConfirm()}>
             {pending ? "Удаление…" : "Удалить"}
           </Button>
         </DialogFooter>

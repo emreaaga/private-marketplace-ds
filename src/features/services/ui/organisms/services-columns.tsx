@@ -17,6 +17,10 @@ function MinimalBadge({ children }: { children: ReactNode }) {
 
 export const servicesColumns: ColumnDef<Service>[] = [
   {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
     accessorKey: "company_name",
     header: "Фирма",
     cell: ({ row, getValue }) => {

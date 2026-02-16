@@ -24,6 +24,10 @@ export function StatusIndicator({ active }: { active: boolean }) {
 
 export const companiesColumns: ColumnDef<Company>[] = [
   {
+    accessorKey: "id",
+    header: "ID",
+  },
+  {
     accessorKey: "name",
     header: "Название",
     cell: ({ row, getValue }) => {

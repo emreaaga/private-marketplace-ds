@@ -14,31 +14,31 @@ import { UserRoleSelect } from "./user-role-select";
 export function EditUserForm({
   form,
   user,
-  onSubmit,
+  onSubmitAction,
 }: {
   form: UseFormReturn<EditUserFormValues>;
   user: UserDetail;
-  onSubmit: (values: EditUserFormValues) => void | Promise<void>;
+  onSubmitAction: (values: EditUserFormValues) => void | Promise<void>;
 }) {
   const { register, handleSubmit, control, formState, clearErrors, setValue } = form;
 
   const country = useWatch({ control, name: "location.country" });
   const phoneNumber = useWatch({ control, name: "phone_number" });
+  const role = useWatch({ control, name: "role" });
+  console.log("role from form:", role);
 
   return (
-    <form id="edit-user-form" className="grid gap-4" onSubmit={handleSubmit(onSubmit)}>
-      {/* Row 1: Company + Role */}
+    <form id="edit-user-form" className="grid gap-4" onSubmit={handleSubmit(onSubmitAction)}>
       <div className="grid grid-cols-2 gap-3">
         <CompanyReadonlySelect companyName={user.company_name} companyType={user.company_type} />
 
         <Controller
           control={control}
           name="role"
-          render={({ field }) => <UserRoleSelect value={field.value} onChange={field.onChange} />}
+          render={({ field }) => <UserRoleSelect value={field.value} onChangeAction={field.onChange} />}
         />
       </div>
 
-      {/* Row 2: Country/City/District */}
       <Controller
         control={control}
         name="location"
@@ -48,7 +48,6 @@ export function EditUserForm({
             value={field.value}
             onChange={(v) => {
               field.onChange(v);
-              // если страну сбросили — очищаем телефон
               if (!v.country) setValue("phone_number", "");
             }}
             placeholder="Страна · Город · Район"
@@ -56,19 +55,16 @@ export function EditUserForm({
         )}
       />
 
-      {/* Row 3: Name + Surname */}
       <div className="grid grid-cols-2 gap-3">
         <FloatingLabelInput label="Имя" {...register("name")} />
         <FloatingLabelInput label="Фамилия" {...register("surname")} />
       </div>
 
-      {/* Row 4: Email */}
       <FloatingLabelInput label="Email" type="email" {...register("email")} />
 
-      {/* Row 5: Phone (depends on country) */}
       <PhoneNumberInput
         country={country}
-        value={phoneNumber ?? ""}
+        value={phoneNumber}
         error={!!formState.errors.phone_number}
         onChange={(v) => {
           setValue("phone_number", v, { shouldDirty: true });
@@ -76,7 +72,6 @@ export function EditUserForm({
         }}
       />
 
-      {/* Row 6: Address */}
       <FloatingLabelInput label="Адрес" {...register("address_line")} />
     </form>
   );
