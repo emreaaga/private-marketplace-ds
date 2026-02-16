@@ -1,8 +1,10 @@
+import type { CountryCode } from "../geography/country.types";
+
 import { User } from "./user.model";
 
 export type UserDetail = User & {
   surname: string;
-  country: string;
+  country: CountryCode;
   city: string;
   district: string;
   address_line: string | null;

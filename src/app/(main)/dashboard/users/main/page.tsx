@@ -1,106 +1,100 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { usersService } from "@/features/users/api/users";
-import { DeleteUserDialog } from "@/features/users/ui/organisms/dialogs/delete-user/delete-user-dialog";
+import { useDeleteUser } from "@/features/users/mutations/use-delete-user";
+import { useUpdateUser } from "@/features/users/mutations/use-update-user";
+import { useUsersList } from "@/features/users/queries/use-users-list";
 import { EditUserDialog } from "@/features/users/ui/organisms/dialogs/edit-user/edit-user-dialog";
 import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
 import { createUsersColumns } from "@/features/users/ui/organisms/users-columns";
-import type { User } from "@/shared/types/users/user.model";
+import { DeleteDialog } from "@/shared/ui/organisms/delete-dialog";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
-type UserActionMode = "edit" | "delete" | null;
+type Action = { type: "edit" | "delete"; userId: number } | null;
 
+const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
+
+// eslint-disable-next-line complexity
 export default function UsersMainPage() {
-  const [users, setUsers] = useState<User[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [action, setAction] = useState<Action>(null);
 
-  const [selectedUserId, setSelectedUserId] = useState<number | null>(null);
-  const [selectedUserName, setSelectedUserName] = useState<string | undefined>(undefined);
-  const [mode, setMode] = useState<UserActionMode>(null);
+  const [page, setPage] = useState(1);
 
-  const [deleting, setDeleting] = useState(false);
-  const [deleteError, setDeleteError] = useState<string | null>(null);
+  const { data, isLoading, isError } = useUsersList({ page });
 
-  useEffect(() => {
-    usersService
-      .getUsers()
-      .then(setUsers)
-      .finally(() => setLoading(false));
-  }, []);
+  const users = data?.data ?? [];
+  const pageCount = data?.pagination.totalPages ?? 1;
+
+  const deleteUser = useDeleteUser();
+  const updateUser = useUpdateUser();
+
+  const selectedUserId = action?.userId ?? null;
+  const mode = action?.type ?? null;
 
   const columns = useMemo(
     () =>
       createUsersColumns({
-        onEdit: (user) => {
-          setSelectedUserId(user.id);
-          setSelectedUserName(user.name);
-          setMode("edit");
-        },
-        onDelete: (user) => {
-          setSelectedUserId(user.id);
-          setSelectedUserName(user.name);
-          setDeleteError(null);
-          setMode("delete");
-        },
+        onEdit: (user) => setAction({ type: "edit", userId: user.id }),
+        onDelete: (user) => setAction({ type: "delete", userId: user.id }),
       }),
     [],
   );
 
   const close = () => {
-    if (deleting) return;
-    setMode(null);
-    setSelectedUserId(null);
-    setSelectedUserName(undefined);
-    setDeleteError(null);
+    if (deleteUser.isPending) return;
+    setAction(null);
   };
 
-  const handleDeleteConfirm = async (id: number) => {
-    if (deleting) return;
+  const emptyMessage = isLoading
+    ? "Загрузка..."
+    : isError
+      ? "Не удалось загрузить пользователей"
+      : "Пользователи не найдены";
 
-    setDeleting(true);
-    setDeleteError(null);
-
-    const prev = users;
-    setUsers((cur) => cur.filter((u) => u.id !== id));
-
-    try {
-      await usersService.deleteUser(id);
-      setMode(null);
-      setSelectedUserId(null);
-      setSelectedUserName(undefined);
-    } catch {
-      setUsers(prev);
-      setDeleteError("Не удалось удалить пользователя. Попробуйте снова.");
-    } finally {
-      setDeleting(false);
-    }
+  const onPageChange = (next: number) => {
+    setPage((prev) => {
+      const safeMax = Math.max(1, pageCount);
+      const clamped = clamp(next, 1, safeMax);
+      return prev === clamped ? prev : clamped;
+    });
   };
 
   return (
     <div className="space-y-4">
       <UsersToolbar />
 
-      <DataTable columns={columns} data={users} emptyMessage={loading ? "Загрузка..." : "Пользователи не найдены"} />
+      <DataTable
+        columns={columns}
+        data={users}
+        emptyMessage={emptyMessage}
+        serverPagination={{
+          page,
+          pageCount,
+          onPageChange,
+        }}
+        fixedPageSize={10}
+      />
 
       <EditUserDialog
         open={mode === "edit"}
         userId={selectedUserId}
-        onOpenChange={(open) => !open && setMode(null)}
-        onSubmit={(id, values) => {
-          console.log("submit edit", id, values);
+        onOpenChange={(open) => !open && close()}
+        onSubmitAction={async (id, values) => {
+          await updateUser.mutateAsync({ id, values });
         }}
       />
 
-      <DeleteUserDialog
+      <DeleteDialog
         open={mode === "delete"}
-        userId={selectedUserId}
-        userName={selectedUserName}
+        entityId={selectedUserId ?? undefined}
+        pending={deleteUser.isPending}
         onOpenChange={(open) => !open && close()}
-        onConfirm={handleDeleteConfirm}
-        pending={deleting}
-        error={deleteError}
+        onConfirm={async () => {
+          if (selectedUserId == null) return;
+          await deleteUser.mutateAsync(selectedUserId);
+          setAction(null);
+        }}
       />
     </div>
   );

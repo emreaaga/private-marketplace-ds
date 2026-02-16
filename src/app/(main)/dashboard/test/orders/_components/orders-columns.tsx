@@ -1,10 +1,19 @@
 import { ColumnDef } from "@tanstack/react-table";
 
+import { Order } from "@/shared/types/order/order-map.api";
+import { ORDER_STATUS_META } from "@/shared/types/order/order.status.meta";
 import { Badge } from "@/shared/ui/atoms/badge";
 
 import { formatMoney, formatWeight } from "../../_components/finance";
 
-import { Order, ORDER_STATUS_META } from "./order-type";
+const formatDateTime = (d: Date) =>
+  new Intl.DateTimeFormat("ru-RU", {
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+    hour: "2-digit",
+    minute: "2-digit",
+  }).format(d);
 
 export const OrdersColumns: ColumnDef<Order>[] = [
   {
@@ -64,5 +73,11 @@ export const OrdersColumns: ColumnDef<Order>[] = [
         </Badge>
       );
     },
+  },
+  {
+    accessorKey: "createdAt",
+    header: "Дата",
+    meta: { align: "right" },
+    cell: ({ row }) => <span className="whitespace-nowrap">{formatDateTime(row.original.createdAt)}</span>,
   },
 ];

@@ -2,8 +2,8 @@
 
 import * as React from "react";
 
-import { toast } from "sonner";
-
+import type { ApiClient, CreateOrderPayload } from "@/features/orders/api/orders";
+import { useCreateOrder } from "@/features/orders/mutations/use-create-order";
 import { centsToString, mulMilliByCents, toCents, toFixedScaleForApi, toMilli } from "@/shared/lib/money";
 import type { ClientForm } from "@/shared/types/client/client.form";
 import { emptyClientForm } from "@/shared/types/client/client.form.empty";
@@ -19,17 +19,22 @@ import { ProductList } from "../product-list";
 import { PartiesSummary } from "./steps/parties-summary";
 import { StepParties } from "./steps/step-parties";
 
-function mapClientToApi(value: ClientForm) {
+function mapClientToApi(value: ClientForm): ApiClient {
   return {
     name: value.firstName,
     surname: value.lastName,
     country: value.country ?? null,
     city: value.city ?? null,
     district: value.district ?? null,
-    address: value.address,
     phone_country_code: value.phone_country_code,
     phone_number: value.phone_number,
-    passports: value.passports.map((p) => p.trim()).filter(Boolean),
+
+    address_line: value.address,
+
+    passports: value.passports
+      .map((p) => p.trim())
+      .filter(Boolean)
+      .map((passport_number) => ({ passport_number })),
   };
 }
 
@@ -44,6 +49,8 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
   const [items, setItems] = React.useState<ItemUI[]>([]);
   const [summary, setSummary] = React.useState<OrderSummaryForm>(EMPTY_ORDER_SUMMARY_FORM);
 
+  const createOrder = useCreateOrder();
+
   const reset = React.useCallback(() => {
     setSender(emptyClientForm);
     setReceiver(emptyClientForm);
@@ -57,25 +64,21 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
   };
 
   const weightMilli = React.useMemo(() => toMilli(summary.weight_kg), [summary.weight_kg]);
-
   const rateCents = React.useMemo(() => toCents(summary.rate_per_kg), [summary.rate_per_kg]);
-
   const shippingCents = React.useMemo(() => mulMilliByCents(weightMilli, rateCents), [weightMilli, rateCents]);
-
   const extraFeeCents = React.useMemo(() => toCents(summary.extra_fee), [summary.extra_fee]);
-
   const depositCents = React.useMemo(() => toCents(summary.deposit), [summary.deposit]);
-
   const servicesCents = React.useMemo(() => shippingCents + extraFeeCents, [shippingCents, extraFeeCents]);
-
   const balanceCents = React.useMemo(() => servicesCents - depositCents, [servicesCents, depositCents]);
-
   const balance = React.useMemo(() => centsToString(balanceCents), [balanceCents]);
 
-  const handleCreate = () => {
+  const handleCreate = async () => {
+    if (createOrder.isPending) return;
+
+    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const itemsDto: ItemCreateDTO[] = items.map(({ ui_id, ...dto }) => dto);
 
-    const payload = {
+    const payload: CreateOrderPayload = {
       sender: mapClientToApi(sender),
       receiver: mapClientToApi(receiver),
       order_items: itemsDto,
@@ -88,20 +91,14 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
       },
     };
 
-    console.log("ORDER_CREATE_PAYLOAD:", payload);
-    toast.success("Payload выведен в консоль");
+    const created = await createOrder.mutateAsync(payload);
+    // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
+    if (created) handleOpenChange(false);
   };
 
   return (
     <Dialog open={open} onOpenChange={handleOpenChange}>
-      <DialogContent
-        className={[
-          "w-[1400px]! max-w-[calc(100vw-2rem)]!",
-          "h-[80vh]! max-h-[calc(100vh-2rem)]!",
-          "flex flex-col overflow-hidden",
-          "p-1 pt-8",
-        ].join(" ")}
-      >
+      <DialogContent className="flex h-[80vh]! max-h-[calc(100vh-2rem)]! w-[1400px]! max-w-[calc(100vw-2rem)]! flex-col overflow-hidden p-1 pt-8">
         <DialogTitle className="sr-only">Создание заказа</DialogTitle>
 
         <div className="flex min-h-0 flex-1 overflow-hidden">
@@ -124,6 +121,7 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
                 value={summary}
                 onChangeAction={(p) => setSummary((s) => ({ ...s, ...p }))}
                 balance={balance}
+                enabled={open}
               />
             </div>
           </main>
@@ -131,11 +129,16 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
 
         <div className="bg-background shrink-0 border-t px-2 py-2">
           <div className="flex justify-end gap-2">
-            <Button size="sm" variant="secondary" onClick={() => handleOpenChange(false)}>
+            <Button
+              size="sm"
+              variant="secondary"
+              onClick={() => handleOpenChange(false)}
+              disabled={createOrder.isPending}
+            >
               Закрыть
             </Button>
-            <Button size="sm" onClick={handleCreate}>
-              Сохранить
+            <Button size="sm" onClick={handleCreate} disabled={createOrder.isPending}>
+              {createOrder.isPending ? "Сохранение..." : "Сохранить"}
             </Button>
           </div>
         </div>

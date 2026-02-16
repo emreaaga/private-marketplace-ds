@@ -1,31 +1,44 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useMemo, useState } from "react";
 
-import { servicesService } from "@/features/services/api/services";
+import { useServicesList } from "@/features/services/queries/use-services-list";
 import { servicesColumns } from "@/features/services/ui/organisms/services-columns";
 import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
-import type { Service } from "@/shared/types/services/services.model";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
-export default function ServicesPage() {
-  const [services, setServices] = useState<Service[]>([]);
-  const [loading, setLoading] = useState(true);
+const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
-  useEffect(() => {
-    servicesService
-      .getServices()
-      .then(setServices)
-      .finally(() => setLoading(false));
-  }, []);
+export default function ServicesPage() {
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading, isError } = useServicesList({ page });
+
+  const services = data?.data ?? [];
+  const pageCount = data?.pagination.totalPages ?? 1;
+
+  const emptyMessage = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить сервисы" : "Сервисы не найдены";
+
+  const onPageChange = (next: number) => {
+    setPage((prev) => {
+      const safeMax = Math.max(1, pageCount);
+      const clamped = clamp(next, 1, safeMax);
+      return prev === clamped ? prev : clamped;
+    });
+  };
+
+  const columns = useMemo(() => servicesColumns, []);
 
   return (
     <div className="space-y-4">
       <UsersToolbar />
+
       <DataTable
-        columns={servicesColumns}
+        columns={columns}
         data={services}
-        emptyMessage={loading ? "Загрузка..." : "Сервисы не найдены"}
+        emptyMessage={emptyMessage}
+        serverPagination={{ page, pageCount, onPageChange }}
+        fixedPageSize={10}
       />
     </div>
   );

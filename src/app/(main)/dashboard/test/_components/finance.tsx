@@ -4,6 +4,7 @@ export function formatMoney(value: number) {
   return (
     <span className="tabular-nums">
       {int}
+      <span className="text-muted-foreground text-xs">.{frac}</span>
       <span className="text-muted-foreground ml-1 text-xs">$</span>
     </span>
   );

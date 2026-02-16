@@ -1,14 +1,13 @@
 "use client";
 
-import { useState } from "react";
+import { useEffect, useMemo } from "react";
 
-import { Controller, useFormContext } from "react-hook-form";
+import { Controller, useFormContext, useWatch } from "react-hook-form";
 import { toast } from "sonner";
 
-import { servicesService } from "@/features/services/api/services";
+import { useServicesLookup } from "@/features/services/queries/use-services-lookup";
 import { CompanySelect } from "@/features/users/ui/organisms/company-select";
 import type { FlightFormValues } from "@/shared/types/flight/flight-create.schema";
-import type { Service } from "@/shared/types/services/services.model";
 import { DateTimePicker } from "@/shared/ui/atoms/date-picker";
 import { Field } from "@/shared/ui/atoms/field";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/shared/ui/atoms/select";
@@ -19,31 +18,40 @@ function money2(v: unknown): string {
   return Number.isFinite(n) ? n.toFixed(2) : "—";
 }
 
-export function FlightPartiesForm() {
-  const { control, setValue, watch } = useFormContext<FlightFormValues>();
-
-  const airPartnerId = watch("air_partner_id"); // number | undefined
-  const [services, setServices] = useState<Service[]>([]);
-  const [loadingServices, setLoadingServices] = useState(false);
-
-  async function loadServices(companyId: number) {
-    setLoadingServices(true);
-    try {
-      const data = await servicesService.getServices({
-        company_id: companyId,
-        type: "flight",
-        pricing_type: "per_kg",
-      });
-      setServices(data);
-    } catch {
-      setServices([]);
-      toast.error("Не удалось загрузить услуги");
-    } finally {
-      setLoadingServices(false);
-    }
+function toFiniteNumber(v: unknown): number | undefined {
+  if (typeof v === "number") return Number.isFinite(v) ? v : undefined;
+  if (typeof v === "string" && v.trim() !== "") {
+    const n = Number(v);
+    return Number.isFinite(n) ? n : undefined;
   }
+  return undefined;
+}
 
-  const serviceSelectDisabled = !airPartnerId || loadingServices;
+export function FlightPartiesForm() {
+  const { control, setValue } = useFormContext<FlightFormValues>();
+
+  // ✅ лучше чем watch() в таком кейсе
+  const airPartnerIdRaw = useWatch({ control, name: "air_partner_id" });
+  const companyId = toFiniteNumber(airPartnerIdRaw);
+
+  const {
+    data: services = [],
+    isFetching: fetchingServices,
+    isError: servicesError,
+  } = useServicesLookup({
+    company_id: companyId,
+    type: "flight",
+    pricing_type: "per_kg",
+  });
+
+  useEffect(() => {
+    if (servicesError) toast.error("Не удалось загрузить услуги");
+  }, [servicesError]);
+
+  const serviceById = useMemo(() => new Map(services.map((s) => [s.id, s])), [services]);
+
+  // ✅ НЕ дизейблим во время fetch — пусть можно открыть и увидеть "Загрузка..."
+  const serviceSelectDisabled = companyId == null;
 
   return (
     <div className="space-y-4 text-xs">
@@ -56,14 +64,13 @@ export function FlightPartiesForm() {
               <CompanySelect
                 type="air_partner"
                 placeholder="Авиапартнёр"
-                value={field.value}
+                value={toFiniteNumber(field.value)}
                 onChange={(id) => {
                   field.onChange(id);
-                  setServices([]);
+
+                  // сбрасываем зависимые поля
                   setValue("air_service_id", undefined, { shouldValidate: true, shouldDirty: true });
                   setValue("air_kg_price", "", { shouldValidate: true, shouldDirty: true });
-
-                  if (id) void loadServices(id);
                 }}
               />
             )}
@@ -76,35 +83,53 @@ export function FlightPartiesForm() {
             control={control}
             render={({ field }) => (
               <Select
-                value={field.value ? String(field.value) : undefined}
+                // ✅ всегда controlled
+                value={field.value == null ? "" : String(field.value)}
                 onValueChange={(v) => {
-                  const serviceId = Number(v);
-                  field.onChange(serviceId);
+                  if (v === "") {
+                    field.onChange(undefined);
+                    setValue("air_kg_price", "", { shouldValidate: true, shouldDirty: true });
+                    return;
+                  }
 
-                  const s = services.find((x) => x.id === serviceId);
-                  setValue("air_kg_price", s ? money2(s.price) : "", {
-                    shouldValidate: true,
-                    shouldDirty: true,
-                  });
+                  const serviceId = Number(v);
+                  field.onChange(Number.isFinite(serviceId) ? serviceId : undefined);
+
+                  const s = Number.isFinite(serviceId) ? serviceById.get(serviceId) : undefined;
+                  setValue("air_kg_price", s ? money2(s.price) : "", { shouldValidate: true, shouldDirty: true });
                 }}
                 disabled={serviceSelectDisabled}
               >
                 <SelectTrigger>
                   <SelectValue
                     placeholder={
-                      !airPartnerId
+                      companyId == null
                         ? "Услуга авиапартнёра"
-                        : loadingServices
+                        : fetchingServices
                           ? "Загрузка..."
-                          : services.length === 0
-                            ? "Нет услуг"
-                            : "Услуга авиапартнёра"
+                          : servicesError
+                            ? "Ошибка загрузки"
+                            : services.length === 0
+                              ? "Нет услуг"
+                              : "Услуга авиапартнёра"
                     }
                   />
                 </SelectTrigger>
 
                 <SelectContent>
-                  {services.length === 0 && airPartnerId && !loadingServices ? (
+                  {companyId == null ? (
+                    <SelectItem value="__choose__" disabled>
+                      Сначала выберите авиапартнёра
+                    </SelectItem>
+                  ) : fetchingServices ? (
+                    <SelectItem value="__loading__" disabled>
+                      Загрузка...
+                    </SelectItem>
+                  ) : servicesError ? (
+                    <SelectItem value="__error__" disabled>
+                      Ошибка загрузки
+                    </SelectItem>
+                  ) : services.length === 0 ? (
                     <SelectItem value="__empty__" disabled>
                       Нет услуг
                     </SelectItem>
@@ -171,7 +196,7 @@ export function FlightPartiesForm() {
               <CompanySelect
                 type="customs_broker"
                 placeholder="Отпр. (таможня)"
-                value={field.value}
+                value={toFiniteNumber(field.value)}
                 onChange={field.onChange}
               />
             )}
@@ -186,7 +211,7 @@ export function FlightPartiesForm() {
               <CompanySelect
                 type="customs_broker"
                 placeholder="Получ. (таможня)"
-                value={field.value}
+                value={toFiniteNumber(field.value)}
                 onChange={field.onChange}
               />
             )}

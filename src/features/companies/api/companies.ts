@@ -1,9 +1,19 @@
+"use client";
+
 import { api } from "@/shared/lib/api";
 import type { CreateCompanyPayload } from "@/shared/types/company/company.dto";
 import type { Company } from "@/shared/types/company/company.model";
 import type { CompanyType } from "@/shared/types/company/company.types";
+import type { PaginatedResponse } from "@/shared/types/paginated-response";
 
-type GetCompaniesParams = {
+export type CompanyOption = { id: number; name: string };
+
+type GetCompaniesPageParams = {
+  page: number;
+  type?: CompanyType;
+};
+
+type GetCompaniesLookupParams = {
   type?: CompanyType;
 };
 
@@ -13,9 +23,19 @@ export const companiesService = {
     return data.company;
   },
 
-  async getCompanies(params?: GetCompaniesParams): Promise<Company[]> {
-    const { data } = await api.get("/companies", {
-      params,
+  async getCompaniesPage(params: GetCompaniesPageParams, signal?: AbortSignal): Promise<PaginatedResponse<Company>> {
+    const { data } = await api.get<PaginatedResponse<Company>>("/companies", {
+      params: { page: params.page, type: params.type },
+      signal,
+    });
+
+    return data;
+  },
+
+  async getCompaniesLookup(params?: GetCompaniesLookupParams, signal?: AbortSignal): Promise<CompanyOption[]> {
+    const { data } = await api.get<{ data: CompanyOption[] }>("/companies/lookup", {
+      params: params?.type ? { type: params.type } : undefined,
+      signal,
     });
 
     return data.data;

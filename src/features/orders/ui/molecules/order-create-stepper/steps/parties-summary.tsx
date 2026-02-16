@@ -2,12 +2,9 @@
 
 import * as React from "react";
 
-import { toast } from "sonner";
-
-import { ShipmentsService } from "@/features/shipments/api/shipment";
+import { useDraftShipments } from "@/features/shipments/queries/use-draft-shipments";
 import { clampScale } from "@/shared/lib/money";
 import type { OrderSummaryForm } from "@/shared/types/order/order-summary.form";
-import type { Shipment } from "@/shared/types/shipment/shipment.model";
 import { Input } from "@/shared/ui/atoms/input";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 import { formatQuantity } from "@/shared/ui/molecules/format-quantity";
@@ -34,48 +31,25 @@ type Props = {
   value: OrderSummaryForm;
   onChangeAction: (patch: Partial<OrderSummaryForm>) => void;
   balance: string;
+  enabled?: boolean;
 };
 
-export function PartiesSummary({ value, onChangeAction, balance }: Props) {
-  const [shipments, setShipments] = React.useState<Shipment[]>([]);
-  const [loading, setLoading] = React.useState(false);
-
-  React.useEffect(() => {
-    let cancelled = false;
-    setLoading(true);
-
-    ShipmentsService.getShipments({ status: "draft" })
-      .then((data) => {
-        if (!cancelled) setShipments(data);
-      })
-      .catch(() => {
-        if (!cancelled) {
-          setShipments([]);
-          toast.error("Не удалось загрузить отправки");
-        }
-      })
-      .finally(() => {
-        if (!cancelled) setLoading(false);
-      });
-
-    return () => {
-      cancelled = true;
-    };
-  }, []);
+export function PartiesSummary({ value, onChangeAction, balance, enabled = true }: Props) {
+  const { data: shipments = [], isLoading, isError } = useDraftShipments(enabled);
 
   return (
     <div className="flex w-full items-center gap-2">
       <Select
         value={value.shipment_id ?? undefined}
         onValueChange={(v) => onChangeAction({ shipment_id: v })}
-        disabled={loading}
+        disabled={isLoading || isError}
       >
         <SelectTrigger className="h-8 w-56 text-xs">
-          <SelectValue placeholder={loading ? "Загрузка..." : "Отправка"} />
+          <SelectValue placeholder={isLoading ? "Загрузка..." : isError ? "Ошибка" : "Отправка"} />
         </SelectTrigger>
 
         <SelectContent>
-          {!loading && shipments.length === 0 ? (
+          {!isLoading && shipments.length === 0 ? (
             <SelectItem value="__empty__" disabled>
               Нет отправок
             </SelectItem>

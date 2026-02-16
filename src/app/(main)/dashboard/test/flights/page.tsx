@@ -1,8 +1,8 @@
 "use client";
 
-import { useEffect, useMemo, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { flightsService } from "@/features/flights/api/flights";
+import { useFlightsList } from "@/features/flights/queries/use-flights-list";
 import type { Flight } from "@/shared/types/flight/flight.model";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
@@ -11,25 +11,40 @@ import { EditFlightDialog } from "../_components/edit-flight-dialog";
 import { createFlightsActionsColumn } from "../_components/flight-columns.actions";
 import { flightsBaseColumns } from "../_components/flight-columns.base";
 
+const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
+
 export default function FlightsPage() {
-  const [flights, setFlights] = useState<Flight[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [page, setPage] = useState(1);
   const [editId, setEditId] = useState<number | null>(null);
+
+  const { data, isLoading, isError } = useFlightsList({ page });
+
+  const flights: Flight[] = data?.data ?? [];
+  const pageCount = data?.pagination.totalPages ?? 1;
 
   const columns = useMemo(() => [...flightsBaseColumns, createFlightsActionsColumn(setEditId)], []);
 
-  useEffect(() => {
-    flightsService
-      .getFlights()
-      .then(setFlights)
-      .finally(() => setLoading(false));
-  }, []);
+  const emptyMessage = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить рейсы" : "Рейсы не найдены";
+
+  const onPageChange = (next: number) => {
+    setPage((prev) => {
+      const safeMax = Math.max(1, pageCount);
+      const clamped = clamp(next, 1, safeMax);
+      return prev === clamped ? prev : clamped;
+    });
+  };
 
   return (
     <div className="space-y-4">
       <FlightsToolbar />
 
-      <DataTable columns={columns} data={flights} emptyMessage={loading ? "Загрузка..." : "Рейсы не найдены"} />
+      <DataTable
+        columns={columns}
+        data={flights}
+        emptyMessage={emptyMessage}
+        serverPagination={{ page, pageCount, onPageChange }}
+        fixedPageSize={10}
+      />
 
       <EditFlightDialog
         open={editId !== null}

@@ -1,6 +1,6 @@
 "use client";
 
-import { Fragment, useState } from "react";
+import { Fragment, useMemo, useState } from "react";
 
 import {
   ColumnDef,
@@ -9,44 +9,123 @@ import {
   getCoreRowModel,
   getExpandedRowModel,
   useReactTable,
+  type OnChangeFn,
+  type PaginationState,
 } from "@tanstack/react-table";
-import { Table as TableIcon, Columns as ColumnsIcon } from "lucide-react";
+import { Table as TableIcon } from "lucide-react";
 
-import { Button } from "@/shared/ui/atoms/button";
-import { Checkbox } from "@/shared/ui/atoms/checkbox";
-import { DropdownMenu, DropdownMenuTrigger, DropdownMenuContent } from "@/shared/ui/atoms/dropdown-menu";
 import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/shared/ui/atoms/table";
 import { DataTablePagination } from "@/shared/ui/organisms/table/data-table-pagination";
 
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "../../atoms/empty";
 
+type ServerPagination = {
+  /** 1-based */
+  page: number;
+  pageCount: number;
+  onPageChange: (page: number) => void;
+};
+
 export interface DataTableProps<TData> {
   columns: ColumnDef<TData, unknown>[];
   data: TData[];
-  pageSize?: number;
   emptyMessage?: string;
   renderExpandedRow?: (row: TData) => React.ReactNode;
+
+  serverPagination?: ServerPagination;
+
+  pagination?: PaginationState;
+  onPaginationChange?: OnChangeFn<PaginationState>;
+  pageCount?: number;
+
+  hidePagination?: boolean;
+  disablePageSizeSelect?: boolean;
+
+  fixedPageSize?: number;
 }
 
+const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
+
+// eslint-disable-next-line complexity
 export function DataTable<TData>({
   columns,
   data,
-  pageSize = 10,
   emptyMessage = "Нет данных",
   renderExpandedRow,
+
+  serverPagination,
+
+  pagination,
+  onPaginationChange,
+  pageCount,
+
+  hidePagination = false,
+  disablePageSizeSelect = false,
+  fixedPageSize = 10,
 }: DataTableProps<TData>) {
-  const [page] = useState(1);
   const [columnVisibility, setColumnVisibility] = useState<VisibilityState>({});
+
+  const isServer = serverPagination != null;
+
+  const paginationEnabled = isServer || (pagination != null && onPaginationChange != null && pageCount != null);
+
+  const resolvedPageCount = isServer ? serverPagination.pageCount : pageCount;
+
+  const resolvedPagination: PaginationState | undefined = useMemo(() => {
+    if (!paginationEnabled) return undefined;
+
+    if (isServer) {
+      return {
+        pageIndex: Math.max(0, serverPagination.page - 1), // 0-based для TanStack
+        pageSize: fixedPageSize, // ✅ всегда 10
+      };
+    }
+
+    return pagination!;
+  }, [paginationEnabled, isServer, serverPagination, pagination, fixedPageSize]);
+
+  const resolvedOnPaginationChange: OnChangeFn<PaginationState> | undefined = useMemo(() => {
+    if (!paginationEnabled) return undefined;
+
+    if (!isServer) return onPaginationChange;
+
+    return (updater) => {
+      const current = resolvedPagination!;
+      const next = typeof updater === "function" ? updater(current) : updater;
+
+      // ✅ pageSize изменения игнорируем (фиксировано 10)
+      if (next.pageSize !== current.pageSize) {
+        return;
+      }
+
+      const maxIndex = Math.max(0, serverPagination.pageCount - 1);
+      const nextIndex = clamp(next.pageIndex, 0, maxIndex);
+
+      serverPagination.onPageChange(nextIndex + 1); // назад в 1-based
+    };
+  }, [paginationEnabled, isServer, onPaginationChange, serverPagination, resolvedPagination]);
 
   const table = useReactTable({
     data,
     columns,
+
     state: {
       columnVisibility,
+      ...(paginationEnabled ? { pagination: resolvedPagination } : {}),
     },
+
     onColumnVisibilityChange: setColumnVisibility,
+    ...(paginationEnabled ? { onPaginationChange: resolvedOnPaginationChange } : {}),
 
     getCoreRowModel: getCoreRowModel(),
+
+    ...(paginationEnabled
+      ? {
+          manualPagination: true,
+          pageCount: resolvedPageCount!,
+          autoResetPageIndex: false,
+        }
+      : {}),
 
     ...(renderExpandedRow && {
       getExpandedRowModel: getExpandedRowModel(),
@@ -56,39 +135,8 @@ export function DataTable<TData>({
 
   const rows = table.getRowModel().rows;
 
-  const totalPages = Math.max(1, Math.ceil(rows.length / pageSize));
-  const safePage = Math.min(page, totalPages);
-
-  const paginated = rows.slice((safePage - 1) * pageSize, safePage * pageSize);
-
   return (
     <div className="space-y-2">
-      {/* <div className="flex items-center justify-end">
-        <DropdownMenu>
-          <DropdownMenuTrigger asChild>
-            <Button variant="outline" size="sm" className="gap-2">
-              <ColumnsIcon size={16} />
-              Редактировать
-            </Button>
-          </DropdownMenuTrigger>
-
-          <DropdownMenuContent align="end" className="w-56">
-            {table
-              .getAllLeafColumns()
-              .filter((column) => column.getCanHide())
-              .map((column) => (
-                <label key={column.id} className="flex cursor-pointer items-center gap-2 px-2 py-1.5 text-sm">
-                  <Checkbox
-                    checked={column.getIsVisible()}
-                    onCheckedChange={(value) => column.toggleVisibility(!!value)}
-                  />
-                  <span className="truncate">{flexRender(column.columnDef.header, {} as any)}</span>
-                </label>
-              ))}
-          </DropdownMenuContent>
-        </DropdownMenu>
-      </div> */}
-
       <div className="overflow-x-auto rounded-lg border">
         <Table>
           <TableHeader>
@@ -104,8 +152,8 @@ export function DataTable<TData>({
           </TableHeader>
 
           <TableBody>
-            {paginated.length ? (
-              paginated.map((row) => (
+            {rows.length ? (
+              rows.map((row) => (
                 <Fragment key={row.id}>
                   <TableRow>
                     {row.getVisibleCells().map((cell) => (
@@ -141,7 +189,20 @@ export function DataTable<TData>({
         </Table>
       </div>
 
-      <DataTablePagination table={table} />
+      {!hidePagination && paginationEnabled && (
+        <DataTablePagination
+          table={table}
+          externalPagination={
+            serverPagination
+              ? {
+                  page: serverPagination.page,
+                  pageCount: serverPagination.pageCount,
+                  onPageChange: serverPagination.onPageChange,
+                }
+              : undefined
+          }
+        />
+      )}
     </div>
   );
 }

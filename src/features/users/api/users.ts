@@ -1,28 +1,19 @@
 "use client";
 
 import { api } from "@/shared/lib/api";
+import { PaginatedResponse } from "@/shared/types/paginated-response";
 import type { User, UserDetail } from "@/shared/types/users";
 
-import { CreateUserDto } from "../types/create-user.dto";
-
-export type UsersPagination = {
-  page: number;
-  limit: number;
-  total: number;
-  totalPages: number;
-  hasNext: boolean;
-  hasPrev: boolean;
-};
-
-export type UsersListResponse = {
-  data: User[];
-  pagination: UsersPagination;
-};
+import type { CreateUserDto } from "../types/create-user.dto";
 
 export const usersService = {
-  async getUsers(): Promise<User[]> {
-    const { data } = await api.get("/users");
-    return data.data;
+  async getUsers(params: { page: number }, signal?: AbortSignal): Promise<PaginatedResponse<User>> {
+    const { data } = await api.get<PaginatedResponse<User>>("/users", {
+      params: { page: params.page },
+      signal,
+    });
+
+    return data;
   },
 
   async createUser(payload: CreateUserDto): Promise<User> {
@@ -30,21 +21,17 @@ export const usersService = {
     return data.user;
   },
 
-  async getUser(userId: number, signal: AbortSignal): Promise<UserDetail> {
+  async getUser(userId: number, signal?: AbortSignal): Promise<UserDetail> {
     const { data } = await api.get(`/users/${userId}`, { signal });
+    return data.data;
+  },
 
+  async updateUser(userId: number, payload: Partial<UserDetail>): Promise<UserDetail> {
+    const { data } = await api.patch(`/users/${userId}`, payload);
     return data.data;
   },
 
   async deleteUser(userId: number) {
     await api.delete(`/users/${userId}`);
-  },
-
-  async changeStatus(userId: number, status: string) {
-    await api.patch(`/users/${userId}/status`, { status });
-  },
-
-  async changeRole(userId: number, role: string) {
-    await api.patch(`/users/${userId}/role`, { role });
   },
 };

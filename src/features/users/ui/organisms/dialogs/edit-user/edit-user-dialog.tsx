@@ -1,10 +1,12 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useEffect } from "react";
 
+import { useQuery } from "@tanstack/react-query";
 import { useForm } from "react-hook-form";
 
 import { usersService } from "@/features/users/api/users";
+import { usersKeys } from "@/features/users/queries/users.keys";
 import type { UserDetail } from "@/shared/types/users";
 import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
@@ -12,118 +14,103 @@ import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "
 import { EditUserForm } from "./edit-user-form";
 import type { EditUserFormValues } from "./edit-user.types";
 
+type Props = {
+  open: boolean;
+  userId: number | null;
+  onOpenChange(open: boolean): void;
+  onSubmitAction?: (userId: number, values: EditUserFormValues) => Promise<void>;
+};
+
 const EMPTY: EditUserFormValues = {
   role: "employee",
   name: "",
   surname: "",
   email: "",
-  location: { country: null, city: null, district: null },
+  location: {
+    country: null,
+    city: null,
+    district: null,
+  },
   address_line: "",
   phone_number: "",
 };
 
-export function EditUserDialog({
-  open,
-  userId,
-  onOpenChange,
-  onSubmit,
-}: {
-  open: boolean;
-  userId: number | null;
-  onOpenChange(open: boolean): void;
-  onSubmit?: (userId: number, values: EditUserFormValues) => void | Promise<void>;
-}) {
-  const [loading, setLoading] = useState(false);
-  const [loadError, setLoadError] = useState<string | null>(null);
-  const [user, setUser] = useState<UserDetail | null>(null);
+function toFormValues(user: UserDetail): EditUserFormValues {
+  return {
+    role: user.role,
+    name: user.name,
+    surname: user.surname,
+    email: user.email,
+    location: {
+      country: user.country,
+      city: user.city,
+      district: user.district,
+    },
+    address_line: user.address_line ?? "",
+    phone_number: user.phone_number,
+  };
+}
 
-  const form = useForm<EditUserFormValues>({ defaultValues: EMPTY });
+export function EditUserDialog({ open, userId, onOpenChange, onSubmitAction }: Props) {
+  const form = useForm<EditUserFormValues>({
+    defaultValues: EMPTY,
+    mode: "onChange",
+  });
+
+  const enabled = open && userId !== null;
+
+  const { data, isLoading, isError } = useQuery<UserDetail>({
+    queryKey: usersKeys.detail(userId),
+    enabled,
+    queryFn: ({ signal }) => {
+      if (userId === null) {
+        throw new Error("User ID is null");
+      }
+      return usersService.getUser(userId, signal);
+    },
+  });
 
   useEffect(() => {
-    if (!open || userId == null) return;
-
-    const controller = new AbortController();
-
-    setLoading(true);
-    setLoadError(null);
-
-    usersService
-      .getUser(userId, controller.signal)
-      .then((u) => {
-        setUser(u);
-
-        form.reset({
-          role: u.role,
-          name: u.name ?? "",
-          surname: u.surname ?? "",
-          email: u.email ?? "",
-          location: {
-            country: (u.country as any) ?? null,
-            city: (u.city as any) ?? null,
-            district: (u.district as any) ?? null,
-          },
-          address_line: u.address_line ?? "",
-          phone_number: u.phone_number ?? "",
-        });
-      })
-      .catch((err) => {
-        if (controller.signal.aborted) return;
-        if (err?.code === "ERR_CANCELED") return;
-
-        setLoadError("Не удалось загрузить пользователя");
-        setUser(null);
-        form.reset(EMPTY);
-      })
-      .finally(() => {
-        if (controller.signal.aborted) return;
-        setLoading(false);
-      });
-
-    return () => controller.abort();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [open, userId]);
-
-  const handleDialogOpenChange = (nextOpen: boolean) => {
-    onOpenChange(nextOpen);
-
-    if (!nextOpen) {
-      setLoading(false);
-      setLoadError(null);
-      setUser(null);
-      form.reset(EMPTY);
+    if (data) {
+      form.reset(toFormValues(data));
     }
+  }, [data, form]);
+
+  const handleClose = () => {
+    if (form.formState.isSubmitting) return;
+    form.reset(EMPTY);
+    onOpenChange(false);
   };
 
-  const disabled = userId == null || loading || !!loadError || form.formState.isSubmitting;
+  const handleSubmit = async (values: EditUserFormValues) => {
+    if (userId === null || !onSubmitAction) return;
+
+    await onSubmitAction(userId, values);
+    handleClose();
+  };
+
+  const isSaveDisabled =
+    userId === null || isLoading || isError || form.formState.isSubmitting || !form.formState.isValid;
 
   return (
-    <Dialog open={open} onOpenChange={handleDialogOpenChange}>
+    <Dialog open={open} onOpenChange={(next) => !next && handleClose()}>
       <DialogContent className="sm:max-w-[520px]">
         <DialogHeader>
-          <DialogTitle>Обновить пользователя {userId ?? ""}</DialogTitle>
+          <DialogTitle>Обновить пользователя {userId}</DialogTitle>
         </DialogHeader>
 
-        {loading ? (
-          <div className="text-muted-foreground text-sm">Загрузка данных…</div>
-        ) : loadError ? (
-          <div className="text-destructive text-sm">{loadError}</div>
-        ) : user ? (
-          <EditUserForm
-            form={form}
-            user={user}
-            onSubmit={async (values) => {
-              if (userId == null) return;
-              await onSubmit?.(userId, values);
-              handleDialogOpenChange(false);
-            }}
-          />
-        ) : null}
+        {isLoading && <div className="text-muted-foreground text-sm">Загрузка данных…</div>}
+
+        {isError && <div className="text-destructive text-sm">Ошибка загрузки</div>}
+
+        {data && <EditUserForm form={form} user={data} onSubmit={handleSubmit} />}
 
         <DialogFooter>
-          <Button variant="secondary" onClick={() => handleDialogOpenChange(false)}>
+          <Button variant="secondary" disabled={form.formState.isSubmitting} onClick={handleClose}>
             Закрыть
           </Button>
-          <Button type="submit" form="edit-user-form" disabled={disabled}>
+
+          <Button type="submit" form="edit-user-form" disabled={isSaveDisabled}>
             {form.formState.isSubmitting ? "Сохранение…" : "Сохранить"}
           </Button>
         </DialogFooter>

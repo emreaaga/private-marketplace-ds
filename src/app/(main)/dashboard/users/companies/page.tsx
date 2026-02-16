@@ -1,32 +1,44 @@
 "use client";
 
-import { useEffect, useState } from "react";
+import { useMemo, useState } from "react";
 
-import { companiesService } from "@/features/companies/api/companies";
+import { useCompaniesList } from "@/features/companies/queries/use-companies-list";
 import { companiesColumns } from "@/features/companies/ui/organisms/companies-columns";
 import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
-import type { Company } from "@/shared/types/company/company.model";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
-export default function CompaniesMainPage() {
-  const [companies, setCompanies] = useState<Company[]>([]);
-  const [loading, setLoading] = useState(true);
+const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
-  useEffect(() => {
-    companiesService
-      .getCompanies()
-      .then(setCompanies)
-      .finally(() => setLoading(false));
-  }, []);
+export default function CompaniesMainPage() {
+  const [page, setPage] = useState(1);
+
+  const { data, isLoading, isError } = useCompaniesList({ page });
+
+  const companies = data?.data ?? [];
+  const pageCount = data?.pagination.totalPages ?? 1;
+
+  const emptyMessage = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить компании" : "Компании не найдены";
+
+  const onPageChange = (next: number) => {
+    setPage((prev) => {
+      const safeMax = Math.max(1, pageCount);
+      const clamped = clamp(next, 1, safeMax);
+      return prev === clamped ? prev : clamped;
+    });
+  };
+
+  const columns = useMemo(() => companiesColumns, []);
 
   return (
     <div className="space-y-4">
       <UsersToolbar />
 
       <DataTable
-        columns={companiesColumns}
+        columns={columns}
         data={companies}
-        emptyMessage={loading ? "Загрузка..." : "Компании не найдены"}
+        emptyMessage={emptyMessage}
+        serverPagination={{ page, pageCount, onPageChange }}
+        fixedPageSize={10}
       />
     </div>
   );

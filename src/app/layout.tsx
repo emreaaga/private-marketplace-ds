@@ -11,6 +11,8 @@ import { PreferencesStoreProvider } from "@/shared/styles/preferences-provider";
 import { Toaster } from "@/shared/ui/atoms/sonner";
 import { AuthProvider } from "@/shared/ui/organisms/sidebar/auth-provider";
 
+import { Providers } from "./providers";
+
 import "./globals.css";
 
 const inter = Inter({ subsets: ["latin"] });
@@ -61,12 +63,14 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   return (
     <html lang="en" className={themeMode} data-theme-preset={themePreset}>
       <body className={`${inter.className} min-h-screen antialiased`}>
-        <AuthProvider initialSession={session}>
-          <PreferencesStoreProvider themeMode={themeMode} themePreset={themePreset}>
-            {children}
-            <Toaster />
-          </PreferencesStoreProvider>
-        </AuthProvider>
+        <Providers>
+          <AuthProvider initialSession={session}>
+            <PreferencesStoreProvider themeMode={themeMode} themePreset={themePreset}>
+              {children}
+              <Toaster />
+            </PreferencesStoreProvider>
+          </AuthProvider>
+        </Providers>
 
         <Analytics />
       </body>

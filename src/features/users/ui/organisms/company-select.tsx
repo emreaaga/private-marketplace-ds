@@ -1,12 +1,11 @@
-import { useEffect, useState } from "react";
+"use client";
 
 import { Building2 } from "lucide-react";
 
-import { companiesService } from "@/features/companies/api/companies";
+import { useCompaniesLookup } from "@/features/companies/queries/use-companies-lookup";
 import { cn } from "@/shared/lib/utils";
-import { COMPANY_TYPE_META } from "@/shared/types/company/company.meta";
-import type { Company } from "@/shared/types/company/company.model";
 import type { CompanyType } from "@/shared/types/company/company.types";
+import { ScrollArea } from "@/shared/ui/atoms/scroll-area";
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/shared/ui/atoms/select";
 
 interface CompanySelectProps {
@@ -18,32 +17,45 @@ interface CompanySelectProps {
 }
 
 export function CompanySelect({ value, onChange, type, placeholder, error }: CompanySelectProps) {
-  const [companies, setCompanies] = useState<Company[]>([]);
+  const { data: companies = [], isLoading, isError } = useCompaniesLookup({ type });
 
-  useEffect(() => {
-    companiesService.getCompanies({ type }).then(setCompanies);
-  }, [type]);
+  const emptyLabel = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить" : "Компании не найдены";
 
   return (
-    <Select value={value ? String(value) : undefined} onValueChange={(v) => onChange(Number(v))}>
+    <Select
+      value={value == null ? "" : String(value)}
+      onValueChange={(v) => {
+        if (v === "") return onChange(undefined);
+
+        const id = Number(v);
+        onChange(Number.isFinite(id) ? id : undefined);
+      }}
+    >
       <SelectTrigger className={cn("w-full", error && "border-destructive focus:ring-destructive")}>
         <SelectValue placeholder={placeholder ?? "Компания"} />
       </SelectTrigger>
 
-      <SelectContent>
-        {companies.map((company) => {
-          const meta = COMPANY_TYPE_META[company.type];
-          const Icon = meta?.Icon ?? Building2;
-
-          return (
-            <SelectItem key={company.id} value={String(company.id)}>
-              <div className="flex items-center gap-2">
-                <Icon className="text-muted-foreground h-4 w-4" />
-                <span>{company.name}</span>
-              </div>
-            </SelectItem>
-          );
-        })}
+      <SelectContent className="p-0">
+        <ScrollArea className="h-45">
+          {companies.length === 0 ? (
+            <div className="p-2">
+              <SelectItem value="__empty" disabled>
+                {emptyLabel}
+              </SelectItem>
+            </div>
+          ) : (
+            <div className="p-1">
+              {companies.map((company) => (
+                <SelectItem key={company.id} value={String(company.id)}>
+                  <div className="flex items-center gap-2">
+                    <Building2 className="text-muted-foreground h-4 w-4" />
+                    <span className="truncate">{company.name}</span>
+                  </div>
+                </SelectItem>
+              ))}
+            </div>
+          )}
+        </ScrollArea>
       </SelectContent>
     </Select>
   );
