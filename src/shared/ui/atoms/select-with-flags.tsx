@@ -2,6 +2,7 @@
 
 import { useId, useState } from "react";
 
+import { cn } from "@/shared/lib/utils";
 import { COUNTRY_META } from "@/shared/types/geography/country.meta";
 import type { CountryCode } from "@/shared/types/geography/country.types";
 import { Button } from "@/shared/ui/atoms/button";
@@ -20,6 +21,7 @@ type CountryCityPopoverSelectProps = {
   onChange: (value: CountryCityValue) => void;
   mode?: Mode;
   placeholder?: string;
+  className?: string;
 };
 
 // eslint-disable-next-line complexity
@@ -28,6 +30,7 @@ export default function CountryCityPopoverSelect({
   onChange,
   mode = "country-city",
   placeholder,
+  className,
 }: CountryCityPopoverSelectProps) {
   const id = useId();
 
@@ -40,7 +43,9 @@ export default function CountryCityPopoverSelect({
 
   const districts = selectedCityMeta?.districts ?? [];
 
-  const resolvedPlaceholder = placeholder ?? (mode === "country-only" ? "Страна" : "Страна · Город");
+  const resolvedPlaceholder =
+    placeholder ??
+    (mode === "country-only" ? "Страна" : mode === "country-city" ? "Страна · Город" : "Страна · Город · Район");
 
   const resetToCountry = () => {
     setStep("country");
@@ -82,7 +87,12 @@ export default function CountryCityPopoverSelect({
       }}
     >
       <PopoverTrigger asChild>
-        <Button id={id} type="button" variant="outline" className="flex w-full items-center justify-start gap-2">
+        <Button
+          id={id}
+          type="button"
+          variant="outline"
+          className={cn("flex w-full items-center justify-start gap-2", className)}
+        >
           {country ? (
             <>
               <img src={country.flag} alt="" className="h-4 w-5" />

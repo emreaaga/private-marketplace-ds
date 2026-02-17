@@ -34,12 +34,12 @@ export const sidebarItems: NavGroup[] = [
         icon: Package,
         roles: [UserRole.ADMIN],
       },
-      {
-        title: "Почта 2.0",
-        url: "/dashboard/logistics/flights",
-        icon: Package,
-        roles: [UserRole.ADMIN],
-      },
+      // {
+      //   title: "Почта 2.0",
+      //   url: "/dashboard/logistics/flights",
+      //   icon: Package,
+      //   roles: [UserRole.ADMIN],
+      // },
       {
         title: "Продавцы",
         url: "/dashboard/seller/orders",

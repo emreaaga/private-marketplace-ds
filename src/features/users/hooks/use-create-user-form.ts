@@ -1,39 +1,46 @@
 import { useState } from "react";
 
+import { useCreateUser } from "../mutations/user-create-user";
 import { createUserSchema, type CreateUserFormData } from "../types/create-user.schema";
 
-import { useCreateUserSubmit } from "./use-create-user-submit";
 import { useUserFormState } from "./use-user-form-state";
 import { useUserLocation } from "./use-user-location";
 
-type FormErrors = Partial<Record<keyof CreateUserFormData, string>>;
+const generateEmail = (name: string, surname: string) => {
+  const prefix = (name.slice(0, 2) + surname.slice(0, 2)).toLowerCase();
+  const random = Math.floor(100 + Math.random() * 900);
+  return `${prefix}${random}@gmail.com`;
+};
+
+const generatePassword = () => {
+  const charset = "abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789!@#$%";
+  return Array.from(crypto.getRandomValues(new Uint32Array(12)))
+    .map((x) => charset[x % charset.length])
+    .join("");
+};
 
 export function useCreateUserForm() {
   const location = useUserLocation();
   const form = useUserFormState();
-  const submitter = useCreateUserSubmit();
+  const createUserMutation = useCreateUser();
 
-  const [errors, setErrors] = useState<FormErrors>({});
-
-  const clearError = (field: keyof FormErrors) => {
-    setErrors((prev) => {
-      if (!prev[field]) return prev;
-
-      const next = { ...prev };
-      delete next[field];
-      return next;
-    });
-  };
+  const [errors, setErrors] = useState<Partial<Record<keyof CreateUserFormData, string>>>({});
+  const [createdData, setCreatedData] = useState<{ email: string; password: string } | null>(null);
 
   const submit = async () => {
+    const email = generateEmail(form.name, form.surname);
+    const password = generatePassword();
+
     const payload = {
       company_id: form.companyId,
-      name: form.name,
-      surname: form.surname,
-      country: location.country,
-      city: location.city,
-      district: location.district,
-      address_line: form.addressLine,
+      name: form.name.trim(),
+      surname: form.surname.trim(),
+      email,
+      password,
+      country: location.country || "",
+      city: location.city || "",
+      district: location.district || "",
+      address_line: form.addressLine || "",
       phone_country_code: location.phoneCode,
       phone_number: form.phoneNumber,
       role: form.role,
@@ -42,41 +49,41 @@ export function useCreateUserForm() {
     const parsed = createUserSchema.safeParse(payload);
 
     if (!parsed.success) {
-      const nextErrors: FormErrors = {};
-
+      const nextErrors: any = {};
       parsed.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof FormErrors;
-        nextErrors[field] = issue.message;
+        nextErrors[issue.path[0]] = issue.message;
       });
-
       setErrors(nextErrors);
       return;
     }
 
     setErrors({});
 
-    await submitter.submit({
-      ...parsed.data,
-      address_line: parsed.data.address_line ?? "",
-    });
+    try {
+      await createUserMutation.mutateAsync(parsed.data);
+
+      setCreatedData({ email, password });
+    } catch (e) {
+      // Ошибки обработает мутация (toast)
+    }
   };
 
   const reset = () => {
     form.reset();
     location.reset();
-    submitter.reset();
+    createUserMutation.reset();
     setErrors({});
+    setCreatedData(null);
   };
 
   return {
     ...form,
     ...location,
-    ...submitter,
-
+    created: createdData,
+    isPending: createUserMutation.isPending,
     errors,
-    clearError,
-
     submit,
     reset,
+    clearError: (field: string) => setErrors((prev) => ({ ...prev, [field]: undefined })),
   };
 }

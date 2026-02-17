@@ -67,8 +67,8 @@ export default function CreateUserDialog({ open, onOpenChange }: CreateUserDialo
                 </Button>
               </DialogClose>
 
-              <Button size="sm" onClick={form.submit}>
-                Создать
+              <Button size="sm" onClick={form.submit} disabled={form.isPending}>
+                {form.isPending ? "Создание..." : "Создать"}
               </Button>
             </>
           )}

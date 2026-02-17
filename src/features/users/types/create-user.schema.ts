@@ -10,6 +10,9 @@ export const createUserSchema = z.object({
   name: z.string().min(1, "Имя обязательно"),
   surname: z.string().min(1, "Фамилия обязательна"),
 
+  email: z.string().email(),
+  password: z.string().min(6),
+
   country: z.string().length(2, "Неверный код страны"),
   city: z.string().min(1, "Город обязателен"),
   district: z.string().min(1, "Район обязателен"),
