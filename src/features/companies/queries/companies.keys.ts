@@ -14,8 +14,10 @@ export const companiesKeys = {
 
   lists: () => [...companiesKeys.all, "list"] as const,
 
-  listPage: (params: CompaniesListParams) => [...companiesKeys.lists(), "page", params] as const,
+  pages: () => [...companiesKeys.lists(), "page"] as const,
+  lookups: () => [...companiesKeys.lists(), "lookup"] as const,
 
+  listPage: (params: CompaniesListParams) => [...companiesKeys.lists(), "page", params] as const,
   lookup: (params: CompaniesLookupParams) => [...companiesKeys.lists(), "lookup", params] as const,
 
   details: () => [...companiesKeys.all, "detail"] as const,

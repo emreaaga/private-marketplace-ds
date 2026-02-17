@@ -21,6 +21,8 @@ export type UsersTableActions = {
   onDelete(user: User): void;
 };
 
+const dtf = new Intl.DateTimeFormat("ru-RU");
+
 export function createUsersColumns(actions: UsersTableActions): ColumnDef<User>[] {
   return [
     {
@@ -82,7 +84,7 @@ export function createUsersColumns(actions: UsersTableActions): ColumnDef<User>[
     {
       accessorKey: "created_at",
       header: "Создан",
-      cell: ({ getValue }) => new Date(getValue<string>()).toLocaleDateString("ru-RU"),
+      cell: ({ getValue }) => dtf.format(new Date(getValue<string>())),
     },
 
     {

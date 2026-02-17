@@ -11,4 +11,5 @@ export type Service = {
   pricing_type: ServicePrice;
   price: string;
   is_active: boolean;
+  created_at: string;
 };

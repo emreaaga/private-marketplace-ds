@@ -15,6 +15,6 @@ export interface CreateUserDto {
   phone_country_code: string;
   phone_number: string;
 
-  company_id?: number;
-  role?: UserRoles;
+  company_id: number;
+  role: UserRoles;
 }

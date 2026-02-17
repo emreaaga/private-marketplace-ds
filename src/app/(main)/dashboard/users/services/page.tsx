@@ -1,44 +1,55 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useServicesList } from "@/features/services/queries/use-services-list";
-import { servicesColumns } from "@/features/services/ui/organisms/services-columns";
+import { useUpdateService } from "@/features/services/queries/use-update-service";
+import { ServiceEditDialog } from "@/features/services/ui/organisms/service-edit-dialog";
+import { createServicesColumns } from "@/features/services/ui/organisms/services-columns";
 import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
+import { Service } from "@/shared/types/services/services.model";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
-
-const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
 export default function ServicesPage() {
   const [page, setPage] = useState(1);
+  const [editOpen, setEditOpen] = useState(false);
+  const [editServiceId, setEditServiceId] = useState<number | null>(null);
 
   const { data, isLoading, isError } = useServicesList({ page });
+  const updateService = useUpdateService();
 
-  const services = data?.data ?? [];
-  const pageCount = data?.pagination.totalPages ?? 1;
+  const handleEdit = useCallback((service: Service) => {
+    setEditServiceId(service.id);
+    setEditOpen(true);
+  }, []);
 
-  const emptyMessage = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить сервисы" : "Сервисы не найдены";
-
-  const onPageChange = (next: number) => {
-    setPage((prev) => {
-      const safeMax = Math.max(1, pageCount);
-      const clamped = clamp(next, 1, safeMax);
-      return prev === clamped ? prev : clamped;
-    });
-  };
-
-  const columns = useMemo(() => servicesColumns, []);
+  const columns = useMemo(
+    () =>
+      createServicesColumns({
+        onView: handleEdit,
+      }),
+    [handleEdit],
+  );
 
   return (
     <div className="space-y-4">
       <UsersToolbar />
-
       <DataTable
         columns={columns}
-        data={services}
-        emptyMessage={emptyMessage}
-        serverPagination={{ page, pageCount, onPageChange }}
-        fixedPageSize={10}
+        data={data?.data ?? []}
+        serverPagination={{ page, pageCount: data?.pagination.totalPages ?? 1, onPageChange: setPage }}
+      />
+
+      <ServiceEditDialog
+        open={editOpen}
+        serviceId={editServiceId}
+        onOpenChangeAction={(open) => {
+          setEditOpen(open);
+          if (!open) setTimeout(() => setEditServiceId(null), 200);
+        }}
+        onSubmitAction={async (id, values) => {
+          await updateService.mutateAsync({ id, payload: values });
+        }}
       />
     </div>
   );

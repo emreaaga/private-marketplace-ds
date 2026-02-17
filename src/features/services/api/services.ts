@@ -39,6 +39,16 @@ export const servicesService = {
     return data.data;
   },
 
+  async getService(id: number, signal?: AbortSignal): Promise<Service> {
+    const { data } = await api.get<{ data: Service }>(`/services/${id}`, { signal });
+    return data.data;
+  },
+
+  async updateService(id: number, payload: Partial<CreateServicePayload>): Promise<Service> {
+    const { data } = await api.patch(`/services/${id}`, payload);
+    return data;
+  },
+
   async createService(payload: CreateServicePayload): Promise<Service> {
     const { data } = await api.post("/services", payload);
     return data;

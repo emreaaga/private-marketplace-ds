@@ -24,8 +24,6 @@ export function EditUserForm({
 
   const country = useWatch({ control, name: "location.country" });
   const phoneNumber = useWatch({ control, name: "phone_number" });
-  const role = useWatch({ control, name: "role" });
-  console.log("role from form:", role);
 
   return (
     <form id="edit-user-form" className="grid gap-4" onSubmit={handleSubmit(onSubmitAction)}>

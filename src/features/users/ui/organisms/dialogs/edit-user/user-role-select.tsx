@@ -17,7 +17,7 @@ export function UserRoleSelect({
   const Icon = meta?.Icon;
 
   return (
-    <Select value={value} onValueChange={(v) => onChangeAction(v as UserRoles)}>
+    <Select key={value} value={value} onValueChange={(v) => onChangeAction(v as UserRoles)}>
       <SelectTrigger className="w-full">
         {meta && Icon ? (
           <div className="flex items-center gap-2">
@@ -32,14 +32,10 @@ export function UserRoleSelect({
       <SelectContent>
         {(Object.keys(USER_ROLE_META) as UserRoles[]).map((role) => {
           const itemMeta = USER_ROLE_META[role];
-          const ItemIcon = itemMeta.Icon;
-
-          const disabled = !!itemMeta.disabled && role !== value;
-
           return (
-            <SelectItem key={role} value={role} disabled={disabled} textValue={itemMeta.label}>
+            <SelectItem key={role} value={role} disabled={!!itemMeta.disabled && role !== value}>
               <div className="flex items-center gap-2">
-                <ItemIcon className="text-muted-foreground h-4 w-4" />
+                <itemMeta.Icon className="text-muted-foreground h-4 w-4" />
                 <span>{itemMeta.label}</span>
               </div>
             </SelectItem>

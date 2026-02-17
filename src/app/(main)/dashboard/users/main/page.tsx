@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import { useDeleteUser } from "@/features/users/mutations/use-delete-user";
 import { useUpdateUser } from "@/features/users/mutations/use-update-user";
@@ -31,14 +31,16 @@ export default function UsersMainPage() {
   const deleteUser = useDeleteUser();
   const updateUser = useUpdateUser();
 
-  const openEdit = (id: number) => {
+  const openEdit = useCallback((id: number) => {
     setEditUserId(id);
     setEditOpen(true);
-  };
+  }, []);
 
   const closeEdit = () => setEditOpen(false);
 
-  const openDelete = (id: number) => setDeleteAction({ type: "delete", userId: id });
+  const openDelete = useCallback((id: number) => {
+    setDeleteAction({ type: "delete", userId: id });
+  }, []);
 
   const closeDelete = () => {
     if (deleteUser.isPending) return;
@@ -51,7 +53,7 @@ export default function UsersMainPage() {
         onEdit: (user) => openEdit(user.id),
         onDelete: (user) => openDelete(user.id),
       }),
-    [],
+    [openEdit, openDelete],
   );
 
   const emptyMessage = isLoading
@@ -86,7 +88,9 @@ export default function UsersMainPage() {
         open={editOpen}
         userId={editUserId}
         onOpenChange={(next) => !next && closeEdit()}
-        onSubmitAction={(id, values) => updateUser.mutateAsync({ id, values })}
+        onSubmitAction={async (id, values) => {
+          await updateUser.mutateAsync({ id, values });
+        }}
       />
 
       <DeleteDialog

@@ -17,6 +17,14 @@ type GetCompaniesLookupParams = {
   type?: CompanyType;
 };
 
+export type UpdateCompanyPayload = {
+  name: string;
+  type: CompanyType;
+  country: string;
+  city: string;
+  is_active: boolean;
+};
+
 export const companiesService = {
   async createCompany(payload: CreateCompanyPayload): Promise<Company> {
     const { data } = await api.post("/companies", payload);
@@ -30,6 +38,16 @@ export const companiesService = {
     });
 
     return data;
+  },
+
+  async getCompany(id: number, signal?: AbortSignal): Promise<Company> {
+    const { data } = await api.get<{ data: Company }>(`/companies/${id}`, { signal });
+    return data.data;
+  },
+
+  async updateCompany(id: number, payload: UpdateCompanyPayload): Promise<Company> {
+    const { data } = await api.patch<{ data: Company }>(`/companies/${id}`, payload);
+    return data.data;
   },
 
   async getCompaniesLookup(params?: GetCompaniesLookupParams, signal?: AbortSignal): Promise<CompanyOption[]> {

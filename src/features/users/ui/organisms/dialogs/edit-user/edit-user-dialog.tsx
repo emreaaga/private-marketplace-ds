@@ -1,9 +1,9 @@
 "use client";
 
-import { useEffect, useCallback } from "react";
+import { useMemo } from "react";
 
 import { useQuery } from "@tanstack/react-query";
-import { useForm, type UseFormReturn } from "react-hook-form";
+import { useForm } from "react-hook-form";
 
 import { usersService } from "@/features/users/api/users";
 import { usersKeys } from "@/features/users/queries/users.keys";
@@ -31,32 +31,8 @@ const EMPTY: EditUserFormValues = {
   phone_number: "",
 };
 
-function toFormValues(user: UserDetail): EditUserFormValues {
-  return {
-    role: user.role,
-    name: user.name,
-    surname: user.surname,
-    email: user.email,
-    location: { country: user.country, city: user.city, district: user.district },
-    address_line: user.address_line ?? "",
-    phone_number: user.phone_number,
-  };
-}
-
-function syncForm(form: UseFormReturn<EditUserFormValues>, open: boolean, userId: number | null, data?: UserDetail) {
-  if (!open) return;
-
-  if (userId == null || !data) {
-    form.reset(EMPTY);
-    return;
-  }
-
-  form.reset(toFormValues(data));
-}
-
+// eslint-disable-next-line complexity
 export function EditUserDialog({ open, userId, onOpenChange, onSubmitAction }: Props) {
-  const form = useForm<EditUserFormValues>({ defaultValues: EMPTY, mode: "onChange" });
-
   const enabled = open && userId !== null;
 
   const { data, isLoading, isError } = useQuery<UserDetail>({
@@ -64,35 +40,47 @@ export function EditUserDialog({ open, userId, onOpenChange, onSubmitAction }: P
     enabled,
     queryFn: ({ signal }) => usersService.getUser(userId as number, signal),
     staleTime: 30_000,
-    refetchOnWindowFocus: false,
   });
 
-  useEffect(() => {
-    syncForm(form, open, userId, data);
-  }, [form, open, userId, data]);
+  const normalizedData = useMemo<EditUserFormValues>(() => {
+    if (!data) return EMPTY;
+    return {
+      role: data.role,
+      name: data.name,
+      surname: data.surname,
+      email: data.email,
+      location: { country: data.country, city: data.city, district: data.district },
+      address_line: data.address_line ?? "",
+      phone_number: data.phone_number,
+    };
+  }, [data]);
 
-  const requestClose = useCallback(() => {
+  const form = useForm<EditUserFormValues>({
+    defaultValues: EMPTY,
+    values: open && data ? normalizedData : EMPTY,
+    mode: "onChange",
+  });
+
+  const requestClose = () => {
     if (form.formState.isSubmitting) return;
     onOpenChange(false);
-  }, [form.formState.isSubmitting, onOpenChange]);
+  };
 
-  const handleSubmit = useCallback(
-    async (values: EditUserFormValues) => {
-      if (userId === null || !onSubmitAction) return;
+  const handleSubmit = async (values: EditUserFormValues) => {
+    if (userId === null || !onSubmitAction) return;
+    try {
       await onSubmitAction(userId, values);
-      requestClose();
-    },
-    [userId, onSubmitAction, requestClose],
-  );
-
-  const isSaveDisabled =
-    userId === null || isLoading || isError || form.formState.isSubmitting || !form.formState.isValid;
+      onOpenChange(false);
+    } catch (e) {
+      console.error(e);
+    }
+  };
 
   return (
-    <Dialog open={open} onOpenChange={(next) => !next && requestClose()}>
+    <Dialog open={open} onOpenChange={requestClose}>
       <DialogContent className="min-h-[420px] sm:max-w-[520px]">
         <DialogHeader>
-          <DialogTitle>Обновить пользователя {userId}</DialogTitle>
+          <DialogTitle>Обновить пользователя {userId ? `#${userId}` : ""}</DialogTitle>
         </DialogHeader>
 
         {isLoading && <div className="text-muted-foreground text-sm">Загрузка данных…</div>}
@@ -105,7 +93,12 @@ export function EditUserDialog({ open, userId, onOpenChange, onSubmitAction }: P
             Закрыть
           </Button>
 
-          <Button size="sm" type="submit" form="edit-user-form" disabled={isSaveDisabled}>
+          <Button
+            size="sm"
+            type="submit"
+            form="edit-user-form"
+            disabled={isLoading || isError || form.formState.isSubmitting || !form.formState.isValid}
+          >
             {form.formState.isSubmitting ? "Сохранение…" : "Сохранить"}
           </Button>
         </DialogFooter>
