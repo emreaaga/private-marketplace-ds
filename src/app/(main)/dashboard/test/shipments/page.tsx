@@ -6,24 +6,22 @@ import { useShipmentsList } from "@/features/shipments/queries/use-shipments-lis
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
 import { ShipmentToolbar } from "../../logistics/shipments/_components/shipment-toolbar";
+import { ShipmentDetailDialog } from "../_components/shipment-edit-dialog";
 
-import { ShipmentsColumns } from "./_components/shipment-columns";
+import { getShipmentsColumns } from "./_components/shipment-columns";
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
 export default function FlightShipmentsPage() {
   const [page, setPage] = useState(1);
+  const [viewId, setViewId] = useState<number | null>(null);
 
   const { data, isLoading, isError } = useShipmentsList({ page });
 
   const shipments = data?.data ?? [];
   const pageCount = data?.pagination.totalPages ?? 1;
 
-  const emptyMessage = isLoading
-    ? "Загрузка..."
-    : isError
-      ? "Не удалось загрузить отправления"
-      : "Отправления не найдены";
+  const columns = useMemo(() => getShipmentsColumns(setViewId), []);
 
   const onPageChange = (next: number) => {
     setPage((prev) => {
@@ -33,7 +31,11 @@ export default function FlightShipmentsPage() {
     });
   };
 
-  const columns = useMemo(() => ShipmentsColumns, []);
+  const emptyMessage = isLoading
+    ? "Загрузка..."
+    : isError
+      ? "Не удалось загрузить отправления"
+      : "Отправления не найдены";
 
   return (
     <div className="space-y-4">
@@ -45,6 +47,12 @@ export default function FlightShipmentsPage() {
         emptyMessage={emptyMessage}
         serverPagination={{ page, pageCount, onPageChange }}
         fixedPageSize={10}
+      />
+
+      <ShipmentDetailDialog
+        open={viewId !== null}
+        shipmentId={viewId}
+        onOpenChangeAction={(open) => !open && setViewId(null)}
       />
     </div>
   );

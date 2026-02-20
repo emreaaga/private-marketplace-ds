@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
 
@@ -42,18 +44,34 @@ interface ResponsiveTabsHeaderProps {
   items: readonly HeaderTabItem[];
 }
 
+const normalizePath = (path: string) => {
+  return path
+    .split("/")
+    .filter((segment) => !/^\d+$/.test(segment))
+    .join("/");
+};
+
 export function ResponsiveTabsHeader({ items }: ResponsiveTabsHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
 
-  const activeTab = items.find((item) => pathname.startsWith(item.href))?.href ?? items[0]?.href;
+  const activeTab = useMemo(() => {
+    const normalizedCurrentPath = normalizePath(pathname);
+
+    const matchedItem = items.find((item) => {
+      const normalizedItemHref = normalizePath(item.href);
+      return normalizedCurrentPath.includes(normalizedItemHref);
+    });
+
+    return matchedItem?.href ?? items[0]?.href;
+  }, [pathname, items]);
 
   if (!activeTab) return null;
 
   return (
     <>
       <div className="sm:hidden">
-        <Select value={activeTab} onValueChange={router.push}>
+        <Select value={activeTab} onValueChange={(value) => router.push(value)}>
           <SelectTrigger className="w-full">
             <SelectValue />
           </SelectTrigger>
@@ -75,7 +93,7 @@ export function ResponsiveTabsHeader({ items }: ResponsiveTabsHeaderProps) {
 
               return (
                 <TabsTrigger key={item.href} value={item.href} asChild>
-                  <Link href={item.href} className="flex items-center gap-2 px-3 py-2 text-sm">
+                  <Link href={item.href} className="flex items-center gap-2 px-3 py-2 text-sm transition-colors">
                     {Icon && <Icon className="h-4 w-4 shrink-0" />}
                     <span>{item.label}</span>
                   </Link>

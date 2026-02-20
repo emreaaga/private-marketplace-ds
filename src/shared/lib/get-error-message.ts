@@ -1,23 +1,30 @@
 import axios from "axios";
 
-type ApiErrorShape = {
-  message?: string;
-  error?: string;
-};
-
+// eslint-disable-next-line complexity
 export function getErrorMessage(err: unknown): string {
-  if (axios.isAxiosError<ApiErrorShape>(err)) {
+  const MAX_LENGTH = 150;
+  const FALLBACK_MESSAGE = "Произошла ошибка при выполнении запроса";
+
+  if (axios.isAxiosError(err)) {
     const data = err.response?.data;
+    const backendMessage = data?.message;
 
-    if (data?.message) return data.message;
-    if (data?.error) return data.error;
+    if (typeof backendMessage === "string" && backendMessage.trim().length > 0) {
+      const message = backendMessage.trim();
 
-    return "Запрос упал.";
+      return message.length > MAX_LENGTH ? message.substring(0, MAX_LENGTH) + "..." : message;
+    }
+
+    if (err.response?.status && err.response.status >= 500) {
+      return "Ошибка сервера. Попробуйте позже.";
+    }
+
+    return FALLBACK_MESSAGE;
   }
 
   if (err instanceof Error) {
     return err.message;
   }
 
-  return "Неизвестная ошибка";
+  return FALLBACK_MESSAGE;
 }

@@ -1,11 +1,12 @@
+"use client";
+
 import { useState } from "react";
 
-import { toast } from "sonner";
-
-import { companiesService } from "@/features/companies/api/companies";
 import type { CompanyType } from "@/shared/types/company/company.types";
 import { createCompanySchema } from "@/shared/types/company/create-company.schema";
 import type { CountryCode } from "@/shared/types/geography/country.types";
+
+import { useCreateCompany } from "../../queries/use-create-company";
 
 export type CreateCompanyForm = {
   name: string;
@@ -23,10 +24,11 @@ const initialForm: CreateCompanyForm = {
   city: null,
 };
 
-export function useCreateCompanyForm(onSuccess: () => void) {
+export function useCreateCompanyForm(onSuccessAction: () => void) {
   const [form, setForm] = useState<CreateCompanyForm>(initialForm);
   const [errors, setErrors] = useState<FormErrors>({});
-  const [loading, setLoading] = useState(false);
+
+  const createMutation = useCreateCompany();
 
   const clearError = (field: keyof FormErrors) => {
     setErrors((prev) => {
@@ -40,12 +42,12 @@ export function useCreateCompanyForm(onSuccess: () => void) {
   const reset = () => {
     setForm(initialForm);
     setErrors({});
-    setLoading(false);
+    createMutation.reset();
   };
 
   const submit = async () => {
     const payload = {
-      name: form.name,
+      name: form.name.trim(),
       type: form.type,
       country: form.country,
       city: form.city,
@@ -63,29 +65,27 @@ export function useCreateCompanyForm(onSuccess: () => void) {
       return;
     }
 
+    setErrors({});
+
     try {
-      setLoading(true);
+      await createMutation.mutateAsync(parsed.data);
 
-      await companiesService.createCompany(parsed.data);
-
-      toast.success("Фирма создана");
-      onSuccess();
-    } catch {
-      toast.error("Не удалось создать фирму");
-    } finally {
-      setLoading(false);
+      onSuccessAction();
+      reset();
+    } catch (error) {
+      console.error("Failed to create company:", error);
     }
   };
 
-  const isFormIncomplete = !form.name || !form.type || !form.country || !form.city;
+  const isFormIncomplete = !form.name.trim() || !form.type || !form.country || !form.city;
 
   return {
-    isFormIncomplete,
     form,
     setForm,
     errors,
     clearError,
-    loading,
+    loading: createMutation.isPending,
+    isFormIncomplete,
     submit,
     reset,
   };

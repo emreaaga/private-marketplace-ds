@@ -46,22 +46,14 @@ export type OrdersListItemApi = {
 
 export type OrdersListResponseApi = { data: OrdersListItemApi[] };
 
-// ✅ пагинированный ответ от бэка
 export type OrdersListPaginatedResponseApi = PaginatedResponse<OrdersListItemApi>;
 
 export type GetOrdersPageParams = {
   page: number;
-  // сюда позже можно добавить фильтры (status, q, date range и т.п.)
+  shipment_id?: number;
 };
 
 export const ordersService = {
-  // legacy — пока оставь
-  async getOrders() {
-    const { data } = await api.get<OrdersListResponseApi>("/orders");
-    return data;
-  },
-
-  // ✅ новый метод для таблицы
   async getOrdersPage(params: GetOrdersPageParams, signal?: AbortSignal): Promise<OrdersListPaginatedResponseApi> {
     const { data } = await api.get<OrdersListPaginatedResponseApi>("/orders", { params, signal });
     return data;
@@ -70,5 +62,10 @@ export const ordersService = {
   async createOrder(payload: CreateOrderPayload) {
     const { data } = await api.post<CreateOrderResponse>("/orders", payload);
     return data;
+  },
+
+  async getOrder(id: number, signal?: AbortSignal) {
+    const { data } = await api.get(`/flights/${id}`, { signal });
+    return data.data;
   },
 };

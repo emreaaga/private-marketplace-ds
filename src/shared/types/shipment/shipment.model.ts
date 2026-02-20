@@ -7,6 +7,8 @@ export type Shipment = {
   route: string;
   orders_count: string;
   total_weight_kg: string;
+  total_prepaid: string;
+  total_remaining: string;
   status: ShipmentStatuses;
   created_at: string;
 };

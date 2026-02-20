@@ -1,217 +1,125 @@
 "use client";
 
-import { useMemo, useRef, useState } from "react";
+import { useState } from "react";
 
+import { Plus, PackageSearch } from "lucide-react";
 import { useFormContext, useWatch } from "react-hook-form";
-import { toast } from "sonner";
 
-import { ShipmentsService } from "@/features/shipments/api/shipment";
-import { CompanySelect } from "@/features/users/ui/organisms/company-select";
 import type { FlightShipment } from "@/shared/types/flight/flight.dto";
-import type { Shipment } from "@/shared/types/shipment/shipment.model";
+import { Button } from "@/shared/ui/atoms/button";
 import { ScrollArea } from "@/shared/ui/atoms/scroll-area";
-import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 
-import type { EditFlightFormValues } from "./edit-flight-dialog";
+import { AddingShipmentRow } from "./adding-shipment-row";
+import type { EditFlightFormValues } from "./edit-flight.utils";
+import { SelectedShipmentRow } from "./selected-shipment-row";
 
-type ShipmentLike = {
-  id: number;
-  company_name: string;
-  total_weight_kg: unknown;
-  orders_count: unknown;
-};
+export function EditFlightShipments({ initialShipments }: { initialShipments: FlightShipment[] }) {
+  const { control, setValue, getValues } = useFormContext<EditFlightFormValues>();
 
-function num2(v: unknown): string {
-  const n = Number(v);
-  return Number.isFinite(n) ? n.toFixed(2) : "0.00";
-}
+  const selectedIds = useWatch({ control, name: "shipments" });
 
-function toShipmentLike(s: FlightShipment | Shipment): ShipmentLike {
-  return {
-    id: s.id,
-    company_name: s.company_name,
-    total_weight_kg: s.total_weight_kg,
-    orders_count: s.orders_count,
-  };
-}
+  const [addingRows, setAddingRows] = useState<string[]>([]);
 
-type Props = {
-  initialShipments: FlightShipment[];
-};
-
-export function EditFlightShipments({ initialShipments }: Props) {
-  const { control, getValues, setValue } = useFormContext<EditFlightFormValues>();
-
-  const selectedIds = useWatch({
-    control,
-    name: "shipments",
-    defaultValue: initialShipments.map((s) => s.id),
-  });
-
-  const selectedSet = useMemo(() => new Set(selectedIds), [selectedIds]);
-
-  const [companyId, setCompanyId] = useState<number | undefined>();
-  const [companyShipments, setCompanyShipments] = useState<Shipment[]>([]);
-  const [loading, setLoading] = useState(false);
-  const [selectedShipmentId, setSelectedShipmentId] = useState<string>("");
-
-  const [cache, setCache] = useState<Map<number, ShipmentLike>>(
-    () => new Map(initialShipments.map((s) => [s.id, toShipmentLike(s)])),
+  const [metadataCache, setMetadataCache] = useState<
+    Map<number, { name: string; weight: unknown; prepaid?: unknown; remaining?: unknown }>
+  >(
+    () =>
+      new Map(
+        initialShipments.map((s) => [
+          s.id,
+          {
+            name: s.company_name,
+            weight: s.total_weight_kg,
+            prepaid: s.total_prepaid,
+            remaining: s.total_remaining,
+          },
+        ]),
+      ),
   );
 
-  const reqSeq = useRef(0);
+  const addNewRow = () => setAddingRows((prev) => [...prev, crypto.randomUUID()]);
 
-  const shipmentsById = useMemo(() => {
-    const m = new Map<number, ShipmentLike>();
+  const removeAddingRow = (rowId: string) => setAddingRows((prev) => prev.filter((id) => id !== rowId));
 
-    for (const s of initialShipments) m.set(s.id, toShipmentLike(s));
-    for (const [id, s] of cache) m.set(id, s);
-
-    return m;
-  }, [initialShipments, cache]);
-
-  async function loadCompanyShipments(id: number) {
-    const seq = ++reqSeq.current;
-    setLoading(true);
-
-    try {
-      const data = await ShipmentsService.getShipments({ company_id: id, status: "draft" });
-
-      if (seq !== reqSeq.current) return;
-
-      setCompanyShipments(data);
-      setCache((prev) => {
-        const next = new Map(prev);
-        for (const s of data) next.set(s.id, toShipmentLike(s));
-        return next;
-      });
-    } catch {
-      if (seq === reqSeq.current) {
-        setCompanyShipments([]);
-        toast.error("Не удалось загрузить отправки");
-      }
-    } finally {
-      if (seq === reqSeq.current) setLoading(false);
+  const addShipment = (
+    id: number,
+    meta: { name: string; weight: unknown; prepaid?: unknown; remaining?: unknown },
+    rowId: string,
+  ) => {
+    const current = getValues("shipments");
+    if (!current.includes(id)) {
+      setMetadataCache((prev) => new Map(prev).set(id, meta));
+      setValue("shipments", [...current, id], { shouldDirty: true });
     }
-  }
+    removeAddingRow(rowId);
+  };
 
-  function addShipment(id: number) {
-    const current = getValues("shipments");
-    if (current.includes(id)) return;
-    setValue("shipments", [...current, id], { shouldDirty: true, shouldValidate: true });
-  }
-
-  function removeShipment(id: number) {
-    const current = getValues("shipments");
+  const removeShipment = (id: number) => {
     setValue(
       "shipments",
-      current.filter((x) => x !== id),
-      { shouldDirty: true, shouldValidate: true },
+      selectedIds.filter((x: number) => x !== id),
+      { shouldDirty: true },
     );
-  }
-
-  const emptyList = Boolean(companyId) && !loading && companyShipments.length === 0;
-  const selectDisabled = !companyId || loading;
+  };
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="flex items-center justify-between">
-        <div className="text-sm font-medium">Отправки</div>
-        <div className="text-muted-foreground text-xs">{selectedIds.length} шт</div>
+      <div className="flex items-center justify-between px-1">
+        <div className="flex flex-col">
+          <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
+            Состав рейса {selectedIds.length}
+          </span>
+        </div>
+        <Button
+          variant="ghost"
+          size="icon"
+          className="hover:bg-primary/10 hover:text-primary h-6 w-6 shrink-0"
+          onClick={addNewRow}
+        >
+          <Plus className="h-4 w-4" />
+        </Button>
+      </div>
+
+      <div className="text-muted-foreground/60 grid grid-cols-[45px_1fr_75px_85px_85px_32px] gap-2 px-3 text-[9px] font-bold tracking-tight uppercase">
+        <span>ID</span>
+        <span>Фирма</span>
+        <span className="text-right">Вес</span>
+        <span className="text-right">Предоплата</span>
+        <span className="text-right">Остаток</span>
       </div>
 
       <div className="min-h-0 flex-1">
-        <ScrollArea className="bg-background h-full rounded-md border">
-          {selectedIds.length === 0 ? (
-            <div className="text-muted-foreground px-4 py-4 text-sm">Нет отправок</div>
-          ) : (
-            <div className="divide-y">
-              {selectedIds.map((id) => {
-                const s = shipmentsById.get(id);
-
-                return (
-                  <div key={id} className="flex items-start justify-between gap-3 px-4 py-2">
-                    <div className="text-muted-foreground text-sm">
-                      #{id} · {s?.company_name ?? "—"}
-                    </div>
-
-                    <div className="flex items-center gap-3">
-                      <div className="text-muted-foreground text-xs whitespace-nowrap">
-                        {s ? `${num2(s.total_weight_kg)} кг · ${Number(s.orders_count)} шт` : "—"}
-                      </div>
-
-                      <button
-                        type="button"
-                        className="text-muted-foreground hover:text-red-600"
-                        title="Удалить"
-                        onClick={() => removeShipment(id)}
-                      >
-                        ✕
-                      </button>
-                    </div>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </ScrollArea>
-      </div>
-
-      <div className="flex gap-2">
-        <div className="w-[260px] shrink-0">
-          <CompanySelect
-            type="postal"
-            placeholder="Компания"
-            value={companyId}
-            onChange={(id) => {
-              setCompanyId(id);
-              setSelectedShipmentId("");
-              setCompanyShipments([]);
-
-              if (!id) {
-                reqSeq.current++;
-                setLoading(false);
-                return;
-              }
-
-              void loadCompanyShipments(id);
-            }}
-          />
-        </div>
-
-        <div className="min-w-0 flex-1">
-          <Select
-            value={selectedShipmentId}
-            onValueChange={(v) => {
-              setSelectedShipmentId("");
-              const id = Number(v);
-              if (Number.isFinite(id)) addShipment(id);
-            }}
-            disabled={selectDisabled}
-          >
-            <SelectTrigger className="h-9 w-full">
-              <SelectValue
-                placeholder={
-                  !companyId ? "Выберите компанию" : loading ? "Загрузка..." : emptyList ? "Нет отправок" : "Отправка"
-                }
+        <ScrollArea className="bg-background h-full rounded-md border text-sm shadow-sm">
+          <div className="divide-border/40 divide-y">
+            {selectedIds.map((id: number) => (
+              <SelectedShipmentRow
+                key={id}
+                id={id}
+                meta={metadataCache.get(id)}
+                onRemoveAction={() => removeShipment(id)}
               />
-            </SelectTrigger>
+            ))}
 
-            <SelectContent>
-              {emptyList ? (
-                <SelectItem value="__empty__" disabled>
-                  Нет отправок
-                </SelectItem>
-              ) : (
-                companyShipments.map((s) => (
-                  <SelectItem key={s.id} value={String(s.id)} disabled={selectedSet.has(s.id)}>
-                    #{s.id} · {num2(s.total_weight_kg)} кг · {Number(s.orders_count)} шт
-                  </SelectItem>
-                ))
-              )}
-            </SelectContent>
-          </Select>
-        </div>
+            {addingRows.map((rowId) => (
+              <AddingShipmentRow
+                key={rowId}
+                onCancelAction={() => removeAddingRow(rowId)}
+                onSelectAction={(shipmentId, meta) => addShipment(shipmentId, meta, rowId)}
+                excludeIds={selectedIds}
+              />
+            ))}
+
+            {selectedIds.length === 0 && addingRows.length === 0 && (
+              <div
+                className="text-muted-foreground hover:bg-muted/10 flex h-24 cursor-pointer flex-col items-center justify-center gap-1 transition-colors"
+                onClick={addNewRow}
+              >
+                <PackageSearch className="h-6 w-6 opacity-20" />
+                <span className="text-[11px] italic">Нажмите +, чтобы добавить отправку</span>
+              </div>
+            )}
+          </div>
+        </ScrollArea>
       </div>
     </div>
   );

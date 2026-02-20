@@ -1,12 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { ShipmentsService, type GetShipmentsLookupParams } from "@/features/shipments/api/shipment";
-import { shipmentsKeys } from "@/features/shipments/queries/shipments.keys";
+import { ShipmentsService } from "@/features/shipments/api/shipment";
 
-export function useShipmentsLookup(params: GetShipmentsLookupParams) {
+export function useAvailableShipments(companyId?: number) {
   return useQuery({
-    queryKey: shipmentsKeys.lookup(params),
-    queryFn: ({ signal }) => ShipmentsService.getShipmentsLookup(params, signal),
-    staleTime: 5 * 60_000,
+    queryKey: ["shipments", "search", companyId],
+    queryFn: () => ShipmentsService.getShipments({ company_id: companyId, status: "draft" }),
+    enabled: !!companyId,
+    staleTime: 60_000,
   });
 }

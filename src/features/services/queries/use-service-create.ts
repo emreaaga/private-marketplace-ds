@@ -3,18 +3,15 @@ import { toast } from "sonner";
 
 import { servicesService } from "../api/services";
 import { servicesKeys } from "../queries/services-keys";
-import type { FormValues } from "../ui/organisms/service-edit-dialog";
 
-type Vars = { id: number; payload: Partial<FormValues> };
-
-export function useUpdateService() {
+export function useServiceCreate() {
   const qc = useQueryClient();
 
   return useMutation({
-    mutationFn: ({ id, payload }: Vars) => servicesService.updateService(id, payload),
+    mutationFn: servicesService.createService,
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: servicesKeys.all });
-      toast.success("Услуга обновлена");
+      toast.success("Услуга успешно создана");
     },
   });
 }

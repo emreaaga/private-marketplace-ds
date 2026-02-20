@@ -75,7 +75,6 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
   const handleCreate = async () => {
     if (createOrder.isPending) return;
 
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     const itemsDto: ItemCreateDTO[] = items.map(({ ui_id, ...dto }) => dto);
 
     const payload: CreateOrderPayload = {

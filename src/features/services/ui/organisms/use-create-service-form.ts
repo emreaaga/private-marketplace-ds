@@ -1,12 +1,10 @@
 import { useState } from "react";
 
-import { toast } from "sonner";
-
 import { createServiceSchema } from "@/shared/types/services/create-service.schema";
 import type { ServicePrice } from "@/shared/types/services/services.pricing";
 import type { ServiceType } from "@/shared/types/services/services.types";
 
-import { servicesService } from "../../api/services";
+import { useServiceCreate } from "../../queries/use-service-create";
 
 export type CreateServiceForm = {
   company_id?: number;
@@ -24,10 +22,11 @@ const initialForm: CreateServiceForm = {
   price: "",
 };
 
-export function useCreateServiceForm(onSuccess: () => void) {
+export function useCreateServiceForm(onSuccessAction: () => void) {
   const [form, setForm] = useState<CreateServiceForm>(initialForm);
-  const [loading, setLoading] = useState(false);
   const [errors, setErrors] = useState<FormErrors>({});
+
+  const createMutation = useServiceCreate();
 
   const clearError = (field: keyof FormErrors) => {
     setErrors((prev) => {
@@ -41,7 +40,7 @@ export function useCreateServiceForm(onSuccess: () => void) {
   const reset = () => {
     setForm(initialForm);
     setErrors({});
-    setLoading(false);
+    createMutation.reset();
   };
 
   const submit = async () => {
@@ -69,31 +68,22 @@ export function useCreateServiceForm(onSuccess: () => void) {
     setErrors({});
 
     try {
-      setLoading(true);
-
-      await servicesService.createService(parsed.data);
-
-      toast.success("Услуга создана");
-      onSuccess();
+      await createMutation.mutateAsync(parsed.data);
+      onSuccessAction();
+      reset();
     } catch {
-      toast.error("Не удалось создать услугу");
-    } finally {
-      setLoading(false);
+      // Ошибка обработается в мутации (toast)
     }
   };
 
-  const isFormIncomplete = !form.company_id || !form.type || !form.pricing_type || !form.price;
-
   return {
-    isFormIncomplete,
+    isFormIncomplete: !form.company_id || !form.type || !form.pricing_type || !form.price,
     form,
     setForm,
-    loading,
-
     errors,
     clearError,
-
     submit,
     reset,
+    loading: createMutation.isPending,
   };
 }

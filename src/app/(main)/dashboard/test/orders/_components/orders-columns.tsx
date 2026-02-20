@@ -1,19 +1,12 @@
 import { ColumnDef } from "@tanstack/react-table";
+import { Eye } from "lucide-react";
 
 import { Order } from "@/shared/types/order/order-map.api";
 import { ORDER_STATUS_META } from "@/shared/types/order/order.status.meta";
 import { Badge } from "@/shared/ui/atoms/badge";
+import { Button } from "@/shared/ui/atoms/button";
 
 import { formatMoney, formatWeight } from "../../_components/finance";
-
-const formatDateTime = (d: Date) =>
-  new Intl.DateTimeFormat("ru-RU", {
-    year: "numeric",
-    month: "2-digit",
-    day: "2-digit",
-    hour: "2-digit",
-    minute: "2-digit",
-  }).format(d);
 
 export const OrdersColumns: ColumnDef<Order>[] = [
   {
@@ -77,7 +70,18 @@ export const OrdersColumns: ColumnDef<Order>[] = [
   {
     accessorKey: "createdAt",
     header: "Дата",
-    meta: { align: "right" },
-    cell: ({ row }) => <span className="whitespace-nowrap">{formatDateTime(row.original.createdAt)}</span>,
+    cell: ({ row }) => {
+      const value = row.original.createdAt;
+      return <span className="text-muted-foreground text-sm">{new Date(value).toLocaleDateString("ru-RU")}</span>;
+    },
+  },
+  {
+    id: "actions",
+    header: "",
+    cell: () => (
+      <Button variant="ghost" className="h-5 w-5">
+        <Eye className="h-5 w-5" />
+      </Button>
+    ),
   },
 ];

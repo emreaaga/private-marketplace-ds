@@ -15,6 +15,12 @@ export const flightsService = {
     return data;
   },
 
+  async updateFlight(id: number, payload: any) {
+    console.log(id, payload);
+    const { data } = await api.put<ApiResponse<Flight>>(`/flights/${id}`, payload);
+    return data.data;
+  },
+
   async getFlightsPage(params: GetFlightsPageParams, signal?: AbortSignal): Promise<PaginatedResponse<Flight>> {
     const { data } = await api.get<PaginatedResponse<Flight>>("/flights", {
       params,
@@ -26,11 +32,5 @@ export const flightsService = {
   async getFlight(id: number, signal?: AbortSignal): Promise<FlightDetails> {
     const { data } = await api.get<ApiResponse<FlightDetails>>(`/flights/${id}`, { signal });
     return data.data;
-  },
-
-  async updateFlight(id: number, payload: unknown) {
-    console.log(id, payload);
-    const { data } = await api.put(`/flights/${id}`, payload);
-    return data;
   },
 };

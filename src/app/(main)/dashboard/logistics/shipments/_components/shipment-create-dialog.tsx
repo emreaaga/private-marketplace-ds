@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import { toast } from "sonner";
 
-import { ShipmentsService } from "@/features/shipments/api/shipment";
+import { useCreateShipment } from "@/features/shipments/queries/use-create-shipment";
 import { CompanySelect } from "@/features/users/ui/organisms/company-select";
 import type { CountryCode } from "@/shared/types/geography/country.types";
 import { Button } from "@/shared/ui/atoms/button";
@@ -29,19 +29,11 @@ interface ShipmentCreateDialogProps {
 
 export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialogProps) {
   const [companyId, setCompanyId] = useState<number | undefined>();
-
-  const [origin, setOrigin] = useState<LocationValue>({
-    country: null,
-    city: null,
-  });
-
-  const [destination, setDestination] = useState<LocationValue>({
-    country: null,
-    city: null,
-  });
-
+  const [origin, setOrigin] = useState<LocationValue>({ country: null, city: null });
+  const [destination, setDestination] = useState<LocationValue>({ country: null, city: null });
   const [errors, setErrors] = useState<Errors>({});
-  const [isSubmitting, setIsSubmitting] = useState(false);
+
+  const createMutation = useCreateShipment();
 
   const resetForm = () => {
     setCompanyId(undefined);
@@ -56,7 +48,6 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
 
   const validate = (): boolean => {
     const nextErrors: Errors = {};
-
     if (!companyId) nextErrors.companyId = true;
     if (!origin.country) nextErrors.origin = true;
     if (!destination.country) nextErrors.destination = true;
@@ -74,24 +65,19 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
   const handleSubmit = async () => {
     if (!validate()) return;
 
-    try {
-      setIsSubmitting(true);
-
-      await ShipmentsService.createShipment({
+    createMutation.mutate(
+      {
         company_id: companyId!,
         from_country: origin.country!,
         to_country: destination.country!,
-      });
-
-      toast.success("Отправка успешно создана");
-
-      resetForm();
-      onOpenChange(false);
-    } catch {
-      toast.error("Не удалось создать отправку");
-    } finally {
-      setIsSubmitting(false);
-    }
+      },
+      {
+        onSuccess: () => {
+          resetForm();
+          onOpenChange(false);
+        },
+      },
+    );
   };
 
   return (
@@ -147,12 +133,12 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
         </div>
 
         <div className="flex justify-end gap-2 pt-4">
-          <Button size="sm" variant="outline" onClick={() => onOpenChange(false)}>
+          <Button size="sm" variant="outline" onClick={() => onOpenChange(false)} disabled={createMutation.isPending}>
             Отмена
           </Button>
 
-          <Button size="sm" onClick={handleSubmit} disabled={isSubmitting}>
-            Создать
+          <Button size="sm" onClick={handleSubmit} disabled={createMutation.isPending}>
+            {createMutation.isPending ? "Создание..." : "Создать"}
           </Button>
         </div>
       </DialogContent>

@@ -12,12 +12,10 @@ export function useCreateOrder() {
 
     onSuccess: () => {
       toast.success("Заказ создан");
-      qc.invalidateQueries({ queryKey: shipmentsKeys.list({ status: "draft" }), refetchType: "active" });
-    },
-
-    onError: (e) => {
-      console.log(e);
-      toast.error("Ошибка запроса.");
+      qc.invalidateQueries({
+        queryKey: shipmentsKeys.list({ status: "draft" }),
+        refetchType: "active",
+      });
     },
   });
 }

@@ -8,8 +8,7 @@ import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
 import { FlightsToolbar } from "../../logistics/flights/_components/flights-toolbar";
 import { EditFlightDialog } from "../_components/edit-flight-dialog";
-import { createFlightsActionsColumn } from "../_components/flight-columns.actions";
-import { flightsBaseColumns } from "../_components/flight-columns.base";
+import { createFlightsColumns } from "../_components/flight-columns";
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
@@ -22,7 +21,7 @@ export default function FlightsPage() {
   const flights: Flight[] = data?.data ?? [];
   const pageCount = data?.pagination.totalPages ?? 1;
 
-  const columns = useMemo(() => [...flightsBaseColumns, createFlightsActionsColumn(setEditId)], []);
+  const columns = useMemo(() => createFlightsColumns(setEditId), []);
 
   const emptyMessage = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить рейсы" : "Рейсы не найдены";
 

@@ -22,6 +22,11 @@ export const ShipmentsService = {
     return data.data;
   },
 
+  async getById(id: number, signal?: AbortSignal): Promise<Shipment> {
+    const { data } = await api.get<{ data: Shipment }>(`/shipments/${id}`, { signal });
+    return data.data;
+  },
+
   async getShipments(params?: GetShipmentQuery, signal?: AbortSignal): Promise<Shipment[]> {
     const { data } = await api.get<ShipmentResponse>("/shipments", { params, signal });
     return data.data;

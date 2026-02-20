@@ -14,9 +14,10 @@ interface CompanySelectProps {
   type?: CompanyType;
   placeholder?: string;
   error?: boolean;
+  className?: string;
 }
 
-export function CompanySelect({ value, onChange, type, placeholder, error }: CompanySelectProps) {
+export function CompanySelect({ value, onChange, type, placeholder, error, className }: CompanySelectProps) {
   const { data: companies = [], isLoading, isError } = useCompaniesLookup({ type });
 
   const emptyLabel = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить" : "Компании не найдены";
@@ -31,7 +32,13 @@ export function CompanySelect({ value, onChange, type, placeholder, error }: Com
         onChange(Number.isFinite(id) ? id : undefined);
       }}
     >
-      <SelectTrigger className={cn("w-full", error && "border-destructive focus:ring-destructive")}>
+      <SelectTrigger
+        className={cn(
+          "w-full",
+          error && "border-destructive focus:ring-destructive",
+          className, // Передаем className в триггер
+        )}
+      >
         <SelectValue placeholder={placeholder ?? "Компания"} />
       </SelectTrigger>
 
