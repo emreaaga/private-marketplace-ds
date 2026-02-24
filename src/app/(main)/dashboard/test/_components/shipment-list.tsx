@@ -21,7 +21,16 @@ export function ShipmentList() {
 
   const [metadataCache, setMetadataCache] = useState<Map<number, { name: string; weight: unknown }>>(() => new Map());
 
-  const addNewRow = () => setAddingRows((prev) => [...prev, crypto.randomUUID()]);
+  const addNewRow = () => {
+    const generateId = () => {
+      if (typeof window !== "undefined" && window.crypto && window.crypto.randomUUID) {
+        return window.crypto.randomUUID();
+      }
+      return Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+    };
+
+    setAddingRows((prev) => [...prev, generateId()]);
+  };
 
   const removeAddingRowAction = (rowId: string) => setAddingRows((prev) => prev.filter((id) => id !== rowId));
 
