@@ -43,7 +43,6 @@ export default function SellersOrdersResponsive({ data, columns }: OrdersRespons
     <LogisticsOrdersTable
       data={data}
       columns={columns}
-      pageSize={10}
       renderExpandedRow={(order: Order) => <OrderPaymentDetails order={order} />}
     />
   );

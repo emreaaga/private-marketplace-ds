@@ -56,5 +56,5 @@ export function CartTable({ items }: any) {
     },
   ];
 
-  return <DataTable data={items} columns={columns} pageSize={5} />;
+  return <DataTable data={items} columns={columns} />;
 }

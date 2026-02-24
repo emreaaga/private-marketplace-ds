@@ -23,5 +23,5 @@ export function LogisticsOrdersResponsive({ data, columns }: OrdersResponsivePro
     return <LoadingPlaceholder label="Подготовка таблицы…" />;
   }
 
-  return <LogisticsOrdersTable data={data} columns={columns} pageSize={isMobile ? 5 : 10} />;
+  return <LogisticsOrdersTable data={data} columns={columns} />;
 }

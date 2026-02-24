@@ -39,7 +39,6 @@ export default function FinancialEventsPage() {
         columns={FinancialEventsColumns}
         data={MOCK_FINANCIAL_EVENTS}
         emptyMessage="Финансовые события отсутствуют"
-        pageSize={10}
       />
     </div>
   );

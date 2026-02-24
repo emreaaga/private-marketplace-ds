@@ -38,6 +38,6 @@ export function TransactionsResponsive({ data, columns }: TransactionsResponsive
   return isMobile ? (
     <TransactionsMobileList data={data} />
   ) : (
-    <TransactionsDesktopTable columns={columns} data={data} pageSize={10} emptyMessage="Транзакций нет" />
+    <TransactionsDesktopTable columns={columns} data={data} emptyMessage="Транзакций нет" />
   );
 }

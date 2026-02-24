@@ -13,5 +13,5 @@ interface ProductsTableProps {
 }
 
 export function ProductsTable({ data, columns, pageSize = 10 }: ProductsTableProps) {
-  return <DataTable data={data} columns={columns} pageSize={pageSize} emptyMessage="Нет товаров" />;
+  return <DataTable data={data} columns={columns} emptyMessage="Нет товаров" />;
 }
