@@ -13,7 +13,27 @@ interface ListProps {
 
 export function ProductList({ items, onChange }: ListProps) {
   const addItem = () => {
-    onChange([...items, { ui_id: crypto.randomUUID(), name: "", quantity: 1, unit_price: "", category: "" }]);
+    // ФУНКЦИЯ ГЕНЕРАЦИИ ID:
+    // crypto.randomUUID() работает только в Secure Context (HTTPS или localhost).
+    // Для HTTP (по IP) используем fallback на основе Math.random.
+    const generateId = () => {
+      if (typeof window !== "undefined" && window.crypto && window.crypto.randomUUID) {
+        return window.crypto.randomUUID();
+      }
+      // Резервный метод для работы по обычному HTTP (без SSL)
+      return Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
+    };
+
+    onChange([
+      ...items,
+      {
+        ui_id: generateId(),
+        name: "",
+        quantity: 1,
+        unit_price: "",
+        category: "",
+      },
+    ]);
   };
 
   const updateItem = (ui_id: string, patch: Partial<ItemUI>) => {

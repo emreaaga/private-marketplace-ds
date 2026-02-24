@@ -77,7 +77,7 @@ export default function MainPage() {
               Вес рейсов за этот месяц
             </h3>
             <div className="mt-2 flex items-baseline gap-2">
-              <span className="text-3xl font-bold tracking-tight">14 250</span>
+              <span className="text-3xl font-bold tracking-tight">0. 00</span>
               <span className="text-muted-foreground text-sm font-medium">кг</span>
             </div>
             <div className="bg-border mt-3 h-1 w-full overflow-hidden rounded-full">
