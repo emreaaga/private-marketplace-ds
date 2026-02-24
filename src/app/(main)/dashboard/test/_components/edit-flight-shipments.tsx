@@ -1,11 +1,11 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo, useCallback } from "react";
 
+import Big from "big.js";
 import { Plus, PackageSearch } from "lucide-react";
-import { useFormContext, useWatch } from "react-hook-form";
+import { useFormContext, useWatch, useFieldArray } from "react-hook-form";
 
-import type { FlightShipment } from "@/shared/types/flight/flight.dto";
 import { Button } from "@/shared/ui/atoms/button";
 import { ScrollArea } from "@/shared/ui/atoms/scroll-area";
 
@@ -13,90 +13,124 @@ import { AddingShipmentRow } from "./adding-shipment-row";
 import type { EditFlightFormValues } from "./edit-flight.utils";
 import { SelectedShipmentRow } from "./selected-shipment-row";
 
-export function EditFlightShipments({ initialShipments }: { initialShipments: FlightShipment[] }) {
+export function EditFlightShipments() {
   const { control, setValue, getValues } = useFormContext<EditFlightFormValues>();
 
-  const selectedIds = useWatch({ control, name: "shipments" });
+  const { fields, append, remove } = useFieldArray({
+    control,
+    name: "shipments_data",
+    keyName: "rhf_id",
+  });
+
+  const selectedIds = useWatch({ control, name: "shipments", defaultValue: [] });
+  const shipmentsData = useWatch({ control, name: "shipments_data", defaultValue: [] });
 
   const [addingRows, setAddingRows] = useState<string[]>([]);
 
-  const [metadataCache, setMetadataCache] = useState<
-    Map<number, { name: string; weight: unknown; prepaid?: unknown; remaining?: unknown }>
-  >(
-    () =>
-      new Map(
-        initialShipments.map((s) => [
-          s.id,
-          {
-            name: s.company_name,
-            weight: s.total_weight_kg,
-            prepaid: s.total_prepaid,
-            remaining: s.total_remaining,
-          },
-        ]),
-      ),
+  const addNewRow = useCallback(() => setAddingRows((prev) => [...prev, crypto.randomUUID()]), []);
+
+  const removeAddingRow = useCallback(
+    (rowId: string) => setAddingRows((prev) => prev.filter((id) => id !== rowId)),
+    [],
   );
 
-  const addNewRow = () => setAddingRows((prev) => [...prev, crypto.randomUUID()]);
+  const addShipment = useCallback(
+    (id: number, meta: { name: string; weight: unknown; prepaid?: unknown; remaining?: unknown }, rowId: string) => {
+      const currentIds = getValues("shipments");
 
-  const removeAddingRow = (rowId: string) => setAddingRows((prev) => prev.filter((id) => id !== rowId));
+      if (!currentIds.includes(id)) {
+        setValue("shipments", [...currentIds, id], { shouldDirty: true });
 
-  const addShipment = (
-    id: number,
-    meta: { name: string; weight: unknown; prepaid?: unknown; remaining?: unknown },
-    rowId: string,
-  ) => {
-    const current = getValues("shipments");
-    if (!current.includes(id)) {
-      setMetadataCache((prev) => new Map(prev).set(id, meta));
-      setValue("shipments", [...current, id], { shouldDirty: true });
-    }
-    removeAddingRow(rowId);
-  };
+        append({
+          id,
+          company_name: meta.name,
+          total_weight_kg: String(meta.weight ?? 0),
+          original_weight_kg: String(meta.weight ?? 0),
+          total_prepaid: String(meta.prepaid ?? 0),
+          total_remaining: String(meta.remaining ?? 0),
+        });
+      }
+      removeAddingRow(rowId);
+    },
+    [getValues, setValue, append, removeAddingRow],
+  );
 
-  const removeShipment = (id: number) => {
-    setValue(
-      "shipments",
-      selectedIds.filter((x: number) => x !== id),
-      { shouldDirty: true },
-    );
-  };
+  const removeShipment = useCallback(
+    (dbId: number, index: number) => {
+      const currentIds = getValues("shipments");
+
+      setValue(
+        "shipments",
+        currentIds.filter((x: number) => x !== dbId),
+        { shouldDirty: true },
+      );
+
+      remove(index);
+    },
+    [getValues, setValue, remove],
+  );
+
+  const { totals, weightDiffs } = useMemo(() => {
+    const acc = {
+      weight: new Big(0),
+      prepaid: new Big(0),
+      remaining: new Big(0),
+    };
+
+    const diffs: Record<number, number> = {};
+
+    shipmentsData.forEach((curr) => {
+      const currentVal = curr.total_weight_kg || "0";
+      const originalVal = curr.original_weight_kg ?? currentVal;
+
+      const currentW = new Big(currentVal);
+      const originalW = new Big(originalVal);
+
+      const diff = currentW.minus(originalW).toNumber();
+      diffs[curr.id] = diff > 0.01 ? diff : 0;
+
+      acc.weight = acc.weight.plus(currentW);
+      acc.prepaid = acc.prepaid.plus(new Big(String(curr.total_prepaid ?? 0) || "0"));
+      acc.remaining = acc.remaining.plus(new Big(String(curr.total_remaining ?? 0) || "0"));
+    });
+
+    return { totals: acc, weightDiffs: diffs };
+  }, [shipmentsData]);
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="flex items-center justify-between px-1">
-        <div className="flex flex-col">
-          <span className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
-            Состав рейса {selectedIds.length}
-          </span>
-        </div>
+      <div className="text-muted-foreground grid grid-cols-[45px_1fr_75px_85px_85px_32px] items-center gap-2 px-3 text-[9px] font-bold tracking-tight uppercase">
         <Button
           variant="ghost"
           size="icon"
           className="hover:bg-primary/10 hover:text-primary h-6 w-6 shrink-0"
           onClick={addNewRow}
+          title="Добавить отправку"
         >
           <Plus className="h-4 w-4" />
         </Button>
-      </div>
-
-      <div className="text-muted-foreground/60 grid grid-cols-[45px_1fr_75px_85px_85px_32px] gap-2 px-3 text-[9px] font-bold tracking-tight uppercase">
-        <span>ID</span>
         <span>Фирма</span>
         <span className="text-right">Вес</span>
         <span className="text-right">Предоплата</span>
         <span className="text-right">Остаток</span>
+        <span></span>
       </div>
 
-      <div className="min-h-0 flex-1">
-        <ScrollArea className="bg-background h-full rounded-md border text-sm shadow-sm">
+      <div className="flex min-h-0 flex-1 flex-col rounded-md border shadow-sm">
+        <ScrollArea className="bg-background flex-1 text-sm">
           <div className="divide-border/40 divide-y">
-            {selectedIds.map((id: number) => (
+            {fields.map((field, index) => (
               <SelectedShipmentRow
-                key={id}
-                id={id}
-                meta={metadataCache.get(id)}
-                onRemoveAction={() => removeShipment(id)}
+                key={field.rhf_id}
+                id={field.id}
+                meta={{
+                  name: field.company_name,
+                  weight: field.total_weight_kg,
+                  weightDiff: weightDiffs[field.id] ?? 0,
+                  prepaid: field.total_prepaid,
+                  remaining: field.total_remaining,
+                }}
+                onRemoveAction={() => removeShipment(field.id, index)}
               />
             ))}
 
@@ -109,7 +143,7 @@ export function EditFlightShipments({ initialShipments }: { initialShipments: Fl
               />
             ))}
 
-            {selectedIds.length === 0 && addingRows.length === 0 && (
+            {fields.length === 0 && addingRows.length === 0 && (
               <div
                 className="text-muted-foreground hover:bg-muted/10 flex h-24 cursor-pointer flex-col items-center justify-center gap-1 transition-colors"
                 onClick={addNewRow}
@@ -120,6 +154,24 @@ export function EditFlightShipments({ initialShipments }: { initialShipments: Fl
             )}
           </div>
         </ScrollArea>
+
+        {fields.length > 0 && (
+          <div className="bg-muted/30 border-t p-2 text-[11px] font-medium">
+            <div className="grid grid-cols-[45px_1fr_75px_85px_85px_32px] items-center gap-2">
+              <span className="text-muted-foreground col-span-2 text-right font-bold tracking-wider uppercase">
+                Итого ({fields.length}):
+              </span>
+              <span className="text-right font-semibold tabular-nums">{totals.weight.toFixed(2)} кг</span>
+              <span className="text-right font-semibold text-green-600/80 tabular-nums">
+                ${totals.prepaid.toFixed(2)}
+              </span>
+              <span className="text-right font-semibold text-orange-600/80 tabular-nums">
+                ${totals.remaining.toFixed(2)}
+              </span>
+              <span></span>
+            </div>
+          </div>
+        )}
       </div>
     </div>
   );

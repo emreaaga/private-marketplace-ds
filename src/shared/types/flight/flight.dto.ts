@@ -50,6 +50,8 @@ export type FlightDetails = Omit<CreateFlightDto, "shipments"> & {
   created_at: string;
 
   shipments: FlightShipment[];
+
+  total_flight_weight_kg: string | null;
 };
 
 export type ApiResponse<T> = { data: T };

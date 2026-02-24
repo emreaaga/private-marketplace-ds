@@ -22,7 +22,8 @@ type EntryRow = {
 
 type Props = {
   items: ItemUI[];
-  onItemsChange: (next: ItemUI[]) => void;
+  onItemsChange?: (next: ItemUI[]) => void; // Сделали опциональным для readOnly режима
+  readOnly?: boolean; // Добавили флаг режима просмотра
 };
 
 function makeUiId() {
@@ -32,24 +33,27 @@ function makeEntryId() {
   return crypto.randomUUID();
 }
 
-export function ProductList({ items, onItemsChange }: Props) {
+export function ProductList({ items, onItemsChange, readOnly = false }: Props) {
   const initialId = React.useMemo(() => makeEntryId(), []);
 
   const [entryRows, setEntryRows] = React.useState<EntryRow[]>([{ id: initialId, value: EMPTY_ITEM_CREATE_FORM }]);
-
   const [focusEntryId, setFocusEntryId] = React.useState<string | null>(initialId);
 
   const totalQuantity = React.useMemo(() => items.reduce((s, i) => s + i.quantity, 0), [items]);
-
   const totalPrice = React.useMemo(() => items.reduce((s, i) => s + toMoney(i.unit_price, 0) * i.quantity, 0), [items]);
 
-  const removeItem = (ui_id: string) => onItemsChange(items.filter((i) => i.ui_id !== ui_id));
+  const removeItem = (ui_id: string) => {
+    if (readOnly || !onItemsChange) return;
+    onItemsChange(items.filter((i) => i.ui_id !== ui_id));
+  };
 
   const changeQuantity = (ui_id: string, delta: number) => {
+    if (readOnly || !onItemsChange) return;
     onItemsChange(items.map((i) => (i.ui_id === ui_id ? { ...i, quantity: Math.max(1, i.quantity + delta) } : i)));
   };
 
   const addEntryRow = () => {
+    if (readOnly) return;
     const id = makeEntryId();
     setEntryRows((prev) => [...prev, { id, value: EMPTY_ITEM_CREATE_FORM }]);
     setFocusEntryId(id);
@@ -65,6 +69,8 @@ export function ProductList({ items, onItemsChange }: Props) {
   };
 
   const autoCommitEntryRow = (id: string) => {
+    if (readOnly || !onItemsChange) return;
+
     const row = entryRows.find((r) => r.id === id);
     if (!row) return;
 
@@ -99,16 +105,19 @@ export function ProductList({ items, onItemsChange }: Props) {
       <div className="rounded-md border">
         <div className="bg-muted/30 grid grid-cols-[28px_1fr_92px_110px_110px] items-center gap-1 border-b px-2 py-1 text-[11px] font-medium">
           <div className="flex justify-center">
-            <Button
-              type="button"
-              variant="secondary"
-              size="icon"
-              className="h-6 w-6"
-              onClick={addEntryRow}
-              title="Добавить строку"
-            >
-              <Plus className="h-3.5 w-3.5" />
-            </Button>
+            {/* Скрываем кнопку добавления, если режим только для чтения */}
+            {!readOnly && (
+              <Button
+                type="button"
+                variant="secondary"
+                size="icon"
+                className="h-6 w-6"
+                onClick={addEntryRow}
+                title="Добавить строку"
+              >
+                <Plus className="h-3.5 w-3.5" />
+              </Button>
+            )}
           </div>
 
           <span className="text-muted-foreground">Товар</span>
@@ -126,20 +135,23 @@ export function ProductList({ items, onItemsChange }: Props) {
                 item={it}
                 onChangeQuantity={(delta) => changeQuantity(it.ui_id, delta)}
                 onRemove={() => removeItem(it.ui_id)}
+                readOnly={readOnly} // <-- Прокидываем флаг дальше
               />
             ))}
 
-            {entryRows.map((r, idx) => (
-              <ItemCreateRow
-                key={r.id}
-                index={entryStartIndex + idx}
-                value={r.value}
-                onChange={(patch) => updateEntryRow(r.id, patch)}
-                onAutoCommit={() => autoCommitEntryRow(r.id)}
-                onRemove={() => removeEntryRow(r.id)}
-                autoFocus={focusEntryId === r.id}
-              />
-            ))}
+            {/* В режиме чтения не показываем пустые строки для ввода */}
+            {!readOnly &&
+              entryRows.map((r, idx) => (
+                <ItemCreateRow
+                  key={r.id}
+                  index={entryStartIndex + idx}
+                  value={r.value}
+                  onChange={(patch) => updateEntryRow(r.id, patch)}
+                  onAutoCommit={() => autoCommitEntryRow(r.id)}
+                  onRemove={() => removeEntryRow(r.id)}
+                  autoFocus={focusEntryId === r.id}
+                />
+              ))}
           </div>
         </ScrollArea>
       </div>

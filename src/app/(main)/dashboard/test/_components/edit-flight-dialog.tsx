@@ -28,6 +28,7 @@ const DEFAULT_VALUES: EditFlightFormValues = {
   awb_number: "",
   final_gross_weight_kg: "",
   shipments: [],
+  shipments_data: [],
 };
 
 export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFlightDialogProps) {
@@ -52,12 +53,9 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
 
   const onSave = form.handleSubmit(async (values) => {
     if (!flightId) return;
-
     try {
       const payload = toUpdatePayload(values);
-
       await updateMutation.mutateAsync({ id: flightId, payload });
-
       handleClose();
     } catch {
       // Здесь ошибка
@@ -68,7 +66,7 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
-      <DialogContent className="flex h-[560px]! w-[1500px]! max-w-[calc(100vw-2rem)]! flex-col overflow-hidden p-0">
+      <DialogContent className="flex h-140! w-375! max-w-[calc(100vw-2rem)]! flex-col overflow-hidden p-0">
         <DialogHeader className="flex flex-row items-center gap-3 space-y-0 border-b px-4 py-3">
           <DialogTitle className="leading-none">{flightId ? `Рейс #${flightId}` : "Загрузка..."}</DialogTitle>
 
@@ -101,7 +99,7 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
                 </div>
 
                 <div className="bg-muted/20 min-w-0 overflow-hidden px-2">
-                  <EditFlightShipments key={`${flightId}-${sessionKey}`} initialShipments={flight.shipments} />
+                  <EditFlightShipments key={`${flightId}-${sessionKey}`} />
                 </div>
               </div>
             ) : (
@@ -110,10 +108,10 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
           </div>
 
           <div className="flex shrink-0 justify-end gap-2 border-t px-6 py-3">
-            <Button variant="secondary" onClick={handleClose}>
+            <Button size="sm" variant="secondary" onClick={handleClose}>
               Отмена
             </Button>
-            <Button onClick={onSave} disabled={!canSave}>
+            <Button size="sm" onClick={onSave} disabled={!canSave}>
               {updateMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
             </Button>
           </div>

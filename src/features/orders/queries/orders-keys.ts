@@ -7,4 +7,5 @@ export const ordersKeys = {
   list: () => [...ordersKeys.lists(), "legacy"] as const,
 
   listPage: (params: GetOrdersPageParams) => [...ordersKeys.lists(), "page", params] as const,
+  detail: (id: number) => [...ordersKeys.all, "detail", id] as const,
 };

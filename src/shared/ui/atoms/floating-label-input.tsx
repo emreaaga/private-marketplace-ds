@@ -20,8 +20,8 @@ export const FloatingLabelInput = React.forwardRef<HTMLInputElement, FloatingLab
     return (
       <div className={["group relative w-full", containerClassName].filter(Boolean).join(" ")}>
         {Icon && (
-          <div className="text-muted-foreground/60 absolute top-1/2 left-3 -translate-y-1/2">
-            <Icon size={18} strokeWidth={2} />
+          <div className="text-muted-foreground/60 absolute top-1/2 left-2 -translate-y-1/2">
+            <Icon size={14} strokeWidth={2} />
           </div>
         )}
 
@@ -31,7 +31,6 @@ export const FloatingLabelInput = React.forwardRef<HTMLInputElement, FloatingLab
             "origin-start text-muted-foreground/60 absolute top-1/2 block -translate-y-1/2 cursor-text px-1 text-sm transition-all",
             "group-focus-within:pointer-events-none group-focus-within:top-0 group-focus-within:cursor-default group-focus-within:text-xs",
             "has-[+input:not(:placeholder-shown)]:pointer-events-none has-[+input:not(:placeholder-shown)]:top-0 has-[+input:not(:placeholder-shown)]:cursor-default has-[+input:not(:placeholder-shown)]:text-xs",
-            // Если есть иконка, сдвигаем лейбл вправо в обычном состоянии
             Icon ? "left-9" : "left-2",
           ].join(" ")}
         >
@@ -42,7 +41,7 @@ export const FloatingLabelInput = React.forwardRef<HTMLInputElement, FloatingLab
           id={id}
           ref={ref}
           placeholder=" "
-          className={["dark:bg-background", Icon ? "pl-10" : "", className].filter(Boolean).join(" ")}
+          className={["dark:bg-background", Icon ? "pl-8" : "", className].filter(Boolean).join(" ")}
           {...props}
         />
       </div>

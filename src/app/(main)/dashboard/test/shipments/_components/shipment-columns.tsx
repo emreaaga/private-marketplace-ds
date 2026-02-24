@@ -8,18 +8,25 @@ import { ChevronRight, Eye } from "lucide-react";
 import type { Shipment } from "@/shared/types/shipment/shipment.model";
 import { SHIPMENT_STATUS_META } from "@/shared/types/shipment/shipment.status.meta";
 import { Button } from "@/shared/ui/atoms/button";
+import { StatusProgress } from "@/shared/ui/atoms/status-progress";
+import { formatMoney } from "@/shared/ui/molecules/format-money";
 import { formatQuantity } from "@/shared/ui/molecules/format-quantity";
 import { formatWeight } from "@/shared/ui/molecules/format-weight";
 
 export const getShipmentsColumns = (onView: (id: number) => void): ColumnDef<Shipment>[] => [
   {
     accessorKey: "id",
-    header: "Отправка",
-    cell: ({ row }) => <span className="font-mono text-sm">#{row.original.id}</span>,
+    header: "ID",
+    cell: ({ row }) => <span className="text-muted-foreground font-mono text-xs">{row.original.id}</span>,
   },
   {
     accessorKey: "company_name",
     header: "Почта",
+    cell: ({ getValue }) => (
+      <div className="max-w-20 truncate" title={getValue<string>()}>
+        {getValue<string>()}
+      </div>
+    ),
   },
   {
     accessorKey: "route",
@@ -33,48 +40,26 @@ export const getShipmentsColumns = (onView: (id: number) => void): ColumnDef<Shi
   {
     accessorKey: "total_weight_kg",
     header: "Вес",
-    cell: ({ getValue }) => formatWeight(getValue<number>()),
+    cell: ({ getValue }) => formatWeight(getValue<string>()),
+  },
+  {
+    accessorKey: "total_prepaid",
+    header: "Взнос",
+    cell: ({ getValue }) => formatMoney(getValue<string>()),
+  },
+  {
+    accessorKey: "total_remaining",
+    header: "Остаток",
+    cell: ({ getValue }) => formatMoney(getValue<string>()),
   },
   {
     accessorKey: "status",
     header: "Статус",
     cell: ({ row }) => {
       const status = row.original.status;
-      const meta = SHIPMENT_STATUS_META[status];
+      const { Icon, step, label } = SHIPMENT_STATUS_META[status];
 
-      const { Icon, step, label } = meta;
-      const totalSteps = 5;
-      const percentage = (step / totalSteps) * 100;
-      const circumference = 56.5;
-
-      return (
-        <div className="relative flex h-6 w-6 items-center justify-center" title={label}>
-          <svg className="absolute h-full w-full -rotate-90">
-            <circle
-              cx="12"
-              cy="12"
-              r="9"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              fill="transparent"
-              className="text-muted/20"
-            />
-            <circle
-              cx="12"
-              cy="12"
-              r="9"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              fill="transparent"
-              strokeDasharray={circumference}
-              strokeDashoffset={circumference - (circumference * percentage) / 100}
-              strokeLinecap="round"
-              className="text-muted-foreground/60 transition-all duration-500"
-            />
-          </svg>
-          <Icon className="text-muted-foreground/80 relative z-10 h-3.5 w-3.5" />
-        </div>
-      );
+      return <StatusProgress step={step} totalSteps={5} Icon={Icon} label={label} />;
     },
   },
   {
@@ -85,14 +70,19 @@ export const getShipmentsColumns = (onView: (id: number) => void): ColumnDef<Shi
       const shipmentId = row.original.id;
 
       return (
-        <div className="flex items-center justify-end gap-1">
-          <Button variant="ghost" className="h-7 w-7 p-0" title="Просмотр" onClick={() => onView(shipmentId)}>
-            <Eye className="h-3.5 w-3.5" />
+        <div className="flex items-center justify-end gap-0.5">
+          <Button
+            variant="ghost"
+            className="hover:bg-muted/50 h-6 w-6 p-0"
+            title="Просмотр"
+            onClick={() => onView(shipmentId)}
+          >
+            <Eye className="text-muted-foreground/70 h-3 w-3" />
           </Button>
 
-          <Button asChild variant="ghost" className="h-7 w-7 p-0">
+          <Button asChild variant="ghost" className="hover:bg-muted/50 h-6 w-6 p-0">
             <Link href={`/dashboard/test/${shipmentId}/orders`} title="Открыть заказы">
-              <ChevronRight className="text-muted-foreground h-3.5 w-3.5" />
+              <ChevronRight className="text-muted-foreground/70 h-3 w-3" />
             </Link>
           </Button>
         </div>

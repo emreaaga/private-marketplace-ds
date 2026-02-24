@@ -3,15 +3,17 @@
 import { useMemo, useState } from "react";
 
 import { useOrdersList } from "@/features/orders/queries/use-orders-list";
+import { OrderEditDialog } from "@/features/orders/ui/organisms/order-edit-dialog";
 import { OrdersToolbar } from "@/features/orders/ui/organisms/sections/orders-toolbar";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
-import { OrdersColumns } from "./_components/orders-columns";
+import { getOrdersColumns } from "./_components/orders-columns";
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
 export default function OrdersPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
+  const [editId, setEditId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
 
   const { data, isLoading, isError } = useOrdersList({ page });
@@ -29,7 +31,7 @@ export default function OrdersPage() {
     });
   };
 
-  const columns = useMemo(() => OrdersColumns, []);
+  const columns = useMemo(() => getOrdersColumns(setEditId), []);
 
   return (
     <div className="space-y-4">
@@ -42,6 +44,8 @@ export default function OrdersPage() {
         serverPagination={{ page, pageCount, onPageChange }}
         fixedPageSize={10}
       />
+
+      <OrderEditDialog open={editId !== null} orderId={editId} onOpenChange={(isOpen) => !isOpen && setEditId(null)} />
     </div>
   );
 }

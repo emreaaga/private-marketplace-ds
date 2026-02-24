@@ -3,17 +3,20 @@
 import Link from "next/link";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import { Eye, ChevronRight } from "lucide-react";
+import { Eye, ChevronRight, DollarSign } from "lucide-react";
 
 import type { Flight } from "@/shared/types/flight/flight.model";
 import { FLIGHT_STATUS_META } from "@/shared/types/flight/flight.status.meta";
 import { Button } from "@/shared/ui/atoms/button";
+import { StatusProgress } from "@/shared/ui/atoms/status-progress";
+import { formatMoney } from "@/shared/ui/molecules/format-money";
 import { formatWeight } from "@/shared/ui/molecules/format-weight";
 
 export const createFlightsColumns = (onEdit: (id: number) => void): ColumnDef<Flight>[] => [
   {
     accessorKey: "id",
     header: "ID",
+    cell: ({ row }) => <span className="text-muted-foreground font-mono text-xs">{row.original.id}</span>,
   },
   {
     accessorKey: "route",
@@ -22,14 +25,7 @@ export const createFlightsColumns = (onEdit: (id: number) => void): ColumnDef<Fl
   {
     accessorKey: "air_kg_price",
     header: "Ставка",
-    cell: ({ row }) => {
-      const price = row.original.air_kg_price;
-      return price ? (
-        <span className="text-muted-foreground font-medium tabular-nums">${Number(price).toFixed(2)}</span>
-      ) : (
-        "—"
-      );
-    },
+    cell: ({ row }) => <div>{formatMoney(row.original.air_kg_price)}</div>,
   },
   {
     accessorKey: "status",
@@ -37,35 +33,10 @@ export const createFlightsColumns = (onEdit: (id: number) => void): ColumnDef<Fl
     cell: ({ row }) => {
       const status = row.original.status;
       const { Icon, step, label } = FLIGHT_STATUS_META[status];
-      const percentage = (step / 4) * 100;
-      const circumference = 56.5;
 
       return (
-        <div className="relative flex h-6 w-6 items-center justify-center" title={label}>
-          <svg className="absolute h-full w-full -rotate-90">
-            <circle
-              cx="12"
-              cy="12"
-              r="9"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              fill="transparent"
-              className="text-muted/20"
-            />
-            <circle
-              cx="12"
-              cy="12"
-              r="9"
-              stroke="currentColor"
-              strokeWidth="1.5"
-              fill="transparent"
-              strokeDasharray={circumference}
-              strokeDashoffset={circumference - (circumference * percentage) / 100}
-              strokeLinecap="round"
-              className="text-muted-foreground/60 transition-all duration-500"
-            />
-          </svg>
-          <Icon className="text-muted-foreground/80 relative z-10 h-3 w-3" />
+        <div className="ml-1 flex items-center justify-start">
+          <StatusProgress step={step} totalSteps={4} Icon={Icon} label={label} />
         </div>
       );
     },
@@ -79,6 +50,16 @@ export const createFlightsColumns = (onEdit: (id: number) => void): ColumnDef<Fl
     },
   },
   {
+    accessorKey: "prepaid_sum",
+    header: "Взнос",
+    cell: ({ row }) => <div>{formatMoney(row.original.prepaid_sum)}</div>,
+  },
+  {
+    accessorKey: "remaining_sum",
+    header: "Остаток",
+    cell: ({ row }) => <div>{formatMoney(row.original.remaining_sum)}</div>,
+  },
+  {
     accessorKey: "arrival_at",
     header: "Прибытие",
     cell: ({ row }) => {
@@ -89,14 +70,27 @@ export const createFlightsColumns = (onEdit: (id: number) => void): ColumnDef<Fl
   {
     id: "actions",
     header: "",
+    meta: { align: "right" },
     cell: ({ row }) => (
-      <div className="flex items-center justify-end gap-1">
-        <Button variant="ghost" className="h-7 w-7 p-0" onClick={() => onEdit(row.original.id)}>
-          <Eye className="h-4 w-4" />
+      <div className="flex items-center justify-end gap-0.5">
+        <Button
+          variant="ghost"
+          className="hover:bg-muted/50 h-6 w-6 p-0"
+          title="Просмотр"
+          onClick={() => onEdit(row.original.id)}
+        >
+          <Eye className="text-muted-foreground/70 h-3 w-3" />
         </Button>
-        <Button asChild variant="ghost" className="h-7 w-7 p-0">
-          <Link href={`/dashboard/test/${row.original.id}/shipments`}>
-            <ChevronRight className="text-muted-foreground h-4 w-4" />
+
+        <Button asChild variant="ghost" className="h-6 w-6 p-0 hover:bg-green-500/10">
+          <Link href={`/dashboard/test/${row.original.id}/flight-finance`} title="Финансы рейса">
+            <DollarSign className="text-muted-foreground/70 h-3.5 w-3.5 transition-colors hover:text-green-600" />
+          </Link>
+        </Button>
+
+        <Button asChild variant="ghost" className="hover:bg-muted/50 h-6 w-6 p-0">
+          <Link href={`/dashboard/test/${row.original.id}/shipments`} title="Открыть отправки">
+            <ChevronRight className="text-muted-foreground/70 h-3 w-3" />
           </Link>
         </Button>
       </div>

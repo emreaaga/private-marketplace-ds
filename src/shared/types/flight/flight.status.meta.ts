@@ -1,6 +1,6 @@
 import type React from "react";
 
-import { CircleDashed, Plane, MapPin, CheckCircle2 } from "lucide-react";
+import { CircleDashed, PlaneTakeoff, MapPin, Check } from "lucide-react";
 
 import type { Flight } from "@/shared/types/flight/flight.model";
 
@@ -23,7 +23,7 @@ export const FLIGHT_STATUS_META: Record<
   },
   departed: {
     label: "В пути",
-    Icon: Plane,
+    Icon: PlaneTakeoff,
     variant: "default",
     step: 2,
   },
@@ -35,7 +35,7 @@ export const FLIGHT_STATUS_META: Record<
   },
   closed: {
     label: "Закрыт",
-    Icon: CheckCircle2,
+    Icon: Check,
     variant: "secondary",
     step: 4,
   },

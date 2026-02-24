@@ -1,5 +1,25 @@
+import Big from "big.js";
+
 import type { FlightDetails } from "@/shared/types/flight/flight.dto";
 import type { CountryCode } from "@/shared/types/geography/country.types";
+
+export function distributeWeightProportionally<T extends { total_weight_kg: string | number }>(
+  actualWeight: string | number,
+  shipments: T[],
+): T[] {
+  const totalActual = new Big(actualWeight || 0);
+
+  const totalCalculated = shipments.reduce((acc, s) => acc.plus(new Big(s.total_weight_kg || 0)), new Big(0));
+
+  if (totalCalculated.eq(0)) return shipments;
+
+  const ratio = totalActual.div(totalCalculated);
+
+  return shipments.map((s) => ({
+    ...s,
+    total_weight_kg: new Big(s.total_weight_kg).times(ratio).toFixed(2),
+  }));
+}
 
 export type EditFlightFormValues = {
   departure_location: { country: CountryCode | null; city: string | null };
@@ -7,6 +27,7 @@ export type EditFlightFormValues = {
   air_partner_id?: number;
   sender_customs_id?: number;
   receiver_customs_id?: number;
+  total_flight_weight_kg?: string;
   air_kg_price: string;
   loading_at?: Date;
   departure_at?: Date;
@@ -15,6 +36,14 @@ export type EditFlightFormValues = {
   awb_number: string;
   final_gross_weight_kg: string;
   shipments: number[];
+  shipments_data: {
+    id: number;
+    total_weight_kg: string;
+    original_weight_kg?: string;
+    company_name: string;
+    total_prepaid?: unknown;
+    total_remaining?: unknown;
+  }[];
 };
 
 const parseDate = (v: string | null | undefined): Date | undefined => {
@@ -42,6 +71,7 @@ export function toFormValues(f: FlightDetails): EditFlightFormValues {
     air_partner_id: f.air_partner_id,
     sender_customs_id: f.sender_customs_id,
     receiver_customs_id: f.receiver_customs_id,
+    total_flight_weight_kg: formatNumber(f.total_flight_weight_kg),
     air_kg_price: formatNumber(f.air_kg_price),
     loading_at: parseDate(f.loading_at),
     departure_at: parseDate(f.departure_at),
@@ -50,6 +80,18 @@ export function toFormValues(f: FlightDetails): EditFlightFormValues {
     awb_number: f.awb_number ?? "",
     final_gross_weight_kg: f.final_gross_weight_kg == null ? "" : formatNumber(f.final_gross_weight_kg),
     shipments: f.shipments.map((s) => s.id),
+    shipments_data: f.shipments.map((s) => {
+      const shipmentRecord = s as Record<string, unknown>;
+
+      return {
+        id: s.id,
+        company_name: s.company_name,
+        total_weight_kg: formatNumber(s.total_weight_kg),
+        original_weight_kg: formatNumber(s.total_weight_kg),
+        total_prepaid: shipmentRecord.total_prepaid,
+        total_remaining: shipmentRecord.total_remaining,
+      };
+    }),
   };
 }
 

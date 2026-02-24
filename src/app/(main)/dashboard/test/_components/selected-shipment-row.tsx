@@ -7,29 +7,37 @@ interface SelectedShipmentRowProps {
   meta?: {
     name: string;
     weight: number | string | unknown;
+    weightDiff?: number;
     prepaid?: number | string | unknown;
     remaining?: number | string | unknown;
   };
   onRemoveAction: () => void;
 }
 
+// eslint-disable-next-line complexity
 export function SelectedShipmentRow({ id, meta, onRemoveAction }: SelectedShipmentRowProps) {
   return (
     <div className="group hover:bg-muted/40 grid grid-cols-[40px_1fr_70px_80px_80px_32px] items-center gap-2 px-3 py-1.5 transition-colors">
-      <span className="text-muted-foreground font-mono text-[10px]">#{id}</span>
+      <span className="text-muted-foreground font-mono text-[10px]">{id}</span>
 
-      <span className="truncate text-[13px] leading-none font-medium">{meta?.name ?? "..."}</span>
+      <span className="truncate text-[13px] leading-none">{meta?.name ?? "..."}</span>
 
-      <span className="text-right text-xs font-bold whitespace-nowrap tabular-nums">
-        {Number(meta?.weight ?? 0).toFixed(1)} кг
+      <div className="flex flex-col items-end justify-center text-right whitespace-nowrap tabular-nums">
+        {meta?.weightDiff && meta.weightDiff > 0.01 ? (
+          <span className="animate-in fade-in slide-in-from-bottom-1 mb-0.5 text-[9px] leading-none font-bold text-orange-500">
+            +{meta.weightDiff.toFixed(2)}
+          </span>
+        ) : null}
+
+        <span className="text-xs">{Number(meta?.weight ?? 0).toFixed(2)} кг</span>
+      </div>
+
+      <span className="text-right text-[11px] font-semibold tabular-nums">
+        {Number(meta?.prepaid ?? 0).toFixed(2)} $
       </span>
 
       <span className="text-right text-[11px] font-semibold tabular-nums">
-        +{Number(meta?.prepaid ?? 0).toFixed(0)} $
-      </span>
-
-      <span className="text-right text-[11px] font-semibold tabular-nums">
-        {Number(meta?.remaining ?? 0).toFixed(0)} $
+        {Number(meta?.remaining ?? 0).toFixed(2)} $
       </span>
 
       <div className="flex justify-end">

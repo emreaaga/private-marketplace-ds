@@ -1,17 +1,19 @@
-export function formatMoney(value: string | number) {
-  const num = Number(value);
+import { cn } from "@/shared/lib/utils";
 
-  if (Number.isNaN(num)) {
+export function formatMoney(amount: string | null | undefined, className?: string) {
+  if (!amount || isNaN(Number(amount))) {
     return <span className="text-muted-foreground">—</span>;
   }
 
-  const [int, frac] = num.toFixed(2).split(".");
+  const [whole, cents] = Number(amount).toFixed(2).split(".");
 
   return (
-    <span className="leading-none tabular-nums">
-      <span className="text-muted-foreground ml-1 text-xs">$</span>
-      {int}
-      <span className="text-muted-foreground text-xs">.{frac}</span>
-    </span>
+    <div className={cn("flex items-baseline font-normal tabular-nums", className)}>
+      <span className="text-muted-foreground mr-0.5 text-[0.9em]">$</span>
+
+      <span className="text-foreground">{whole}</span>
+
+      <span className="text-muted-foreground text-[0.75em]">.{cents}</span>
+    </div>
   );
 }

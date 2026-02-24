@@ -9,6 +9,15 @@ export type GetFlightsPageParams = {
   page: number;
 };
 
+export type FlightSummary = {
+  revenue: string;
+  total_weight: string;
+  total_prepaid: string;
+  total_remaining: string;
+  total_expenses: string;
+  total_profit: string;
+};
+
 export const flightsService = {
   async createFlight(payload: CreateFlightDto) {
     const { data } = await api.post("/flights", payload);
@@ -16,7 +25,7 @@ export const flightsService = {
   },
 
   async updateFlight(id: number, payload: any) {
-    console.log(id, payload);
+    console.log(payload);
     const { data } = await api.put<ApiResponse<Flight>>(`/flights/${id}`, payload);
     return data.data;
   },
@@ -27,6 +36,11 @@ export const flightsService = {
       signal,
     });
     return data;
+  },
+
+  async getFlightSummary(id: number, signal?: AbortSignal): Promise<FlightSummary> {
+    const { data } = await api.get<ApiResponse<FlightSummary>>(`/flights/${id}/summary`, { signal });
+    return data.data;
   },
 
   async getFlight(id: number, signal?: AbortSignal): Promise<FlightDetails> {

@@ -37,6 +37,7 @@ export type OrdersListItemApi = {
   receiver_name: string;
   weight_kg: string;
   rate_per_kg: string;
+  extra_fee: string;
   total_amount: string;
   prepaid_amount: string;
   balance: string;
@@ -54,7 +55,10 @@ export type GetOrdersPageParams = {
 };
 
 export const ordersService = {
-  async getOrdersPage(params: GetOrdersPageParams, signal?: AbortSignal): Promise<OrdersListPaginatedResponseApi> {
+  async getOrdersPage(
+    params: GetOrdersPageParams,
+    signal?: AbortSignal,
+  ): Promise<PaginatedResponse<OrdersListItemApi>> {
     const { data } = await api.get<OrdersListPaginatedResponseApi>("/orders", { params, signal });
     return data;
   },
@@ -65,7 +69,7 @@ export const ordersService = {
   },
 
   async getOrder(id: number, signal?: AbortSignal) {
-    const { data } = await api.get(`/flights/${id}`, { signal });
-    return data.data;
+    const { data } = await api.get(`/orders/${id}`, { signal });
+    return data;
   },
 };

@@ -20,8 +20,7 @@ export function ShipmentDetailDialog({ open, shipmentId, onOpenChangeAction }: S
 
   return (
     <Dialog open={open} onOpenChange={onOpenChangeAction}>
-      <DialogContent className="gap-0 overflow-hidden border-none p-0 shadow-2xl sm:max-w-[400px]">
-        {/* Шапка */}
+      <DialogContent className="gap-0 overflow-hidden border-none p-0 shadow-2xl sm:max-w-100">
         <DialogHeader className="p-6 pb-4">
           <div className="flex items-center gap-3">
             <div className="flex h-10 w-10 items-center justify-center rounded-lg border bg-zinc-50 dark:bg-zinc-900">
@@ -36,7 +35,7 @@ export function ShipmentDetailDialog({ open, shipmentId, onOpenChangeAction }: S
 
         <Separator />
 
-        <div className="relative min-h-[260px]">
+        <div className="relative min-h-65">
           {isLoading && !displayData ? (
             <div className="absolute inset-0 flex items-center justify-center bg-white/50 backdrop-blur-sm dark:bg-zinc-950/50">
               <div className="h-5 w-5 animate-spin rounded-full border-2 border-zinc-200 border-t-zinc-500" />
@@ -87,7 +86,7 @@ export function ShipmentDetailDialog({ open, shipmentId, onOpenChangeAction }: S
               </div>
             </div>
           ) : (
-            <div className="flex h-[260px] flex-col items-center justify-center text-center">
+            <div className="flex h-65 flex-col items-center justify-center text-center">
               <AlertCircle className="h-6 w-6 text-zinc-200" />
               <p className="mt-2 text-xs font-medium text-zinc-400">Нет данных</p>
             </div>

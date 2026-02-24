@@ -9,16 +9,18 @@ export function StepParties({
   receiver,
   onSenderChangeAction,
   onReceiverChangeAction,
+  readOnly = false, // <-- Добавили флаг
 }: {
   sender: ClientForm;
   receiver: ClientForm;
-  onSenderChangeAction: (patch: Partial<ClientForm>) => void;
-  onReceiverChangeAction: (patch: Partial<ClientForm>) => void;
+  onSenderChangeAction?: (patch: Partial<ClientForm>) => void; // Сделали опциональным
+  onReceiverChangeAction?: (patch: Partial<ClientForm>) => void; // Сделали опциональным
+  readOnly?: boolean;
 }) {
   return (
     <div className="space-y-4">
-      <PartyFields title="Отправитель" value={sender} onChangeAction={onSenderChangeAction} />
-      <PartyFields title="Получатель" value={receiver} onChangeAction={onReceiverChangeAction} />
+      <PartyFields title="Отправитель" value={sender} onChangeAction={onSenderChangeAction} readOnly={readOnly} />
+      <PartyFields title="Получатель" value={receiver} onChangeAction={onReceiverChangeAction} readOnly={readOnly} />
     </div>
   );
 }

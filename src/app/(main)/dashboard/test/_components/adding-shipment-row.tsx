@@ -28,8 +28,8 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
   const { data: shipments = [], isLoading } = useAvailableShipments(companyId);
 
   return (
-    <div className="bg-primary/5 animate-in fade-in slide-in-from-top-1 border-primary/20 flex h-[26px] items-center gap-1 border-b border-dashed px-2">
-      <div className="flex h-full w-[130px] shrink-0 items-center">
+    <div className="bg-primary/5 animate-in fade-in slide-in-from-top-1 border-primary/20 flex h-6.5 items-center gap-1 border-b border-dashed px-2">
+      <div className="flex h-full w-32.5 shrink-0 items-center">
         <CompanySelect
           type="postal"
           placeholder="Фирма..."

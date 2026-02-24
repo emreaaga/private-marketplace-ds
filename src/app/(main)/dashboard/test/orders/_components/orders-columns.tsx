@@ -1,87 +1,102 @@
 import { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 
-import { Order } from "@/shared/types/order/order-map.api";
+import { OrdersListItemApi } from "@/features/orders/api/orders";
 import { ORDER_STATUS_META } from "@/shared/types/order/order.status.meta";
-import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
+import { StatusProgress } from "@/shared/ui/atoms/status-progress";
+import { formatMoney } from "@/shared/ui/molecules/format-money";
+import { formatWeight } from "@/shared/ui/molecules/format-weight";
 
-import { formatMoney, formatWeight } from "../../_components/finance";
-
-export const OrdersColumns: ColumnDef<Order>[] = [
+export const getOrdersColumns = (onView: (id: number) => void): ColumnDef<OrdersListItemApi>[] => [
   {
     accessorKey: "id",
-    header: "Заказ",
-    cell: ({ row }) => <span className="font-mono text-sm">{row.original.id}</span>,
+    header: "ID",
+    cell: ({ row }) => <span className="text-muted-foreground font-mono text-xs">{row.original.id}</span>,
   },
   {
-    accessorKey: "clientName",
-    header: "Клиент",
+    accessorKey: "sender_name",
+    header: "Отпр",
+    cell: ({ row }) => (
+      <div className="text-muted-foreground max-w-24 truncate text-[13px] font-medium" title={row.original.sender_name}>
+        {row.original.sender_name}
+      </div>
+    ),
   },
   {
-    accessorKey: "weightKg",
+    accessorKey: "receiver_name",
+    header: "Полч",
+    cell: ({ row }) => (
+      <div
+        className="text-muted-foreground max-w-24 truncate text-[13px] font-medium"
+        title={row.original.receiver_name}
+      >
+        {row.original.receiver_name}
+      </div>
+    ),
+  },
+  {
+    accessorKey: "weight_kg",
     header: "Вес",
-    meta: { align: "right" },
-    cell: ({ row }) => formatWeight(row.original.weightKg),
+    cell: ({ getValue }) => formatWeight(getValue<string>()),
   },
   {
-    accessorKey: "tariffPerKgUsd",
+    accessorKey: "rate_per_kg",
     header: "Ставка",
-    meta: { align: "right" },
-    cell: ({ row }) => formatMoney(row.original.tariffPerKgUsd),
+    cell: ({ getValue }) => formatMoney(getValue<string>()),
   },
   {
-    accessorKey: "incomeUsd",
-    header: "Стоимость",
-    meta: { align: "right" },
-    cell: ({ row }) => formatMoney(row.original.incomeUsd),
+    accessorKey: "extra_fee",
+    header: "Доплата",
+    cell: ({ getValue }) => formatMoney(getValue<string>()),
   },
   {
-    accessorKey: "paidUsd",
-    header: "Оплачено",
-    meta: { align: "right" },
-    cell: ({ row }) => formatMoney(row.original.paidUsd),
+    accessorKey: "prepaid_amount",
+    header: "Взнос",
+    cell: ({ getValue }) => formatMoney(getValue<string>()),
   },
   {
-    accessorKey: "remainingUsd",
+    accessorKey: "balance",
     header: "Остаток",
     meta: { align: "right" },
-    cell: ({ row }) => (
-      <span className={row.original.remainingUsd > 0 ? "text-red-600" : "text-green-600"}>
-        {formatMoney(row.original.remainingUsd)}
-      </span>
-    ),
+    cell: ({ getValue }) => formatMoney(getValue<string>()),
   },
   {
     accessorKey: "status",
     header: "Статус",
     cell: ({ row }) => {
-      const meta = ORDER_STATUS_META[row.original.status];
-      const Icon = meta.icon;
+      const statusMeta = ORDER_STATUS_META[row.original.status];
 
       return (
-        <Badge variant={meta.variant} className="gap-1">
-          <Icon size={14} className="opacity-70" />
-          {meta.label}
-        </Badge>
+        <div className="ml-1 flex items-center justify-start">
+          <StatusProgress step={statusMeta.step} totalSteps={5} Icon={statusMeta.icon} label={statusMeta.label} />
+        </div>
       );
     },
   },
   {
-    accessorKey: "createdAt",
+    accessorKey: "created_at",
     header: "Дата",
     cell: ({ row }) => {
-      const value = row.original.createdAt;
+      const value = row.original.created_at;
       return <span className="text-muted-foreground text-sm">{new Date(value).toLocaleDateString("ru-RU")}</span>;
     },
   },
   {
     id: "actions",
     header: "",
-    cell: () => (
-      <Button variant="ghost" className="h-5 w-5">
-        <Eye className="h-5 w-5" />
-      </Button>
+    meta: { align: "right" },
+    cell: ({ row }) => (
+      <div className="flex justify-end">
+        <Button
+          variant="ghost"
+          className="hover:bg-muted/50 h-6 w-6 p-0"
+          onClick={() => onView(row.original.id)}
+          title="Просмотр заказа"
+        >
+          <Eye className="text-muted-foreground/70 h-3 w-3" />
+        </Button>
+      </div>
     ),
   },
 ];

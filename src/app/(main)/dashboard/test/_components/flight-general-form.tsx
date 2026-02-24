@@ -12,6 +12,7 @@ import CountryCityPopoverSelect from "@/shared/ui/atoms/select-with-flags";
 import { ServiceLookupSelect } from "../../logistics/flights/_components/service-lookup-select";
 
 import type { EditFlightFormValues } from "./edit-flight.utils";
+import { FlightWeightControl } from "./flight-weight-control";
 
 interface FlightGeneralFormProps {
   mode: "create" | "edit";
@@ -19,6 +20,7 @@ interface FlightGeneralFormProps {
 
 export function FlightGeneralForm({ mode }: FlightGeneralFormProps) {
   const { control, setValue } = useFormContext<FlightFormValues | EditFlightFormValues>();
+
   const airPartnerId = useWatch({ control, name: "air_partner_id" });
 
   const getFieldClassName = (isDirty: boolean, extra?: string) =>
@@ -93,27 +95,6 @@ export function FlightGeneralForm({ mode }: FlightGeneralFormProps) {
 
       <div className="grid grid-cols-2 gap-2">
         <Controller
-          name="loading_at"
-          control={control}
-          render={({ field, fieldState }) => (
-            <div className={getFieldClassName(fieldState.isDirty)}>
-              <DateTimePicker placeholder="Погрузка" {...field} />
-            </div>
-          )}
-        />
-        <Controller
-          name="unloading_at"
-          control={control}
-          render={({ field, fieldState }) => (
-            <div className={getFieldClassName(fieldState.isDirty)}>
-              <DateTimePicker placeholder="Разгрузка" {...field} />
-            </div>
-          )}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-2">
-        <Controller
           name="sender_customs_id"
           control={control}
           render={({ field, fieldState }) => (
@@ -143,6 +124,28 @@ export function FlightGeneralForm({ mode }: FlightGeneralFormProps) {
         />
       </div>
 
+      {/* Секция Дат */}
+      <div className="grid grid-cols-2 gap-2">
+        <Controller
+          name="loading_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <div className={getFieldClassName(fieldState.isDirty)}>
+              <DateTimePicker placeholder="Погрузка" {...field} />
+            </div>
+          )}
+        />
+        <Controller
+          name="unloading_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <div className={getFieldClassName(fieldState.isDirty)}>
+              <DateTimePicker placeholder="Разгрузка" {...field} />
+            </div>
+          )}
+        />
+      </div>
+
       <div className="grid grid-cols-2 gap-2">
         <Controller
           name="departure_at"
@@ -165,35 +168,26 @@ export function FlightGeneralForm({ mode }: FlightGeneralFormProps) {
       </div>
 
       {mode === "edit" && (
-        <div className="grid grid-cols-2 gap-2">
-          <Controller
-            name="awb_number"
-            control={control}
-            render={({ field, fieldState }) => (
-              <Input
-                placeholder="Накладной номер"
-                {...field}
-                className={cn(
-                  !field.value && "border-yellow-400 bg-yellow-50",
-                  fieldState.isDirty && "ring-1 ring-yellow-400",
-                )}
-              />
-            )}
-          />
-          <Controller
-            name="final_gross_weight_kg"
-            control={control}
-            render={({ field, fieldState }) => (
-              <Input
-                placeholder="Фактический вес"
-                {...field}
-                className={cn(
-                  field.value === "" && "border-yellow-400 bg-yellow-50",
-                  fieldState.isDirty && "ring-1 ring-yellow-400",
-                )}
-              />
-            )}
-          />
+        <div className="grid grid-cols-1 gap-4 border-t pt-4">
+          <div className="grid grid-cols-2 gap-2">
+            <Controller
+              name="awb_number"
+              control={control}
+              render={({ field, fieldState }) => (
+                <div className="space-y-1.5">
+                  <label className="text-muted-foreground px-1 text-[10px] font-semibold tracking-wider uppercase">
+                    AWB Номер
+                  </label>
+                  <Input
+                    {...field}
+                    placeholder="Номер накладной"
+                    className={cn(fieldState.isDirty && "ring-1 ring-yellow-400")}
+                  />
+                </div>
+              )}
+            />
+            <FlightWeightControl />
+          </div>
         </div>
       )}
     </div>

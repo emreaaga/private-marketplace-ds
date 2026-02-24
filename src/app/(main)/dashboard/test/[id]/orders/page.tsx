@@ -1,22 +1,25 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useMemo } from "react";
 
 import { useParams } from "next/navigation";
 
 import { useOrdersList } from "@/features/orders/queries/use-orders-list";
+import { OrderEditDialog } from "@/features/orders/ui/organisms/order-edit-dialog";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
-import { OrdersColumns } from "../../orders/_components/orders-columns";
+import { getOrdersColumns } from "../../orders/_components/orders-columns";
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
 export default function ShipmentOrdersPage() {
   const params = useParams();
-
   const shipmentId = Number(params.id);
 
   const [page, setPage] = useState(1);
+
+  const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
+  const [isDialogOpen, setIsDialogOpen] = useState(false);
 
   const { data, isLoading, isError } = useOrdersList({
     page,
@@ -25,6 +28,13 @@ export default function ShipmentOrdersPage() {
 
   const orders = data?.data ?? [];
   const pageCount = data?.pagination.totalPages ?? 1;
+
+  const handleViewOrder = (id: number) => {
+    setSelectedOrderId(id);
+    setIsDialogOpen(true);
+  };
+
+  const columns = useMemo(() => getOrdersColumns(handleViewOrder), []);
 
   const emptyMessage = isLoading
     ? "Загрузка заказов..."
@@ -47,7 +57,7 @@ export default function ShipmentOrdersPage() {
       </div>
 
       <DataTable
-        columns={OrdersColumns}
+        columns={columns}
         data={orders}
         emptyMessage={emptyMessage}
         serverPagination={{
@@ -57,6 +67,8 @@ export default function ShipmentOrdersPage() {
         }}
         fixedPageSize={10}
       />
+
+      <OrderEditDialog open={isDialogOpen} orderId={selectedOrderId} onOpenChange={setIsDialogOpen} />
     </div>
   );
 }
