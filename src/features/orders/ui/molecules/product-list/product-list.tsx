@@ -26,12 +26,15 @@ type Props = {
   readOnly?: boolean; // Добавили флаг режима просмотра
 };
 
-function makeUiId() {
-  return crypto.randomUUID();
+function makeSafeId() {
+  if (typeof window !== "undefined" && window.crypto && window.crypto.randomUUID) {
+    return window.crypto.randomUUID();
+  }
+  return Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
 }
-function makeEntryId() {
-  return crypto.randomUUID();
-}
+
+const makeUiId = makeSafeId;
+const makeEntryId = makeSafeId;
 
 export function ProductList({ items, onItemsChange, readOnly = false }: Props) {
   const initialId = React.useMemo(() => makeEntryId(), []);
