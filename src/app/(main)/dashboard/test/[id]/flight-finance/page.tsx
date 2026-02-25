@@ -46,7 +46,7 @@ export default function FlightFinancePage() {
           isLoading={isSummaryLoading}
         />
         <StatCard
-          label="Предоплата"
+          label="Взнос"
           value={`$${summary?.total_prepaid ?? "0.00"}`}
           icon={Wallet}
           isLoading={isSummaryLoading}

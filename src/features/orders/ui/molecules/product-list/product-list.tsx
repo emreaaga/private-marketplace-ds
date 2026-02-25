@@ -138,11 +138,10 @@ export function ProductList({ items, onItemsChange, readOnly = false }: Props) {
                 item={it}
                 onChangeQuantity={(delta) => changeQuantity(it.ui_id, delta)}
                 onRemove={() => removeItem(it.ui_id)}
-                readOnly={readOnly} // <-- Прокидываем флаг дальше
+                readOnly={readOnly}
               />
             ))}
 
-            {/* В режиме чтения не показываем пустые строки для ввода */}
             {!readOnly &&
               entryRows.map((r, idx) => (
                 <ItemCreateRow

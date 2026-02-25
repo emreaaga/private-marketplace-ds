@@ -1,5 +1,5 @@
 import { ColumnDef } from "@tanstack/react-table";
-import { Eye } from "lucide-react";
+import { DollarSign, Eye } from "lucide-react";
 
 import { OrdersListItemApi } from "@/features/orders/api/orders";
 import { ORDER_STATUS_META } from "@/shared/types/order/order.status.meta";
@@ -87,7 +87,7 @@ export const getOrdersColumns = (onView: (id: number) => void): ColumnDef<Orders
     header: "",
     meta: { align: "right" },
     cell: ({ row }) => (
-      <div className="flex justify-end">
+      <div className="flex items-center justify-end gap-0.5">
         <Button
           variant="ghost"
           className="hover:bg-muted/50 h-6 w-6 p-0"
@@ -95,6 +95,10 @@ export const getOrdersColumns = (onView: (id: number) => void): ColumnDef<Orders
           title="Просмотр заказа"
         >
           <Eye className="text-muted-foreground/70 h-3 w-3" />
+        </Button>
+
+        <Button variant="ghost" className="h-6 w-6 p-0 hover:bg-green-500/10 hover:text-green-600">
+          <DollarSign className="text-muted-foreground/70 h-4 w-4 transition-colors" />
         </Button>
       </div>
     ),

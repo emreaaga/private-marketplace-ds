@@ -42,7 +42,7 @@ export function StatCard({
           {isLoading ? (
             <Skeleton className="h-7 w-20 rounded-md" />
           ) : (
-            <span className="block text-xl font-bold tracking-tight">{value}</span>
+            <span className="block text-xl tracking-tight">{value}</span>
           )}
 
           {subtitle &&
