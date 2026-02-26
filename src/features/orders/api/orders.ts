@@ -16,6 +16,15 @@ export type ApiClient = {
   passports: ApiPassport[];
 };
 
+export type OrderSummaryApi = {
+  total_amount: string;
+  extra_fee: string;
+  prepaid_amount: string;
+  air_kg_price: string;
+  rate_per_kg: string;
+  balance: string;
+};
+
 export type CreateOrderPayload = {
   sender: ApiClient;
   receiver: ApiClient;
@@ -61,6 +70,13 @@ export const ordersService = {
   ): Promise<PaginatedResponse<OrdersListItemApi>> {
     const { data } = await api.get<OrdersListPaginatedResponseApi>("/orders", { params, signal });
     return data;
+  },
+
+  async getOrderSummary(id: number, signal?: AbortSignal): Promise<OrderSummaryApi> {
+    const { data } = await api.get<{ data: OrderSummaryApi }>(`/orders/${id}/summary`, {
+      signal,
+    });
+    return data.data;
   },
 
   async createOrder(payload: CreateOrderPayload) {

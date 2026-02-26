@@ -10,7 +10,7 @@ interface StatCardProps {
   value: ReactNode;
   icon: LucideIcon;
   subtitle?: string;
-  variant?: "default" | "warning" | "danger";
+  variant?: "default" | "warning" | "danger" | "success";
   isLoading?: boolean;
 }
 
@@ -26,6 +26,7 @@ export function StatCard({
     default: "bg-background/60",
     warning: "bg-yellow-500/5 border-yellow-500/20",
     danger: "bg-red-500/5 border-red-500/20",
+    success: "bg-green-500/5 border-green-500/20",
   };
 
   return (

@@ -1,3 +1,5 @@
+import Link from "next/link";
+
 import { ColumnDef } from "@tanstack/react-table";
 import { DollarSign, Eye } from "lucide-react";
 
@@ -97,8 +99,10 @@ export const getOrdersColumns = (onView: (id: number) => void): ColumnDef<Orders
           <Eye className="text-muted-foreground/70 h-3 w-3" />
         </Button>
 
-        <Button variant="ghost" className="h-6 w-6 p-0 hover:bg-green-500/10 hover:text-green-600">
-          <DollarSign className="text-muted-foreground/70 h-4 w-4 transition-colors" />
+        <Button asChild variant="ghost" className="h-6 w-6 p-0 hover:bg-green-500/10 hover:text-green-600">
+          <Link href={`/dashboard/test/orders/${row.original.id}/finance`}>
+            <DollarSign className="text-muted-foreground/70 h-4 w-4 transition-colors" />
+          </Link>
         </Button>
       </div>
     ),

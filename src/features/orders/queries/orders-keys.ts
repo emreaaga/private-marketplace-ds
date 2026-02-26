@@ -8,4 +8,6 @@ export const ordersKeys = {
 
   listPage: (params: GetOrdersPageParams) => [...ordersKeys.lists(), "page", params] as const,
   detail: (id: number) => [...ordersKeys.all, "detail", id] as const,
+
+  summary: (id: number) => [...ordersKeys.detail(id), "summary"] as const,
 };

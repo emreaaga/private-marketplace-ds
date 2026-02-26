@@ -6,7 +6,7 @@ export const ORDER_STATUS_META: Record<
   OrderStatus,
   {
     label: string;
-    icon: LucideIcon; // Используем конкретный тип LucideIcon
+    icon: LucideIcon;
     variant: "default" | "secondary" | "destructive";
     step: number;
   }
