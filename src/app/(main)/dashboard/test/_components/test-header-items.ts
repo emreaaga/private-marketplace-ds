@@ -14,9 +14,4 @@ export const TestHeaderItems = [
     label: "Заказы",
     icon: "orders",
   },
-  {
-    href: "/dashboard/test/finance",
-    label: "Финансы",
-    icon: "finance",
-  },
 ] as const;

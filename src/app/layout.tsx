@@ -4,8 +4,6 @@ import type { Metadata } from "next";
 import { Inter } from "next/font/google";
 import { cookies } from "next/headers";
 
-import { Analytics } from "@vercel/analytics/next";
-
 import { APP_CONFIG } from "@/shared/lib/app-config";
 import { PreferencesStoreProvider } from "@/shared/styles/preferences-provider";
 import { Toaster } from "@/shared/ui/atoms/sonner";
@@ -71,8 +69,6 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
             </PreferencesStoreProvider>
           </AuthProvider>
         </Providers>
-
-        <Analytics />
       </body>
     </html>
   );

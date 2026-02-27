@@ -7,7 +7,14 @@ import type { Shipment } from "@/shared/types/shipment/shipment.model";
 
 type ShipmentResponse = { data: Shipment[] };
 
-export type ShipmentOption = { id: number; number: string };
+export type ShipmentOption = {
+  id: number;
+  number: string;
+  orders_count: string;
+  total_weight_kg: string;
+  total_prepaid: string;
+  total_remaining: string;
+};
 
 export type GetShipmentsPageParams = GetShipmentQuery & { page: number };
 

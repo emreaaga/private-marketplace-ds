@@ -15,7 +15,7 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
 
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
-      <DialogContent className="flex h-[85vh]! max-h-[calc(100vh-2rem)]! w-[1400px]! max-w-[calc(100vw-2rem)]! flex-col overflow-hidden border-none p-0 shadow-2xl">
+      <DialogContent className="flex h-[85vh]! max-h-[calc(100vh-2rem)]! w-350! max-w-[calc(100vw-2rem)]! flex-col overflow-hidden border-none p-0 shadow-2xl">
         <DialogTitle className="sr-only">Создание заказа</DialogTitle>
 
         {open && <OrderCreateFormContent onSuccess={handleClose} onCancel={handleClose} />}

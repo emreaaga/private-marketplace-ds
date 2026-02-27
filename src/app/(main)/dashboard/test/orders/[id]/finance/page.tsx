@@ -8,6 +8,7 @@ import { ArrowDownRight, DollarSign, ListChecks, Scale } from "lucide-react";
 
 import { useOrderFinancialEvents } from "@/features/financial-events/queries/use-order-financial-events";
 import { useOrderSummary } from "@/features/orders/queries/user-order-summary";
+import { formatMoney } from "@/shared/ui/molecules/format-money";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
 import { StatCard } from "../../../../main/_components/stat-card";
@@ -20,18 +21,13 @@ const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v,
 export default function OrderFinancePage() {
   const { id } = useParams();
   const orderId = Number(id);
-
   const [page, setPage] = useState(1);
 
   const { data: summary, isLoading: isLoadingSummary } = useOrderSummary(orderId);
-
   const { data: eventsResponse, isLoading: isLoadingEvents } = useOrderFinancialEvents(orderId, page);
 
-  const total = summary?.total_amount ?? "0.00";
-  const paid = summary?.prepaid_amount ?? "0.00";
   const balance = summary?.balance ?? "0.00";
   const isDebt = Number(balance) > 0;
-
   const pageCount = eventsResponse?.pagination.totalPages ?? 1;
 
   const onPageChange = (next: number) => {
@@ -47,28 +43,31 @@ export default function OrderFinancePage() {
       <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
         <StatCard
           label="Итого"
-          value={`$${total}`}
+          value={formatMoney(summary?.total_amount)}
           icon={DollarSign}
-          subtitle={`Доп. оплата: $${summary?.extra_fee ?? "0.00"}`}
+          subtitle={summary?.extra_fee ? `Доп. оплата: $${summary.extra_fee}` : undefined}
           isLoading={isLoadingSummary}
         />
+
         <StatCard
           label="Взнос"
-          value={`$${paid}`}
+          value={formatMoney(summary?.prepaid_amount)}
           icon={ListChecks}
-          variant={Number(paid) > 0 ? "success" : "default"}
+          variant={Number(summary?.prepaid_amount) > 0 ? "success" : "default"}
           isLoading={isLoadingSummary}
         />
+
         <StatCard
           label="Остаток"
-          value={`$${balance}`}
+          value={formatMoney(balance)}
           icon={ArrowDownRight}
           variant={isDebt ? "warning" : "success"}
           isLoading={isLoadingSummary}
         />
+
         <StatCard
           label="Ставка"
-          value={`$${summary?.rate_per_kg ?? "0"}/кг`}
+          value={formatMoney(summary?.rate_per_kg)}
           icon={Scale}
           subtitle={`Вес: ${summary?.air_kg_price ?? "0"} кг`}
           isLoading={isLoadingSummary}

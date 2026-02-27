@@ -46,12 +46,12 @@ export function FlightsDialog({
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
       <DialogContent
         className={[
-          "w-[1500px]! max-w-[calc(100vw-2rem)]!",
+          "w-375! max-w-[calc(100vw-2rem)]!",
           "h-[600px]! max-h-[calc(100vh-2rem)]!",
           "flex flex-col overflow-hidden p-0",
         ].join(" ")}
       >
-        <DialogHeader className="border-b px-6 py-4">
+        <DialogHeader className="border-b px-6 py-3">
           <DialogTitle>Создание рейса</DialogTitle>
         </DialogHeader>
 
@@ -62,18 +62,18 @@ export function FlightsDialog({
                 <FlightGeneralForm mode="create" />
               </div>
 
-              <div className="bg-muted/20 min-w-0 overflow-hidden px-2 py-2">
+              <div className="bg-muted/20 min-w-0 overflow-hidden">
                 <ShipmentList />
               </div>
             </div>
           </div>
 
-          <div className="shrink-0 border-t px-6 py-3">
+          <div className="shrink-0 border-t px-6 py-2">
             <div className="flex justify-end gap-2">
-              <Button variant="secondary" onClick={handleClose}>
+              <Button size="sm" variant="secondary" onClick={handleClose}>
                 Отмена
               </Button>
-              <Button onClick={onSave} disabled={createMutation.isPending}>
+              <Button size="sm" onClick={onSave} disabled={createMutation.isPending}>
                 {createMutation.isPending ? "Сохранение..." : "Создать рейс"}
               </Button>
             </div>

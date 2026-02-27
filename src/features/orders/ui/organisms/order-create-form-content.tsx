@@ -18,7 +18,7 @@ export function OrderCreateFormContent({ onSuccess, onCancel }: Props) {
   return (
     <div className="flex min-h-0 flex-1 flex-col overflow-hidden">
       <div className="flex min-h-0 flex-1 gap-4 overflow-hidden bg-white p-4">
-        <aside className="custom-scrollbar w-[440px] shrink-0 space-y-6 overflow-y-auto pr-2">
+        <aside className="custom-scrollbar w-110 shrink-0 space-y-6 overflow-y-auto pr-2">
           <PartyForm
             title="Отправитель"
             value={state.sender}

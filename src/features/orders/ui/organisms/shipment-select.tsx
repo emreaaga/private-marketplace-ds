@@ -18,13 +18,16 @@ export function ShipmentSelect({ value, onChange }: ShipmentSelectProps) {
   });
 
   const currentId = value ? Number(value) : null;
-
   const displayShipments: ShipmentOption[] = shipments ? [...shipments] : [];
 
   if (currentId && !displayShipments.some((s) => s.id === currentId)) {
     displayShipments.unshift({
       id: currentId,
       number: currentId.toString(),
+      orders_count: "0",
+      total_weight_kg: "0.00",
+      total_prepaid: "0.00",
+      total_remaining: "0.00",
     });
   }
 
@@ -35,16 +38,23 @@ export function ShipmentSelect({ value, onChange }: ShipmentSelectProps) {
       </span>
 
       <Select value={currentId?.toString()} onValueChange={(val) => onChange(Number(val))} disabled={isLoading}>
-        <SelectTrigger className="focus:ring-primary/20 h-8 w-full border text-xs shadow-none focus:ring-1">
+        <SelectTrigger className="focus:ring-primary/20 h-9 w-full border text-xs shadow-none focus:ring-1">
           <div className="flex items-center gap-2 truncate font-normal">
             <Box size={14} className="text-muted-foreground/60 shrink-0" />
-            <SelectValue placeholder={isLoading ? "..." : ""} />
+            <SelectValue placeholder={isLoading ? "Загрузка..." : ""} />
           </div>
         </SelectTrigger>
+
         <SelectContent>
           {displayShipments.map((s) => (
             <SelectItem key={s.id} value={s.id.toString()} className="text-xs">
-              {s.id}
+              <div className="flex items-center gap-1.5">
+                <span className="font-medium">{s.id}</span>
+                <span className="text-muted-foreground">/</span>
+                <span>{s.orders_count} зак.</span>
+                <span className="text-muted-foreground">/</span>
+                <span>{s.total_weight_kg} кг</span>
+              </div>
             </SelectItem>
           ))}
         </SelectContent>
