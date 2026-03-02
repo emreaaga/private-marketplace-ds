@@ -40,23 +40,29 @@ export function ShipmentSelect({ value, onChange }: ShipmentSelectProps) {
       <Select value={currentId?.toString()} onValueChange={(val) => onChange(Number(val))} disabled={isLoading}>
         <SelectTrigger className="focus:ring-primary/20 h-9 w-full border text-xs shadow-none focus:ring-1">
           <div className="flex items-center gap-2 truncate font-normal">
-            <Box size={14} className="text-muted-foreground/60 shrink-0" />
-            <SelectValue placeholder={isLoading ? "Загрузка..." : ""} />
+            <Box size={12} className="text-muted-foreground/60 shrink-0" />
+            <SelectValue placeholder={isLoading ? "Загрузка..." : "ID"}>
+              {currentId ? `${currentId}` : null}
+            </SelectValue>
           </div>
         </SelectTrigger>
 
         <SelectContent>
-          {displayShipments.map((s) => (
-            <SelectItem key={s.id} value={s.id.toString()} className="text-xs">
-              <div className="flex items-center gap-1.5">
-                <span className="font-medium">{s.id}</span>
-                <span className="text-muted-foreground">/</span>
-                <span>{s.orders_count} зак.</span>
-                <span className="text-muted-foreground">/</span>
-                <span>{s.total_weight_kg} кг</span>
-              </div>
-            </SelectItem>
-          ))}
+          {displayShipments.length === 0 && !isLoading ? (
+            <div className="text-muted-foreground p-1 text-center text-xs italic">Нет отправок</div>
+          ) : (
+            displayShipments.map((s) => (
+              <SelectItem key={s.id} value={s.id.toString()} className="py-1.5 text-[11px]">
+                <div className="flex items-center gap-1.5">
+                  <span className="font-bold">{s.id}</span>
+                  <span className="text-muted-foreground/40 text-[9px]">|</span>
+                  <span className="text-muted-foreground">{s.orders_count} зак.</span>
+                  <span className="text-muted-foreground/40 text-[9px]">|</span>
+                  <span className="font-medium">{s.total_weight_kg} кг</span>
+                </div>
+              </SelectItem>
+            ))
+          )}
         </SelectContent>
       </Select>
     </div>

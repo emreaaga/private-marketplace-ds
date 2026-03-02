@@ -6,9 +6,10 @@ import { useFlightsList } from "@/features/flights/queries/use-flights-list";
 import type { Flight } from "@/shared/types/flight/flight.model";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
-import { FlightsToolbar } from "../../logistics/flights/_components/flights-toolbar";
-import { EditFlightDialog } from "../_components/edit-flight-dialog";
-import { createFlightsColumns } from "../_components/flight-columns";
+import { EditFlightDialog } from "./_components/edit-flight-dialog";
+import { createFlightsColumns } from "./_components/flight-columns";
+import { FlightExpandedRow } from "./_components/flight-expanded-row";
+import { FlightsToolbar } from "./_components/flights-toolbar";
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
@@ -43,6 +44,7 @@ export default function FlightsPage() {
         emptyMessage={emptyMessage}
         serverPagination={{ page, pageCount, onPageChange }}
         fixedPageSize={10}
+        renderExpandedRow={FlightExpandedRow}
       />
 
       <EditFlightDialog

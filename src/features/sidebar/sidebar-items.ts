@@ -16,12 +16,6 @@ export const sidebarItems: NavGroup[] = [
         icon: BarChart3,
         roles: [UserRole.ADMIN, UserRole.SELLER, UserRole.CUSTOMER],
       },
-    ],
-  },
-  {
-    id: 2,
-    label: "Страницы",
-    items: [
       {
         title: "Пользователи",
         url: "/dashboard/users/main",
@@ -29,17 +23,23 @@ export const sidebarItems: NavGroup[] = [
         roles: [UserRole.ADMIN],
       },
       {
+        title: "Настройки",
+        url: "/dashboard/settings/roles",
+        icon: Settings,
+        roles: [UserRole.ADMIN],
+      },
+    ],
+  },
+  {
+    id: 2,
+    label: "Роли",
+    items: [
+      {
         title: "Почта",
         url: "/dashboard/test/flights",
         icon: Package,
         roles: [UserRole.ADMIN],
       },
-      // {
-      //   title: "Почта 2.0",
-      //   url: "/dashboard/logistics/flights",
-      //   icon: Package,
-      //   roles: [UserRole.ADMIN],
-      // },
       {
         title: "Продавцы",
         url: "/dashboard/seller/orders",
@@ -53,15 +53,21 @@ export const sidebarItems: NavGroup[] = [
         roles: [UserRole.ADMIN],
       },
       {
+        title: "Почта 2.0",
+        url: "/dashboard/logistics/flights",
+        icon: Package,
+        roles: [UserRole.ADMIN],
+      },
+    ],
+  },
+  {
+    id: 3,
+    label: "Финансы",
+    items: [
+      {
         title: "Кошелек",
         url: "/dashboard/wallet",
         icon: Wallet,
-        roles: [UserRole.ADMIN],
-      },
-      {
-        title: "Настройки",
-        url: "/dashboard/settings/roles",
-        icon: Settings,
         roles: [UserRole.ADMIN],
       },
     ],

@@ -26,6 +26,15 @@ export function PartyForm({ title, value, onChange }: PartyFormProps) {
     onChange(patch);
   };
 
+  const filterLetters = (val: string) => val.replace(/[^a-zA-Z]/g, "");
+
+  const filterPassport = (val: string) => {
+    const upper = val.toUpperCase();
+    const letters = upper.slice(0, 2).replace(/[^A-Z]/g, "");
+    const numbers = upper.slice(2).replace(/[^0-9]/g, "");
+    return (letters + numbers).slice(0, 9);
+  };
+
   return (
     <section className="w-full space-y-2 py-1">
       <div className="flex items-center justify-between">
@@ -43,13 +52,13 @@ export function PartyForm({ title, value, onChange }: PartyFormProps) {
           placeholder="Имя"
           className="h-8 px-3 text-sm"
           value={value.firstName || ""}
-          onChange={(e) => onChange({ firstName: e.target.value })}
+          onChange={(e) => onChange({ firstName: filterLetters(e.target.value) })}
         />
         <Input
           placeholder="Фамилия"
           className="h-8 px-3 text-sm"
           value={value.lastName || ""}
-          onChange={(e) => onChange({ lastName: e.target.value })}
+          onChange={(e) => onChange({ lastName: filterLetters(e.target.value) })}
         />
       </div>
 
@@ -58,13 +67,19 @@ export function PartyForm({ title, value, onChange }: PartyFormProps) {
           placeholder="Паспорт 1"
           className="h-8 px-3 text-sm"
           value={value.passports[0] || ""}
-          onChange={(e) => onChange({ passports: [e.target.value, value.passports[1] || ""] })}
+          onChange={(e) => {
+            const masked = filterPassport(e.target.value);
+            onChange({ passports: [masked, value.passports[1] || ""] });
+          }}
         />
         <Input
           placeholder="Паспорт 2"
           className="h-8 px-3 text-sm"
           value={value.passports[1] || ""}
-          onChange={(e) => onChange({ passports: [value.passports[0] || "", e.target.value] })}
+          onChange={(e) => {
+            const masked = filterPassport(e.target.value);
+            onChange({ passports: [value.passports[0] || "", masked] });
+          }}
         />
       </div>
 

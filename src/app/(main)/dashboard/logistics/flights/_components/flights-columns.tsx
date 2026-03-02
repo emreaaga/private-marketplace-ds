@@ -1,130 +1,71 @@
-"use client";
-
-import Link from "next/link";
-
 import { ColumnDef } from "@tanstack/react-table";
-import { ArrowRight } from "lucide-react";
 
-import { Button } from "@/shared/ui/atoms/button";
-import { Switch } from "@/shared/ui/atoms/switch";
 import { TableBadge } from "@/shared/ui/molecules/table-badge";
 
-export const MOCK_FLIGHTS = [
-  {
-    id: "1",
-    code: "001",
-    route: "TR → UZ",
-    ordersCount: 5,
-    weightKg: 120,
-    total: 1800,
-    status: "В пути",
-    locked: true,
-  },
-  {
-    id: "2",
-    code: "002",
-    route: "CH → UZ",
-    ordersCount: 3,
-    weightKg: 70,
-    total: 950,
-    status: "Ожидание",
-    locked: false,
-  },
-];
+import { HeaderWithIcon } from "../../orders/_components/header-icon";
+import { stageIcons } from "../../orders/_components/stage-icons";
 
-export type Flight = {
-  id: string;
-  code: string;
-  route: string;
-  ordersCount: number;
-  weightKg: number;
-  total: number;
-  status: string;
-  locked: boolean;
-};
+import { Flight } from "./flights.type";
 
 export const FlightsColumns: ColumnDef<Flight>[] = [
   {
-    accessorKey: "code",
+    accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => {
-      const shipment = row.original;
-
-      return (
-        <div className="flex items-center gap-1">
-          <Switch checked={!shipment.locked} />
-          <span className={shipment.locked ? "text-muted-foreground line-through" : "font-medium"}>
-            {shipment.code}
-          </span>
-        </div>
-      );
-    },
   },
-
   {
-    accessorKey: "col1",
-    header: "Клиент",
-    cell: () => "Client - 1",
+    accessorKey: "courier1",
+    header: () => <HeaderWithIcon icon={stageIcons.courier} label="Сбор Денег" />,
+    // innerBadge = сколько собрали предоплаты
+    cell: ({ row }) => <TableBadge innerBadge={row.original.prepaid_sum}>Курьер 1</TableBadge>,
   },
-
   {
-    accessorKey: "col2",
-    header: "Курьер",
-    cell: () => "Курьер",
+    accessorKey: "point1",
+    header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт 1" />,
+    // innerBadge = сколько отправок собрали в стране отправления
+    cell: ({ row }) => <TableBadge innerBadge={`${row.original.shipments_count} шт`}>Склад отправ.</TableBadge>,
   },
-
   {
-    accessorKey: "col3",
-    header: "Пункт1",
-    cell: () => "IST-A01",
+    accessorKey: "sender_customs",
+    header: () => <HeaderWithIcon icon={stageIcons.customs} label="Экспорт" />,
+    // innerBadge = ставка таможни
+    cell: ({ row }) => (
+      <TableBadge innerBadge={row.original.sender_customs_price}>{row.original.sender_customs}</TableBadge>
+    ),
   },
-
   {
-    accessorKey: "col4",
-    header: "Таможня",
-    cell: () => "IST-таможня",
+    accessorKey: "flight",
+    header: () => <HeaderWithIcon icon={stageIcons.flight} label="Рейс" />,
+    // innerBadge = ID рейса, текст = Маршрут
+    cell: ({ row }) => <TableBadge innerBadge={row.original.air_kg_price}>{row.original.route}</TableBadge>,
   },
-
   {
-    accessorKey: "col5",
-    header: "Рейс",
-    cell: () => "TR–UZ",
+    accessorKey: "receiver_customs",
+    header: () => <HeaderWithIcon icon={stageIcons.customs} label="Импорт" />,
+    // innerBadge = ставка таможни прибытия
+    cell: ({ row }) => (
+      <TableBadge innerBadge={row.original.receiver_customs_price}>{row.original.receiver_customs}</TableBadge>
+    ),
   },
-
   {
-    accessorKey: "col6",
-    header: "Таможня",
-    cell: () => "TAS-таможня",
+    accessorKey: "point2",
+    header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт 2" />,
+    // innerBadge = финальный вес из аэропорта (или "Взвешивается", если null)
+    cell: ({ row }) => (
+      <TableBadge innerBadge={row.original.final_gross_weight_kg ?? "Взвешивается"}>Склад получ.</TableBadge>
+    ),
   },
-
   {
-    accessorKey: "col7",
-    header: "Пункт2",
-    cell: () => "TAS-A02",
+    accessorKey: "courier2",
+    header: () => <HeaderWithIcon icon={stageIcons.courier} label="Долг кассы" />,
+    // innerBadge = сколько курьер должен собрать при выдаче
+    cell: ({ row }) => <TableBadge innerBadge={row.original.remaining_sum}>Курьер 2</TableBadge>,
   },
-
   {
-    accessorKey: "col8",
-    header: "Курьер",
-    cell: () => "Курьер",
-  },
-
-  {
-    accessorKey: "col9",
-    header: "Клиент",
-    cell: () => "SKD-client",
-  },
-
-  {
-    id: "actions",
-    header: "",
-    enableHiding: false,
-    cell: () => (
-      <Link href="/dashboard/logistics/orders">
-        <Button variant="ghost" size="icon" className="h-6 w-6">
-          <ArrowRight className="h-4 w-4" />
-        </Button>
-      </Link>
+    accessorKey: "clients",
+    header: () => <HeaderWithIcon icon={stageIcons.customs} label="Выдача" />,
+    // innerBadge = соотношение выданных заказов к общему числу
+    cell: ({ row }) => (
+      <TableBadge innerBadge={`${row.original.delivered_count} / ${row.original.shipments_count}`}>Клиенты</TableBadge>
     ),
   },
 ];

@@ -1,5 +1,7 @@
 "use client";
 
+import React from "react";
+
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
@@ -24,6 +26,7 @@ import {
   SidebarMenuSub,
   SidebarMenuSubButton,
   SidebarMenuSubItem,
+  SidebarSeparator,
   useSidebar,
 } from "@/shared/ui/atoms/sidebar";
 
@@ -145,9 +148,6 @@ export function NavMain({ items }: NavMainProps) {
   const path = usePathname();
   const { state, isMobile } = useSidebar();
 
-  // const user = useAuthStore((s) => s.user);
-  // if (!user) return null;
-
   const getBasePath = (url: string) => {
     const segments = url.split("/").filter(Boolean);
     return segments.length >= 2 ? `/${segments.slice(0, 2).join("/")}` : url;
@@ -185,6 +185,7 @@ export function NavMain({ items }: NavMainProps) {
 
   return (
     <>
+      {/* Кнопка создания — всегда сверху */}
       <SidebarGroup>
         <SidebarGroupContent className="flex flex-col gap-2">
           <SidebarMenu>
@@ -201,49 +202,55 @@ export function NavMain({ items }: NavMainProps) {
         </SidebarGroupContent>
       </SidebarGroup>
 
-      {items.map((group) => {
+      {/* Группы меню */}
+      {items.map((group, index) => {
         const visibleItems = group.items;
-
         if (visibleItems.length === 0) return null;
 
         return (
-          <SidebarGroup key={group.id}>
-            {group.label && <SidebarGroupLabel>{group.label}</SidebarGroupLabel>}
-            <SidebarGroupContent className="flex flex-col gap-2">
-              <SidebarMenu>
-                {visibleItems.map((item) => {
-                  if (state === "collapsed" && !isMobile) {
-                    if (!item.subItems) {
-                      return (
-                        <SidebarMenuItem key={item.title}>
-                          <SidebarMenuButton
-                            asChild
-                            aria-disabled={item.comingSoon}
-                            tooltip={item.title}
-                            isActive={isItemActive(item.url, item.subItems)}
-                          >
-                            <Link prefetch={false} href={item.url} target={item.newTab ? "_blank" : undefined}>
-                              {item.icon && <item.icon />}
-                              <span>{item.title}</span>
-                            </Link>
-                          </SidebarMenuButton>
-                        </SidebarMenuItem>
-                      );
+          <React.Fragment key={group.id}>
+            {/* Показываем линию ТОЛЬКО если это не первая группа в списке (index !== 0).
+               Это уберет линию между кнопкой "Создать" и первым разделом.
+            */}
+            {index !== 0 && <SidebarSeparator className="mx-0 my-2 opacity-50" />}
+
+            <SidebarGroup>
+              <SidebarGroupContent className="flex flex-col gap-2">
+                <SidebarMenu>
+                  {visibleItems.map((item) => {
+                    if (state === "collapsed" && !isMobile) {
+                      if (!item.subItems) {
+                        return (
+                          <SidebarMenuItem key={item.title}>
+                            <SidebarMenuButton
+                              asChild
+                              aria-disabled={item.comingSoon}
+                              tooltip={item.title}
+                              isActive={isItemActive(item.url, item.subItems)}
+                            >
+                              <Link prefetch={false} href={item.url} target={item.newTab ? "_blank" : undefined}>
+                                {item.icon && <item.icon />}
+                                <span>{item.title}</span>
+                              </Link>
+                            </SidebarMenuButton>
+                          </SidebarMenuItem>
+                        );
+                      }
+                      return <NavItemCollapsed key={item.title} item={item} isActive={isItemActive} />;
                     }
-                    return <NavItemCollapsed key={item.title} item={item} isActive={isItemActive} />;
-                  }
-                  return (
-                    <NavItemExpanded
-                      key={item.title}
-                      item={item}
-                      isActive={isItemActive}
-                      isSubmenuOpen={isSubmenuOpen}
-                    />
-                  );
-                })}
-              </SidebarMenu>
-            </SidebarGroupContent>
-          </SidebarGroup>
+                    return (
+                      <NavItemExpanded
+                        key={item.title}
+                        item={item}
+                        isActive={isItemActive}
+                        isSubmenuOpen={isSubmenuOpen}
+                      />
+                    );
+                  })}
+                </SidebarMenu>
+              </SidebarGroupContent>
+            </SidebarGroup>
+          </React.Fragment>
         );
       })}
     </>

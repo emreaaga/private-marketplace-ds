@@ -1,1 +1,1 @@
-export type CompanyType = "platform" | "postal" | "air_partner" | "customs_broker" | "airline";
+export type CompanyType = "postal" | "air_partner" | "customs_broker" | "airline";

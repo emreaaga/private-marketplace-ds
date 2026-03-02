@@ -76,8 +76,8 @@ export function DataTable<TData>({
 
     if (isServer) {
       return {
-        pageIndex: Math.max(0, serverPagination.page - 1), // 0-based для TanStack
-        pageSize: fixedPageSize, // ✅ всегда 10
+        pageIndex: Math.max(0, serverPagination.page - 1),
+        pageSize: fixedPageSize,
       };
     }
 
@@ -163,7 +163,7 @@ export function DataTable<TData>({
 
                   {renderExpandedRow && row.getIsExpanded() && (
                     <TableRow className="bg-muted/40">
-                      <TableCell colSpan={table.getVisibleLeafColumns().length} className="p-4">
+                      <TableCell colSpan={table.getVisibleLeafColumns().length}>
                         {renderExpandedRow(row.original)}
                       </TableCell>
                     </TableRow>

@@ -16,7 +16,14 @@ export const createFlightsColumns = (onEdit: (id: number) => void): ColumnDef<Fl
   {
     accessorKey: "id",
     header: "ID",
-    cell: ({ row }) => <span className="text-muted-foreground font-mono text-xs">{row.original.id}</span>,
+    cell: ({ row }) => (
+      <button
+        onClick={() => row.toggleExpanded()}
+        className="text-muted-foreground hover:text-primary cursor-pointer font-mono text-xs transition-colors hover:underline"
+      >
+        {row.original.id}
+      </button>
+    ),
   },
   {
     accessorKey: "route",
@@ -40,6 +47,10 @@ export const createFlightsColumns = (onEdit: (id: number) => void): ColumnDef<Fl
         </div>
       );
     },
+  },
+  {
+    accessorKey: "total_shipments",
+    header: "Отп",
   },
   {
     accessorKey: "final_gross_weight_kg",

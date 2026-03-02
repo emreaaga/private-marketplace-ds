@@ -32,7 +32,7 @@ export function PartiesSummary({ value, onChange }: PartiesSummaryProps) {
         inputMode="decimal"
         value={value.weight_kg}
         onChange={(e) => handleFormatChange("weight_kg", e.target.value)}
-        className="h-8 text-xs"
+        className="h-9 text-xs"
       />
 
       <FloatingLabelInput
@@ -42,7 +42,7 @@ export function PartiesSummary({ value, onChange }: PartiesSummaryProps) {
         inputMode="decimal"
         value={value.rate_per_kg}
         onChange={(e) => handleFormatChange("rate_per_kg", e.target.value)}
-        className="h-8 text-xs"
+        className="h-9 text-xs"
       />
 
       <FloatingLabelInput
@@ -52,7 +52,7 @@ export function PartiesSummary({ value, onChange }: PartiesSummaryProps) {
         inputMode="decimal"
         value={value.extra_fee}
         onChange={(e) => handleFormatChange("extra_fee", e.target.value)}
-        className="h-8 text-xs"
+        className="h-9 text-xs"
       />
 
       <FloatingLabelInput
@@ -62,7 +62,7 @@ export function PartiesSummary({ value, onChange }: PartiesSummaryProps) {
         inputMode="decimal"
         value={value.deposit}
         onChange={(e) => handleFormatChange("deposit", e.target.value)}
-        className="h-8 text-xs"
+        className="h-9 text-xs"
       />
 
       <FloatingLabelInput
@@ -70,7 +70,7 @@ export function PartiesSummary({ value, onChange }: PartiesSummaryProps) {
         icon={Calculator}
         readOnly
         value={balance.toFixed(2)}
-        className="bg-muted/20 h-8 cursor-default text-xs"
+        className="bg-muted/20 h-9 cursor-default text-xs"
       />
     </div>
   );

@@ -15,11 +15,6 @@ export const USER_ROLE_META: Record<
     Icon: Briefcase,
     disabled: false,
   },
-  admin: {
-    label: "Админ.",
-    Icon: UserCog,
-    disabled: true,
-  },
   employee: {
     label: "Сотрудник",
     Icon: Briefcase,

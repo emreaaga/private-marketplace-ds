@@ -10,7 +10,7 @@ import { Button } from "@/shared/ui/atoms/button";
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/atoms/input-group";
 import { IconButton } from "@/shared/ui/molecules/icon-button";
 
-const loadFlightsDialog = () => import("../../../test/_components/create-flight-dialog").then((m) => m.FlightsDialog);
+const loadFlightsDialog = () => import("../../_components/create-flight-dialog").then((m) => m.FlightsDialog);
 const FlightsDialog = dynamic(loadFlightsDialog, {
   ssr: false,
 });

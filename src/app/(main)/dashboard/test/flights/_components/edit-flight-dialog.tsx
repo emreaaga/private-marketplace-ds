@@ -11,9 +11,9 @@ import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
 
-import { EditFlightShipments } from "./edit-flight-shipments";
-import { toFormValues, toUpdatePayload, type EditFlightFormValues } from "./edit-flight.utils";
-import { FlightGeneralForm } from "./flight-general-form";
+import { EditFlightShipments } from "../../_components/edit-flight-shipments";
+import { toFormValues, toUpdatePayload, type EditFlightFormValues } from "../../_components/edit-flight.utils";
+import { FlightGeneralForm } from "../../_components/flight-general-form";
 
 interface EditFlightDialogProps {
   open: boolean;

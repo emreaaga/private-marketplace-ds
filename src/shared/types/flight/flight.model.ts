@@ -9,6 +9,7 @@ export type Flight = {
   shipments_count: number;
   status: FlightStatuses;
   arrival_at: string;
+  total_shipments: string;
   prepaid_sum: string;
   remaining_sum: string;
 };

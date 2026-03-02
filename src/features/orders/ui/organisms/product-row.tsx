@@ -15,7 +15,6 @@ interface RowProps {
 }
 
 export function ProductRow({ index, item, onUpdate, onRemove }: RowProps) {
-  // Вычисляем сумму только если цена введена и больше 0
   const priceNum = Number(item.unit_price);
   const rowSum = priceNum > 0 && item.quantity > 0 ? (priceNum * item.quantity).toFixed(2) : "";
 
@@ -23,7 +22,6 @@ export function ProductRow({ index, item, onUpdate, onRemove }: RowProps) {
 
   return (
     <div className="group hover:bg-muted/40 border-muted/5 grid grid-cols-[28px_1fr_100px_100px_100px] items-center gap-1 border-b px-2 py-0.5 transition-colors">
-      {/* 1. Индекс / Удаление */}
       <div className="relative flex h-6 w-6 items-center justify-center">
         <span className={cn(textStyle, "text-muted-foreground/40 group-hover:hidden")}>{index + 1}</span>
         <button
@@ -34,7 +32,6 @@ export function ProductRow({ index, item, onUpdate, onRemove }: RowProps) {
         </button>
       </div>
 
-      {/* 2. Название */}
       <Input
         value={item.name}
         onChange={(e) => onUpdate({ name: e.target.value })}
@@ -45,8 +42,7 @@ export function ProductRow({ index, item, onUpdate, onRemove }: RowProps) {
         )}
       />
 
-      {/* 3. Цена - Выравнивание по правому краю шапки */}
-      <div className="flex items-center justify-end pr-4">
+      <div className="flex items-center justify-end">
         <Input
           type="text"
           inputMode="decimal"
@@ -60,7 +56,6 @@ export function ProductRow({ index, item, onUpdate, onRemove }: RowProps) {
         <span className={cn(textStyle, "text-muted-foreground/30 ml-1 font-mono")}>$</span>
       </div>
 
-      {/* 4. Количество */}
       <div className="flex items-center justify-end gap-1 pr-4">
         <Button
           variant="ghost"
@@ -83,7 +78,6 @@ export function ProductRow({ index, item, onUpdate, onRemove }: RowProps) {
         </Button>
       </div>
 
-      {/* 5. Итоговая сумма - Выравнивание строго по краю */}
       <div className={cn(textStyle, "text-foreground/70 pr-2 text-right font-mono")}>
         {rowSum} {rowSum && <span className="text-muted-foreground/30">$</span>}
       </div>
