@@ -1,4 +1,4 @@
-import { Briefcase, ShoppingCart, Truck, UserCog } from "lucide-react";
+import { Briefcase, ShoppingCart, Truck } from "lucide-react";
 
 import { UserRoles } from "@/shared/types/users/user.model";
 
