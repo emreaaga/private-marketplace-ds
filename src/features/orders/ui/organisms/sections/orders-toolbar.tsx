@@ -12,7 +12,10 @@ import { IconButton } from "@/shared/ui/molecules/icon-button";
 
 const OrderCreateDialog = dynamic(
   () => import("@/features/orders/ui/organisms/create-order-dialog").then((m) => m.CreateOrderDialog),
-  { loading: () => null },
+  {
+    ssr: false,
+    loading: () => null,
+  },
 );
 
 interface OrdersHeaderProps {

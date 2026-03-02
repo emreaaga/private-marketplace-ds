@@ -4,20 +4,20 @@ import { useState } from "react";
 
 import dynamic from "next/dynamic";
 
-import { ListFilter, Search, SlidersHorizontal, RotateCcw } from "lucide-react";
+import { ListFilter, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
 
 import { InputGroup, InputGroupAddon, InputGroupInput } from "@/shared/ui/atoms/input-group";
 import { IconButton } from "@/shared/ui/molecules/icon-button";
 
 import { CreateDropdown } from "../create-dropdown";
 
-const CreateUserDialog = dynamic(() => import("../forms/create-user-dialog"), { ssr: false });
-const CreateCompanyDialog = dynamic(() => import("../../../../companies/ui/organisms/create-company-dialog"), {
-  ssr: false,
-});
-const CreateServiceDialog = dynamic(() => import("@/features/services/ui/organisms/create-service-dialog"), {
-  ssr: false,
-});
+const loadUser = () => import("../forms/create-user-dialog");
+const loadCompany = () => import("../../../../companies/ui/organisms/create-company-dialog");
+const loadService = () => import("@/features/services/ui/organisms/create-service-dialog");
+
+const CreateUserDialog = dynamic(loadUser, { ssr: false });
+const CreateCompanyDialog = dynamic(loadCompany, { ssr: false });
+const CreateServiceDialog = dynamic(loadService, { ssr: false });
 
 type DialogType = "user" | "company" | "service" | null;
 
@@ -44,9 +44,12 @@ export function UsersToolbar() {
           </InputGroup>
 
           <CreateDropdown
-            onCreateUser={() => setDialog("user")}
-            onCreateCompany={() => setDialog("company")}
-            onCreateService={() => setDialog("service")}
+            onCreateUserAction={() => setDialog("user")}
+            onHoverUserAction={loadUser}
+            onCreateCompanyAction={() => setDialog("company")}
+            onHoverCompanyAction={loadCompany}
+            onCreateServiceAction={() => setDialog("service")}
+            onHoverServiceAction={loadService}
           />
         </div>
 
@@ -59,7 +62,7 @@ export function UsersToolbar() {
 
       {ActiveDialog && (
         <ActiveDialog
-          open
+          open={true}
           onOpenChange={(open: boolean) => {
             if (!open) setDialog(null);
           }}

@@ -2,6 +2,7 @@
 
 import { zodResolver } from "@hookform/resolvers/zod";
 import { FormProvider, useForm } from "react-hook-form";
+import { toast } from "sonner";
 
 import { useCreateFlight } from "@/features/flights/queries/use-create-flight";
 import { flightFormSchema, type FlightFormValues } from "@/shared/types/flight/flight-create.schema";
@@ -22,6 +23,10 @@ export function FlightsDialog({
 }) {
   const createMutation = useCreateFlight();
 
+  const onInvalid = () => {
+    toast.error("Пожалуйста, заполните все поля");
+  };
+
   const form = useForm<FlightFormValues>({
     resolver: zodResolver(flightFormSchema),
     mode: "onSubmit",
@@ -33,9 +38,16 @@ export function FlightsDialog({
   });
 
   const onSave = form.handleSubmit(async (values) => {
-    await createMutation.mutateAsync(toCreateFlightDto(values));
-    handleClose();
-  });
+    try {
+      await createMutation.mutateAsync(toCreateFlightDto(values));
+      handleClose();
+    } catch (error) {
+      // Ошибки сервера обработает глобальный провайдер,
+      // но mutateAsync прокидывает ошибку дальше, поэтому ловим её здесь,
+      // чтобы handleClose() не сработал при ошибке сервера.
+      console.error("Mutation failed", error);
+    }
+  }, onInvalid);
 
   const handleClose = () => {
     form.reset();
@@ -47,7 +59,7 @@ export function FlightsDialog({
       <DialogContent
         className={[
           "w-375! max-w-[calc(100vw-2rem)]!",
-          "h-[600px]! max-h-[calc(100vh-2rem)]!",
+          "h-150! max-h-[calc(100vh-2rem)]!",
           "flex flex-col overflow-hidden p-0",
         ].join(" ")}
       >

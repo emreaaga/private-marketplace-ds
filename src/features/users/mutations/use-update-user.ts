@@ -3,7 +3,6 @@ import { toast } from "sonner";
 
 import { usersService } from "@/features/users/api/users";
 import { usersKeys } from "@/features/users/queries/users.keys";
-import { getErrorMessage } from "@/shared/lib/get-error-message";
 
 import type { EditUserFormValues } from "../ui/organisms/dialogs/edit-user/edit-user.types";
 
@@ -18,10 +17,6 @@ export function useUpdateUser() {
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: usersKeys.all });
       toast.success("Данные пользователя обновлены");
-    },
-
-    onError: (err) => {
-      toast.error(getErrorMessage(err));
     },
   });
 }

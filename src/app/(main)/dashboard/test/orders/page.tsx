@@ -2,12 +2,18 @@
 
 import { useMemo, useState } from "react";
 
+import dynamic from "next/dynamic";
+
 import { useOrdersList } from "@/features/orders/queries/use-orders-list";
-import { OrderEditDialog } from "@/features/orders/ui/organisms/order-edit-dialog";
 import { OrdersToolbar } from "@/features/orders/ui/organisms/sections/orders-toolbar";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
 import { getOrdersColumns } from "./_components/orders-columns";
+
+const OrderEditDialog = dynamic(
+  () => import("@/features/orders/ui/organisms/order-edit-dialog").then((mod) => mod.OrderEditDialog),
+  { ssr: false },
+);
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
@@ -45,7 +51,9 @@ export default function OrdersPage() {
         fixedPageSize={10}
       />
 
-      <OrderEditDialog open={editId !== null} orderId={editId} onOpenChange={(isOpen) => !isOpen && setEditId(null)} />
+      {editId !== null && (
+        <OrderEditDialog open={true} orderId={editId} onOpenChange={(isOpen) => !isOpen && setEditId(null)} />
+      )}
     </div>
   );
 }

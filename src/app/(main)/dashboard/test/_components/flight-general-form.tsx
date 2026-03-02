@@ -124,7 +124,6 @@ export function FlightGeneralForm({ mode }: FlightGeneralFormProps) {
         />
       </div>
 
-      {/* Секция Дат */}
       <div className="grid grid-cols-2 gap-2">
         <Controller
           name="loading_at"

@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 
-import { Copy, RefreshCcw, Link as LinkIcon, Check } from "lucide-react";
+import { Check, Copy, Link as LinkIcon, RefreshCcw } from "lucide-react";
 
 import { copyStoreLink, generateNewStoreLink } from "@/features/clients/lib/store-link";
 import { Button } from "@/shared/ui/atoms/button";
-import { Card, CardHeader, CardTitle, CardContent } from "@/shared/ui/atoms/card";
+import { Card, CardContent, CardHeader, CardTitle } from "@/shared/ui/atoms/card";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 
 type ExpireAfter = "never" | "7d" | "30d";
@@ -69,7 +69,7 @@ export function StoreLinkCard() {
           </Button>
 
           <Select value={expireAfter} onValueChange={(value) => setExpireAfter(value as ExpireAfter)}>
-            <SelectTrigger className="w-[130px] shrink-0">
+            <SelectTrigger className="w-32.5 shrink-0">
               <SelectValue placeholder="Срок" />
             </SelectTrigger>
 

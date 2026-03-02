@@ -1,4 +1,10 @@
-export function FlightExpandedRow() {
+import type { Flight } from "@/shared/types/flight/flight.model";
+
+interface FlightExpandedRowProps {
+  row: Flight;
+}
+
+export function FlightExpandedRow({ row }: FlightExpandedRowProps) {
   return (
     <div className="bg-muted/5 w-full">
       <div className="text-muted-foreground flex w-full items-center justify-between py-2.5 text-xs">
@@ -31,7 +37,7 @@ export function FlightExpandedRow() {
         <div className="flex gap-6">
           <div className="flex gap-1.5">
             <span>погрузка:</span>
-            <span className="text-foreground">-</span>
+            <span className="text-foreground">{new Date(row.arrival_at).toLocaleDateString("ru-RU")}</span>
           </div>
         </div>
       </div>

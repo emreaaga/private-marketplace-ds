@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import { Eye, ChevronRight, DollarSign } from "lucide-react";
+import { ChevronRight, DollarSign, Eye } from "lucide-react";
 
 import type { Flight } from "@/shared/types/flight/flight.model";
 import { FLIGHT_STATUS_META } from "@/shared/types/flight/flight.status.meta";
@@ -86,7 +86,7 @@ export const createFlightsColumns = (onEdit: (id: number) => void): ColumnDef<Fl
       <div className="flex items-center justify-end gap-0.5">
         <Button
           variant="ghost"
-          className="hover:bg-muted/50 h-6 w-6 p-0"
+          className="h-6 w-6 p-0 hover:bg-gray-500/10"
           title="Просмотр"
           onClick={() => onEdit(row.original.id)}
         >
@@ -99,7 +99,7 @@ export const createFlightsColumns = (onEdit: (id: number) => void): ColumnDef<Fl
           </Link>
         </Button>
 
-        <Button asChild variant="ghost" className="hover:bg-muted/50 h-6 w-6 p-0">
+        <Button asChild variant="ghost" className="h-6 w-6 p-0 hover:bg-gray-500/10">
           <Link href={`/dashboard/test/${row.original.id}/shipments`} title="Открыть отправки">
             <ChevronRight className="text-muted-foreground/70 h-3 w-3" />
           </Link>

@@ -2,29 +2,35 @@
 
 import { useCallback, useMemo, useState } from "react";
 
+import dynamic from "next/dynamic";
+
 import { useDeleteUser } from "@/features/users/mutations/use-delete-user";
 import { useUpdateUser } from "@/features/users/mutations/use-update-user";
 import { useUsersList } from "@/features/users/queries/use-users-list";
-import { EditUserDialog } from "@/features/users/ui/organisms/dialogs/edit-user/edit-user-dialog";
 import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
 import { createUsersColumns } from "@/features/users/ui/organisms/users-columns";
-import { DeleteDialog } from "@/shared/ui/organisms/delete-dialog";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
-type DeleteAction = { type: "delete"; userId: number } | null;
+const EditUserDialog = dynamic(
+  () => import("@/features/users/ui/organisms/dialogs/edit-user/edit-user-dialog").then((m) => m.EditUserDialog),
+  { ssr: false },
+);
+
+const DeleteDialog = dynamic(() => import("@/shared/ui/organisms/delete-dialog").then((m) => m.DeleteDialog), {
+  ssr: false,
+});
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
+type DeleteAction = { type: "delete"; userId: number } | null;
+
 export default function UsersMainPage() {
-  const [deleteAction, setDeleteAction] = useState<DeleteAction>(null);
-
   const [page, setPage] = useState(1);
-
   const [editOpen, setEditOpen] = useState(false);
   const [editUserId, setEditUserId] = useState<number | null>(null);
+  const [deleteAction, setDeleteAction] = useState<DeleteAction>(null);
 
   const { data, isLoading, isError } = useUsersList({ page });
-
   const users = data?.data ?? [];
   const pageCount = data?.pagination.totalPages ?? 1;
 
@@ -36,7 +42,10 @@ export default function UsersMainPage() {
     setEditOpen(true);
   }, []);
 
-  const closeEdit = () => setEditOpen(false);
+  const closeEdit = () => {
+    setEditOpen(false);
+    setEditUserId(null);
+  };
 
   const openDelete = useCallback((id: number) => {
     setDeleteAction({ type: "delete", userId: id });
@@ -45,6 +54,14 @@ export default function UsersMainPage() {
   const closeDelete = () => {
     if (deleteUser.isPending) return;
     setDeleteAction(null);
+  };
+
+  const onPageChange = (next: number) => {
+    setPage((prev) => {
+      const safeMax = Math.max(1, pageCount);
+      const clamped = clamp(next, 1, safeMax);
+      return prev === clamped ? prev : clamped;
+    });
   };
 
   const columns = useMemo(
@@ -62,14 +79,6 @@ export default function UsersMainPage() {
       ? "Не удалось загрузить пользователей"
       : "Пользователи не найдены";
 
-  const onPageChange = (next: number) => {
-    setPage((prev) => {
-      const safeMax = Math.max(1, pageCount);
-      const clamped = clamp(next, 1, safeMax);
-      return prev === clamped ? prev : clamped;
-    });
-  };
-
   const selectedUserId = deleteAction?.userId ?? null;
 
   return (
@@ -84,26 +93,31 @@ export default function UsersMainPage() {
         fixedPageSize={10}
       />
 
-      <EditUserDialog
-        open={editOpen}
-        userId={editUserId}
-        onOpenChange={(next) => !next && closeEdit()}
-        onSubmitAction={async (id, values) => {
-          await updateUser.mutateAsync({ id, values });
-        }}
-      />
+      {editOpen && (
+        <EditUserDialog
+          open={editOpen}
+          userId={editUserId}
+          onOpenChange={(next) => !next && closeEdit()}
+          onSubmitAction={async (id, values) => {
+            await updateUser.mutateAsync({ id, values });
+            closeEdit();
+          }}
+        />
+      )}
 
-      <DeleteDialog
-        open={selectedUserId !== null}
-        entityId={selectedUserId ?? undefined}
-        pending={deleteUser.isPending}
-        onOpenChange={(open) => !open && closeDelete()}
-        onConfirm={async () => {
-          if (selectedUserId == null) return;
-          await deleteUser.mutateAsync(selectedUserId);
-          setDeleteAction(null);
-        }}
-      />
+      {selectedUserId !== null && (
+        <DeleteDialog
+          open={selectedUserId !== null}
+          entityId={selectedUserId}
+          pending={deleteUser.isPending}
+          onOpenChange={(open) => !open && closeDelete()}
+          onConfirm={async () => {
+            if (selectedUserId == null) return;
+            await deleteUser.mutateAsync(selectedUserId);
+            setDeleteAction(null);
+          }}
+        />
+      )}
     </div>
   );
 }

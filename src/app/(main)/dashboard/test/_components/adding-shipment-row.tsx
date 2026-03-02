@@ -28,16 +28,27 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
   const { data: shipments = [], isLoading } = useAvailableShipments(companyId);
 
   return (
-    <div className="bg-primary/5 animate-in fade-in slide-in-from-top-1 border-primary/20 flex h-6.5 items-center gap-1 border-b border-dashed px-2">
+    <div className="bg-primary/5 animate-in fade-in slide-in-from-top-1 border-primary/20 flex h-6.5 items-center gap-1 border-b border-dashed px-1">
+      {/* 1. Кнопка удаления в начале — теперь она часть строки */}
+      <button
+        type="button"
+        onClick={onCancelAction}
+        className="text-muted-foreground hover:text-destructive shrink-0 p-1 transition-colors"
+      >
+        <X className="h-3.5 w-3.5" />
+      </button>
+
       <div className="flex h-full w-32.5 shrink-0 items-center">
         <CompanySelect
           type="postal"
           placeholder="Фирма..."
           value={companyId}
           onChange={setCompanyId}
-          className="h-full min-h-0 border-none bg-transparent px-0 py-0 text-[10px] shadow-none focus:ring-0 [&>svg]:h-3 [&>svg]:w-3"
+          className="h-full min-h-0 border-none bg-transparent px-1 py-0 text-[10px] shadow-none focus:ring-0 [&>svg]:h-3 [&>svg]:w-3"
         />
       </div>
+
+      <div className="bg-primary/20 h-4 w-px" />
 
       <div className="flex h-full min-w-0 flex-1 items-center">
         <Select
@@ -55,13 +66,15 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
           }}
           disabled={!companyId || isLoading}
         >
-          <SelectTrigger className="h-full min-h-0 border-none bg-transparent px-0 py-0 text-[10px] shadow-none focus:ring-0 [&>svg]:hidden">
-            <SelectValue placeholder={isLoading ? "..." : "Выбор..."} />
+          <SelectTrigger className="h-full min-h-0 border-none bg-transparent px-1 py-0 text-[10px] shadow-none focus:ring-0 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:opacity-50">
+            <SelectValue placeholder={isLoading ? "..." : "Выбор отправки..."} />
           </SelectTrigger>
 
           <SelectContent>
             {shipments.length === 0 ? (
-              <div className="text-muted-foreground p-2 text-center text-[10px]">Нет доступных</div>
+              <div className="text-muted-foreground p-1 text-center text-xs">
+                {companyId ? "Нет доступных" : "Сначала выберите фирму"}
+              </div>
             ) : (
               shipments.map((s) => (
                 <SelectItem
@@ -71,7 +84,7 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
                   className="py-1 text-[10px]"
                 >
                   <div className="flex items-center gap-1.5">
-                    <span className="font-mono">#{s.id}</span>
+                    <span className="font-mono opacity-70">#{s.id}</span>
                     <span>·</span>
                     <span className="font-bold">{Number(s.total_weight_kg).toFixed(1)}кг</span>
                   </div>
@@ -81,14 +94,6 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
           </SelectContent>
         </Select>
       </div>
-
-      <button
-        type="button"
-        onClick={onCancelAction}
-        className="text-muted-foreground hover:text-destructive shrink-0 p-0.5 transition-colors"
-      >
-        <X className="h-3 w-3" />
-      </button>
     </div>
   );
 }

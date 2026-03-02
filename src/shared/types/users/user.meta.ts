@@ -1,4 +1,4 @@
-import { Briefcase, ShoppingCart, Truck } from "lucide-react";
+import { Briefcase, ShoppingCart, Truck, Users } from "lucide-react";
 
 import { UserRoles } from "@/shared/types/users/user.model";
 
@@ -17,7 +17,7 @@ export const USER_ROLE_META: Record<
   },
   employee: {
     label: "Сотрудник",
-    Icon: Briefcase,
+    Icon: Users,
     disabled: true,
   },
   courier: {

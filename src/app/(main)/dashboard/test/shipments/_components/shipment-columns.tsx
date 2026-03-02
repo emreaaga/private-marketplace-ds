@@ -13,7 +13,7 @@ import { formatMoney } from "@/shared/ui/molecules/format-money";
 import { formatQuantity } from "@/shared/ui/molecules/format-quantity";
 import { formatWeight } from "@/shared/ui/molecules/format-weight";
 
-export const getShipmentsColumns = (onView: (id: number) => void): ColumnDef<Shipment>[] => [
+export const getShipmentsColumns = (onView: (id: number) => void, onPrefetch: () => void): ColumnDef<Shipment>[] => [
   {
     accessorKey: "id",
     header: "ID",
@@ -76,11 +76,12 @@ export const getShipmentsColumns = (onView: (id: number) => void): ColumnDef<Shi
             className="hover:bg-muted/50 h-6 w-6 p-0"
             title="Просмотр"
             onClick={() => onView(shipmentId)}
+            onMouseEnter={onPrefetch}
           >
             <Eye className="text-muted-foreground/70 h-3 w-3" />
           </Button>
 
-          <Button asChild variant="ghost" className="hover:bg-muted/50 h-6 w-6 p-0">
+          <Button asChild variant="ghost" className="hover:bg-muted/50 h-6 w-6 p-0" onMouseEnter={onPrefetch}>
             <Link href={`/dashboard/test/${shipmentId}/orders`} title="Открыть заказы">
               <ChevronRight className="text-muted-foreground/70 h-3 w-3" />
             </Link>

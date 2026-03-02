@@ -2,19 +2,24 @@
 
 import { useCallback, useMemo, useState } from "react";
 
+import dynamic from "next/dynamic";
+
 import { useCompaniesList } from "@/features/companies/queries/use-companies-list";
 import { useUpdateCompany } from "@/features/companies/queries/use-update-company";
 import { createCompaniesColumns } from "@/features/companies/ui/organisms/companies-columns";
-import { CompanyEditDialog } from "@/features/companies/ui/organisms/company-edit-dialog";
 import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
 import type { Company } from "@/shared/types/company/company.model";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
+
+const CompanyEditDialog = dynamic(
+  () => import("@/features/companies/ui/organisms/company-edit-dialog").then((m) => m.CompanyEditDialog),
+  { ssr: false },
+);
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
 export default function CompaniesMainPage() {
   const [page, setPage] = useState(1);
-
   const [editOpen, setEditOpen] = useState(false);
   const [editCompanyId, setEditCompanyId] = useState<number | null>(null);
 
@@ -43,8 +48,6 @@ export default function CompaniesMainPage() {
     [openEdit],
   );
 
-  const emptyMessage = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить компании" : "Компании не найдены";
-
   const onPageChange = (next: number) => {
     setPage((prev) => {
       const safeMax = Math.max(1, pageCount);
@@ -52,6 +55,8 @@ export default function CompaniesMainPage() {
       return prev === clamped ? prev : clamped;
     });
   };
+
+  const emptyMessage = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить компании" : "Компании не найдены";
 
   return (
     <div className="space-y-4">
@@ -65,13 +70,15 @@ export default function CompaniesMainPage() {
         fixedPageSize={10}
       />
 
-      <CompanyEditDialog
-        open={editOpen}
-        companyId={editCompanyId}
-        pending={updateCompany.isPending}
-        onOpenChange={(open) => !open && closeEdit()}
-        onSubmitAction={(id, values) => updateCompany.mutateAsync({ id, values })}
-      />
+      {editOpen && (
+        <CompanyEditDialog
+          open={editOpen}
+          companyId={editCompanyId}
+          pending={updateCompany.isPending}
+          onOpenChange={(open) => !open && closeEdit()}
+          onSubmitAction={(id, values) => updateCompany.mutateAsync({ id, values })}
+        />
+      )}
     </div>
   );
 }

@@ -2,13 +2,19 @@
 
 import { useCallback, useMemo, useState } from "react";
 
+import dynamic from "next/dynamic";
+
 import { useServicesList } from "@/features/services/queries/use-services-list";
 import { useUpdateService } from "@/features/services/queries/use-update-service";
-import { ServiceEditDialog } from "@/features/services/ui/organisms/service-edit-dialog";
 import { createServicesColumns } from "@/features/services/ui/organisms/services-columns";
 import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
 import { Service } from "@/shared/types/services/services.model";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
+
+const ServiceEditDialog = dynamic(
+  () => import("@/features/services/ui/organisms/service-edit-dialog").then((m) => m.ServiceEditDialog),
+  { ssr: false },
+);
 
 export default function ServicesPage() {
   const [page, setPage] = useState(1);
@@ -31,26 +37,37 @@ export default function ServicesPage() {
     [handleEdit],
   );
 
+  const emptyMessage = isLoading ? "Загрузка..." : isError ? "Ошибка загрузки" : "Услуги не найдены";
+
   return (
     <div className="space-y-4">
       <UsersToolbar />
+
       <DataTable
         columns={columns}
         data={data?.data ?? []}
-        serverPagination={{ page, pageCount: data?.pagination.totalPages ?? 1, onPageChange: setPage }}
+        emptyMessage={emptyMessage}
+        serverPagination={{
+          page,
+          pageCount: data?.pagination.totalPages ?? 1,
+          onPageChange: setPage,
+        }}
+        fixedPageSize={10}
       />
 
-      <ServiceEditDialog
-        open={editOpen}
-        serviceId={editServiceId}
-        onOpenChangeAction={(open) => {
-          setEditOpen(open);
-          if (!open) setTimeout(() => setEditServiceId(null), 200);
-        }}
-        onSubmitAction={async (id, values) => {
-          await updateService.mutateAsync({ id, payload: values });
-        }}
-      />
+      {editOpen && (
+        <ServiceEditDialog
+          open={editOpen}
+          serviceId={editServiceId}
+          onOpenChangeAction={(open) => {
+            setEditOpen(open);
+            if (!open) setTimeout(() => setEditServiceId(null), 200);
+          }}
+          onSubmitAction={async (id, values) => {
+            await updateService.mutateAsync({ id, payload: values });
+          }}
+        />
+      )}
     </div>
   );
 }
