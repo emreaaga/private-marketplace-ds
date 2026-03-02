@@ -6,6 +6,7 @@ import { toast } from "sonner";
 
 import { useCreateShipment } from "@/features/shipments/queries/use-create-shipment";
 import { CompanySelect } from "@/features/users/ui/organisms/company-select";
+import { cn } from "@/shared/lib/utils";
 import type { CountryCode } from "@/shared/types/geography/country.types";
 import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
@@ -88,15 +89,15 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
         onOpenChange(next);
       }}
     >
-      <DialogContent className="sm:max-w-md">
-        <DialogHeader>
-          <DialogTitle>Создать отправку</DialogTitle>
+      <DialogContent className="border-border/40 overflow-hidden rounded-2xl p-0 shadow-2xl sm:max-w-100">
+        <DialogHeader className="px-4 pt-4 pb-2">
+          <DialogTitle className="text-[16px] font-bold tracking-tight">Новая отправка</DialogTitle>
         </DialogHeader>
 
-        <div className="grid grid-cols-2 gap-2">
-          <div className="col-span-2">
+        <div className="space-y-3 px-4 py-2">
+          <div className="space-y-1">
             <CompanySelect
-              placeholder="Почта"
+              placeholder="Выберите почту..."
               type="postal"
               value={companyId}
               error={!!errors.companyId}
@@ -107,38 +108,51 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
             />
           </div>
 
-          <div className={errors.origin ? "border-destructive rounded-md border" : ""}>
-            <CountryCityPopoverSelect
-              value={origin}
-              onChange={(v) => {
-                setOrigin(v);
-                clearError("origin");
-              }}
-              mode="country-only"
-              placeholder="Откуда"
-            />
-          </div>
+          <div className="grid grid-cols-2 gap-3">
+            <div className={cn("rounded-xl transition-all", errors.origin && "ring-destructive/20 ring-2")}>
+              <CountryCityPopoverSelect
+                value={origin}
+                onChange={(v) => {
+                  setOrigin(v);
+                  clearError("origin");
+                }}
+                mode="country-only"
+                placeholder="Откуда"
+              />
+            </div>
 
-          <div className={errors.destination ? "border-destructive rounded-md border" : ""}>
-            <CountryCityPopoverSelect
-              value={destination}
-              onChange={(v) => {
-                setDestination(v);
-                clearError("destination");
-              }}
-              mode="country-only"
-              placeholder="Куда"
-            />
+            <div className={cn("rounded-xl transition-all", errors.destination && "ring-destructive/20 ring-2")}>
+              <CountryCityPopoverSelect
+                value={destination}
+                onChange={(v) => {
+                  setDestination(v);
+                  clearError("destination");
+                }}
+                mode="country-only"
+                placeholder="Куда"
+              />
+            </div>
           </div>
         </div>
 
-        <div className="flex justify-end gap-2 pt-4">
-          <Button size="sm" variant="outline" onClick={() => onOpenChange(false)} disabled={createMutation.isPending}>
+        <div className="bg-muted/5 border-border/40 mt-3 flex justify-end gap-2 border-t px-4 py-3">
+          <Button
+            size="sm"
+            variant="outline"
+            onClick={() => onOpenChange(false)}
+            disabled={createMutation.isPending}
+            className="border-border/40 h-8 rounded-lg px-3 text-[12px]"
+          >
             Отмена
           </Button>
 
-          <Button size="sm" onClick={handleSubmit} disabled={createMutation.isPending}>
-            {createMutation.isPending ? "Создание..." : "Создать"}
+          <Button
+            size="sm"
+            onClick={handleSubmit}
+            disabled={createMutation.isPending}
+            className="bg-foreground text-background hover:bg-foreground/90 h-8 rounded-lg px-4 text-[12px] font-bold transition-all active:scale-[0.98]"
+          >
+            {createMutation.isPending ? "Создание..." : "Создать отправку"}
           </Button>
         </div>
       </DialogContent>

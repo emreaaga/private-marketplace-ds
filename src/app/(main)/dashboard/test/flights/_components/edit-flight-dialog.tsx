@@ -107,11 +107,21 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
             )}
           </div>
 
-          <div className="flex shrink-0 justify-end gap-2 border-t px-6 py-3">
-            <Button size="sm" variant="secondary" onClick={handleClose}>
+          <div className="bg-background border-border/40 flex shrink-0 justify-end gap-2 border-t px-6 py-4">
+            <Button
+              variant="outline"
+              size="sm"
+              onClick={handleClose}
+              className="border-border/40 hover:bg-muted h-8 rounded-lg px-4 text-[13px] font-medium transition-colors"
+            >
               Отмена
             </Button>
-            <Button size="sm" onClick={onSave} disabled={!canSave}>
+            <Button
+              size="sm"
+              onClick={onSave}
+              disabled={!canSave || updateMutation.isPending}
+              className="bg-foreground text-background hover:bg-foreground/90 h-8 min-w-35 rounded-lg text-[13px] font-bold transition-all active:scale-[0.98]"
+            >
               {updateMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
             </Button>
           </div>

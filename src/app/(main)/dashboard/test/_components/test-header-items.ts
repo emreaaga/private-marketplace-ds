@@ -11,7 +11,12 @@ export const TestHeaderItems = [
   },
   {
     href: "/dashboard/test/orders",
-    label: "Заказы",
-    icon: "orders",
+    label: "Исходящие заказы",
+    icon: "outbound",
+  },
+  {
+    href: "/dashboard/test/incoming-orders",
+    label: "Входящие заказы",
+    icon: "inbound",
   },
 ] as const;

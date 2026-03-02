@@ -16,32 +16,32 @@ interface SimpleTableProps {
   data: DirectoryItem[];
 }
 
-function SimpleTable({ title, data }: SimpleTableProps) {
+function SimpleDirectoryList({ title, data }: SimpleTableProps) {
   return (
-    <div className="flex flex-col gap-2">
-      <h2 className="text-muted-foreground px-1 text-[10px] font-bold tracking-widest uppercase">{title}</h2>
-      <div className="border-border overflow-hidden rounded-lg border">
-        <table className="w-full text-sm">
-          <thead className="bg-muted/40 border-border border-b text-[11px]">
-            <tr>
-              <th className="text-muted-foreground h-8 w-12 px-3 text-left font-semibold uppercase">ID</th>
-              <th className="text-muted-foreground h-8 px-3 text-left font-semibold uppercase">Название</th>
-            </tr>
-          </thead>
-          <tbody className="divide-border divide-y">
-            {data.map((item) => (
-              <tr key={item.number} className="hover:bg-muted/20 transition-colors">
-                <td className="text-muted-foreground w-12 px-3 py-2 text-xs">{item.number}</td>
-                <td className="px-3 py-1">
-                  <div className="flex items-center gap-2">
-                    <item.Icon className="text-primary/80 h-3.5 w-3.5" />
-                    <span className="text-xs leading-none">{item.label}</span>
-                  </div>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
+    <div className="border-border/50 bg-background/50 hover:border-border/80 flex flex-col gap-4 rounded-xl border p-4 shadow-[0_1px_3px_rgba(0,0,0,0.01)] transition-colors">
+      <h3 className="text-muted-foreground/70 px-1 text-[10px] font-bold tracking-[0.2em] uppercase">{title}</h3>
+
+      <div className="space-y-0.5">
+        {data.map((item) => (
+          <div
+            key={item.number}
+            className="group hover:bg-secondary/60 flex items-center gap-4 rounded-md px-2 py-1.5 transition-colors"
+          >
+            <span className="text-muted-foreground/60 group-hover:text-primary/80 w-5 shrink-0 font-mono text-[11px] font-medium transition-colors">
+              {String(item.number).padStart(2, "0")}
+            </span>
+
+            <div className="flex items-center gap-3">
+              <div className="bg-muted/40 text-muted-foreground/60 group-hover:bg-primary/10 group-hover:text-primary flex h-7 w-7 items-center justify-center rounded-lg transition-colors">
+                <item.Icon className="h-4 w-4" />
+              </div>
+
+              <span className="text-foreground/90 group-hover:text-foreground text-[13px] font-medium transition-colors">
+                {item.label}
+              </span>
+            </div>
+          </div>
+        ))}
       </div>
     </div>
   );
@@ -59,9 +59,9 @@ export default function DirectoryPage() {
   }));
 
   return (
-    <div className="grid grid-cols-1 items-start gap-x-12 gap-y-10 md:grid-cols-2">
-      <SimpleTable title="Роли пользователей" data={rolesData} />
-      <SimpleTable title="Типы компаний" data={companyTypesData} />
+    <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:gap-8">
+      <SimpleDirectoryList title="Роли пользователей" data={rolesData} />
+      <SimpleDirectoryList title="Типы компаний" data={companyTypesData} />
     </div>
   );
 }

@@ -1,6 +1,6 @@
 "use client";
 
-import { Scale, DollarSign, PlusCircle, Wallet, Calculator } from "lucide-react";
+import { Calculator, DollarSign, PlusCircle, Scale, Wallet } from "lucide-react";
 
 import { OrderSummaryForm } from "@/shared/types/order/order-summary.form";
 import { FloatingLabelInput } from "@/shared/ui/atoms/floating-label-input";

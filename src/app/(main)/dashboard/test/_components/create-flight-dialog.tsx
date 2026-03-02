@@ -71,7 +71,7 @@ export function FlightsDialog({
           <div className="min-h-0 flex-1">
             <div className="grid h-full min-h-0 grid-cols-[450px_1fr]">
               <div className="min-w-0 overflow-auto px-4 py-4">
-                <FlightGeneralForm mode="create" />
+                <FlightGeneralForm mode="create" isVisible={open} />
               </div>
 
               <div className="bg-muted/20 min-w-0 overflow-hidden">
@@ -80,12 +80,22 @@ export function FlightsDialog({
             </div>
           </div>
 
-          <div className="shrink-0 border-t px-6 py-2">
-            <div className="flex justify-end gap-2">
-              <Button size="sm" variant="secondary" onClick={handleClose}>
+          <div className="border-border/40 bg-background shrink-0 border-t px-8 py-5">
+            <div className="flex justify-end gap-3">
+              <Button
+                variant="outline"
+                size="sm"
+                onClick={handleClose}
+                className="border-border/40 hover:bg-muted h-8 rounded-lg px-4 text-[13px] font-medium transition-colors"
+              >
                 Отмена
               </Button>
-              <Button size="sm" onClick={onSave} disabled={createMutation.isPending}>
+              <Button
+                size="sm"
+                onClick={onSave}
+                disabled={createMutation.isPending}
+                className="bg-foreground text-background hover:bg-foreground/90 h-8 min-w-35 rounded-lg text-[13px] font-bold transition-all active:scale-[0.98]"
+              >
                 {createMutation.isPending ? "Сохранение..." : "Создать рейс"}
               </Button>
             </div>

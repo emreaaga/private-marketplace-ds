@@ -1,7 +1,8 @@
 "use client";
 
-import { Building2, LucideTextSelection, PlusIcon, User, UserCircle } from "lucide-react";
+import { Briefcase, Building2, ChevronDown, LucideIcon, Plus, User, UserCircle } from "lucide-react";
 
+import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/atoms/button";
 import {
   DropdownMenu,
@@ -19,6 +20,15 @@ type CreateDropdownProps = {
   onHoverServiceAction: () => void;
 };
 
+interface DropdownItemProps {
+  icon: LucideIcon;
+  label: string;
+  onClick?: () => void;
+  onMouseEnter?: () => void;
+  disabled?: boolean;
+  className?: string;
+}
+
 export function CreateDropdown({
   onCreateUserAction,
   onHoverUserAction,
@@ -30,33 +40,61 @@ export function CreateDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button size="sm" className="h-9 flex-1 md:flex-none">
-          <PlusIcon className="h-4 w-4" />
-          <span>Создать</span>
+        <Button
+          size="sm"
+          className="bg-foreground text-background hover:bg-foreground/90 h-8 w-full gap-1.5 px-3 shadow-md transition-all active:scale-95 md:w-auto"
+        >
+          <Plus size={14} strokeWidth={3} />
+          <span className="text-[12px] font-bold tracking-tight">Создать</span>
+          <ChevronDown size={12} className="ml-0.5 opacity-50" />
         </Button>
       </DropdownMenuTrigger>
 
-      <DropdownMenuContent align="start">
-        <DropdownMenuItem onClick={onCreateCompanyAction} onMouseEnter={onHoverCompanyAction}>
-          <Building2 className="mr-2 h-4 w-4" />
-          Фирма
-        </DropdownMenuItem>
+      <DropdownMenuContent
+        align="start"
+        className="border-border/40 bg-background/95 w-(--radix-dropdown-menu-trigger-width) rounded-xl p-1 shadow-xl backdrop-blur-md"
+      >
+        <DropdownItem
+          onClick={onCreateCompanyAction}
+          onMouseEnter={onHoverCompanyAction}
+          icon={Building2}
+          label="Фирма"
+        />
 
-        <DropdownMenuItem onClick={onCreateUserAction} onMouseEnter={onHoverUserAction}>
-          <User className="mr-2 h-4 w-4" />
-          Польз.
-        </DropdownMenuItem>
+        <DropdownItem onClick={onCreateUserAction} onMouseEnter={onHoverUserAction} icon={User} label="Польз." />
 
-        <DropdownMenuItem onClick={onCreateServiceAction} onMouseEnter={onHoverServiceAction}>
-          <LucideTextSelection className="mr-2 h-4 w-4" />
-          Услуга
-        </DropdownMenuItem>
+        <DropdownItem
+          onClick={onCreateServiceAction}
+          onMouseEnter={onHoverServiceAction}
+          icon={Briefcase}
+          label="Услуга"
+        />
 
-        <DropdownMenuItem disabled>
-          <UserCircle className="mr-2 h-4 w-4" />
-          Клиент
-        </DropdownMenuItem>
+        <div className="bg-border/40 my-1 h-px" />
+
+        <DropdownItem disabled icon={UserCircle} label="Клиент" className="opacity-50" />
       </DropdownMenuContent>
     </DropdownMenu>
+  );
+}
+
+function DropdownItem({ icon: Icon, label, onClick, onMouseEnter, disabled, className }: DropdownItemProps) {
+  return (
+    <DropdownMenuItem
+      disabled={disabled}
+      onClick={onClick}
+      onMouseEnter={onMouseEnter}
+      className={cn(
+        "group hover:bg-muted focus:bg-muted flex cursor-pointer items-center gap-2.5 rounded-lg px-2.5 py-1.5 text-[13px] font-medium transition-colors",
+        className,
+      )}
+    >
+      <Icon
+        size={14}
+        strokeWidth={2}
+        className="text-muted-foreground/40 group-hover:text-primary/70 group-focus:text-primary/70 transition-colors"
+      />
+      <span className="text-foreground/80 group-hover:text-foreground">{label}</span>
+    </DropdownMenuItem>
   );
 }

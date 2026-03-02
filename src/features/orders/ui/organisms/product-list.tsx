@@ -2,6 +2,7 @@
 
 import { Plus } from "lucide-react";
 
+import { cn } from "@/shared/lib/utils";
 import { ItemUI } from "@/shared/types/order/item/item-ui";
 
 import { ProductRow } from "./product-row";
@@ -43,30 +44,37 @@ export function ProductList({ items, onChange }: ListProps) {
   const removeItem = (ui_id: string) => {
     onChange(items.filter((it) => it.ui_id !== ui_id));
   };
+  const headerLabelStyle = "text-[10px] font-bold text-muted-foreground/50 uppercase tracking-tight";
 
   return (
     <div className="bg-background flex h-full flex-col overflow-hidden">
-      <div className="text-muted-foreground/60 bg-muted/10 grid grid-cols-[28px_1fr_100px_100px_100px] items-center gap-1 border-b border-dashed px-2 py-1.5 text-[10px] font-bold tracking-widest uppercase">
-        <div className="flex justify-center">
+      <div className="bg-muted/5 flex items-center gap-2 border-b border-dashed px-3 py-1.5">
+        <div className="flex w-7 shrink-0 justify-center">
           <button
             onClick={addItem}
-            className="text-primary transition-transform hover:scale-125 active:scale-95"
-            title="Добавить товар"
+            className="text-primary/60 hover:text-primary transition-all hover:scale-110 active:scale-95"
+            title="Добавить позицию"
           >
             <Plus size={14} strokeWidth={3} />
           </button>
         </div>
-        <div>Наименование</div>
-        <div className="pr-4 text-right">Цена</div>
-        <div className="pr-4 text-right">Кол-во</div>
-        <div className="pr-2 text-right">Сумма</div>
+
+        <div className={cn(headerLabelStyle, "flex-[2.5]")}>Наименование</div>
+        <div className={cn(headerLabelStyle, "flex-1 text-right")}>Цена</div>
+        <div className={cn(headerLabelStyle, "flex-1 text-center")}>Кол-во</div>
+        <div className={cn(headerLabelStyle, "flex-1 pr-1 text-right")}>Итого</div>
       </div>
 
-      <div className="custom-scrollbar divide-muted/20 flex-1 divide-y divide-dashed overflow-y-auto font-normal">
+      <div className="custom-scrollbar divide-muted/10 flex-1 divide-y overflow-y-auto outline-none">
         {items.length === 0 ? (
-          <div className="text-muted-foreground/30 flex flex-col items-center justify-center py-12 text-[11px]">
-            <p className="italic">Список пуст</p>
-            <p className="text-[9px]">Нажмите на плюс выше</p>
+          <div className="flex flex-col items-center justify-center py-12 text-center">
+            <p className="text-muted-foreground/40 text-[11px] font-medium italic">Список пуст</p>
+            <button
+              onClick={addItem}
+              className="text-primary/50 hover:text-primary mt-1 text-[9px] font-bold tracking-widest uppercase transition-colors"
+            >
+              + Добавить первый товар
+            </button>
           </div>
         ) : (
           items.map((item, index) => (

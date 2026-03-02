@@ -16,9 +16,10 @@ import { FlightWeightControl } from "./flight-weight-control";
 
 interface FlightGeneralFormProps {
   mode: "create" | "edit";
+  isVisible?: boolean;
 }
 
-export function FlightGeneralForm({ mode }: FlightGeneralFormProps) {
+export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormProps) {
   const { control, setValue } = useFormContext<FlightFormValues | EditFlightFormValues>();
 
   const airPartnerId = useWatch({ control, name: "air_partner_id" });
@@ -58,6 +59,7 @@ export function FlightGeneralForm({ mode }: FlightGeneralFormProps) {
               <CompanySelect
                 type="air_partner"
                 placeholder="Авиапартнёр"
+                enabled={isVisible}
                 value={field.value as number}
                 onChange={(id) => {
                   field.onChange(id);

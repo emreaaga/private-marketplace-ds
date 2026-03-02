@@ -6,7 +6,7 @@ import { useCompaniesLookup } from "@/features/companies/queries/use-companies-l
 import { cn } from "@/shared/lib/utils";
 import type { CompanyType } from "@/shared/types/company/company.types";
 import { ScrollArea } from "@/shared/ui/atoms/scroll-area";
-import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from "@/shared/ui/atoms/select";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 
 interface CompanySelectProps {
   value?: number;
@@ -15,10 +15,19 @@ interface CompanySelectProps {
   placeholder?: string;
   error?: boolean;
   className?: string;
+  enabled?: boolean;
 }
 
-export function CompanySelect({ value, onChange, type, placeholder, error, className }: CompanySelectProps) {
-  const { data: companies = [], isLoading, isError } = useCompaniesLookup({ type });
+export function CompanySelect({
+  value,
+  onChange,
+  type,
+  placeholder,
+  error,
+  className,
+  enabled = true,
+}: CompanySelectProps) {
+  const { data: companies = [], isLoading, isError } = useCompaniesLookup({ type, enabled });
 
   const emptyLabel = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить" : "Компании не найдены";
 
@@ -32,13 +41,7 @@ export function CompanySelect({ value, onChange, type, placeholder, error, class
         onChange(Number.isFinite(id) ? id : undefined);
       }}
     >
-      <SelectTrigger
-        className={cn(
-          "w-full",
-          error && "border-destructive focus:ring-destructive",
-          className, // Передаем className в триггер
-        )}
-      >
+      <SelectTrigger className={cn("w-full", error && "border-destructive focus:ring-destructive", className)}>
         <SelectValue placeholder={placeholder ?? "Компания"} />
       </SelectTrigger>
 

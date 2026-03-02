@@ -4,8 +4,6 @@ import { Minus, Plus, Trash2 } from "lucide-react";
 
 import { cn } from "@/shared/lib/utils";
 import { ItemUI } from "@/shared/types/order/item/item-ui";
-import { Button } from "@/shared/ui/atoms/button";
-import { Input } from "@/shared/ui/atoms/input";
 
 interface RowProps {
   index: number;
@@ -16,70 +14,72 @@ interface RowProps {
 
 export function ProductRow({ index, item, onUpdate, onRemove }: RowProps) {
   const priceNum = Number(item.unit_price);
-  const rowSum = priceNum > 0 && item.quantity > 0 ? (priceNum * item.quantity).toFixed(2) : "";
+  const rowSum =
+    priceNum > 0 && item.quantity > 0
+      ? (priceNum * item.quantity).toLocaleString("ru-RU", { minimumFractionDigits: 2 })
+      : "0.00";
 
-  const textStyle = "text-[10px] font-normal tabular-nums tracking-tight";
+  const labelStyle = "text-[9px] font-bold text-muted-foreground/40 uppercase tracking-tighter";
+  const inputStyle = "bg-transparent text-[13px] focus:outline-none focus:ring-0 placeholder:text-muted-foreground/20";
 
   return (
-    <div className="group hover:bg-muted/40 border-muted/5 grid grid-cols-[28px_1fr_100px_100px_100px] items-center gap-1 border-b px-2 py-0.5 transition-colors">
-      <div className="relative flex h-6 w-6 items-center justify-center">
-        <span className={cn(textStyle, "text-muted-foreground/40 group-hover:hidden")}>{index + 1}</span>
+    <div className="group hover:bg-secondary/40 hover:border-border/30 flex items-center gap-2 border-b border-transparent px-3 py-0.5 transition-colors">
+      <div className="relative flex h-6 w-7 shrink-0 items-center justify-center">
+        <span className="text-muted-foreground/40 text-[10px] font-medium transition-opacity group-hover:opacity-0">
+          {String(index + 1).padStart(2, "0")}
+        </span>
         <button
           onClick={onRemove}
-          className="hidden text-red-500/60 transition-colors group-hover:flex hover:text-red-500"
+          className="hover:text-destructive absolute inset-0 flex items-center justify-center opacity-0 transition-all group-hover:opacity-100"
         >
-          <Trash2 size={12} />
+          <Trash2 size={13} strokeWidth={2} />
         </button>
       </div>
 
-      <Input
-        value={item.name}
-        onChange={(e) => onUpdate({ name: e.target.value })}
-        placeholder="Товар..."
-        className={cn(
-          textStyle,
-          "text-foreground/80 placeholder:text-muted-foreground/20 h-6 border-none bg-transparent p-0 shadow-none focus-visible:ring-0",
-        )}
-      />
+      <div className="flex-[2.5]">
+        <input
+          value={item.name}
+          onChange={(e) => onUpdate({ name: e.target.value })}
+          placeholder="Название позиции..."
+          className={cn(inputStyle, "w-full font-medium")}
+        />
+      </div>
 
-      <div className="flex items-center justify-end">
-        <Input
+      <div className="flex flex-1 items-center justify-end gap-1">
+        <input
           type="text"
           inputMode="decimal"
           value={item.unit_price}
           onChange={(e) => onUpdate({ unit_price: e.target.value.replace(",", ".") })}
-          className={cn(
-            textStyle,
-            "text-foreground/70 h-6 w-16 border-none bg-transparent p-0 text-right font-mono shadow-none focus-visible:ring-0",
-          )}
+          placeholder="0.00"
+          className={cn(inputStyle, "w-16 text-right font-mono tracking-tight")}
         />
-        <span className={cn(textStyle, "text-muted-foreground/30 ml-1 font-mono")}>$</span>
+        <span className={labelStyle}>$</span>
       </div>
 
-      <div className="flex items-center justify-end gap-1 pr-4">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100"
-          onClick={() => onUpdate({ quantity: Math.max(1, item.quantity - 1) })}
-        >
-          <Minus className="text-muted-foreground/40 h-3 w-3" />
-        </Button>
-        <span className={cn(textStyle, "text-muted-foreground min-w-[2.5ch] text-center font-mono")}>
-          {item.quantity}
-        </span>
-        <Button
-          variant="ghost"
-          size="icon"
-          className="h-5 w-5 p-0 opacity-0 group-hover:opacity-100"
-          onClick={() => onUpdate({ quantity: item.quantity + 1 })}
-        >
-          <Plus className="text-muted-foreground/40 h-3 w-3" />
-        </Button>
+      <div className="flex flex-1 items-center justify-center">
+        <div className="group-hover:bg-background/80 flex items-center rounded-md px-1 transition-opacity">
+          <button
+            onClick={() => onUpdate({ quantity: Math.max(1, item.quantity - 1) })}
+            className="text-muted-foreground/50 hover:text-foreground flex h-5 w-5 items-center justify-center transition-colors active:scale-90"
+          >
+            <Minus size={10} strokeWidth={3} />
+          </button>
+
+          <span className="min-w-6 text-center font-mono text-[12px] font-semibold">{item.quantity}</span>
+
+          <button
+            onClick={() => onUpdate({ quantity: item.quantity + 1 })}
+            className="text-muted-foreground/50 hover:text-foreground flex h-5 w-5 items-center justify-center transition-colors active:scale-90"
+          >
+            <Plus size={10} strokeWidth={3} />
+          </button>
+        </div>
       </div>
 
-      <div className={cn(textStyle, "text-foreground/70 pr-2 text-right font-mono")}>
-        {rowSum} {rowSum && <span className="text-muted-foreground/30">$</span>}
+      <div className="text-foreground/80 flex flex-1 justify-end font-mono text-[13px] font-bold tracking-tighter">
+        {rowSum}
+        <span className={cn(labelStyle, "ml-1 self-center")}>$</span>
       </div>
     </div>
   );

@@ -10,10 +10,10 @@ import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
 import { getOrdersColumns } from "./_components/orders-columns";
 
-const OrderEditDialog = dynamic(
-  () => import("@/features/orders/ui/organisms/order-edit-dialog").then((mod) => mod.OrderEditDialog),
-  { ssr: false },
-);
+const OrderEditDialogLoader = () =>
+  import("@/features/orders/ui/organisms/order-edit-dialog").then((mod) => mod.OrderEditDialog);
+
+const OrderEditDialog = dynamic(OrderEditDialogLoader, { ssr: false });
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
@@ -37,7 +37,11 @@ export default function OrdersPage() {
     });
   };
 
-  const columns = useMemo(() => getOrdersColumns(setEditId), []);
+  const prefetchEditDialog = () => {
+    OrderEditDialogLoader();
+  };
+
+  const columns = useMemo(() => getOrdersColumns(setEditId, prefetchEditDialog), []);
 
   return (
     <div className="space-y-4">

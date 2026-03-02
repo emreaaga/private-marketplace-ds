@@ -14,7 +14,6 @@ interface PartyFormProps {
   onChange: (patch: Partial<ClientForm>) => void;
 }
 
-// eslint-disable-next-line complexity
 export function PartyForm({ title, value, onChange }: PartyFormProps) {
   const handleGeoChange = (geo: { country: CountryCode | null; city: string | null; district?: string | null }) => {
     const patch: Partial<ClientForm> = { ...geo };

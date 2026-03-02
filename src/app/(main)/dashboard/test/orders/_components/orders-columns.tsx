@@ -10,7 +10,7 @@ import { StatusProgress } from "@/shared/ui/atoms/status-progress";
 import { formatMoney } from "@/shared/ui/molecules/format-money";
 import { formatWeight } from "@/shared/ui/molecules/format-weight";
 
-export const getOrdersColumns = (onView: (id: number) => void): ColumnDef<OrdersListItemApi>[] => [
+export const getOrdersColumns = (onView: (id: number) => void, onHover: () => void): ColumnDef<OrdersListItemApi>[] => [
   {
     accessorKey: "id",
     header: "ID",
@@ -94,6 +94,7 @@ export const getOrdersColumns = (onView: (id: number) => void): ColumnDef<Orders
           variant="ghost"
           className="hover:bg-muted/50 h-6 w-6 p-0"
           onClick={() => onView(row.original.id)}
+          onMouseEnter={onHover}
           title="Просмотр заказа"
         >
           <Eye className="text-muted-foreground/70 h-3 w-3" />

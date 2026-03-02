@@ -20,7 +20,7 @@ const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v,
 export default function FlightShipmentsPage() {
   const [page, setPage] = useState(1);
   const [viewId, setViewId] = useState<number | null>(null);
-  const [shouldLoad, setShouldLoad] = useState(false); // Флаг для предзагрузки
+  const [shouldLoad, setShouldLoad] = useState(false);
 
   const { data, isLoading, isError } = useShipmentsList({ page });
 

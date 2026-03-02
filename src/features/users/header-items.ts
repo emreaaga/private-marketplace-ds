@@ -14,4 +14,9 @@ export const usersHeaderItems = [
     label: "Услуги",
     icon: "service",
   },
+  {
+    href: "/dashboard/users/clients",
+    label: "Клиенты",
+    icon: "clients",
+  },
 ] as const;
