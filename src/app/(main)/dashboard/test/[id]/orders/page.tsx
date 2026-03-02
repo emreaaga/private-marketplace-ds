@@ -1,14 +1,18 @@
 "use client";
 
-import { useState, useMemo } from "react";
+import { useCallback, useMemo, useState } from "react";
 
+import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 
 import { useOrdersList } from "@/features/orders/queries/use-orders-list";
-import { OrderEditDialog } from "@/features/orders/ui/organisms/order-edit-dialog";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
 import { getOrdersColumns } from "../../orders/_components/orders-columns";
+
+const OrderEditDialogLoader = () =>
+  import("@/features/orders/ui/organisms/order-edit-dialog").then((m) => m.OrderEditDialog);
+const OrderEditDialog = dynamic(OrderEditDialogLoader, { ssr: false });
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
@@ -17,9 +21,10 @@ export default function ShipmentOrdersPage() {
   const shipmentId = Number(params.id);
 
   const [page, setPage] = useState(1);
-
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+
+  const [isDialogLoaded, setIsDialogLoaded] = useState(false);
 
   const { data, isLoading, isError } = useOrdersList({
     page,
@@ -29,18 +34,18 @@ export default function ShipmentOrdersPage() {
   const orders = data?.data ?? [];
   const pageCount = data?.pagination.totalPages ?? 1;
 
-  const handleViewOrder = (id: number) => {
+  const handleViewOrder = useCallback((id: number) => {
     setSelectedOrderId(id);
+    setIsDialogLoaded(true);
     setIsDialogOpen(true);
-  };
+  }, []);
 
-  const columns = useMemo(() => getOrdersColumns(handleViewOrder), []);
+  const handlePrefetch = useCallback(() => {
+    OrderEditDialogLoader();
+    setIsDialogLoaded(true);
+  }, []);
 
-  const emptyMessage = isLoading
-    ? "Загрузка заказов..."
-    : isError
-      ? "Не удалось загрузить заказы"
-      : "В этой отправке пока нет заказов";
+  const columns = useMemo(() => getOrdersColumns(handleViewOrder, handlePrefetch), [handleViewOrder, handlePrefetch]);
 
   const onPageChange = (next: number) => {
     setPage((prev) => {
@@ -59,16 +64,14 @@ export default function ShipmentOrdersPage() {
       <DataTable
         columns={columns}
         data={orders}
-        emptyMessage={emptyMessage}
-        serverPagination={{
-          page,
-          pageCount,
-          onPageChange,
-        }}
+        emptyMessage={isLoading ? "Загрузка..." : isError ? "Ошибка" : "Нет заказов"}
+        serverPagination={{ page, pageCount, onPageChange }}
         fixedPageSize={10}
       />
 
-      <OrderEditDialog open={isDialogOpen} orderId={selectedOrderId} onOpenChange={setIsDialogOpen} />
+      {isDialogLoaded && (
+        <OrderEditDialog open={isDialogOpen} orderId={selectedOrderId} onOpenChange={setIsDialogOpen} />
+      )}
     </div>
   );
 }
