@@ -80,7 +80,7 @@ export function FlightsDialog({
             </div>
           </div>
 
-          <div className="border-border/40 bg-background shrink-0 border-t px-8 py-5">
+          <div className="border-border/40 bg-background shrink-0 border-t px-4 py-2">
             <div className="flex justify-end gap-3">
               <Button
                 variant="outline"

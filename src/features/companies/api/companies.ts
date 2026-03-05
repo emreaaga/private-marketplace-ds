@@ -4,6 +4,7 @@ import { api } from "@/shared/lib/api";
 import type { CreateCompanyPayload } from "@/shared/types/company/company.dto";
 import type { Company } from "@/shared/types/company/company.model";
 import type { CompanyType } from "@/shared/types/company/company.types";
+import { CountryCode } from "@/shared/types/geography/country.types";
 import type { PaginatedResponse } from "@/shared/types/paginated-response";
 
 export type CompanyOption = { id: number; name: string };
@@ -20,8 +21,10 @@ type GetCompaniesLookupParams = {
 export type UpdateCompanyPayload = {
   name: string;
   type: CompanyType;
-  country: string;
-  city: string;
+  location: {
+    country: CountryCode | string;
+    city: string;
+  };
   is_active: boolean;
 };
 

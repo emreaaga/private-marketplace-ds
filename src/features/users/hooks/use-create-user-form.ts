@@ -37,9 +37,11 @@ export function useCreateUserForm() {
       surname: form.surname.trim(),
       email,
       password,
-      country: location.country || "",
-      city: location.city || "",
-      district: location.district || "",
+      location: {
+        country: location.country || "",
+        city: location.city || "",
+        district: location.district || "",
+      },
       address_line: form.addressLine || "",
       phone_country_code: location.phoneCode,
       phone_number: form.phoneNumber,
@@ -51,7 +53,8 @@ export function useCreateUserForm() {
     if (!parsed.success) {
       const nextErrors: any = {};
       parsed.error.issues.forEach((issue) => {
-        nextErrors[issue.path[0]] = issue.message;
+        const path = issue.path.join(".");
+        nextErrors[path] = issue.message;
       });
       setErrors(nextErrors);
       return;
@@ -61,10 +64,9 @@ export function useCreateUserForm() {
 
     try {
       await createUserMutation.mutateAsync(parsed.data);
-
       setCreatedData({ email, password });
-    } catch (e) {
-      // Ошибки обработает мутация (toast)
+    } catch {
+      // Ошибки обработает мутация через toast
     }
   };
 

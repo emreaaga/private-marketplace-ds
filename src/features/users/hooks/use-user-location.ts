@@ -1,15 +1,18 @@
-import { useState, useMemo, useCallback } from "react";
+"use client";
+
+import { useCallback, useMemo, useState } from "react";
 
 import { COUNTRY_META } from "@/shared/types/geography/country.meta";
 import type { CountryCode } from "@/shared/types/geography/country.types";
 
 export function useUserLocation() {
   const [country, setCountry] = useState<CountryCode | "">("");
-  const [city, setCity] = useState<string>(""); // city code
+  const [city, setCity] = useState<string>("");
   const [district, setDistrict] = useState<string>("");
 
   const selectedCountryData = useMemo(() => {
-    return country ? COUNTRY_META[country] : null;
+    if (!country) return null;
+    return COUNTRY_META[country as CountryCode] ?? null;
   }, [country]);
 
   const selectedCityData = useMemo(() => {
@@ -20,7 +23,7 @@ export function useUserLocation() {
 
   const phoneCode = selectedCountryData?.phoneCode ?? "+";
 
-  const handleCountryChange = useCallback((value: CountryCode) => {
+  const handleCountryChange = useCallback((value: CountryCode | "") => {
     setCountry(value);
     setCity("");
     setDistrict("");
@@ -34,7 +37,7 @@ export function useUserLocation() {
   const countryOptions = useMemo(
     () =>
       Object.entries(COUNTRY_META).map(([code, meta]) => ({
-        value: code as CountryCode, // country code
+        value: code as CountryCode,
         label: meta.label,
       })),
     [],
@@ -44,8 +47,8 @@ export function useUserLocation() {
     () =>
       selectedCountryData
         ? Object.values(selectedCountryData.cities).map((city) => ({
-            value: city.code, // city CODE goes to state / API / DB
-            label: city.label, // UI
+            value: city.code,
+            label: city.label,
           }))
         : [],
     [selectedCountryData],
@@ -55,7 +58,7 @@ export function useUserLocation() {
     () =>
       selectedCityData
         ? selectedCityData.districts.map((d) => ({
-            value: d, // full name
+            value: d,
             label: d,
           }))
         : [],
@@ -75,12 +78,13 @@ export function useUserLocation() {
 
     setDistrict,
 
+    handleCountryChange,
+    handleCityChange,
     reset,
 
     phoneCode,
-
-    handleCountryChange,
-    handleCityChange,
+    selectedCountryData,
+    selectedCityData,
 
     countryOptions,
     cityOptions,

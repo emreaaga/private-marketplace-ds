@@ -1,7 +1,7 @@
 "use client";
 
 import { Button } from "@/shared/ui/atoms/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/shared/ui/atoms/dialog";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
 import { Spinner } from "@/shared/ui/atoms/spinner";
 
 import { CreateServiceForm } from "./create-service-form";
@@ -9,17 +9,17 @@ import { useCreateServiceForm } from "./use-create-service-form";
 
 type Props = {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChangeAction: (open: boolean) => void;
 };
 
-export default function CreateServiceDialog({ open, onOpenChange }: Props) {
+export default function CreateServiceDialog({ open, onOpenChangeAction }: Props) {
   const { form, setForm, loading, errors, clearError, isFormIncomplete, submit, reset } = useCreateServiceForm(() =>
-    onOpenChange(false),
+    onOpenChangeAction(false),
   );
 
   const handleOpenChange = (nextOpen: boolean) => {
     if (!nextOpen) reset();
-    onOpenChange(nextOpen);
+    onOpenChangeAction(nextOpen);
   };
 
   return (

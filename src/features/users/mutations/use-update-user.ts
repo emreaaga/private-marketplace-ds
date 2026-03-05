@@ -16,7 +16,7 @@ export function useUpdateUser() {
 
     onSuccess: () => {
       qc.invalidateQueries({ queryKey: usersKeys.all });
-      toast.success("Данные пользователя обновлены");
+      toast.success("Данные успешно обновлены");
     },
   });
 }

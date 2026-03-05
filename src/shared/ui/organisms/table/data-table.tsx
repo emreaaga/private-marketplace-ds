@@ -20,7 +20,6 @@ import { DataTablePagination } from "@/shared/ui/organisms/table/data-table-pagi
 import { Empty, EmptyDescription, EmptyHeader, EmptyMedia, EmptyTitle } from "../../atoms/empty";
 
 type ServerPagination = {
-  /** 1-based */
   page: number;
   pageCount: number;
   onPageChange: (page: number) => void;
@@ -93,7 +92,6 @@ export function DataTable<TData>({
       const current = resolvedPagination!;
       const next = typeof updater === "function" ? updater(current) : updater;
 
-      // ✅ pageSize изменения игнорируем (фиксировано 10)
       if (next.pageSize !== current.pageSize) {
         return;
       }

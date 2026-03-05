@@ -75,7 +75,7 @@ export default function CompaniesMainPage() {
           open={editOpen}
           companyId={editCompanyId}
           pending={updateCompany.isPending}
-          onOpenChange={(open) => !open && closeEdit()}
+          onOpenChangeAction={(open) => !open && closeEdit()}
           onSubmitAction={(id, values) => updateCompany.mutateAsync({ id, values })}
         />
       )}

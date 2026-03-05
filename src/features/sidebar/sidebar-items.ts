@@ -1,6 +1,6 @@
 "use client";
 
-import { Users, Package, UserCircle, BarChart3, Settings, Store, Wallet, Plane } from "lucide-react";
+import { BarChart3, Package, Settings, Store, UserCircle, Users, Wallet } from "lucide-react";
 
 import { NavGroup } from "@/features/sidebar/types/sidebar.types";
 import { UserRole } from "@/shared/lib/rbac/roles";

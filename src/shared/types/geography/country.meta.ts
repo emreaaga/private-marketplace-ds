@@ -17,7 +17,7 @@ export const COUNTRY_META: Record<
 > = {
   tr: {
     label: "Turkey",
-    phoneCode: "+90",
+    phoneCode: "90",
     flag: "https://flagcdn.com/w40/tr.png",
     cities: {
       istanbul: {
@@ -40,7 +40,7 @@ export const COUNTRY_META: Record<
 
   uz: {
     label: "Uzbekistan",
-    phoneCode: "+998",
+    phoneCode: "998",
     flag: "https://flagcdn.com/w40/uz.png",
     cities: {
       tashkent: {
@@ -63,7 +63,7 @@ export const COUNTRY_META: Record<
 
   ch: {
     label: "China",
-    phoneCode: "+86",
+    phoneCode: "86",
     flag: "https://flagcdn.com/w40/cn.png",
     cities: {
       beijing: {

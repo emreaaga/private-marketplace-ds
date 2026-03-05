@@ -3,22 +3,23 @@
 import { CheckCircle } from "lucide-react";
 
 import { useCreateUserForm } from "@/features/users/hooks/use-create-user-form";
+import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/atoms/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogFooter, DialogClose } from "@/shared/ui/atoms/dialog";
+import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
 import { CopyRow } from "@/shared/ui/molecules/copy-row";
 
 import { CreateUserForm } from "./create-user-form";
 
 interface CreateUserDialogProps {
   open: boolean;
-  onOpenChange: (open: boolean) => void;
+  onOpenChangeAction: (open: boolean) => void;
 }
 
-export default function CreateUserDialog({ open, onOpenChange }: CreateUserDialogProps) {
+export default function CreateUserDialog({ open, onOpenChangeAction }: CreateUserDialogProps) {
   const form = useCreateUserForm();
 
   const handleOpenChange = (open: boolean) => {
-    onOpenChange(open);
+    onOpenChangeAction(open);
 
     if (!open) {
       setTimeout(() => {
@@ -62,12 +63,24 @@ export default function CreateUserDialog({ open, onOpenChange }: CreateUserDialo
           ) : (
             <>
               <DialogClose asChild>
-                <Button variant="ghost" size="sm">
+                <Button
+                  variant="outline"
+                  className={cn(
+                    "h-8 rounded-md px-3 text-[13px] font-medium transition-colors",
+                    "text-muted-foreground hover:bg-accent hover:text-foreground",
+                  )}
+                  size="sm"
+                >
                   Отмена
                 </Button>
               </DialogClose>
 
-              <Button size="sm" onClick={form.submit} disabled={form.isPending}>
+              <Button
+                size="sm"
+                className="bg-foreground text-background hover:bg-foreground/90 h-8 rounded-lg text-[13px] font-bold transition-all active:scale-[0.98]"
+                onClick={form.submit}
+                disabled={form.isPending}
+              >
                 {form.isPending ? "Создание..." : "Создать"}
               </Button>
             </>

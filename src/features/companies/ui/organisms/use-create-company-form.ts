@@ -30,7 +30,7 @@ export function useCreateCompanyForm(onSuccessAction: () => void) {
 
   const createMutation = useCreateCompany();
 
-  const clearError = (field: keyof FormErrors) => {
+  const clearErrorAction = (field: keyof FormErrors) => {
     setErrors((prev) => {
       if (!prev[field]) return prev;
       const next = { ...prev };
@@ -49,8 +49,10 @@ export function useCreateCompanyForm(onSuccessAction: () => void) {
     const payload = {
       name: form.name.trim(),
       type: form.type,
-      country: form.country,
-      city: form.city,
+      location: {
+        country: form.country,
+        city: form.city,
+      },
     };
 
     const parsed = createCompanySchema.safeParse(payload);
@@ -58,7 +60,7 @@ export function useCreateCompanyForm(onSuccessAction: () => void) {
     if (!parsed.success) {
       const nextErrors: FormErrors = {};
       parsed.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof FormErrors;
+        const field = issue.path[issue.path.length - 1] as keyof FormErrors;
         nextErrors[field] = true;
       });
       setErrors(nextErrors);
@@ -69,7 +71,6 @@ export function useCreateCompanyForm(onSuccessAction: () => void) {
 
     try {
       await createMutation.mutateAsync(parsed.data);
-
       onSuccessAction();
       reset();
     } catch (error) {
@@ -81,9 +82,9 @@ export function useCreateCompanyForm(onSuccessAction: () => void) {
 
   return {
     form,
-    setForm,
+    setFormAction: setForm,
     errors,
-    clearError,
+    clearErrorAction,
     loading: createMutation.isPending,
     isFormIncomplete,
     submit,

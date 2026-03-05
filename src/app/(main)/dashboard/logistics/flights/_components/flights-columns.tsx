@@ -22,6 +22,7 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
     accessorKey: "point1",
     header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт 1" />,
     // innerBadge = сколько отправок собрали в стране отправления
+    // TODO - колво отправок и колво заказов
     cell: ({ row }) => <TableBadge innerBadge={`${row.original.shipments_count} шт`}>Склад отправ.</TableBadge>,
   },
   {
@@ -35,7 +36,7 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
   {
     accessorKey: "flight",
     header: () => <HeaderWithIcon icon={stageIcons.flight} label="Рейс" />,
-    // innerBadge = ID рейса, текст = Маршрут
+    // innerBadge = ID рейса, текст = Маршрут страна - город
     cell: ({ row }) => <TableBadge innerBadge={row.original.air_kg_price}>{row.original.route}</TableBadge>,
   },
   {
@@ -50,6 +51,7 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
     accessorKey: "point2",
     header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт 2" />,
     // innerBadge = финальный вес из аэропорта (или "Взвешивается", если null)
+    // TODO - колво пол пунктов
     cell: ({ row }) => (
       <TableBadge innerBadge={row.original.final_gross_weight_kg ?? "Взвешивается"}>Склад получ.</TableBadge>
     ),
@@ -58,6 +60,7 @@ export const FlightsColumns: ColumnDef<Flight>[] = [
     accessorKey: "courier2",
     header: () => <HeaderWithIcon icon={stageIcons.courier} label="Долг кассы" />,
     // innerBadge = сколько курьер должен собрать при выдаче
+    // Колво курьеров и остаток
     cell: ({ row }) => <TableBadge innerBadge={row.original.remaining_sum}>Курьер 2</TableBadge>,
   },
   {
