@@ -72,7 +72,6 @@ export function EditUserDialog({ open, userId, onOpenChange, onSubmitAction }: P
     defaultValues: EMPTY,
     values: open && data ? normalizedData : EMPTY,
     mode: "onChange",
-    resetOptions: { keepDirtyValues: true },
   });
 
   const requestClose = () => {
@@ -80,7 +79,7 @@ export function EditUserDialog({ open, userId, onOpenChange, onSubmitAction }: P
     onOpenChange(false);
   };
 
-  const handleSubmit = async (values: EditUserFormValues) => {
+  const onInternalSubmit = async (values: EditUserFormValues) => {
     if (userId === null || !onSubmitAction) return;
 
     try {
@@ -109,7 +108,7 @@ export function EditUserDialog({ open, userId, onOpenChange, onSubmitAction }: P
       await onSubmitAction(userId, dirtyValues as EditUserFormValues);
       onOpenChange(false);
     } catch (e) {
-      console.error(e);
+      console.error("Submit error:", e);
     }
   };
 
@@ -119,12 +118,12 @@ export function EditUserDialog({ open, userId, onOpenChange, onSubmitAction }: P
         <DialogHeader>
           <DialogTitle>Обновить пользователя {userId ? `#${userId}` : ""}</DialogTitle>
         </DialogHeader>
-        <DialogDescription className="sr-only">Форма редактирования данных.</DialogDescription>
+        <DialogDescription hidden />
 
-        {isLoading && <div className="text-muted-foreground text-sm">Загрузка данных…</div>}
-        {isError && <div className="text-destructive text-sm">Ошибка загрузки</div>}
+        {isLoading && <div className="text-muted-foreground py-4 text-sm">Загрузка данных…</div>}
+        {isError && <div className="text-destructive py-4 text-sm">Ошибка загрузки</div>}
 
-        {data && <EditUserForm form={form} user={data} onSubmitAction={handleSubmit} />}
+        {data && <EditUserForm form={form} user={data} onSubmitAction={onInternalSubmit} />}
 
         <DialogFooter>
           <Button size="sm" variant="outline" onClick={requestClose} disabled={form.formState.isSubmitting}>
@@ -132,10 +131,10 @@ export function EditUserDialog({ open, userId, onOpenChange, onSubmitAction }: P
           </Button>
           <Button
             size="sm"
-            type="submit"
-            form="edit-user-form"
+            type="button"
             className="bg-foreground text-background"
             disabled={isLoading || isError || form.formState.isSubmitting || !form.formState.isValid}
+            onClick={(e) => form.handleSubmit(onInternalSubmit)(e)}
           >
             {form.formState.isSubmitting ? "Сохранение…" : "Сохранить"}
           </Button>

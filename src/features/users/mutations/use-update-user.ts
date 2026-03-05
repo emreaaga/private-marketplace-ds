@@ -4,18 +4,20 @@ import { toast } from "sonner";
 import { usersService } from "@/features/users/api/users";
 import { usersKeys } from "@/features/users/queries/users.keys";
 
-import type { EditUserFormValues } from "../ui/organisms/dialogs/edit-user/edit-user.types";
-
-type Vars = { id: number; values: EditUserFormValues };
+import { useInvalidateUsers } from "../api/use-invalidate-users";
 
 export function useUpdateUser() {
   const qc = useQueryClient();
+  const { invalidate } = useInvalidateUsers();
 
   return useMutation({
-    mutationFn: ({ id, values }: Vars) => usersService.updateUser(id, values),
+    mutationFn: ({ id, values }: { id: number; values: any }) => usersService.updateUser(id, values),
 
-    onSuccess: () => {
-      qc.invalidateQueries({ queryKey: usersKeys.all });
+    onSuccess: async (_, variables) => {
+      await invalidate();
+
+      qc.invalidateQueries({ queryKey: usersKeys.detail(variables.id) });
+
       toast.success("Данные успешно обновлены");
     },
   });

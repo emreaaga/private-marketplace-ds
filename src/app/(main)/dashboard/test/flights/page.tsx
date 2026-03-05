@@ -1,5 +1,3 @@
-// app/flights/page.tsx
-
 import { getFlights } from "@/features/flights/api/get-flights";
 
 import { FlightsTableClient } from "./_components/flights-table-client";
@@ -8,8 +6,6 @@ import { FlightsToolbar } from "./_components/flights-toolbar";
 interface PageProps {
   searchParams: Promise<{ page?: string }>;
 }
-
-// TODO Отправка id, кол-во заказов, общая услуга в каждых отправках.
 
 export default async function FlightsPage({ searchParams }: PageProps) {
   const params = await searchParams;

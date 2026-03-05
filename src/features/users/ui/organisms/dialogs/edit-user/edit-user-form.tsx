@@ -6,14 +6,12 @@ import { Check, Copy, RefreshCw } from "lucide-react";
 import { Controller, useWatch, type UseFormReturn } from "react-hook-form";
 
 import { cn } from "@/shared/lib/utils";
-// ИЗМЕНЕНО: Базовые импорты без .new
 import { COUNTRY_META } from "@/shared/types/geography/country.meta";
 import type { CountryCode } from "@/shared/types/geography/country.types";
 import type { UserDetail } from "@/shared/types/users";
 import { Button } from "@/shared/ui/atoms/button";
 import { FloatingLabelInput } from "@/shared/ui/atoms/floating-label-input";
 import { PhoneNumberInput } from "@/shared/ui/atoms/phone-number-input";
-// ИЗМЕНЕНО: Импорт без .new
 import CountryCityPopoverSelect from "@/shared/ui/atoms/select-with-flags";
 
 import { CompanyReadonlySelect } from "./company-readonly-select";
@@ -41,7 +39,6 @@ export function EditUserForm({
 
   const [isCopied, setIsCopied] = useState(false);
 
-  // Следим за изменениями полей
   const country = useWatch({ control, name: "location.country" });
   const phoneNumber = useWatch({ control, name: "phone_number" });
   const passwordValue = useWatch({ control, name: "password" });
@@ -65,7 +62,7 @@ export function EditUserForm({
   };
 
   return (
-    <form id="edit-user-form" className="grid gap-4" onSubmit={handleSubmit(onSubmitAction)}>
+    <form className="grid gap-4" onSubmit={handleSubmit(onSubmitAction)}>
       <div className="grid grid-cols-2 gap-3">
         <CompanyReadonlySelect companyName={user.company_name} companyType={user.company_type} />
         <Controller
@@ -90,7 +87,6 @@ export function EditUserForm({
               onChange={(v) => {
                 field.onChange(v);
 
-                // ИЗМЕНЕНО: Поиск phoneCode теперь работает по ключу в нижнем регистре
                 const code = v.country ? COUNTRY_META[v.country as CountryCode]?.phoneCode : "";
                 setValue("phone_code", code, { shouldDirty: true });
 
@@ -124,7 +120,6 @@ export function EditUserForm({
         className={getDirtyClass(dirtyFields.email)}
       />
 
-      {/* Пароль */}
       <div className="group/pass relative">
         <FloatingLabelInput
           label="Новый пароль"

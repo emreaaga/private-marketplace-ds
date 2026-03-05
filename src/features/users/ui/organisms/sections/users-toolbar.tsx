@@ -69,7 +69,6 @@ export function UsersToolbar() {
       {ActiveDialog && (
         <ActiveDialog
           open={true}
-          // ТУТ БЫЛА ОШИБКА: теперь используем Action
           onOpenChangeAction={(open: boolean) => {
             if (!open) setDialog(null);
           }}

@@ -1,5 +1,6 @@
 import { useState } from "react";
 
+import { useInvalidateUsers } from "../api/use-invalidate-users";
 import { useCreateUser } from "../mutations/user-create-user";
 import { createUserSchema, type CreateUserFormData } from "../types/create-user.schema";
 
@@ -20,6 +21,7 @@ const generatePassword = () => {
 };
 
 export function useCreateUserForm() {
+  const { invalidate } = useInvalidateUsers();
   const location = useUserLocation();
   const form = useUserFormState();
   const createUserMutation = useCreateUser();
@@ -64,6 +66,9 @@ export function useCreateUserForm() {
 
     try {
       await createUserMutation.mutateAsync(parsed.data);
+
+      await invalidate();
+
       setCreatedData({ email, password });
     } catch {
       // Ошибки обработает мутация через toast
