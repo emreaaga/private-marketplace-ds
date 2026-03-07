@@ -1,15 +1,19 @@
-import { Briefcase, ShoppingCart, Truck, Users } from "lucide-react";
+import { Briefcase, ShieldCheck, ShoppingCart, Truck, Users } from "lucide-react";
 
-import { UserRoles } from "@/shared/types/users/user.model";
+import { AllUserRoles, UserRoles } from "@/shared/types/users/user.model";
 
-export const USER_ROLE_META: Record<
-  UserRoles,
-  {
-    label: string;
-    Icon: React.FC<{ className?: string }>;
-    disabled?: boolean;
-  }
-> = {
+interface RoleMeta {
+  label: string;
+  Icon: React.FC<{ className?: string }>;
+  disabled?: boolean;
+}
+
+export const ALL_USER_ROLE_META: Record<AllUserRoles, RoleMeta> = {
+  admin: {
+    label: "Админ.",
+    Icon: ShieldCheck,
+    disabled: false,
+  },
   company_owner: {
     label: "Директ.",
     Icon: Briefcase,
@@ -31,3 +35,8 @@ export const USER_ROLE_META: Record<
     disabled: true,
   },
 };
+
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
+const { admin: _, ...REST_ROLES } = ALL_USER_ROLE_META;
+
+export const USER_ROLE_META = REST_ROLES as Record<UserRoles, RoleMeta>;

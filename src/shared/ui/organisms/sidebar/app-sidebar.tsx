@@ -1,17 +1,13 @@
 "use client";
 
-import dynamic from "next/dynamic";
 import Link from "next/link";
 
 import { Command } from "lucide-react";
 
-const NavMain = dynamic(() => import("@/shared/ui/organisms/sidebar/nav-main").then((m) => m.NavMain), {
-  ssr: false,
-});
-
 import { sidebarItems } from "@/features/sidebar/sidebar-items";
-import { rootUser } from "@/features/users/fake-user";
+import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { APP_CONFIG } from "@/shared/lib/app-config";
+import { type UserAuth } from "@/shared/types/users/user.auth";
 import {
   Sidebar,
   SidebarContent,
@@ -21,10 +17,19 @@ import {
   SidebarMenuButton,
   SidebarMenuItem,
 } from "@/shared/ui/atoms/sidebar";
+import { NavMain } from "@/shared/ui/organisms/sidebar/nav-main";
 
 import { NavUser } from "./nav-user";
 
-export function AppSidebar() {
+interface AppSidebarProps {
+  user: UserAuth | null;
+}
+
+export function AppSidebar({ user }: AppSidebarProps) {
+  const isMobile = useIsMobile();
+
+  if (isMobile) return null;
+
   return (
     <Sidebar>
       <SidebarHeader>
@@ -39,12 +44,12 @@ export function AppSidebar() {
           </SidebarMenuItem>
         </SidebarMenu>
       </SidebarHeader>
+
       <SidebarContent>
-        <NavMain items={sidebarItems} />
+        <NavMain items={sidebarItems} user={user} />
       </SidebarContent>
-      <SidebarFooter>
-        <NavUser user={rootUser} />
-      </SidebarFooter>
+
+      <SidebarFooter>{user && <NavUser user={user} />}</SidebarFooter>
     </Sidebar>
   );
 }

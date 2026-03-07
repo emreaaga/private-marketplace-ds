@@ -2,11 +2,13 @@
 
 import { useRouter } from "next/navigation";
 
-import { EllipsisVertical, CircleUser, CreditCard, MessageSquareDot, LogOut } from "lucide-react";
+import { CircleUser, CreditCard, EllipsisVertical, LogOut, MessageSquareDot } from "lucide-react";
 import { toast } from "sonner";
 
 import { authService } from "@/features/auth/api/auth";
 import { getInitials } from "@/shared/lib/utils";
+import { ALL_USER_ROLE_META } from "@/shared/types/users";
+import { type UserAuth } from "@/shared/types/users/user.auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/atoms/avatar";
 import {
   DropdownMenu,
@@ -19,29 +21,31 @@ import {
 } from "@/shared/ui/atoms/dropdown-menu";
 import { SidebarMenu, SidebarMenuButton, SidebarMenuItem, useSidebar } from "@/shared/ui/atoms/sidebar";
 
-export function NavUser({
-  user,
-}: {
-  readonly user: {
-    readonly name: string;
-    readonly email: string;
-    readonly avatar: string;
-  };
-}) {
+interface NavUserProps {
+  readonly user: UserAuth;
+}
+
+export function NavUser({ user }: NavUserProps) {
   const { isMobile } = useSidebar();
   const router = useRouter();
+
+  const roleLabel = ALL_USER_ROLE_META[user.role]?.label || user.role;
 
   const handleLogout = async () => {
     try {
       await authService.logout();
-      router.push("/auth/login");
 
       toast.success("Вы вышли из аккаунта");
-    } catch (error) {
-      console.log(error);
+
+      router.push("/auth/login");
+
+      router.refresh();
+    } catch {
       toast.error("Ошибка при выходе");
     }
   };
+
+  const avatarUrl = "/avatars/arhamkhnz.png";
 
   return (
     <SidebarMenu>
@@ -53,12 +57,15 @@ export function NavUser({
               className="data-[state=open]:bg-sidebar-accent data-[state=open]:text-sidebar-accent-foreground"
             >
               <Avatar className="h-8 w-8 rounded-lg grayscale">
-                <AvatarImage src={user.avatar || undefined} alt={user.name} />
-                <AvatarFallback className="rounded-lg">{getInitials(user.name)}</AvatarFallback>
+                <AvatarImage src={avatarUrl} alt={user.name} />
+                <AvatarFallback className="bg-sidebar-primary text-sidebar-primary-foreground rounded-lg">
+                  {getInitials(user.name)}
+                </AvatarFallback>
               </Avatar>
+
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
-                <span className="text-muted-foreground truncate text-xs">{user.email}</span>
+                <span className="text-muted-foreground truncate text-xs">{user.company_name}</span>
               </div>
               <EllipsisVertical className="ml-auto size-4" />
             </SidebarMenuButton>
@@ -72,13 +79,16 @@ export function NavUser({
           >
             <DropdownMenuLabel className="p-0 font-normal">
               <div className="flex items-center gap-2 px-1 py-1.5 text-left text-sm">
-                <Avatar className="h-8 w-8 rounded-lg">
-                  <AvatarImage src={user.avatar || undefined} alt={user.name} />
+                <Avatar className="h-8 w-8 rounded-lg grayscale">
+                  <AvatarImage src={avatarUrl} alt={user.name} />
                   <AvatarFallback className="rounded-lg">{getInitials(user.name)}</AvatarFallback>
                 </Avatar>
-                <div className="grid flex-1 text-left text-sm leading-tight">
-                  <span className="truncate font-medium">{user.name}</span>
-                  <span className="text-muted-foreground truncate text-xs">{user.email}</span>
+                <div className="grid flex-1 text-left leading-tight">
+                  <span className="text-foreground truncate text-sm font-semibold">{user.name}</span>
+                  <span className="text-muted-foreground truncate text-xs">{user.company_name}</span>
+                </div>
+                <div className="bg-muted text-muted-foreground rounded-md px-1.5 py-0.5 text-[10px] font-medium tracking-wider uppercase">
+                  {roleLabel}
                 </div>
               </div>
             </DropdownMenuLabel>
@@ -86,27 +96,35 @@ export function NavUser({
             <DropdownMenuSeparator />
 
             <DropdownMenuGroup>
-              <DropdownMenuItem>
-                <CircleUser />
-                Аккаунт
+              <DropdownMenuItem className="cursor-pointer">
+                <CircleUser className="mr-2 size-4" />
+                <span>Аккаунт</span>
+                <span className="text-muted-foreground/50 ml-auto font-mono text-[10px] tracking-tighter">
+                  {user.id}
+                </span>
               </DropdownMenuItem>
 
-              <DropdownMenuItem>
-                <CreditCard />
-                Платежи
+              <DropdownMenuItem className="cursor-pointer">
+                <CreditCard className="mr-2 size-4" />
+                <span>Компания</span>
+                <span className="text-muted-foreground/50 ml-auto font-mono text-[10px] tracking-tighter">
+                  {user.company_id}
+                </span>
               </DropdownMenuItem>
 
-              <DropdownMenuItem>
-                <MessageSquareDot />
-                Уведомления
+              <DropdownMenuItem className="cursor-pointer">
+                <MessageSquareDot className="mr-2 size-4" />
+                <span>Уведомления</span>
               </DropdownMenuItem>
             </DropdownMenuGroup>
 
             <DropdownMenuSeparator />
 
-            <DropdownMenuItem onClick={handleLogout}>
-              <LogOut />
-              Выйти
+            <DropdownMenuItem
+              onClick={handleLogout}
+              className="text-destructive focus:text-destructive focus:bg-destructive/10 cursor-pointer"
+            >
+              <LogOut className="mr-2 size-4" /> Выйти
             </DropdownMenuItem>
           </DropdownMenuContent>
         </DropdownMenu>

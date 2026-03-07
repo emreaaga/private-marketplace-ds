@@ -3,7 +3,6 @@
 import { BarChart3, Package, Settings, Store, UserCircle, Users, Wallet } from "lucide-react";
 
 import { NavGroup } from "@/features/sidebar/types/sidebar.types";
-import { UserRole } from "@/shared/lib/rbac/roles";
 
 export const sidebarItems: NavGroup[] = [
   {
@@ -14,49 +13,42 @@ export const sidebarItems: NavGroup[] = [
         title: "Главная",
         url: "/dashboard/main",
         icon: BarChart3,
-        roles: [UserRole.ADMIN, UserRole.SELLER, UserRole.CUSTOMER],
       },
       {
         title: "Пользователи",
         url: "/dashboard/users/main",
         icon: Users,
-        roles: [UserRole.ADMIN],
       },
       {
         title: "Настройки",
         url: "/dashboard/settings/roles",
         icon: Settings,
-        roles: [UserRole.ADMIN],
       },
     ],
   },
   {
     id: 2,
-    label: "Роли",
+    label: "Логистика",
     items: [
       {
-        title: "Почта",
+        title: "Логистика",
         url: "/dashboard/test/flights",
         icon: Package,
-        roles: [UserRole.ADMIN],
       },
       {
         title: "Продавцы",
         url: "/dashboard/seller/orders",
         icon: Store,
-        roles: [UserRole.ADMIN],
       },
       {
         title: "Клиенты",
         url: "/dashboard/clients/orders",
         icon: UserCircle,
-        roles: [UserRole.ADMIN],
       },
       {
         title: "Почта 2.0",
         url: "/dashboard/logistics/flights",
         icon: Package,
-        roles: [UserRole.ADMIN],
       },
     ],
   },
@@ -68,7 +60,6 @@ export const sidebarItems: NavGroup[] = [
         title: "Кошелек",
         url: "/dashboard/wallet",
         icon: Wallet,
-        roles: [UserRole.ADMIN],
       },
     ],
   },

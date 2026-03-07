@@ -5,10 +5,11 @@ import React from "react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { PlusCircleIcon, ChevronRight } from "lucide-react";
+import { ChevronRight, PlusCircleIcon } from "lucide-react";
 
-import { useAuthStore } from "@/features/auth/auth.store";
 import { type NavGroup, type NavMainItem } from "@/features/sidebar/types/sidebar.types";
+import { canAccess as checkPermissions } from "@/shared/config/permissions";
+import { type UserAuth } from "@/shared/types/users/user.auth";
 import { Collapsible, CollapsibleContent, CollapsibleTrigger } from "@/shared/ui/atoms/collapsible";
 import {
   DropdownMenu,
@@ -19,7 +20,6 @@ import {
 import {
   SidebarGroup,
   SidebarGroupContent,
-  SidebarGroupLabel,
   SidebarMenu,
   SidebarMenuButton,
   SidebarMenuItem,
@@ -32,6 +32,7 @@ import {
 
 interface NavMainProps {
   readonly items: readonly NavGroup[];
+  readonly user: UserAuth | null;
 }
 
 const IsComingSoon = () => (
@@ -144,9 +145,13 @@ const NavItemCollapsed = ({
   );
 };
 
-export function NavMain({ items }: NavMainProps) {
+export function NavMain({ items, user }: NavMainProps) {
   const path = usePathname();
   const { state, isMobile } = useSidebar();
+
+  if (!user) return null;
+
+  const canCreateUser = checkPermissions("/dashboard/users/main", user);
 
   const getBasePath = (url: string) => {
     const segments = url.split("/").filter(Boolean);
@@ -174,9 +179,7 @@ export function NavMain({ items }: NavMainProps) {
 
   const isSubmenuOpen = (subItems?: NavMainItem["subItems"]) => {
     if (!subItems?.length) return false;
-
     const currentBasePath = getBasePath(path);
-
     return subItems.some((sub) => {
       const subBasePath = getBasePath(sub.url);
       return path === sub.url || path.startsWith(sub.url + "/") || currentBasePath === subBasePath;
@@ -185,39 +188,44 @@ export function NavMain({ items }: NavMainProps) {
 
   return (
     <>
-      {/* Кнопка создания — всегда сверху */}
-      <SidebarGroup>
-        <SidebarGroupContent className="flex flex-col gap-2">
-          <SidebarMenu>
-            <SidebarMenuItem className="flex items-center gap-2">
-              <SidebarMenuButton
-                tooltip="Quick Create"
-                className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
-              >
-                <PlusCircleIcon />
-                <span>Создать пользователя</span>
-              </SidebarMenuButton>
-            </SidebarMenuItem>
-          </SidebarMenu>
-        </SidebarGroupContent>
-      </SidebarGroup>
+      {canCreateUser && (
+        <SidebarGroup>
+          <SidebarGroupContent className="flex flex-col gap-2">
+            <SidebarMenu>
+              <SidebarMenuItem>
+                <SidebarMenuButton
+                  tooltip="Создать пользователя"
+                  className="bg-primary text-primary-foreground hover:bg-primary/90 hover:text-primary-foreground active:bg-primary/90 active:text-primary-foreground min-w-8 duration-200 ease-linear"
+                >
+                  <PlusCircleIcon />
+                  <span>Создать пользователя</span>
+                </SidebarMenuButton>
+              </SidebarMenuItem>
+            </SidebarMenu>
+          </SidebarGroupContent>
+        </SidebarGroup>
+      )}
 
-      {/* Группы меню */}
       {items.map((group, index) => {
-        const visibleItems = group.items;
+        const visibleItems = group.items
+          .filter((item) => checkPermissions(item.url, user))
+          .map((item) => ({
+            ...item,
+            subItems: item.subItems ? item.subItems.filter((sub) => checkPermissions(sub.url, user)) : undefined,
+          }))
+          .filter((item) => !item.subItems || item.subItems.length > 0 || item.url !== "#");
+
         if (visibleItems.length === 0) return null;
 
         return (
           <React.Fragment key={group.id}>
-            {/* Показываем линию ТОЛЬКО если это не первая группа в списке (index !== 0).
-               Это уберет линию между кнопкой "Создать" и первым разделом.
-            */}
             {index !== 0 && <SidebarSeparator className="mx-0 my-2 opacity-50" />}
 
             <SidebarGroup>
               <SidebarGroupContent className="flex flex-col gap-2">
                 <SidebarMenu>
                   {visibleItems.map((item) => {
+                    // Обработка свернутого состояния (Collapsed)
                     if (state === "collapsed" && !isMobile) {
                       if (!item.subItems) {
                         return (
@@ -226,7 +234,7 @@ export function NavMain({ items }: NavMainProps) {
                               asChild
                               aria-disabled={item.comingSoon}
                               tooltip={item.title}
-                              isActive={isItemActive(item.url, item.subItems)}
+                              isActive={isItemActive(item.url)}
                             >
                               <Link prefetch={false} href={item.url} target={item.newTab ? "_blank" : undefined}>
                                 {item.icon && <item.icon />}
@@ -238,6 +246,7 @@ export function NavMain({ items }: NavMainProps) {
                       }
                       return <NavItemCollapsed key={item.title} item={item} isActive={isItemActive} />;
                     }
+
                     return (
                       <NavItemExpanded
                         key={item.title}

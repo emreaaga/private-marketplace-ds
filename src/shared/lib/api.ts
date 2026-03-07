@@ -1,20 +1,31 @@
+// shared/lib/api.ts
 "use client";
 
 import axios from "axios";
 
-import { useAuthStore } from "@/features/auth/auth.store";
-
 export const api = axios.create({
   baseURL: process.env.NEXT_PUBLIC_API_URL,
-  withCredentials: true,
+  withCredentials: true, // КРИТИЧНО: чтобы куки летали туда-сюда
 });
 
-api.interceptors.request.use((config) => {
-  const token = useAuthStore.getState().accessToken;
+api.interceptors.response.use(
+  (response) => response,
+  async (error) => {
+    const originalRequest = error.config;
 
-  if (token) {
-    config.headers.Authorization = `Bearer ${token}`;
-  }
+    if (error.response?.status === 401 && !originalRequest._retry) {
+      originalRequest._retry = true;
 
-  return config;
-});
+      try {
+        await axios.post(`${process.env.NEXT_PUBLIC_API_URL}/auth/refresh`, {}, { withCredentials: true });
+
+        return api(originalRequest);
+      } catch (refreshError) {
+        window.location.href = "/login";
+        return Promise.reject(refreshError);
+      }
+    }
+
+    return Promise.reject(error);
+  },
+);

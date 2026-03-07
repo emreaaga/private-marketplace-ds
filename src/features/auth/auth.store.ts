@@ -1,20 +1,23 @@
 import { create } from "zustand";
 
+import { AllCompanyType } from "@/shared/types/company/company.types";
+import { AllUserRoles } from "@/shared/types/users";
+
 export interface AuthUser {
   id: string;
-  role: string;
+  name: string;
+  role: AllUserRoles;
+  company_id: number;
+  company_name: string;
+  company_type: AllCompanyType;
 }
 
 interface AuthState {
   user: AuthUser | null;
-  accessToken: string | null;
-  setSession: (data: { user: AuthUser; accessToken: string } | null) => void;
+  setSession: (user: AuthUser | null) => void;
 }
 
 export const useAuthStore = create<AuthState>()((set) => ({
   user: null,
-  accessToken: null,
-
-  setSession: (data) =>
-    set(data ? { user: data.user, accessToken: data.accessToken } : { user: null, accessToken: null }),
+  setSession: (user) => set({ user }),
 }));

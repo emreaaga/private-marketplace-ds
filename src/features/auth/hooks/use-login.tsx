@@ -1,36 +1,32 @@
 "use client";
 
+import { useState } from "react";
+
 import { useRouter } from "next/navigation";
 
 import { toast } from "sonner";
 
 import { authService } from "@/features/auth/api/auth";
-import { useAuthStore } from "@/features/auth/auth.store";
 
 export function useLogin() {
   const router = useRouter();
-  const setSession = useAuthStore.getState().setSession;
+  const [isLoading, setIsLoading] = useState(false);
 
   const login = async (email: string, password: string) => {
+    setIsLoading(true);
     try {
-      const res = await authService.login({ email, password });
-
-      setSession({
-        user: {
-          id: String(res.user.id),
-          role: res.user.role,
-        },
-        accessToken: res.accessToken,
-      });
+      await authService.login({ email, password });
 
       toast.success("Вход выполнен успешно!");
+
       router.push("/dashboard/main");
-    } catch (err) {
-      console.error(err);
-      toast.error("Ошибка входа");
-      throw err;
+      router.refresh();
+    } catch {
+      toast.error("Неверный логин или пароль");
+    } finally {
+      setIsLoading(false);
     }
   };
 
-  return { login };
+  return { login, isLoading };
 }

@@ -4,7 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
 import { useLogin } from "@/features/auth/hooks/use-login";
-import { loginSchema, loginDefaultValues, LoginFormValues } from "@/features/auth/types/login.schema";
+import { loginDefaultValues, LoginFormValues, loginSchema } from "@/features/auth/types/login.schema";
 import { Button } from "@/shared/ui/atoms/button";
 import { Form, FormControl, FormField, FormItem, FormLabel, FormMessage } from "@/shared/ui/atoms/form";
 import { Input } from "@/shared/ui/atoms/input";

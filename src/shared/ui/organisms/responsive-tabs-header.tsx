@@ -1,6 +1,6 @@
 "use client";
 
-import { useMemo } from "react";
+import { useMemo, useTransition } from "react";
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
@@ -12,6 +12,7 @@ import {
   Building2,
   ClipboardList,
   Link as LinkIcon,
+  Loader2,
   LucideTextSelection,
   Package,
   Plane,
@@ -20,9 +21,10 @@ import {
   UserSquare,
 } from "lucide-react";
 
+import { canAccess } from "@/shared/config/permissions";
 import { cn } from "@/shared/lib/utils";
+import { type UserAuth } from "@/shared/types/users/user.auth";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
-import { Tabs, TabsList, TabsTrigger } from "@/shared/ui/atoms/tabs";
 
 const ICON_MAP = {
   users: Users,
@@ -48,7 +50,8 @@ export interface HeaderTabItem {
 }
 
 interface ResponsiveTabsHeaderProps {
-  items: readonly HeaderTabItem[];
+  readonly items: readonly HeaderTabItem[];
+  readonly user: UserAuth | null;
 }
 
 const normalizePath = (path: string) => {
@@ -58,31 +61,46 @@ const normalizePath = (path: string) => {
     .join("/");
 };
 
-export function ResponsiveTabsHeader({ items }: ResponsiveTabsHeaderProps) {
+export function ResponsiveTabsHeader({ items, user }: ResponsiveTabsHeaderProps) {
   const pathname = usePathname();
   const router = useRouter();
+  const [isPending, startTransition] = useTransition();
+
+  const visibleItems = useMemo(() => {
+    if (!user) return [];
+    return items.filter((item) => canAccess(item.href, user));
+  }, [items, user]);
 
   const activeTab = useMemo(() => {
     const normalizedCurrentPath = normalizePath(pathname);
-    const matchedItem = items.find((item) => {
+    const matchedItem = visibleItems.find((item) => {
       const normalizedItemHref = normalizePath(item.href);
       return normalizedCurrentPath.includes(normalizedItemHref);
     });
-    return matchedItem?.href ?? items[0]?.href;
-  }, [pathname, items]);
+    return matchedItem?.href ?? visibleItems[0]?.href;
+  }, [pathname, visibleItems]);
 
-  if (!activeTab) return null;
+  const handleSelectChange = (value: string) => {
+    startTransition(() => {
+      router.push(value);
+    });
+  };
+
+  if (visibleItems.length === 0 || !activeTab) return null;
 
   return (
-    <div className="w-full">
+    <div className={cn("w-full transition-opacity duration-200", isPending && "opacity-60")}>
       <div className="mb-4 sm:hidden">
-        <Select value={activeTab} onValueChange={(value) => router.push(value)}>
+        <Select value={activeTab} onValueChange={handleSelectChange}>
           <SelectTrigger className="border-border/40 bg-background/50 h-10 w-full rounded-xl backdrop-blur-md">
-            <SelectValue />
+            <div className="flex items-center gap-2">
+              {isPending && <Loader2 className="h-3 w-3 animate-spin" />}
+              <SelectValue />
+            </div>
           </SelectTrigger>
           <SelectContent className="rounded-xl">
-            {items.map((item) => (
-              <SelectItem key={item.href} value={item.href} className="rounded-lg text-sm">
+            {visibleItems.map((item) => (
+              <SelectItem key={item.href} value={item.href}>
                 {item.label}
               </SelectItem>
             ))}
@@ -91,40 +109,34 @@ export function ResponsiveTabsHeader({ items }: ResponsiveTabsHeaderProps) {
       </div>
 
       <div className="hidden sm:block">
-        <Tabs value={activeTab} className="w-full">
-          <TabsList className="bg-muted/40 inline-flex h-10 items-center justify-start gap-1 rounded-xl p-1">
-            {items.map((item) => {
-              const Icon = item.icon ? ICON_MAP[item.icon] : null;
-              const isActive = activeTab === item.href;
+        <nav className="bg-muted/50 inline-flex items-center gap-1 rounded-lg p-1">
+          {visibleItems.map((item) => {
+            const Icon = item.icon ? ICON_MAP[item.icon] : null;
+            const isActive = activeTab === item.href;
 
-              return (
-                <TabsTrigger
-                  key={item.href}
-                  value={item.href}
-                  asChild
-                  className={cn(
-                    "h-8 rounded-lg px-4 text-[13px] font-medium shadow-none transition-all duration-200",
-                    "data-[state=active]:bg-background data-[state=active]:text-foreground data-[state=active]:shadow-sm",
-                    "hover:text-foreground/80 hover:bg-background/40 data-[state=active]:hover:bg-background",
-                  )}
-                >
-                  <Link href={item.href} prefetch={false} className="flex items-center gap-2">
-                    {Icon && (
-                      <Icon
-                        className={cn(
-                          "h-3.5 w-3.5 shrink-0 transition-colors",
-                          isActive ? "text-primary" : "text-muted-foreground/50",
-                        )}
-                        strokeWidth={isActive ? 2.5 : 2}
-                      />
-                    )}
-                    <span>{item.label}</span>
-                  </Link>
-                </TabsTrigger>
-              );
-            })}
-          </TabsList>
-        </Tabs>
+            return (
+              <Link
+                key={item.href}
+                href={item.href}
+                prefetch={true}
+                className={cn(
+                  "relative flex items-center gap-2 rounded-md px-3 py-1.5 text-[13px] font-medium transition-all",
+                  isActive
+                    ? "bg-background text-foreground shadow-sm"
+                    : "text-muted-foreground hover:bg-background/50 hover:text-foreground",
+                )}
+              >
+                {Icon && (
+                  <Icon
+                    className={cn("h-3.5 w-3.5 shrink-0", isActive ? "text-primary" : "text-muted-foreground/60")}
+                    strokeWidth={isActive ? 2.5 : 2}
+                  />
+                )}
+                <span>{item.label}</span>
+              </Link>
+            );
+          })}
+        </nav>
       </div>
     </div>
   );
