@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import Big from "big.js";
-import { Plus, PackageSearch } from "lucide-react";
-import { useFormContext, useWatch, useFieldArray } from "react-hook-form";
+import { PackageSearch, Plus } from "lucide-react";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 
 import type { FlightFormValues } from "@/shared/types/flight/flight-create.schema";
 import { Button } from "@/shared/ui/atoms/button";
@@ -107,7 +107,7 @@ export function ShipmentList() {
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="text-muted-foreground grid grid-cols-[40px_1fr_70px_80px_80px_32px] items-center gap-2 px-3 text-[9px] font-bold tracking-tight uppercase">
+      <div className="text-muted-foreground grid grid-cols-[30px_60px_1fr_70px_80px_80px_32px] items-center gap-2 px-3 text-[9px] font-bold tracking-tight uppercase">
         <div className="flex justify-center">
           <Button
             variant="ghost"
@@ -118,6 +118,7 @@ export function ShipmentList() {
             <Plus className="h-4 w-4" />
           </Button>
         </div>
+        <span>ID</span>
         <span>Фирма</span>
         <span className="text-right">Вес</span>
         <span className="text-right">Взнос</span>
@@ -131,6 +132,7 @@ export function ShipmentList() {
             {fields.map((field, index) => (
               <SelectedShipmentRow
                 key={field.rhf_id}
+                index={index}
                 id={field.id}
                 meta={{
                   name: field.company_name,
@@ -165,8 +167,9 @@ export function ShipmentList() {
         </ScrollArea>
 
         <div className="bg-muted/30 border-t p-1 text-[11px] font-medium">
-          <div className="grid grid-cols-[40px_1fr_70px_80px_80px_32px] items-center gap-2">
-            <span></span>
+          <div className="grid grid-cols-[30px_60px_1fr_70px_80px_80px_32px] items-center gap-2">
+            <span />
+            <span />
             <span className="text-muted-foreground text-right font-bold tracking-wider uppercase">
               Итого ({fields.length}):
             </span>
@@ -177,7 +180,7 @@ export function ShipmentList() {
             <span className="text-right font-semibold text-orange-600/80 tabular-nums">
               ${totals.remaining.toFixed(2)}
             </span>
-            <span></span>
+            <span />
           </div>
         </div>
       </div>

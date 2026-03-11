@@ -42,7 +42,6 @@ export default function FlightShipmentsPage() {
     : isError
       ? "Не удалось загрузить отправления"
       : "Отправления не найдены";
-
   return (
     <div className="space-y-4">
       <ShipmentToolbar />

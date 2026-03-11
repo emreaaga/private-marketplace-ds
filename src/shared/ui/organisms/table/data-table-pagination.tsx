@@ -41,6 +41,7 @@ export function DataTablePagination<TData>({ table, externalPagination }: Props<
       <div className="text-muted-foreground hover:text-foreground text-[13px] font-medium transition-colors">
         Страница <span className="text-foreground font-mono">{page}</span> из{" "}
         <span className="font-mono">{pageCount}</span>
+        {}
       </div>
 
       <div className="flex items-center gap-1.5">

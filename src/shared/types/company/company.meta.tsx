@@ -1,6 +1,6 @@
-import { Plane, ShieldCheck, Warehouse, PlaneTakeoff } from "lucide-react";
+import { LayoutGrid, Plane, PlaneTakeoff, ShieldCheck, Warehouse } from "lucide-react";
 
-import { CompanyType } from "@/shared/types/company/company.types";
+import { AllCompanyType, CompanyType } from "@/shared/types/company/company.types";
 
 export const COMPANY_TYPE_META: Record<CompanyType, { label: string; Icon: React.FC<{ className?: string }> }> = {
   postal: {
@@ -20,3 +20,12 @@ export const COMPANY_TYPE_META: Record<CompanyType, { label: string; Icon: React
     Icon: ShieldCheck,
   },
 };
+
+export const ALL_COMPANY_TYPE_META: Record<AllCompanyType, { label: string; Icon: React.FC<{ className?: string }> }> =
+  {
+    ...COMPANY_TYPE_META,
+    platform: {
+      label: "Платформа",
+      Icon: LayoutGrid,
+    },
+  };

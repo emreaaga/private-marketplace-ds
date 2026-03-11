@@ -1,5 +1,5 @@
+import { getServerUser } from "@/features/auth/get-server-user";
 import { getUsers } from "@/features/users/api/get-users";
-import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
 
 import { UsersTableClient } from "./_components/users-table-client";
 
@@ -9,15 +9,17 @@ interface PageProps {
 
 export default async function UsersPage({ searchParams }: PageProps) {
   const params = await searchParams;
+  const user = await getServerUser();
   const currentPage = Number(params.page) || 1;
 
-  const data = await getUsers({ page: currentPage });
+  if (!user) return null;
 
-  return (
-    <div className="space-y-4">
-      <UsersToolbar />
+  const fetchParams = {
+    page: currentPage,
+    ...(user.role !== "admin" && { companyId: user.company_id }),
+  };
 
-      <UsersTableClient initialData={data.data} pageCount={data.pagination.totalPages} currentPage={currentPage} />
-    </div>
-  );
+  const data = await getUsers(fetchParams);
+
+  return <UsersTableClient initialData={data.data} pageCount={data.pagination.totalPages} currentPage={currentPage} />;
 }

@@ -5,7 +5,6 @@ import { useMemo } from "react";
 import { Phone } from "lucide-react";
 
 import { cn } from "@/shared/lib/utils";
-// Убираем .new
 import { COUNTRY_META } from "@/shared/types/geography/country.meta";
 import type { CountryCode } from "@/shared/types/geography/country.types";
 import { Input } from "@/shared/ui/atoms/input";

@@ -4,9 +4,9 @@ import { MoreHorizontal } from "lucide-react";
 import { Button } from "@/shared/ui/atoms/button";
 import {
   DropdownMenu,
-  DropdownMenuTrigger,
   DropdownMenuContent,
   DropdownMenuItem,
+  DropdownMenuTrigger,
 } from "@/shared/ui/atoms/dropdown-menu";
 import { TableBadge } from "@/shared/ui/molecules/table-badge";
 

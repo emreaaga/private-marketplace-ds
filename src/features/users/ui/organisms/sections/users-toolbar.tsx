@@ -6,6 +6,9 @@ import dynamic from "next/dynamic";
 
 import { ListFilter, LucideIcon, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
 
+import { canAccess } from "@/shared/config/permissions";
+import { UserAuth } from "@/shared/types/users/user.auth";
+
 import { CreateDropdown } from "../create-dropdown";
 
 const loadUser = () => import("../forms/create-user-dialog");
@@ -24,8 +27,22 @@ const DIALOGS = {
   service: CreateServiceDialog,
 } as const;
 
-export function UsersToolbar() {
+interface UsersToolbarProps {
+  readonly user: UserAuth | null;
+}
+
+export function UsersToolbar({ user }: UsersToolbarProps) {
   const [dialog, setDialog] = useState<DialogType>(null);
+
+  if (!user) return null;
+
+  const isAdmin = user.role === "admin";
+
+  const canCreateUser = isAdmin;
+  const canCreateCompany = isAdmin;
+
+  const canCreateService = canAccess("/dashboard/users/services", user);
+
   const ActiveDialog = dialog ? DIALOGS[dialog] : null;
 
   return (
@@ -56,12 +73,12 @@ export function UsersToolbar() {
           </button>
 
           <CreateDropdown
-            onCreateUserAction={() => setDialog("user")}
-            onHoverUserAction={loadUser}
-            onCreateCompanyAction={() => setDialog("company")}
-            onHoverCompanyAction={loadCompany}
-            onCreateServiceAction={() => setDialog("service")}
-            onHoverServiceAction={loadService}
+            onCreateUserAction={canCreateUser ? () => setDialog("user") : undefined}
+            onHoverUserAction={canCreateUser ? loadUser : undefined}
+            onCreateCompanyAction={canCreateCompany ? () => setDialog("company") : undefined}
+            onHoverCompanyAction={canCreateCompany ? loadCompany : undefined}
+            onCreateServiceAction={canCreateService ? () => setDialog("service") : undefined}
+            onHoverServiceAction={canCreateService ? loadService : undefined}
           />
         </div>
       </div>

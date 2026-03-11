@@ -1,9 +1,10 @@
 "use client";
 
-import { useState } from "react";
+import { useMemo, useState } from "react";
 
 import { toast } from "sonner";
 
+import { getClientUser } from "@/features/auth/get-user";
 import { useCreateShipment } from "@/features/shipments/queries/use-create-shipment";
 import { CompanySelect } from "@/features/users/ui/organisms/company-select";
 import { cn } from "@/shared/lib/utils";
@@ -29,6 +30,10 @@ interface ShipmentCreateDialogProps {
 }
 
 export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialogProps) {
+  // 1. Получаем данные пользователя
+  const user = useMemo(() => getClientUser(), []);
+  const isAdmin = user?.company_type === "platform";
+
   const [companyId, setCompanyId] = useState<number | undefined>();
   const [origin, setOrigin] = useState<LocationValue>({ country: null, city: null });
   const [destination, setDestination] = useState<LocationValue>({ country: null, city: null });
@@ -49,7 +54,12 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
 
   const validate = (): boolean => {
     const nextErrors: Errors = {};
-    if (!companyId) nextErrors.companyId = true;
+
+    // Валидируем выбор компании только если пользователь — админ
+    if (isAdmin && !companyId) {
+      nextErrors.companyId = true;
+    }
+
     if (!origin.country) nextErrors.origin = true;
     if (!destination.country) nextErrors.destination = true;
 
@@ -66,9 +76,18 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
   const handleSubmit = async () => {
     if (!validate()) return;
 
+    // 2. Определяем финальный ID компании
+    // Если админ — берем из стейта, если нет — берем ID компании из профиля юзера
+    const finalCompanyId = isAdmin ? companyId : user?.company_id;
+
+    if (!finalCompanyId) {
+      toast.error("Ошибка: ID компании не определен");
+      return;
+    }
+
     createMutation.mutate(
       {
-        company_id: companyId!,
+        company_id: finalCompanyId,
         from_country: origin.country!,
         to_country: destination.country!,
       },
@@ -95,18 +114,21 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
         </DialogHeader>
 
         <div className="space-y-3 px-4 py-2">
-          <div className="space-y-1">
-            <CompanySelect
-              placeholder="Выберите почту..."
-              type="postal"
-              value={companyId}
-              error={!!errors.companyId}
-              onChange={(v) => {
-                setCompanyId(v);
-                clearError("companyId");
-              }}
-            />
-          </div>
+          {/* 3. Условный рендеринг выбора компании */}
+          {isAdmin && (
+            <div className="space-y-1">
+              <CompanySelect
+                placeholder="Выберите почту..."
+                type="postal"
+                value={companyId}
+                error={!!errors.companyId}
+                onChange={(v) => {
+                  setCompanyId(v);
+                  clearError("companyId");
+                }}
+              />
+            </div>
+          )}
 
           <div className="grid grid-cols-2 gap-3">
             <div className={cn("rounded-xl transition-all", errors.origin && "ring-destructive/20 ring-2")}>

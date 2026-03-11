@@ -11,6 +11,7 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 interface CompanySelectProps {
   value?: number;
   onChange: (value?: number) => void;
+  onSelectName?: (name: string) => void;
   type?: CompanyType;
   placeholder?: string;
   error?: boolean;
@@ -21,6 +22,7 @@ interface CompanySelectProps {
 export function CompanySelect({
   value,
   onChange,
+  onSelectName,
   type,
   placeholder,
   error,
@@ -31,16 +33,28 @@ export function CompanySelect({
 
   const emptyLabel = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить" : "Компании не найдены";
 
-  return (
-    <Select
-      value={value == null ? "" : String(value)}
-      onValueChange={(v) => {
-        if (v === "") return onChange(undefined);
+  const handleValueChange = (v: string) => {
+    if (v === "" || v === "__empty") {
+      onChange(undefined);
+      onSelectName?.("");
+      return;
+    }
 
-        const id = Number(v);
-        onChange(Number.isFinite(id) ? id : undefined);
-      }}
-    >
+    const id = Number(v);
+    const safeId = Number.isFinite(id) ? id : undefined;
+
+    onChange(safeId);
+
+    if (safeId !== undefined && onSelectName) {
+      const selectedCompany = companies.find((c) => c.id === safeId);
+      if (selectedCompany) {
+        onSelectName(selectedCompany.name);
+      }
+    }
+  };
+
+  return (
+    <Select value={value == null ? "" : String(value)} onValueChange={handleValueChange}>
       <SelectTrigger className={cn("w-full", error && "border-destructive focus:ring-destructive", className)}>
         <SelectValue placeholder={placeholder ?? "Компания"} />
       </SelectTrigger>

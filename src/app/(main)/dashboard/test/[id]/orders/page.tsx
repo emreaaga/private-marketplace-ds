@@ -6,6 +6,7 @@ import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 
 import { useOrdersList } from "@/features/orders/queries/use-orders-list";
+import { OrdersToolbar } from "@/features/orders/ui/organisms/sections/orders-toolbar";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
 import { getOrdersColumns } from "../../orders/_components/orders-columns";
@@ -18,7 +19,8 @@ const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v,
 
 export default function ShipmentOrdersPage() {
   const params = useParams();
-  const shipmentId = Number(params.id);
+
+  const shipmentId = Number(params.id) || undefined;
 
   const [page, setPage] = useState(1);
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
@@ -31,6 +33,7 @@ export default function ShipmentOrdersPage() {
     shipment_id: shipmentId,
   });
 
+  const canCreate = data?.shipment_status === "draft";
   const orders = data?.data ?? [];
   const pageCount = data?.pagination.totalPages ?? 1;
 
@@ -55,11 +58,11 @@ export default function ShipmentOrdersPage() {
     });
   };
 
+  const [isCreateOpen, setIsCreateOpen] = useState(false);
+
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-bold tracking-tight">Заказы отправки {shipmentId}</h1>
-      </div>
+      <OrdersToolbar open={isCreateOpen} onOpenChange={setIsCreateOpen} shipmentId={shipmentId} canCreate={canCreate} />
 
       <DataTable
         columns={columns}

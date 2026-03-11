@@ -5,6 +5,9 @@ import { useMemo, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import { toast } from "sonner";
+
+import { UserAuth } from "@/shared/types/users/user.auth";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
 import { createFlightsColumns } from "./flight-columns";
@@ -17,7 +20,14 @@ const FlightExpandedRow = dynamic(() => import("./flight-expanded-row").then((mo
   ssr: false,
 });
 
-export function FlightsTableClient({ initialData, pageCount, currentPage }: any) {
+interface FlightsTableClientProps {
+  initialData: any[];
+  pageCount: number;
+  currentPage: number;
+  user: UserAuth | null;
+}
+
+export function FlightsTableClient({ initialData, pageCount, currentPage, user }: FlightsTableClientProps) {
   const [editId, setEditId] = useState<number | null>(null);
   const [isPending, startTransition] = useTransition();
 
@@ -34,7 +44,11 @@ export function FlightsTableClient({ initialData, pageCount, currentPage }: any)
     });
   };
 
-  const columns = useMemo(() => createFlightsColumns(setEditId), []);
+  const handleCustomsConfirm = async (flightId: number) => {
+    toast.success(`Статус рейса ${flightId} обновлен`);
+  };
+
+  const columns = useMemo(() => createFlightsColumns(setEditId, handleCustomsConfirm, user), [user]);
 
   return (
     <div className={isPending ? "opacity-70 transition-opacity" : ""}>

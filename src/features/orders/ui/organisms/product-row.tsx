@@ -14,6 +14,8 @@ interface RowProps {
 
 export function ProductRow({ index, item, onUpdate, onRemove }: RowProps) {
   const priceNum = Number(item.unit_price);
+  const MAX_PRICE = 10000;
+
   const rowSum =
     priceNum > 0 && item.quantity > 0
       ? (priceNum * item.quantity).toLocaleString("ru-RU", { minimumFractionDigits: 2 })
@@ -40,7 +42,7 @@ export function ProductRow({ index, item, onUpdate, onRemove }: RowProps) {
         <input
           value={item.name}
           onChange={(e) => onUpdate({ name: e.target.value })}
-          placeholder="Название позиции..."
+          placeholder="Название"
           className={cn(inputStyle, "w-full font-medium")}
         />
       </div>
@@ -50,7 +52,26 @@ export function ProductRow({ index, item, onUpdate, onRemove }: RowProps) {
           type="text"
           inputMode="decimal"
           value={item.unit_price}
-          onChange={(e) => onUpdate({ unit_price: e.target.value.replace(",", ".") })}
+          onChange={(e) => {
+            const val = e.target.value.replace(",", ".");
+
+            if (/^\d*\.?\d{0,2}$/.test(val)) {
+              if (val === "") {
+                onUpdate({ unit_price: "" });
+                return;
+              }
+
+              const numVal = parseFloat(val);
+              if (numVal <= MAX_PRICE) {
+                onUpdate({ unit_price: val });
+              }
+            }
+          }}
+          onBlur={() => {
+            if (item.unit_price.endsWith(".")) {
+              onUpdate({ unit_price: item.unit_price.slice(0, -1) });
+            }
+          }}
           placeholder="0.00"
           className={cn(inputStyle, "w-16 text-right font-mono tracking-tight")}
         />

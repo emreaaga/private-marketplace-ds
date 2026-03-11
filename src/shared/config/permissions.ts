@@ -49,15 +49,35 @@ export const ROUTE_PERMISSIONS: Record<string, AccessRule> = {
   },
   "/dashboard/test/shipments": {
     roles: ["admin", "company_owner"],
-    companyTypes: ["postal", "platform", "air_partner", "customs_broker"],
+    companyTypes: ["postal", "platform"],
   },
   "/dashboard/test/orders": {
     roles: ["admin", "company_owner"],
-    companyTypes: ["postal", "platform", "air_partner", "customs_broker"],
+    companyTypes: ["platform", "postal"],
   },
   "/dashboard/test/incoming-orders": {
+    roles: ["admin"],
+    companyTypes: ["platform"],
+  },
+
+  "/dashboard/test/:id/orders": {
     roles: ["admin", "company_owner"],
-    companyTypes: ["postal", "platform", "air_partner", "customs_broker"],
+    companyTypes: ["postal", "platform"],
+  },
+
+  "/dashboard/test/:id/flight-finance": {
+    roles: ["admin", "company_owner"],
+    companyTypes: ["postal", "platform"],
+  },
+
+  "/dashboard/test/:id/shipments": {
+    roles: ["admin", "company_owner"],
+    companyTypes: ["platform", "postal", "customs_broker"],
+  },
+
+  "/dashboard/test/orders/:id/finance": {
+    roles: ["admin", "company_owner"],
+    companyTypes: ["platform", "postal"],
   },
 
   // SELLER
@@ -112,9 +132,11 @@ export const ROUTE_PERMISSIONS: Record<string, AccessRule> = {
 };
 
 export function canAccess(path: string, user: { role: AllUserRoles; company_type: AllCompanyType }): boolean {
+  const normalizedPath = path.replace(/\/\d+(?=\/|$)/g, "/:id");
+
   const matchedPath = Object.keys(ROUTE_PERMISSIONS)
     .sort((a, b) => b.length - a.length)
-    .find((key) => path.startsWith(key));
+    .find((key) => normalizedPath.startsWith(key));
 
   const rule = matchedPath ? ROUTE_PERMISSIONS[matchedPath] : null;
 

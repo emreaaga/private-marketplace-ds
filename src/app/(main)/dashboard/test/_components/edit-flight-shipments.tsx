@@ -1,10 +1,10 @@
 "use client";
 
-import { useState, useMemo, useCallback } from "react";
+import { useCallback, useMemo, useState } from "react";
 
 import Big from "big.js";
-import { Plus, PackageSearch } from "lucide-react";
-import { useFormContext, useWatch, useFieldArray } from "react-hook-form";
+import { PackageSearch, Plus } from "lucide-react";
+import { useFieldArray, useFormContext, useWatch } from "react-hook-form";
 
 import { Button } from "@/shared/ui/atoms/button";
 import { ScrollArea } from "@/shared/ui/atoms/scroll-area";
@@ -107,21 +107,23 @@ export function EditFlightShipments() {
 
   return (
     <div className="flex h-full flex-col gap-2">
-      <div className="text-muted-foreground grid grid-cols-[45px_1fr_75px_85px_85px_32px] items-center gap-2 px-3 text-[9px] font-bold tracking-tight uppercase">
-        <Button
-          variant="ghost"
-          size="icon"
-          className="hover:bg-primary/10 hover:text-primary h-6 w-6 shrink-0"
-          onClick={addNewRow}
-          title="Добавить отправку"
-        >
-          <Plus className="h-4 w-4" />
-        </Button>
+      <div className="text-muted-foreground grid grid-cols-[30px_60px_1fr_70px_80px_80px] items-center gap-2 px-3 text-[9px] font-bold tracking-tight uppercase">
+        <div className="flex justify-center">
+          <Button
+            variant="ghost"
+            size="icon"
+            className="hover:bg-primary/10 hover:text-primary h-6 w-6 shrink-0"
+            onClick={addNewRow}
+            title="Добавить отправку"
+          >
+            <Plus className="h-4 w-4" />
+          </Button>
+        </div>
+        <span>ID</span>
         <span>Фирма</span>
         <span className="text-right">Вес</span>
         <span className="text-right">Предоплата</span>
         <span className="text-right">Остаток</span>
-        <span></span>
       </div>
 
       <div className="flex min-h-0 flex-1 flex-col rounded-md border shadow-sm">
@@ -130,6 +132,7 @@ export function EditFlightShipments() {
             {fields.map((field, index) => (
               <SelectedShipmentRow
                 key={field.rhf_id}
+                index={index}
                 id={field.id}
                 meta={{
                   name: field.company_name,
@@ -165,8 +168,11 @@ export function EditFlightShipments() {
 
         {fields.length > 0 && (
           <div className="bg-muted/30 border-t p-2 text-[11px] font-medium">
-            <div className="grid grid-cols-[45px_1fr_75px_85px_85px_32px] items-center gap-2">
-              <span className="text-muted-foreground col-span-2 text-right font-bold tracking-wider uppercase">
+            <div className="grid grid-cols-[30px_60px_1fr_70px_80px_80px] items-center gap-2">
+              {/* Пустые ячейки для выравнивания */}
+              <span />
+              <span />
+              <span className="text-muted-foreground text-right font-bold tracking-wider uppercase">
                 Итого ({fields.length}):
               </span>
               <span className="text-right font-semibold tabular-nums">{totals.weight.toFixed(2)} кг</span>
@@ -176,7 +182,6 @@ export function EditFlightShipments() {
               <span className="text-right font-semibold text-orange-600/80 tabular-nums">
                 ${totals.remaining.toFixed(2)}
               </span>
-              <span></span>
             </div>
           </div>
         )}

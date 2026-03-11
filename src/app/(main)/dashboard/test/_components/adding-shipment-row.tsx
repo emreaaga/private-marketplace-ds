@@ -24,12 +24,12 @@ interface AddingShipmentRowProps {
 
 export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }: AddingShipmentRowProps) {
   const [companyId, setCompanyId] = useState<number | undefined>();
-
+  const [companyName, setCompanyName] = useState<string>("");
   const { data: shipments = [], isLoading } = useAvailableShipments(companyId);
 
   return (
     <div className="bg-primary/5 animate-in fade-in slide-in-from-top-1 border-primary/20 flex h-6.5 items-center gap-1 border-b border-dashed px-1">
-      {/* 1. Кнопка удаления в начале — теперь она часть строки */}
+      {/* Кнопка отмены */}
       <button
         type="button"
         onClick={onCancelAction}
@@ -44,6 +44,7 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
           placeholder="Фирма..."
           value={companyId}
           onChange={setCompanyId}
+          onSelectName={setCompanyName}
           className="h-full min-h-0 border-none bg-transparent px-1 py-0 text-[10px] shadow-none focus:ring-0 [&>svg]:h-3 [&>svg]:w-3"
         />
       </div>
@@ -57,7 +58,7 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
             const s = shipments.find((x) => x.id === Number(val));
             if (s) {
               onSelectAction(s.id, {
-                name: s.company_name,
+                name: companyName,
                 weight: s.total_weight_kg,
                 prepaid: s.total_prepaid,
                 remaining: s.total_remaining,
@@ -84,9 +85,15 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
                   className="py-1 text-[10px]"
                 >
                   <div className="flex items-center gap-1.5">
-                    <span className="font-mono opacity-70">#{s.id}</span>
-                    <span>·</span>
-                    <span className="font-bold">{Number(s.total_weight_kg).toFixed(1)}кг</span>
+                    <span className="font-bold">#{s.number || s.id}</span>
+
+                    <span className="text-muted-foreground/40 text-[9px]">|</span>
+
+                    <span className="text-muted-foreground">{s.orders_count} зак.</span>
+
+                    <span className="text-muted-foreground/40 text-[9px]">|</span>
+
+                    <span className="font-medium">{Number(s.total_weight_kg).toFixed(1)} кг</span>
                   </div>
                 </SelectItem>
               ))

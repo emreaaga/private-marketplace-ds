@@ -8,9 +8,11 @@ interface Props {
   open: boolean;
 
   onOpenChange: (v: boolean) => void;
+
+  shipmentId?: number;
 }
 
-export function CreateOrderDialog({ open, onOpenChange }: Props) {
+export function CreateOrderDialog({ open, onOpenChange, shipmentId }: Props) {
   const handleClose = () => onOpenChange(false);
 
   return (
@@ -18,7 +20,7 @@ export function CreateOrderDialog({ open, onOpenChange }: Props) {
       <DialogContent className="flex h-[85vh]! max-h-[calc(100vh-2rem)]! w-350! max-w-[calc(100vw-2rem)]! flex-col overflow-hidden border-none p-0 shadow-2xl">
         <DialogTitle className="sr-only">Создание заказа</DialogTitle>
 
-        {open && <OrderCreateFormContent onSuccess={handleClose} onCancel={handleClose} />}
+        {open && <OrderCreateFormContent onSuccess={handleClose} onCancel={handleClose} shipmentId={shipmentId} />}
       </DialogContent>
     </Dialog>
   );

@@ -12,12 +12,12 @@ import {
 } from "@/shared/ui/atoms/dropdown-menu";
 
 type CreateDropdownProps = {
-  onCreateUserAction: () => void;
-  onHoverUserAction: () => void;
-  onCreateCompanyAction: () => void;
-  onHoverCompanyAction: () => void;
-  onCreateServiceAction: () => void;
-  onHoverServiceAction: () => void;
+  onCreateUserAction?: () => void;
+  onHoverUserAction?: () => void;
+  onCreateCompanyAction?: () => void;
+  onHoverCompanyAction?: () => void;
+  onCreateServiceAction?: () => void;
+  onHoverServiceAction?: () => void;
 };
 
 interface DropdownItemProps {
@@ -37,6 +37,10 @@ export function CreateDropdown({
   onCreateServiceAction,
   onHoverServiceAction,
 }: CreateDropdownProps) {
+  const hasAnyAction = onCreateUserAction || onCreateCompanyAction || onCreateServiceAction;
+
+  if (!hasAnyAction) return null;
+
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
@@ -51,26 +55,39 @@ export function CreateDropdown({
       </DropdownMenuTrigger>
 
       <DropdownMenuContent
-        align="start"
-        className="border-border/40 bg-background/95 w-(--radix-dropdown-menu-trigger-width) rounded-xl p-1 shadow-xl backdrop-blur-md"
+        align="end"
+        className="border-border/40 bg-background/95 w-48 rounded-xl p-1 shadow-xl backdrop-blur-md"
       >
-        <DropdownItem
-          onClick={onCreateCompanyAction}
-          onMouseEnter={onHoverCompanyAction}
-          icon={Building2}
-          label="Фирма"
-        />
+        {onCreateCompanyAction && (
+          <DropdownItem
+            onClick={onCreateCompanyAction}
+            onMouseEnter={onHoverCompanyAction}
+            icon={Building2}
+            label="Фирма"
+          />
+        )}
 
-        <DropdownItem onClick={onCreateUserAction} onMouseEnter={onHoverUserAction} icon={User} label="Польз." />
+        {onCreateUserAction && (
+          <DropdownItem
+            onClick={onCreateUserAction}
+            onMouseEnter={onHoverUserAction}
+            icon={User}
+            label="Пользователь"
+          />
+        )}
 
-        <DropdownItem
-          onClick={onCreateServiceAction}
-          onMouseEnter={onHoverServiceAction}
-          icon={Briefcase}
-          label="Услуга"
-        />
+        {onCreateServiceAction && (
+          <DropdownItem
+            onClick={onCreateServiceAction}
+            onMouseEnter={onHoverServiceAction}
+            icon={Briefcase}
+            label="Услуга"
+          />
+        )}
 
-        <div className="bg-border/40 my-1 h-px" />
+        {(onCreateUserAction || onCreateCompanyAction) && onCreateServiceAction && (
+          <div className="bg-border/40 my-1 h-px" />
+        )}
 
         <DropdownItem disabled icon={UserCircle} label="Клиент" className="opacity-50" />
       </DropdownMenuContent>

@@ -10,4 +10,5 @@ type PaginationMeta = {
 export type PaginatedResponse<T = unknown> = {
   data: T[];
   pagination: PaginationMeta;
+  shipment_status?: string;
 };

@@ -12,11 +12,15 @@ import type { ItemUI } from "@/shared/types/order/item/item-ui";
 import type { OrderSummaryForm } from "@/shared/types/order/order-summary.form";
 import { EMPTY_ORDER_SUMMARY_FORM } from "@/shared/types/order/order-summary.form.empty";
 
-export function useOrderCreateForm(onSuccess: () => void) {
+export function useOrderCreateForm(onSuccess: () => void, initialShipmentId?: number) {
   const [sender, setSender] = React.useState(emptyClientForm);
   const [receiver, setReceiver] = React.useState(emptyClientForm);
   const [items, setItems] = React.useState<ItemUI[]>([]);
-  const [summary, setSummary] = React.useState<OrderSummaryForm>(EMPTY_ORDER_SUMMARY_FORM);
+
+  const [summary, setSummary] = React.useState<OrderSummaryForm>(() => ({
+    ...EMPTY_ORDER_SUMMARY_FORM,
+    shipment_id: initialShipmentId?.toString() ?? "",
+  }));
 
   const createOrder = useCreateOrder();
 

@@ -7,6 +7,7 @@ import dynamic from "next/dynamic";
 import { useShipmentsList } from "@/features/shipments/queries/flight-shipments/use-shipments-list";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
+import { ShipmentToolbar } from "../../../logistics/shipments/_components/shipment-toolbar";
 import { getShipmentsColumns } from "../../shipments/_components/shipment-columns";
 
 const ShipmentDetailDialog = dynamic(
@@ -45,9 +46,7 @@ export function FlightShipmentsTable({ flightId }: { flightId: number }) {
 
   return (
     <div className="space-y-4">
-      <div className="flex flex-col gap-1">
-        <h1 className="text-xl font-bold tracking-tight">Отправки рейса {flightId}</h1>
-      </div>
+      <ShipmentToolbar flightId={flightId} />
       <DataTable
         columns={columns}
         data={shipments}

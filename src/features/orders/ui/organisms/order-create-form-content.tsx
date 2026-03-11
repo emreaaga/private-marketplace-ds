@@ -10,10 +10,11 @@ import { useOrderCreateForm } from "./use-order-create-form";
 interface Props {
   onSuccess: () => void;
   onCancel: () => void;
+  shipmentId?: number;
 }
 
-export function OrderCreateFormContent({ onSuccess, onCancel }: Props) {
-  const { state, actions, isPending } = useOrderCreateForm(onSuccess);
+export function OrderCreateFormContent({ onSuccess, onCancel, shipmentId }: Props) {
+  const { state, actions, isPending } = useOrderCreateForm(onSuccess, shipmentId);
 
   return (
     <div className="bg-background flex h-full min-h-0 flex-1 flex-col overflow-hidden">
@@ -42,7 +43,11 @@ export function OrderCreateFormContent({ onSuccess, onCancel }: Props) {
           </div>
 
           <div className="mt-4 px-2">
-            <PartiesSummary value={state.summary} onChange={(p) => actions.setSummary((s) => ({ ...s, ...p }))} />
+            <PartiesSummary
+              value={state.summary}
+              onChange={(p) => actions.setSummary((s) => ({ ...s, ...p }))}
+              shipmentId={shipmentId}
+            />
           </div>
         </main>
       </div>

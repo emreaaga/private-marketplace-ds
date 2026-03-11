@@ -7,6 +7,7 @@ import { toast } from "sonner";
 
 import { authService } from "@/features/auth/api/auth";
 import { getInitials } from "@/shared/lib/utils";
+import { ALL_COMPANY_TYPE_META } from "@/shared/types/company/company.meta";
 import { ALL_USER_ROLE_META } from "@/shared/types/users";
 import { type UserAuth } from "@/shared/types/users/user.auth";
 import { Avatar, AvatarFallback, AvatarImage } from "@/shared/ui/atoms/avatar";
@@ -30,6 +31,7 @@ export function NavUser({ user }: NavUserProps) {
   const router = useRouter();
 
   const roleLabel = ALL_USER_ROLE_META[user.role]?.label || user.role;
+  const CompanyIcon = ALL_COMPANY_TYPE_META[user.company_type]?.Icon;
 
   const handleLogout = async () => {
     try {
@@ -65,7 +67,10 @@ export function NavUser({ user }: NavUserProps) {
 
               <div className="grid flex-1 text-left text-sm leading-tight">
                 <span className="truncate font-medium">{user.name}</span>
-                <span className="text-muted-foreground truncate text-xs">{user.company_name}</span>
+                <span className="text-muted-foreground flex items-center gap-1 truncate text-xs">
+                  {user.company_name}
+                  {CompanyIcon && <CompanyIcon className="size-3" />}
+                </span>
               </div>
               <EllipsisVertical className="ml-auto size-4" />
             </SidebarMenuButton>

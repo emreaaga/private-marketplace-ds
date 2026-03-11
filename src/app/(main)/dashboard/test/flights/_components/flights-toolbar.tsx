@@ -11,7 +11,11 @@ import { Button } from "@/shared/ui/atoms/button";
 const loadFlightsDialog = () => import("../../_components/create-flight-dialog").then((m) => m.FlightsDialog);
 const FlightsDialog = dynamic(loadFlightsDialog, { ssr: false });
 
-export function FlightsToolbar() {
+interface FlightsToolbarProps {
+  canCreate: boolean;
+}
+
+export function FlightsToolbar({ canCreate }: FlightsToolbarProps) {
   const [open, setOpen] = useState(false);
   const [isLoaded, setIsLoaded] = useState(false);
   const handleMouseEnter = () => {
@@ -46,18 +50,20 @@ export function FlightsToolbar() {
             <RotateCcw size={13} strokeWidth={2.5} />
           </button>
 
-          <Button
-            size="sm"
-            className="bg-foreground text-background hover:bg-foreground/90 h-8 gap-1.5 px-3 shadow-md transition-all active:scale-95"
-            onMouseEnter={handleMouseEnter}
-            onClick={() => {
-              setIsLoaded(true);
-              setOpen(true);
-            }}
-          >
-            <Plus size={14} strokeWidth={3} />
-            <span className="text-[12px] font-bold tracking-tight">Создать рейс</span>
-          </Button>
+          {canCreate && (
+            <Button
+              size="sm"
+              className="bg-foreground text-background hover:bg-foreground/90 h-8 gap-1.5 px-3 shadow-md transition-all active:scale-95"
+              onMouseEnter={handleMouseEnter}
+              onClick={() => {
+                setIsLoaded(true);
+                setOpen(true);
+              }}
+            >
+              <Plus size={14} strokeWidth={3} />
+              <span className="text-[12px] font-bold tracking-tight">Создать рейс</span>
+            </Button>
+          )}
         </div>
       </div>
 

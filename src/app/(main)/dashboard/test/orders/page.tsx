@@ -4,6 +4,7 @@ import { useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
 
+import { getClientUser } from "@/features/auth/get-user";
 import { useOrdersList } from "@/features/orders/queries/use-orders-list";
 import { OrdersToolbar } from "@/features/orders/ui/organisms/sections/orders-toolbar";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
@@ -21,6 +22,9 @@ export default function OrdersPage() {
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [editId, setEditId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
+
+  const user = useMemo(() => getClientUser(), []);
+  const isAdmin = user?.company_type === "platform";
 
   const { data, isLoading, isError } = useOrdersList({ page });
 
@@ -45,7 +49,7 @@ export default function OrdersPage() {
 
   return (
     <div className="space-y-4">
-      <OrdersToolbar open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+      <OrdersToolbar open={isCreateOpen} onOpenChange={setIsCreateOpen} canCreate={isAdmin} />
 
       <DataTable
         columns={columns}
