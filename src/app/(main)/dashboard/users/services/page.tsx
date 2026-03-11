@@ -7,7 +7,6 @@ import dynamic from "next/dynamic";
 import { useServicesList } from "@/features/services/queries/use-services-list";
 import { useUpdateService } from "@/features/services/queries/use-update-service";
 import { createServicesColumns } from "@/features/services/ui/organisms/services-columns";
-import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
 import { Service } from "@/shared/types/services/services.model";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
@@ -41,8 +40,6 @@ export default function ServicesPage() {
 
   return (
     <div className="space-y-4">
-      <UsersToolbar />
-
       <DataTable
         columns={columns}
         data={data?.data ?? []}

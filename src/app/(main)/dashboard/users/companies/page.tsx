@@ -7,7 +7,6 @@ import dynamic from "next/dynamic";
 import { useCompaniesList } from "@/features/companies/queries/use-companies-list";
 import { useUpdateCompany } from "@/features/companies/queries/use-update-company";
 import { createCompaniesColumns } from "@/features/companies/ui/organisms/companies-columns";
-import { UsersToolbar } from "@/features/users/ui/organisms/sections/users-toolbar";
 import type { Company } from "@/shared/types/company/company.model";
 import { DataTable } from "@/shared/ui/organisms/table/data-table";
 
@@ -60,8 +59,6 @@ export default function CompaniesMainPage() {
 
   return (
     <div className="space-y-4">
-      <UsersToolbar />
-
       <DataTable
         columns={columns}
         data={companies}
