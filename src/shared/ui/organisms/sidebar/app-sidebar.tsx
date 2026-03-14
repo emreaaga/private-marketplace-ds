@@ -1,7 +1,5 @@
 "use client";
 
-import Link from "next/link";
-
 import { Command } from "lucide-react";
 
 import { sidebarItems } from "@/features/sidebar/sidebar-items";
@@ -19,6 +17,7 @@ import {
 } from "@/shared/ui/atoms/sidebar";
 import { NavMain } from "@/shared/ui/organisms/sidebar/nav-main";
 
+import { NavCompany } from "./nav-company";
 import { NavUser } from "./nav-user";
 
 interface AppSidebarProps {
@@ -33,16 +32,18 @@ export function AppSidebar({ user }: AppSidebarProps) {
   return (
     <Sidebar>
       <SidebarHeader>
-        <SidebarMenu>
-          <SidebarMenuItem>
-            <SidebarMenuButton asChild className="p-1.5">
-              <Link prefetch={false} href="/dashboard/main">
+        {user ? (
+          <NavCompany user={user} />
+        ) : (
+          <SidebarMenu>
+            <SidebarMenuItem>
+              <SidebarMenuButton size="lg">
                 <Command />
-                <span className="text-base font-semibold">{APP_CONFIG.name}</span>
-              </Link>
-            </SidebarMenuButton>
-          </SidebarMenuItem>
-        </SidebarMenu>
+                <span className="font-semibold">{APP_CONFIG.name}</span>
+              </SidebarMenuButton>
+            </SidebarMenuItem>
+          </SidebarMenu>
+        )}
       </SidebarHeader>
 
       <SidebarContent>

@@ -70,7 +70,7 @@ export function OrdersToolbar({ open, onOpenChange, shipmentId, canCreate = true
           {canCreate && (
             <Button
               size="sm"
-              className="bg-foreground text-background hover:bg-foreground/90 h-8 gap-1.5 px-3 shadow-md transition-all active:scale-95"
+              variant="primary"
               onMouseEnter={() => setShouldLoad(true)}
               onClick={() => onOpenChange(true)}
             >

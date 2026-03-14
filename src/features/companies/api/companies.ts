@@ -2,7 +2,7 @@
 
 import { api } from "@/shared/lib/api";
 import type { CreateCompanyPayload } from "@/shared/types/company/company.dto";
-import type { Company } from "@/shared/types/company/company.model";
+import type { Company, CompanyDetailResponse } from "@/shared/types/company/company.model";
 import type { CompanyType } from "@/shared/types/company/company.types";
 import { CountryCode } from "@/shared/types/geography/country.types";
 import type { PaginatedResponse } from "@/shared/types/paginated-response";
@@ -43,9 +43,9 @@ export const companiesService = {
     return data;
   },
 
-  async getCompany(id: number, signal?: AbortSignal): Promise<Company> {
-    const { data } = await api.get<{ data: Company }>(`/companies/${id}`, { signal });
-    return data.data;
+  async getCompany(id: number, signal?: AbortSignal): Promise<CompanyDetailResponse> {
+    const { data } = await api.get<CompanyDetailResponse>(`/companies/${id}`, { signal });
+    return data;
   },
 
   async updateCompany(id: number, payload: UpdateCompanyPayload): Promise<Company> {

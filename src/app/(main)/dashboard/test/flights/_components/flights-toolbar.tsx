@@ -4,7 +4,7 @@ import { useState } from "react";
 
 import dynamic from "next/dynamic";
 
-import { ListFilter, LucideIcon, Plus, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
+import { ListFilter, Plus, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
 
 import { Button } from "@/shared/ui/atoms/button";
 
@@ -36,24 +36,26 @@ export function FlightsToolbar({ canCreate }: FlightsToolbarProps) {
           </div>
 
           <div className="flex items-center gap-1.5">
-            <ToolbarButton Icon={SlidersHorizontal} label="Сортировка" />
-            <ToolbarButton Icon={ListFilter} label="Фильтры" />
+            <Button variant="action" size="sm" className="px-2.5">
+              <SlidersHorizontal size={14} strokeWidth={2} className="text-muted-foreground/40" />
+              <span className="hidden sm:inline">Сортировка</span>
+            </Button>
+            <Button variant="action" size="sm" className="px-2.5">
+              <ListFilter size={14} strokeWidth={2} className="text-muted-foreground/40" />
+              <span className="hidden sm:inline">Фильтры</span>
+            </Button>
           </div>
         </div>
 
         <div className="flex items-center gap-2">
-          <button
-            onClick={() => {}}
-            className="border-border/40 text-muted-foreground/50 hover:bg-muted hover:border-border/80 hover:text-muted-foreground bg-background/50 flex h-8 w-8 items-center justify-center rounded-md border shadow-sm transition-all active:scale-95"
-            title="Сбросить фильтры"
-          >
+          <Button onClick={() => {}} variant="action" size="icon-sm" title="Сбросить фильтры">
             <RotateCcw size={13} strokeWidth={2.5} />
-          </button>
+          </Button>
 
           {canCreate && (
             <Button
               size="sm"
-              className="bg-foreground text-background hover:bg-foreground/90 h-8 gap-1.5 px-3 shadow-md transition-all active:scale-95"
+              variant="primary"
               onMouseEnter={handleMouseEnter}
               onClick={() => {
                 setIsLoaded(true);
@@ -69,14 +71,5 @@ export function FlightsToolbar({ canCreate }: FlightsToolbarProps) {
 
       {isLoaded && <FlightsDialog open={open} onOpenChangeAction={setOpen} />}
     </>
-  );
-}
-
-function ToolbarButton({ Icon, label }: { Icon: LucideIcon; label: string }) {
-  return (
-    <button className="border-border/40 text-muted-foreground/70 hover:bg-muted hover:border-border/80 hover:text-foreground bg-background/50 flex h-8 items-center gap-2 rounded-md border px-2.5 text-[12px] font-medium shadow-sm transition-all active:scale-95">
-      <Icon size={14} strokeWidth={2} className="text-muted-foreground/40 group-hover:text-foreground" />
-      <span className="hidden sm:inline">{label}</span>
-    </button>
   );
 }

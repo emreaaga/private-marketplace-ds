@@ -44,10 +44,7 @@ export function CreateDropdown({
   return (
     <DropdownMenu>
       <DropdownMenuTrigger asChild>
-        <Button
-          size="sm"
-          className="bg-foreground text-background hover:bg-foreground/90 h-8 w-full gap-1.5 px-3 shadow-md transition-all active:scale-95 md:w-auto"
-        >
+        <Button size="sm" variant="primary">
           <Plus size={14} strokeWidth={3} />
           <span className="text-[12px] font-bold tracking-tight">Создать</span>
           <ChevronDown size={12} className="ml-0.5 opacity-50" />

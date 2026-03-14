@@ -58,11 +58,10 @@ export function ShipmentToolbar({ flightId }: ShipmentToolbarProps) {
             <RotateCcw size={13} strokeWidth={2.5} />
           </button>
 
-          {/* Кнопка создания выводится ТОЛЬКО если нет flightId */}
           {!flightId && (
             <Button
               size="sm"
-              className="bg-foreground text-background hover:bg-foreground/90 h-8 gap-1.5 px-3 shadow-md transition-all active:scale-95"
+              variant="primary"
               onMouseEnter={preloadDialog}
               onFocus={preloadDialog}
               onClick={() => setOpen(true)}
