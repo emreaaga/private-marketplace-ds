@@ -1,12 +1,39 @@
 import { ReactNode } from "react";
 
-import { TestHeader } from "./_components/test-header";
+import { getServerSession } from "@/entities/session/server";
+import { ResponsiveTabsHeader } from "@/widgets/responsive-tabs-header";
+
+const TestHeaderItems = [
+  {
+    href: "/dashboard/test/flights",
+    label: "Рейсы",
+    icon: "flights",
+  },
+  {
+    href: "/dashboard/test/shipments",
+    label: "Отправки",
+    icon: "shipments",
+  },
+  {
+    href: "/dashboard/test/orders",
+    label: "Исходящие заказы",
+    icon: "outbound",
+  },
+  {
+    href: "/dashboard/test/incoming-orders",
+    label: "Входящие заказы",
+    icon: "inbound",
+  },
+] as const;
 
 export default async function LogisticsLayout({ children }: { children: ReactNode }) {
+  const user = await getServerSession();
+
   return (
     <div className="space-y-2 sm:space-y-4">
-      <TestHeader />
-      {children}
+      <ResponsiveTabsHeader items={TestHeaderItems} user={user} />
+
+      <main>{children}</main>
     </div>
   );
 }

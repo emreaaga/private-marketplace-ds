@@ -5,7 +5,7 @@ import { useState } from "react";
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import { getErrorMessage } from "@/shared/lib/get-error-message";
+import { getErrorMessage } from "@/shared/api/lib/get-error-message";
 
 export function Providers({ children }: { children: React.ReactNode }) {
   const [client] = useState(

@@ -4,16 +4,12 @@ import { useCallback, useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
 
-import { useCompaniesList } from "@/features/companies/queries/use-companies-list";
-import { useUpdateCompany } from "@/features/companies/queries/use-update-company";
-import { createCompaniesColumns } from "@/features/companies/ui/organisms/companies-columns";
-import type { Company } from "@/shared/types/company/company.model";
-import { DataTable } from "@/shared/ui/organisms/table/data-table";
+import { createCompaniesColumns, useCompaniesList, useUpdateCompany, type Company } from "@/entities/company";
+import { DataTable } from "@/widgets/data-table/ui/data-table";
 
-const CompanyEditDialog = dynamic(
-  () => import("@/features/companies/ui/organisms/company-edit-dialog").then((m) => m.CompanyEditDialog),
-  { ssr: false },
-);
+const CompanyEditDialog = dynamic(() => import("@/features/company-edit").then((m) => m.CompanyEditDialog), {
+  ssr: false,
+});
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 

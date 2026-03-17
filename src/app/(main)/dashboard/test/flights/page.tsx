@@ -1,8 +1,7 @@
-import { getServerUser } from "@/features/auth/get-server-user";
-import { getFlights } from "@/features/flights/api/get-flights";
-
-import { FlightsTableClient } from "./_components/flights-table-client";
-import { FlightsToolbar } from "./_components/flights-toolbar";
+import { getFlights } from "@/entities/flight/api-server/get-flights";
+import { getServerSession } from "@/entities/session/server";
+import { FlightsTableClient } from "@/widgets/flights-table";
+import { FlightsToolbar } from "@/widgets/flights-toolbar";
 
 interface PageProps {
   searchParams: Promise<{ page?: string }>;
@@ -14,7 +13,7 @@ export default async function FlightsPage({ searchParams }: PageProps) {
 
   const data = await getFlights({ page: currentPage });
 
-  const user = await getServerUser();
+  const user = await getServerSession();
   const isAdmin = user?.role === "admin";
 
   return (

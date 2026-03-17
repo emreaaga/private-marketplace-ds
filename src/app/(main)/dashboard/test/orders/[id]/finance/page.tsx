@@ -6,14 +6,11 @@ import { useParams } from "next/navigation";
 
 import { ArrowDownRight, DollarSign, ListChecks, Scale } from "lucide-react";
 
-import { useOrderFinancialEvents } from "@/features/financial-events/queries/use-order-financial-events";
-import { useOrderSummary } from "@/features/orders/queries/user-order-summary";
+import { financialEventsColumns, useFinancialEvents } from "@/entities/financial-events";
+import { useOrderSummary } from "@/entities/order";
 import { formatMoney } from "@/shared/ui/molecules/format-money";
-import { DataTable } from "@/shared/ui/organisms/table/data-table";
-
-import { StatCard } from "../../../../main/_components/stat-card";
-
-import { financialEventsColumns } from "./_components/financial-events-columns";
+import { StatCard } from "@/shared/ui/stat-card";
+import { DataTable } from "@/widgets/data-table/ui/data-table";
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 
@@ -24,7 +21,7 @@ export default function OrderFinancePage() {
   const [page, setPage] = useState(1);
 
   const { data: summary, isLoading: isLoadingSummary } = useOrderSummary(orderId);
-  const { data: eventsResponse, isLoading: isLoadingEvents } = useOrderFinancialEvents(orderId, page);
+  const { data: eventsResponse, isLoading: isLoadingEvents } = useFinancialEvents(orderId, page);
 
   const balance = summary?.balance ?? "0.00";
   const isDebt = Number(balance) > 0;

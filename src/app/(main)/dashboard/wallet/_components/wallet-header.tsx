@@ -1,13 +1,15 @@
 "use client";
 import { useState } from "react";
 
-import { PlusCircle, Coins, Send } from "lucide-react";
+import dynamic from "next/dynamic";
+
+import { Coins, PlusCircle, Send } from "lucide-react";
 
 import { Button } from "@/shared/ui/atoms/button";
 import { ButtonGroup } from "@/shared/ui/atoms/button-group";
 
-import ReceiveOverlay from "./receive-overlay";
-import SendOverlay from "./send-overlay";
+const ReceiveDialog = dynamic(() => import("./receive-dialog"), { ssr: false });
+const SendDialog = dynamic(() => import("./send-dialog"), { ssr: false });
 
 export default function WalletHeader() {
   const balance = 1515;
@@ -27,6 +29,7 @@ export default function WalletHeader() {
           <span className="text-foreground font-semibold tabular-nums">{balance}</span>
         </span>
       </div>
+
       <div className="bg-background inline-flex w-full items-center justify-between rounded-md border shadow-sm sm:w-auto">
         <ButtonGroup className="flex w-full sm:w-auto">
           <Button
@@ -37,7 +40,7 @@ export default function WalletHeader() {
             onMouseEnter={() => setShouldLoadSend(true)}
           >
             <Send className="h-4 w-4" />
-            <span className="sm:inline">Перевести</span>
+            <span>Перевести</span>
           </Button>
           <Button
             size="sm"
@@ -47,16 +50,17 @@ export default function WalletHeader() {
             onMouseEnter={() => setShouldLoadReceive(true)}
           >
             <PlusCircle className="h-4 w-4" />
-            <span className="sm:inline">Пополнить</span>
+            <span>Пополнить</span>
           </Button>
         </ButtonGroup>
       </div>
+
       {(depositOpen || shouldLoadReceive) && (
-        <ReceiveOverlay open={depositOpen} onOpenChange={setDepositOpen} receiveUrl={receiveUrl} />
+        <ReceiveDialog open={depositOpen} onOpenChange={setDepositOpen} receiveUrl={receiveUrl} />
       )}
 
       {(withdrawOpen || shouldLoadSend) && (
-        <SendOverlay open={withdrawOpen} onOpenChange={setWithdrawOpen} userBalance={balance} />
+        <SendDialog open={withdrawOpen} onOpenChange={setWithdrawOpen} userBalance={balance} />
       )}
     </div>
   );

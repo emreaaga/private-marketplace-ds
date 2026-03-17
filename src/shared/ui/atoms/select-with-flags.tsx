@@ -6,9 +6,8 @@ import Image from "next/image";
 
 import { ChevronLeft, ChevronRight } from "lucide-react";
 
+import { COUNTRY_META, type CountryCode } from "@/entities/geography";
 import { cn } from "@/shared/lib/utils";
-import { COUNTRY_META } from "@/shared/types/geography/country.meta";
-import type { CountryCode } from "@/shared/types/geography/country.types";
 import { Button } from "@/shared/ui/atoms/button";
 import { Popover, PopoverContent, PopoverTrigger } from "@/shared/ui/atoms/popover";
 

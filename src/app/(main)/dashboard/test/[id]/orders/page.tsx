@@ -5,14 +5,12 @@ import { useCallback, useMemo, useState } from "react";
 import dynamic from "next/dynamic";
 import { useParams } from "next/navigation";
 
-import { useOrdersList } from "@/features/orders/queries/use-orders-list";
-import { OrdersToolbar } from "@/features/orders/ui/organisms/sections/orders-toolbar";
-import { DataTable } from "@/shared/ui/organisms/table/data-table";
+import { useOrdersList } from "@/entities/order";
+import { getOrdersColumns } from "@/entities/order/ui";
+import { DataTable } from "@/widgets/data-table/ui/data-table";
+import { OrdersToolbar } from "@/widgets/orders-toolbar/ui/orders-toolbar";
 
-import { getOrdersColumns } from "../../orders/_components/orders-columns";
-
-const OrderEditDialogLoader = () =>
-  import("@/features/orders/ui/organisms/order-edit-dialog").then((m) => m.OrderEditDialog);
+const OrderEditDialogLoader = () => import("@/features/order-edit").then((m) => m.OrderEditDialog);
 const OrderEditDialog = dynamic(OrderEditDialogLoader, { ssr: false });
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));

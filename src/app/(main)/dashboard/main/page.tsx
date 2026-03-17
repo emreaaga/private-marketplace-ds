@@ -2,15 +2,13 @@
 
 import Link from "next/link";
 
-import { Building2, Users, Package, HandCoins, PlusCircle, ArrowRightLeft, BarChart3, History } from "lucide-react";
+import { ArrowRightLeft, BarChart3, Building2, HandCoins, Package, PlusCircle, Users } from "lucide-react";
 
-import { useDashboardStats } from "@/features/dashboard/queries/use-dashboard-stats";
+import { useDashboardStats } from "@/entities/dashboard";
 import { Button } from "@/shared/ui/atoms/button";
+import { FeaturePlaceholder } from "@/shared/ui/feature-placeholder";
 import { formatMoney } from "@/shared/ui/molecules/format-money";
-
-import ActivityItem from "./_components/activity-item";
-import { activities } from "./_components/fake-activities";
-import { StatCard } from "./_components/stat-card";
+import { StatCard } from "@/shared/ui/stat-card";
 
 export default function MainPage() {
   const { data, isLoading } = useDashboardStats();
@@ -35,19 +33,7 @@ export default function MainPage() {
       </div>
 
       <div className="grid gap-6 lg:grid-cols-[1.4fr_1fr]">
-        <div className="bg-background rounded-2xl border p-4 shadow-sm">
-          <div className="mb-4 flex items-center justify-between">
-            <h2 className="text-foreground/80 flex items-center gap-2 text-sm font-semibold">
-              <History className="text-muted-foreground h-4 w-4" />
-              История действий
-            </h2>
-          </div>
-          <div className="space-y-2">
-            {activities.map((item, i) => (
-              <ActivityItem key={i} {...item} />
-            ))}
-          </div>
-        </div>
+        <FeaturePlaceholder title="Страница аналитики" description="Здесь будет основная аналитика по дашборду" />
 
         <div className="space-y-4">
           <div className="bg-background rounded-2xl border p-4 shadow-sm">
@@ -72,6 +58,7 @@ export default function MainPage() {
             </div>
           </div>
 
+          {/* Виджет веса */}
           <div className="bg-muted/30 dark:bg-muted/10 rounded-2xl border p-4">
             <h3 className="text-muted-foreground text-[10px] font-bold tracking-wider uppercase">
               Вес рейсов за этот месяц

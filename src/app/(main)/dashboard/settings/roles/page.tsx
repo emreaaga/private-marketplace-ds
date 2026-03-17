@@ -1,9 +1,7 @@
 import React from "react";
 
-import { COMPANY_TYPE_META } from "@/shared/types/company/company.meta";
-import { CompanyType } from "@/shared/types/company/company.types";
-import { USER_ROLE_META } from "@/shared/types/users";
-import { UserRoles } from "@/shared/types/users/user.model";
+import { COMPANY_TYPE_META, type CompanyType } from "@/entities/company";
+import { USER_ROLE_META, UserRoles } from "@/entities/user";
 
 interface DirectoryItem {
   number: number;

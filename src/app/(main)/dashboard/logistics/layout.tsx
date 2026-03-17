@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import { LogisticsHeader } from "@/features/logistics/ui/organisms/logistics-header";
+import { LogisticsHeader } from "@/widgets/logistics/ui/logistics-header";
 
 export default function LogisticsLayout({ children }: { children: ReactNode }) {
   return (

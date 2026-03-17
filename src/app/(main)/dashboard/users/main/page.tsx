@@ -1,7 +1,6 @@
-import { getServerUser } from "@/features/auth/get-server-user";
-import { getUsers } from "@/features/users/api/get-users";
-
-import { UsersTableClient } from "./_components/users-table-client";
+import { getServerSession } from "@/entities/session/server";
+import { getUsers } from "@/entities/user/api/get-users-server.api";
+import { UsersTableClient } from "@/widgets/users-table";
 
 interface PageProps {
   searchParams: Promise<{ page?: string }>;
@@ -9,7 +8,7 @@ interface PageProps {
 
 export default async function UsersPage({ searchParams }: PageProps) {
   const params = await searchParams;
-  const user = await getServerUser();
+  const user = await getServerSession();
   const currentPage = Number(params.page) || 1;
 
   if (!user) return null;

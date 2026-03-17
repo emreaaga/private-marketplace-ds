@@ -4,19 +4,15 @@ import { useState } from "react";
 
 import { useParams } from "next/navigation";
 
-import { TrendingUp, TrendingDown, Receipt, Wallet, Package } from "lucide-react";
+import { Package, Receipt, TrendingDown, TrendingUp, Wallet } from "lucide-react";
 
-import { useFlightExpensesList } from "@/features/flight-expenses/queries/use-flight-expenses-list";
-import { useFlightSummary } from "@/features/flights/queries/use-flight-summary";
+import { useFlightSummary } from "@/entities/flight";
+import { flightExpensesColumns, useFlightExpensesList } from "@/entities/flight-expense";
 import { formatMoney } from "@/shared/ui/molecules/format-money";
 import { formatWeight } from "@/shared/ui/molecules/format-weight";
-import { DataTable } from "@/shared/ui/organisms/table/data-table";
+import { StatCard } from "@/shared/ui/stat-card";
+import { DataTable } from "@/widgets/data-table/ui/data-table";
 
-import { StatCard } from "../../../main/_components/stat-card";
-
-import { flightExpensesColumns } from "./_components/flight-expenses-columns";
-
-// eslint-disable-next-line complexity
 export default function FlightFinancePage() {
   const { id } = useParams();
   const flight_id = Number(id);

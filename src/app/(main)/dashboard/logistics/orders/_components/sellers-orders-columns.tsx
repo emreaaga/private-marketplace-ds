@@ -102,21 +102,6 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
       </TableBadge>
     ),
   },
-  {
-    id: "expand",
-    header: "",
-    size: 28,
-    enableSorting: false,
-    enableHiding: false,
-    cell: ({ row }) => (
-      <button
-        onClick={row.getToggleExpandedHandler()}
-        className="text-muted-foreground hover:text-foreground text-xs leading-none"
-      >
-        {row.getIsExpanded() ? "−" : "+"}
-      </button>
-    ),
-  },
 
   {
     id: "actions",

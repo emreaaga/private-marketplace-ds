@@ -1,5 +1,5 @@
-import { AllCompanyType } from "@/shared/types/company/company.types";
-import { AllUserRoles } from "@/shared/types/users";
+import { AllCompanyType } from "@/entities/company";
+import { AllUserRoles } from "@/entities/user";
 
 export interface AccessRule {
   roles?: AllUserRoles[];

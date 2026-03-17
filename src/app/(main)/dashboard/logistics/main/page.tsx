@@ -1,12 +1,18 @@
 "use client";
+
 import { useMemo } from "react";
 
-import { getSellersOrdersColumns } from "../orders/_components/sellers-orders-columns";
-import SellersOrdersResponsive from "../orders/_components/sellers-orders-responsive";
+import { fakeOrders } from "@/app/(main)/dashboard/logistics/orders/_components/fake-orders";
+import { DataTable } from "@/widgets/data-table/ui/data-table";
 
-import { fakeOrders } from "./_components/fake-orders";
+import { getOrderColumns } from "../orders/_components/orders-table-columns";
 
 export default function LogisticsMainPage() {
-  const columns = useMemo(() => getSellersOrdersColumns(), []);
-  return <SellersOrdersResponsive data={fakeOrders} columns={columns} />;
+  const columns = useMemo(() => getOrderColumns(), []);
+
+  return (
+    <div className="space-y-4">
+      <DataTable columns={columns} data={fakeOrders} />
+    </div>
+  );
 }

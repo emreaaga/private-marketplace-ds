@@ -4,16 +4,14 @@ import { useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
 
-import { useShipmentsList } from "@/features/shipments/queries/use-shipments-list";
-import { DataTable } from "@/shared/ui/organisms/table/data-table";
+import { useShipmentsList } from "@/entities/shipment";
+import { getShipmentsColumns } from "@/entities/shipment/ui";
+import { DataTable } from "@/widgets/data-table/ui/data-table";
+import { ShipmentToolbar } from "@/widgets/shipments-toolbar";
 
-import { ShipmentToolbar } from "../../logistics/shipments/_components/shipment-toolbar";
-
-const loadShipmentDialog = () => import("../_components/shipment-edit-dialog").then((m) => m.ShipmentDetailDialog);
+const loadShipmentDialog = () => import("@/features/shipment-edit").then((m) => m.ShipmentDetailDialog);
 
 const ShipmentDetailDialog = dynamic(loadShipmentDialog, { ssr: false });
-
-import { getShipmentsColumns } from "./_components/shipment-columns";
 
 const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v, max));
 

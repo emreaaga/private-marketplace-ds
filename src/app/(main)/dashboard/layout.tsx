@@ -4,10 +4,10 @@ import { cookies } from "next/headers";
 
 import { Separator } from "@/shared/ui/atoms/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/shared/ui/atoms/sidebar";
-import { AppSidebar } from "@/shared/ui/organisms/sidebar/app-sidebar";
-import { MobileBottomNavClient } from "@/shared/ui/organisms/sidebar/mobile-bottom-nav-client";
-import { SearchDialog } from "@/shared/ui/organisms/sidebar/search-dialog";
-import { ThemeSwitcher } from "@/shared/ui/organisms/sidebar/theme-switcher";
+import { AppSidebar } from "@/widgets/app-sidebar";
+import { MobileBottomNavClient } from "@/widgets/app-sidebar/ui/mobile-bottom-nav-client";
+import { SearchDialog } from "@/widgets/app-sidebar/ui/search-dialog";
+import { ThemeSwitcher } from "@/widgets/app-sidebar/ui/theme-switcher";
 
 async function getUserFromCookies() {
   const cookieStore = await cookies();

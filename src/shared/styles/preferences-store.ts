@@ -1,6 +1,6 @@
 import { createStore } from "zustand/vanilla";
 
-import type { ThemeMode, ThemePreset } from "@/shared/ui/organisms/sidebar/preferences/theme";
+import type { ThemeMode, ThemePreset } from "@/widgets/app-sidebar";
 
 export type PreferencesState = {
   themeMode: ThemeMode;

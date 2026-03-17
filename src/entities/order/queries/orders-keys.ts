@@ -1,0 +1,13 @@
+import { GetOrdersPar } from "../api/get-orders.api";
+
+export const ordersKeys = {
+  all: ["orders"] as const,
+  lists: () => [...ordersKeys.all, "list"] as const,
+
+  list: () => [...ordersKeys.lists(), "legacy"] as const,
+
+  listPage: (params: GetOrdersPar) => [...ordersKeys.lists(), "page", params] as const,
+  detail: (id: number) => [...ordersKeys.all, "detail", id] as const,
+
+  summary: (id: number) => [...ordersKeys.detail(id), "summary"] as const,
+};

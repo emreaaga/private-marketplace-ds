@@ -4,15 +4,13 @@ import { useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
 
-import { getClientUser } from "@/features/auth/get-user";
-import { useOrdersList } from "@/features/orders/queries/use-orders-list";
-import { OrdersToolbar } from "@/features/orders/ui/organisms/sections/orders-toolbar";
-import { DataTable } from "@/shared/ui/organisms/table/data-table";
+import { useOrdersList } from "@/entities/order";
+import { getOrdersColumns } from "@/entities/order/ui";
+import { getClientSession } from "@/entities/session";
+import { DataTable } from "@/widgets/data-table/ui/data-table";
+import { OrdersToolbar } from "@/widgets/orders-toolbar/ui/orders-toolbar";
 
-import { getOrdersColumns } from "./_components/orders-columns";
-
-const OrderEditDialogLoader = () =>
-  import("@/features/orders/ui/organisms/order-edit-dialog").then((mod) => mod.OrderEditDialog);
+const OrderEditDialogLoader = () => import("@/features/order-edit").then((mod) => mod.OrderEditDialog);
 
 const OrderEditDialog = dynamic(OrderEditDialogLoader, { ssr: false });
 
@@ -23,7 +21,7 @@ export default function OrdersPage() {
   const [editId, setEditId] = useState<number | null>(null);
   const [page, setPage] = useState(1);
 
-  const user = useMemo(() => getClientUser(), []);
+  const user = useMemo(() => getClientSession(), []);
   const isAdmin = user?.company_type === "platform";
 
   const { data, isLoading, isError } = useOrdersList({ page });

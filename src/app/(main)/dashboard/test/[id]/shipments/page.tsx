@@ -1,4 +1,4 @@
-import { FlightShipmentsTable } from "./flight-shipments-table.client";
+import { FlightShipmentsTable } from "@/widgets/flights-table";
 
 export default async function Page({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;

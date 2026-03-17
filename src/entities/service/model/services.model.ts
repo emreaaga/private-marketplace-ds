@@ -1,0 +1,15 @@
+import { CompanyType } from "@/entities/company";
+
+import { ServicePrice } from "./services.pricing";
+import { ServiceType } from "./services.types";
+
+export type Service = {
+  id: number;
+  company_name: string;
+  company_type: CompanyType;
+  type: ServiceType;
+  pricing_type: ServicePrice;
+  price: string;
+  is_active: boolean;
+  created_at: string;
+};

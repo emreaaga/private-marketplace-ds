@@ -1,6 +1,6 @@
 "use client";
 
-import { DataTable } from "@/shared/ui/organisms/table/data-table";
+import { DataTable } from "@/widgets/data-table/ui/data-table";
 
 import { FAKE_FLIGHTS } from "./_components/fake-flights"; // Импорт данных
 import { FlightsColumns } from "./_components/flights-columns";

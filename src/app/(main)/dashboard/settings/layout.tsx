@@ -1,6 +1,6 @@
 import { ReactNode } from "react";
 
-import { SettingsHeader } from "@/features/general-settings/ui/organisms/sections/general-settings-header";
+import { SettingsHeader } from "@/widgets/settings/ui/settings-header";
 
 export default function SettingsLayout({ children }: { children: ReactNode }) {
   return (
