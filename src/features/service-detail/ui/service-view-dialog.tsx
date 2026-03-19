@@ -1,5 +1,7 @@
 "use client";
 
+import { useMemo } from "react";
+
 import { ALL_COMPANY_TYPE_META } from "@/entities/company";
 import { SERVICE_PRICING_META, SERVICE_TYPE_META } from "@/entities/service";
 import { useServiceDetail } from "@/entities/service/queries/use-service-detail";
@@ -13,22 +15,25 @@ type Props = {
   onOpenChangeAction: (open: boolean) => void;
 };
 
-// eslint-disable-next-line complexity
 export function ServiceViewDialog({ open, serviceId, onOpenChangeAction }: Props) {
   const isEnabled = open && serviceId !== null;
   const { data: response, isLoading, isError } = useServiceDetail(serviceId, isEnabled);
 
   const service = response;
 
-  const companyLabel = service?.company_type
-    ? ALL_COMPANY_TYPE_META[service.company_type as keyof typeof ALL_COMPANY_TYPE_META]?.label
-    : service?.company_type;
-  const typeLabel = service?.type
-    ? SERVICE_TYPE_META[service.type as keyof typeof SERVICE_TYPE_META]?.label
-    : service?.type;
-  const pricingLabel = service?.pricing_type
-    ? SERVICE_PRICING_META[service.pricing_type as keyof typeof SERVICE_PRICING_META]?.label
-    : service?.pricing_type;
+  const labels = useMemo(() => {
+    if (!service) return { company: "", type: "", pricing: "" };
+
+    return {
+      company: service.company_type
+        ? ALL_COMPANY_TYPE_META[service.company_type as keyof typeof ALL_COMPANY_TYPE_META]?.label
+        : service.company_type,
+      type: service.type ? SERVICE_TYPE_META[service.type as keyof typeof SERVICE_TYPE_META]?.label : service.type,
+      pricing: service.pricing_type
+        ? SERVICE_PRICING_META[service.pricing_type as keyof typeof SERVICE_PRICING_META]?.label
+        : service.pricing_type,
+    };
+  }, [service]);
 
   return (
     <Dialog open={open} onOpenChange={onOpenChangeAction}>
@@ -53,19 +58,19 @@ export function ServiceViewDialog({ open, serviceId, onOpenChangeAction }: Props
                 <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
                   Тип компании
                 </span>
-                <div className="text-foreground text-sm font-medium">{companyLabel}</div>
+                <div className="text-foreground text-sm font-medium">{labels.company}</div>
               </div>
 
               <div className="space-y-1">
                 <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">
                   Тип услуги
                 </span>
-                <div className="text-foreground text-sm font-medium">{typeLabel}</div>
+                <div className="text-foreground text-sm font-medium">{labels.type}</div>
               </div>
 
               <div className="space-y-1">
                 <span className="text-muted-foreground text-[10px] font-bold tracking-widest uppercase">Тариф</span>
-                <div className="text-foreground text-sm font-medium">{pricingLabel}</div>
+                <div className="text-foreground text-sm font-medium">{labels.pricing}</div>
               </div>
 
               <div className="space-y-1">
@@ -90,13 +95,16 @@ export function ServiceViewDialog({ open, serviceId, onOpenChangeAction }: Props
                   Дата создания
                 </span>
                 <div className="text-foreground/80 mt-1 text-sm font-medium">
-                  {new Date(service.created_at).toLocaleString("ru-RU", {
-                    day: "2-digit",
-                    month: "long",
-                    year: "numeric",
-                    hour: "2-digit",
-                    minute: "2-digit",
-                  })}
+                  {/* Добавляем проверку для даты, на всякий случай */}
+                  {service.created_at
+                    ? new Date(service.created_at).toLocaleString("ru-RU", {
+                        day: "2-digit",
+                        month: "long",
+                        year: "numeric",
+                        hour: "2-digit",
+                        minute: "2-digit",
+                      })
+                    : "—"}
                 </div>
               </div>
             </div>
