@@ -26,6 +26,7 @@ export type OrderItem = {
 
 export type OrderListItem = {
   id: number;
+  company_name: string;
   sender_name: string;
   receiver_name: string;
   weight_kg: string;

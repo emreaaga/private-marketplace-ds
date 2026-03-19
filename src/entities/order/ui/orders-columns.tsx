@@ -22,6 +22,10 @@ export const getOrdersColumns = (onView: (id: number) => void, onHover: () => vo
     },
   },
   {
+    accessorKey: "company_name",
+    header: "Фирма",
+  },
+  {
     accessorKey: "sender_name",
     header: "Отпр",
     cell: ({ row }) => {
