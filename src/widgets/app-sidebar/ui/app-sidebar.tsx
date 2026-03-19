@@ -3,7 +3,6 @@
 import { Command } from "lucide-react";
 
 import { type UserAuth } from "@/entities/user";
-import { useIsMobile } from "@/shared/hooks/use-mobile";
 import { APP_CONFIG } from "@/shared/lib/app-config";
 import {
   Sidebar,
@@ -25,12 +24,8 @@ interface AppSidebarProps {
 }
 
 export function AppSidebar({ user }: AppSidebarProps) {
-  const isMobile = useIsMobile();
-
-  if (isMobile) return null;
-
   return (
-    <Sidebar>
+    <Sidebar className="hidden md:flex">
       <SidebarHeader>
         {user ? (
           <NavCompany user={user} />

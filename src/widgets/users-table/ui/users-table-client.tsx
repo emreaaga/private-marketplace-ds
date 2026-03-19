@@ -5,8 +5,8 @@ import { useMemo, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
+import { createUsersColumns } from "@/entities/user";
 import { useUpdateUser } from "@/entities/user/queries/use-update-user";
-import { createUsersColumns } from "@/entities/user/ui/users-columns";
 import { DataTable } from "@/widgets/data-table/ui/data-table";
 
 const EditUserDialog = dynamic(() => import("@/features/user-edit").then((m) => m.EditUserDialog), { ssr: false });
@@ -17,11 +17,11 @@ export function UsersTableClient({ initialData, pageCount, currentPage }: any) {
   const updateUser = useUpdateUser();
 
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const searchParams = useSearchParams();
 
   const onPageChange = (next: number) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
     params.set("page", next.toString());
 
     startTransition(() => {

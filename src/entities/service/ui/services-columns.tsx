@@ -3,7 +3,7 @@ import { ReactNode } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 
-import { COMPANY_TYPE_META } from "@/entities/company";
+import { ALL_COMPANY_TYPE_META } from "@/entities/company";
 import { Service } from "@/entities/service/model/services.model";
 import { SERVICE_PRICING_META } from "@/entities/service/model/services.pricing.meta";
 import { SERVICE_TYPE_META } from "@/entities/service/model/services.types.meta";
@@ -29,7 +29,7 @@ export function createServicesColumns(actions: ServicesTableActions): ColumnDef<
       header: "Фирма",
       cell: ({ row, getValue }) => {
         const { is_active, company_type } = row.original;
-        const { Icon } = COMPANY_TYPE_META[company_type];
+        const { Icon } = ALL_COMPANY_TYPE_META[company_type];
         return (
           <div className="flex items-center gap-2">
             <Icon className={["h-4 w-4", is_active ? "text-muted-foreground" : "text-red-500"].join(" ")} />

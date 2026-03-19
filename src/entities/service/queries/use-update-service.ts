@@ -1,7 +1,7 @@
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { toast } from "sonner";
 
-import type { ServiceEditFormValues } from "@/features/service-edit";
+import type { ServiceEditFormValues } from "@/features/service-edit.disabled";
 
 import { updateServiceApi } from "../api/update-service.api";
 

@@ -18,7 +18,9 @@ const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v,
 export default function ShipmentOrdersPage() {
   const params = useParams();
 
-  const shipmentId = Number(params.id) || undefined;
+  const { id } = params ?? {};
+
+  const shipmentId = id ? Number(id) : undefined;
 
   const [page, setPage] = useState(1);
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);

@@ -1,7 +1,5 @@
 "use client";
 
-import { Building2 } from "lucide-react";
-
 import { cn } from "@/shared/lib/utils";
 import { ScrollArea } from "@/shared/ui/atoms/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
@@ -56,25 +54,37 @@ export function CompanySelect({
 
   return (
     <Select value={value == null ? "" : String(value)} onValueChange={handleValueChange}>
-      <SelectTrigger className={cn("w-full", error && "border-destructive focus:ring-destructive", className)}>
-        <SelectValue placeholder={placeholder ?? "Компания"} />
+      <SelectTrigger
+        className={cn(
+          "h-9 w-full rounded-md border-zinc-200 bg-white px-3 py-2 text-[13px] transition-all",
+          "shadow-sm placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus:outline-none",
+          error && "border-red-500 focus:border-red-500 focus:ring-red-500/10",
+          className,
+        )}
+      >
+        <SelectValue placeholder={placeholder ?? "Выберите компанию"} />
       </SelectTrigger>
 
-      <SelectContent className="p-0">
-        <ScrollArea className="h-45">
+      <SelectContent className="min-w-50 overflow-hidden rounded-lg border-zinc-200 p-0 shadow-xl">
+        <ScrollArea className="h-full max-h-70">
           {companies.length === 0 ? (
-            <div className="p-2">
-              <SelectItem value="__empty" disabled>
-                {emptyLabel}
-              </SelectItem>
-            </div>
+            <div className="py-6 text-center text-[12px] font-medium text-zinc-400">{emptyLabel}</div>
           ) : (
             <div className="p-1">
               {companies.map((company) => (
-                <SelectItem key={company.id} value={String(company.id)}>
-                  <div className="flex items-center gap-2">
-                    <Building2 className="text-muted-foreground h-4 w-4" />
-                    <span className="truncate">{company.name}</span>
+                <SelectItem
+                  key={company.id}
+                  value={String(company.id)}
+                  className="cursor-default rounded-md px-2 py-2 text-[12px] transition-colors focus:bg-zinc-100 focus:text-zinc-900"
+                >
+                  <div className="flex items-center gap-2.5">
+                    <span className="font-mono text-[10px] font-medium tracking-tighter text-zinc-400">
+                      {String(company.id).padStart(3, "0")}
+                    </span>
+
+                    <span className="h-3 w-px bg-zinc-200" />
+
+                    <span className="truncate font-medium text-zinc-700">{company.name}</span>
                   </div>
                 </SelectItem>
               ))}

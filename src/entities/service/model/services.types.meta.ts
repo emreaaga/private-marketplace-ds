@@ -1,4 +1,4 @@
-import { Plane, ShieldCheck, Truck, Megaphone, AlertTriangle } from "lucide-react";
+import { AlertTriangle, Megaphone, Plane, ShieldCheck, Truck } from "lucide-react";
 
 import { ServiceType } from "./services.types";
 

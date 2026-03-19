@@ -2,13 +2,13 @@
 
 import { useMemo } from "react";
 
+import { zodResolver } from "@hookform/resolvers/zod";
 import { useForm } from "react-hook-form";
 
+import { SERVICE_EDIT_EMPTY, serviceEditSchema, type ServiceEditFormValues } from "@/entities/service";
 import { useServiceDetail } from "@/entities/service/queries/use-service-detail";
 import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
-
-import { SERVICE_EDIT_EMPTY, type ServiceEditFormValues } from "../model/service-edit.types";
 
 import { ServiceEditForm } from "./service-edit-form";
 
@@ -28,12 +28,15 @@ export function ServiceEditDialog({ open, serviceId, onOpenChangeAction, onSubmi
     return {
       type: service.type,
       pricing_type: service.pricing_type,
-      price: Number(service.price) || 0,
+
+      price: service.price != null ? String(service.price) : "",
       is_active: !!service.is_active,
     };
   }, [service]);
 
   const form = useForm<ServiceEditFormValues>({
+    resolver: zodResolver(serviceEditSchema),
+    mode: "onChange",
     defaultValues: SERVICE_EDIT_EMPTY,
     values: open && service ? normalizedData : SERVICE_EDIT_EMPTY,
   });
@@ -55,7 +58,7 @@ export function ServiceEditDialog({ open, serviceId, onOpenChangeAction, onSubmi
 
         {!isError && service && <ServiceEditForm form={form} service={service} onSubmit={handleInternalSubmit} />}
 
-        <DialogFooter className="gap-2 sm:gap-0">
+        <DialogFooter>
           <Button variant="secondary" size="sm" onClick={() => onOpenChangeAction(false)}>
             Отмена
           </Button>
@@ -63,7 +66,9 @@ export function ServiceEditDialog({ open, serviceId, onOpenChangeAction, onSubmi
             type="submit"
             form="service-edit-form"
             size="sm"
-            disabled={isLoading || isError || form.formState.isSubmitting || !form.formState.isDirty}
+            disabled={
+              isLoading || isError || form.formState.isSubmitting || !form.formState.isDirty || !form.formState.isValid
+            }
           >
             {form.formState.isSubmitting ? "Сохранение..." : "Сохранить"}
           </Button>

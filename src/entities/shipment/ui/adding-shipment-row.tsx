@@ -5,6 +5,7 @@ import { useState } from "react";
 import { X } from "lucide-react";
 
 import { CompanySelect } from "@/entities/company";
+import { cn } from "@/shared/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 
 import { useAvailableShipments } from "../queries/use-shipments-lookup";
@@ -29,30 +30,31 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
   const { data: shipments = [], isLoading } = useAvailableShipments(companyId);
 
   return (
-    <div className="bg-primary/5 animate-in fade-in slide-in-from-top-1 border-primary/20 flex h-6.5 items-center gap-1 border-b border-dashed px-1">
-      {/* Кнопка отмены */}
-      <button
-        type="button"
-        onClick={onCancelAction}
-        className="text-muted-foreground hover:text-destructive shrink-0 p-1 transition-colors"
-      >
-        <X className="h-3.5 w-3.5" />
-      </button>
+    <div className="animate-in fade-in slide-in-from-top-1 grid h-8 grid-cols-[32px_60px_1fr_80px_90px_90px_32px] items-center gap-3 border-b border-dashed border-zinc-200/60 bg-zinc-50/30 px-4">
+      <div className="flex items-center justify-center">
+        <button
+          type="button"
+          onClick={onCancelAction}
+          className="flex h-5 w-5 items-center justify-center rounded-md text-zinc-400 transition-colors hover:bg-zinc-200/50 hover:text-zinc-800"
+        >
+          <X className="h-3 w-3" />
+        </button>
+      </div>
 
-      <div className="flex h-full w-32.5 shrink-0 items-center">
+      <div className="col-span-2 flex h-full min-w-0 items-center">
         <CompanySelect
           type="postal"
           placeholder="Фирма..."
           value={companyId}
           onChange={setCompanyId}
           onSelectName={setCompanyName}
-          className="h-full min-h-0 border-none bg-transparent px-1 py-0 text-[10px] shadow-none focus:ring-0 [&>svg]:h-3 [&>svg]:w-3"
+          className="h-full w-full -translate-y-px border-none bg-transparent p-0 text-[11px] leading-none font-medium text-zinc-900 shadow-none focus:ring-0 [&>svg]:hidden"
         />
       </div>
 
-      <div className="bg-primary/20 h-4 w-px" />
+      <div className="col-span-3 flex h-full min-w-0 items-center">
+        <div className="mr-4 h-3 w-px shrink-0 bg-zinc-200" />
 
-      <div className="flex h-full min-w-0 flex-1 items-center">
         <Select
           value=""
           onValueChange={(val) => {
@@ -68,14 +70,14 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
           }}
           disabled={!companyId || isLoading}
         >
-          <SelectTrigger className="h-full min-h-0 border-none bg-transparent px-1 py-0 text-[10px] shadow-none focus:ring-0 [&>svg]:h-3 [&>svg]:w-3 [&>svg]:opacity-50">
-            <SelectValue placeholder={isLoading ? "..." : "Выбор отправки..."} />
+          <SelectTrigger className="flex h-full w-full -translate-y-px items-center border-none bg-transparent p-0 text-[11px] leading-none font-medium text-zinc-400 shadow-none focus:ring-0 [&>span]:truncate [&>svg]:h-3 [&>svg]:w-3 [&>svg]:opacity-30">
+            <SelectValue placeholder={isLoading ? "..." : "Выбрать отправку..."} />
           </SelectTrigger>
 
-          <SelectContent>
+          <SelectContent className="min-w-64">
             {shipments.length === 0 ? (
-              <div className="text-muted-foreground p-1 text-center text-xs">
-                {companyId ? "Нет доступных" : "Сначала выберите фирму"}
+              <div className="p-3 text-center text-[10px] font-medium text-zinc-500">
+                {companyId ? "Нет доступных грузов" : "Сначала выберите фирму"}
               </div>
             ) : (
               shipments.map((s) => (
@@ -83,18 +85,19 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
                   key={s.id}
                   value={String(s.id)}
                   disabled={excludeIds.includes(s.id)}
-                  className="py-1 text-[10px]"
+                  className="py-1.5 text-[10px]"
                 >
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-bold">#{s.number || s.id}</span>
-
-                    <span className="text-muted-foreground/40 text-[9px]">|</span>
-
-                    <span className="text-muted-foreground">{s.orders_count} зак.</span>
-
-                    <span className="text-muted-foreground/40 text-[9px]">|</span>
-
-                    <span className="font-medium">{Number(s.total_weight_kg).toFixed(1)} кг</span>
+                  <div className="flex items-center gap-2">
+                    <span
+                      className={cn(
+                        "font-bold transition-colors",
+                        excludeIds.includes(s.id) ? "text-zinc-300" : "text-zinc-900",
+                      )}
+                    >
+                      #{s.number || s.id}
+                    </span>
+                    <span className="text-zinc-400">|</span>
+                    <span className="font-medium text-zinc-600">{Number(s.total_weight_kg).toFixed(1)} кг</span>
                   </div>
                 </SelectItem>
               ))
@@ -102,6 +105,8 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
           </SelectContent>
         </Select>
       </div>
+
+      <div />
     </div>
   );
 }

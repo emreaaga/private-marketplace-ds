@@ -11,7 +11,7 @@ import { USER_STATUS_META } from "../model/user-status.meta";
 import { USER_ROLE_META } from "../model/user.meta";
 import { type User } from "../model/user.model";
 
-export function MinimalBadge({ children }: { children: ReactNode }) {
+function MinimalBadge({ children }: { children: ReactNode }) {
   return (
     <span className="bg-muted text-foreground inline-flex items-center gap-1 rounded-md px-2 py-0.5 text-xs">
       {children}
@@ -19,7 +19,7 @@ export function MinimalBadge({ children }: { children: ReactNode }) {
   );
 }
 
-export type UsersTableActions = {
+type UsersTableActions = {
   onEdit(user: User): void;
 };
 

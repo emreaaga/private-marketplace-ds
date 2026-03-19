@@ -29,7 +29,7 @@ export default async function RootLayout({ children }: { children: ReactNode }) 
   const themePreset = "default";
 
   return (
-    <html lang="en" className={themeMode} data-theme-preset={themePreset}>
+    <html lang="en" className={themeMode} data-theme-preset={themePreset} suppressHydrationWarning>
       <body className={`${inter.className} min-h-screen antialiased`}>
         <Providers>
           <PreferencesStoreProvider themeMode={themeMode} themePreset={themePreset}>

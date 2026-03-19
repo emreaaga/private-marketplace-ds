@@ -7,8 +7,15 @@ export * from "./api/update-company.api";
 
 // MODEL
 export * from "./model/company.model";
-export * from "./model/company.types";
+export {
+  ALL_COMPANY_TYPES,
+  COMPANY_TYPES,
+  companyTypeSchema,
+  type AllCompanyType,
+  type CompanyType,
+} from "./model/company.types";
 export * from "./model/company.types.meta";
+export { createCompanySchema, type CreateCompanySchema } from "./model/create-company.schema";
 
 // QUERIES
 export * from "./queries/companies.keys";
@@ -21,3 +28,4 @@ export * from "./queries/use-update-company";
 // UI
 export { createCompaniesColumns } from "./ui/companies-columns";
 export { CompanySelect } from "./ui/company-select";
+export { CompanyTypeSelect } from "./ui/company-type-select";

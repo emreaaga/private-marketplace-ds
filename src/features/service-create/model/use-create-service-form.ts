@@ -1,88 +1,39 @@
-import { useState } from "react";
+import { zodResolver } from "@hookform/resolvers/zod";
+import { useForm } from "react-hook-form";
+import { z } from "zod";
 
-import { createServiceSchema } from "@/entities/service/model/create-service.schema";
-import type { ServicePrice } from "@/entities/service/model/services.pricing";
-import type { ServiceType } from "@/entities/service/model/services.types";
-import { useServiceCreate } from "@/entities/service/queries";
+import { createServiceSchema, type ServicePrice, type ServiceType, useServiceCreate } from "@/entities/service";
 
-export type CreateServiceForm = {
-  company_id?: number;
-  type: ServiceType | "";
-  pricing_type: ServicePrice | "";
-  price: string;
-};
-
-type FormErrors = Partial<Record<keyof CreateServiceForm, true>>;
-
-const initialForm: CreateServiceForm = {
-  company_id: undefined,
-  type: "",
-  pricing_type: "",
-  price: "",
-};
+type FormValues = z.infer<typeof createServiceSchema>;
 
 export function useCreateServiceForm(onSuccessAction: () => void) {
-  const [form, setForm] = useState<CreateServiceForm>(initialForm);
-  const [errors, setErrors] = useState<FormErrors>({});
-
   const createMutation = useServiceCreate();
 
-  const clearError = (field: keyof FormErrors) => {
-    setErrors((prev) => {
-      if (!prev[field]) return prev;
-      const next = { ...prev };
-      delete next[field];
-      return next;
-    });
-  };
+  const form = useForm<FormValues>({
+    resolver: zodResolver(createServiceSchema),
+    mode: "onChange",
+    defaultValues: {
+      company_id: undefined,
+      type: "" as ServiceType,
+      pricing_type: "" as ServicePrice,
+      price: "",
+    },
+  });
 
-  const reset = () => {
-    setForm(initialForm);
-    setErrors({});
-    createMutation.reset();
-  };
-
-  const submit = async () => {
-    if (!form.company_id) return;
-
-    const payload = {
-      company_id: form.company_id,
-      type: form.type,
-      pricing_type: form.pricing_type,
-      price: Number.parseFloat(form.price),
-    };
-
-    const parsed = createServiceSchema.safeParse(payload);
-
-    if (!parsed.success) {
-      const nextErrors: FormErrors = {};
-      parsed.error.issues.forEach((issue) => {
-        const field = issue.path[0] as keyof CreateServiceForm;
-        nextErrors[field] = true;
-      });
-      setErrors(nextErrors);
-      return;
-    }
-
-    setErrors({});
-
+  const onSubmit = async (data: FormValues) => {
     try {
-      await createMutation.mutateAsync(parsed.data);
+      await createMutation.mutateAsync(data);
       onSuccessAction();
-      reset();
+      form.reset();
     } catch {
-      // Ошибка обработается в мутации (toast)
+      // Ошибка в мутации (toast)
     }
   };
 
   return {
-    isFormIncomplete: !form.company_id || !form.type || !form.pricing_type || !form.price,
     form,
-    setForm,
-    errors,
-    clearError,
-    submit,
-    reset,
+    onSubmit: form.handleSubmit(onSubmit),
     loading: createMutation.isPending,
+    isFormIncomplete: !form.formState.isValid,
   };
 }

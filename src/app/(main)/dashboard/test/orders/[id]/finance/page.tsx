@@ -16,7 +16,7 @@ const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v,
 
 // eslint-disable-next-line complexity
 export default function OrderFinancePage() {
-  const { id } = useParams();
+  const { id } = (useParams() ?? {}) as { id?: string };
   const orderId = Number(id);
   const [page, setPage] = useState(1);
 

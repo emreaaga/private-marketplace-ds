@@ -38,11 +38,8 @@ export function FlightsDialog({
     try {
       await createMutation.mutateAsync(toCreateFlightDto(values));
       handleClose();
-    } catch (error) {
-      // Ошибки сервера обработает глобальный провайдер,
-      // но mutateAsync прокидывает ошибку дальше, поэтому ловим её здесь,
-      // чтобы handleClose() не сработал при ошибке сервера.
-      console.error("Mutation failed", error);
+    } catch {
+      // Обработка ошибок
     }
   }, onInvalid);
 
@@ -71,7 +68,7 @@ export function FlightsDialog({
                 <FlightGeneralForm mode="create" isVisible={open} />
               </div>
 
-              <div className="bg-muted/20 min-w-0 overflow-hidden">
+              <div className="min-w-0 overflow-hidden">
                 <ShipmentList />
               </div>
             </div>
@@ -79,20 +76,10 @@ export function FlightsDialog({
 
           <div className="border-border/40 bg-background shrink-0 border-t px-4 py-2">
             <div className="flex justify-end gap-3">
-              <Button
-                variant="outline"
-                size="sm"
-                onClick={handleClose}
-                className="border-border/40 hover:bg-muted h-8 rounded-lg px-4 text-[13px] font-medium transition-colors"
-              >
+              <Button variant="outline" size="sm" onClick={handleClose}>
                 Отмена
               </Button>
-              <Button
-                size="sm"
-                onClick={onSave}
-                disabled={createMutation.isPending}
-                className="bg-foreground text-background hover:bg-foreground/90 h-8 min-w-35 rounded-lg text-[13px] font-bold transition-all active:scale-[0.98]"
-              >
+              <Button size="sm" onClick={onSave} disabled={createMutation.isPending}>
                 {createMutation.isPending ? "Сохранение..." : "Создать рейс"}
               </Button>
             </div>

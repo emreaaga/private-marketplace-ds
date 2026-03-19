@@ -106,43 +106,46 @@ export function ShipmentList() {
   }, [shipmentsData]);
 
   return (
-    <div className="flex h-full flex-col gap-2">
-      <div className="text-muted-foreground grid grid-cols-[30px_60px_1fr_70px_80px_80px_32px] items-center gap-2 px-3 text-[9px] font-bold tracking-tight uppercase">
-        <div className="flex justify-center">
-          <Button
-            variant="ghost"
-            size="icon"
-            className="hover:bg-primary/10 hover:text-primary h-5 w-5 shrink-0"
-            onClick={addNewRow}
-          >
-            <Plus className="h-4 w-4" />
-          </Button>
+    <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/60 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
+      <div className="border-b border-zinc-200/60 bg-zinc-50/50 px-4 py-1">
+        <div className="grid grid-cols-[32px_60px_1fr_80px_90px_90px_32px] items-center gap-3">
+          <div className="flex justify-center">
+            <Button
+              variant="ghost"
+              size="icon"
+              className="h-6 w-6 rounded-md transition-colors hover:bg-zinc-200/50 hover:text-zinc-900"
+              onClick={addNewRow}
+            >
+              <Plus className="h-3.5 w-3.5" />
+            </Button>
+          </div>
+          <span className="text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">ID</span>
+          <span className="text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">Фирма</span>
+          <span className="text-right text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">Вес (кг)</span>
+          <span className="text-right text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">Взнос</span>
+          <span className="text-right text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">Остаток</span>
+          <span />
         </div>
-        <span>ID</span>
-        <span>Фирма</span>
-        <span className="text-right">Вес</span>
-        <span className="text-right">Взнос</span>
-        <span className="text-right">Остаток</span>
-        <span />
       </div>
 
-      <div className="flex min-h-0 flex-1 flex-col rounded-md border shadow-sm">
-        <ScrollArea className="bg-background flex-1 text-sm">
-          <div className="divide-border/40 divide-y">
+      <div className="relative min-h-0 flex-1 bg-white">
+        <ScrollArea className="h-full">
+          <div className="flex flex-col divide-y divide-zinc-100">
             {fields.map((field, index) => (
-              <SelectedShipmentRow
-                key={field.rhf_id}
-                index={index}
-                id={field.id}
-                meta={{
-                  name: field.company_name,
-                  weight: field.total_weight_kg,
-                  weightDiff: weightDiffs[field.id] ?? 0,
-                  prepaid: field.total_prepaid,
-                  remaining: field.total_remaining,
-                }}
-                onRemoveAction={() => removeShipmentAction(field.id, index)}
-              />
+              <div key={field.rhf_id} className="group transition-colors hover:bg-zinc-50/50">
+                <SelectedShipmentRow
+                  index={index}
+                  id={field.id}
+                  meta={{
+                    name: field.company_name,
+                    weight: field.total_weight_kg,
+                    weightDiff: weightDiffs[field.id] ?? 0,
+                    prepaid: field.total_prepaid,
+                    remaining: field.total_remaining,
+                  }}
+                  onRemoveAction={() => removeShipmentAction(field.id, index)}
+                />
+              </div>
             ))}
 
             {addingRows.map((rowId) => (
@@ -156,32 +159,39 @@ export function ShipmentList() {
 
             {fields.length === 0 && addingRows.length === 0 && (
               <div
-                className="text-muted-foreground hover:bg-muted/10 flex h-24 cursor-pointer flex-col items-center justify-center gap-1 transition-colors"
+                className="group flex cursor-pointer flex-col items-center justify-center px-4 py-16"
                 onClick={addNewRow}
               >
-                <PackageSearch className="h-6 w-6 opacity-20" />
-                <span className="text-[11px] italic">Нажмите +, чтобы выбрать отправку</span>
+                <div className="mb-3 flex h-10 w-10 items-center justify-center rounded-full border border-dashed border-zinc-300 bg-zinc-50 transition-colors group-hover:border-zinc-400 group-hover:bg-zinc-100">
+                  <PackageSearch className="h-5 w-5 text-zinc-400" />
+                </div>
+                <p className="text-[13px] font-medium text-zinc-500">Список пуст</p>
+                <p className="text-[11px] text-zinc-400">Нажмите «+» или сюда, чтобы добавить отправку</p>
               </div>
             )}
           </div>
         </ScrollArea>
+      </div>
 
-        <div className="bg-muted/30 border-t p-1 text-[11px] font-medium">
-          <div className="grid grid-cols-[30px_60px_1fr_70px_80px_80px_32px] items-center gap-2">
-            <span />
-            <span />
-            <span className="text-muted-foreground text-right font-bold tracking-wider uppercase">
+      <div className="border-t border-zinc-200/60 bg-zinc-50/80 px-4">
+        <div className="grid grid-cols-[32px_60px_1fr_80px_90px_90px_32px] items-center gap-3">
+          <span />
+          <span />
+          <div className="text-right">
+            <span className="text-[10px] font-bold tracking-tight text-zinc-400 uppercase">
               Итого ({fields.length}):
             </span>
-            <span className="text-right font-semibold tabular-nums">{totals.weight.toFixed(2)} кг</span>
-            <span className="text-right font-semibold text-green-600/80 tabular-nums">
-              ${totals.prepaid.toFixed(2)}
-            </span>
-            <span className="text-right font-semibold text-orange-600/80 tabular-nums">
-              ${totals.remaining.toFixed(2)}
-            </span>
-            <span />
           </div>
+          <div className="text-right">
+            <span className="text-[13px] font-bold text-zinc-900 tabular-nums">{totals.weight.toFixed(2)}</span>
+          </div>
+          <div className="text-right">
+            <span className="text-[13px] font-bold text-emerald-600 tabular-nums">${totals.prepaid.toFixed(2)}</span>
+          </div>
+          <div className="text-right">
+            <span className="text-[13px] font-bold text-orange-600 tabular-nums">${totals.remaining.toFixed(2)}</span>
+          </div>
+          <span />
         </div>
       </div>
     </div>

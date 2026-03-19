@@ -8,17 +8,31 @@ import { cn } from "@/shared/lib/utils";
 
 import { Input } from "./input";
 
-type InputMode = "text" | "letters" | "numbers";
+type InputMode = "text" | "letters" | "numbers" | "decimal";
 
 type FloatingLabelInputProps = Omit<React.ComponentPropsWithoutRef<typeof Input>, "placeholder"> & {
   label: string;
   containerClassName?: string;
   icon?: LucideIcon;
   mode?: InputMode;
+  maxNumericValue?: number;
 };
 
 export const FloatingLabelInput = React.forwardRef<HTMLInputElement, FloatingLabelInputProps>(
-  ({ id: idProp, label, containerClassName, className, icon: Icon, mode = "text", onChange, ...props }, ref) => {
+  (
+    {
+      id: idProp,
+      label,
+      containerClassName,
+      className,
+      icon: Icon,
+      mode = "text",
+      maxNumericValue = 10000,
+      onChange,
+      ...props
+    },
+    ref,
+  ) => {
     const autoId = React.useId();
     const id = idProp ?? autoId;
 
@@ -29,6 +43,22 @@ export const FloatingLabelInput = React.forwardRef<HTMLInputElement, FloatingLab
         value = value.replace(/[^a-zA-Zа-яА-ЯёЁ\s-]/g, "");
       } else if (mode === "numbers") {
         value = value.replace(/\D/g, "");
+      } else if (mode === "decimal") {
+        value = value.replace(/[^0-9.]/g, "");
+
+        const parts = value.split(".");
+        if (parts.length > 2) {
+          value = parts[0] + "." + parts.slice(1).join("");
+        }
+
+        if (parts[1] !== undefined && parts[1].length > 2) {
+          value = parts[0] + "." + parts[1].slice(0, 2);
+        }
+
+        const numericValue = parseFloat(value);
+        if (!isNaN(numericValue) && numericValue > maxNumericValue) {
+          value = maxNumericValue.toString();
+        }
       }
 
       e.target.value = value;
@@ -63,6 +93,7 @@ export const FloatingLabelInput = React.forwardRef<HTMLInputElement, FloatingLab
           ref={ref}
           placeholder=" "
           onChange={handleOnChange}
+          type={mode === "decimal" ? "text" : props.type}
           className={cn("dark:bg-background transition-all", Icon ? "pl-8" : "", className)}
           {...props}
         />

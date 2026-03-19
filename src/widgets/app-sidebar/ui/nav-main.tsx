@@ -166,7 +166,7 @@ const NavItemCollapsed = ({
 };
 
 export function NavMain({ items, user }: NavMainProps) {
-  const path = usePathname();
+  const path = usePathname() ?? "";
   const { state, isMobile } = useSidebar();
 
   if (!user) return null;

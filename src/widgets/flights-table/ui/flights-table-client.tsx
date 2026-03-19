@@ -31,11 +31,11 @@ export function FlightsTableClient({ initialData, pageCount, currentPage, user }
   const [isPending, startTransition] = useTransition();
 
   const router = useRouter();
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const searchParams = useSearchParams();
 
   const onPageChange = (next: number) => {
-    const params = new URLSearchParams(searchParams.toString());
+    const params = new URLSearchParams(searchParams?.toString() ?? "");
     params.set("page", next.toString());
 
     startTransition(() => {

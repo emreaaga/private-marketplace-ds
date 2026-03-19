@@ -8,7 +8,13 @@ export const createServiceSchema = z.object({
   pricing_type: z.enum(["per_kg", "fixed", "per_item"], {
     errorMap: () => ({ message: "Выберите тариф" }),
   }),
-  price: z.number().min(0, "Цена должна быть больше или равна 0").max(1_000_000, "Слишком большая цена"),
+
+  price: z
+    .string()
+    .min(1, "Введите цену")
+    .refine((val) => !isNaN(Number(val)), "Цена должна быть корректным числом")
+    .refine((val) => Number(val) >= 0, "Цена должна быть больше или равна 0")
+    .refine((val) => Number(val) <= 1_000_000, "Слишком большая цена"),
 });
 
 export type CreateServiceFormData = z.infer<typeof createServiceSchema>;

@@ -15,7 +15,7 @@ export const normalizePath = (path: string) => {
 };
 
 export function useTabsLogic(items: readonly HeaderTabItem[], user: UserAuth | null) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
 
   const visibleItems = useMemo(() => {
     if (!user) return [];

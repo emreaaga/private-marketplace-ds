@@ -1,13 +1,11 @@
-import type { CountryCode } from "./country.types";
-
-export type CityMeta = {
+type CityMeta = {
   code: string;
   label: string;
   districts: string[];
 };
 
 export const COUNTRY_META: Record<
-  CountryCode,
+  string,
   {
     label: string;
     phoneCode: string;

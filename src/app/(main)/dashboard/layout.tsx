@@ -2,6 +2,7 @@ import { ReactNode } from "react";
 
 import { cookies } from "next/headers";
 
+import { getServerSession } from "@/entities/session/server";
 import { Separator } from "@/shared/ui/atoms/separator";
 import { SidebarInset, SidebarProvider, SidebarTrigger } from "@/shared/ui/atoms/sidebar";
 import { AppSidebar } from "@/widgets/app-sidebar";
@@ -9,24 +10,15 @@ import { MobileBottomNavClient } from "@/widgets/app-sidebar/ui/mobile-bottom-na
 import { SearchDialog } from "@/widgets/app-sidebar/ui/search-dialog";
 import { ThemeSwitcher } from "@/widgets/app-sidebar/ui/theme-switcher";
 
-async function getUserFromCookies() {
-  const cookieStore = await cookies();
-  const meta = cookieStore.get("user_metadata")?.value;
-
-  if (!meta) return null;
-
-  try {
-    return JSON.parse(decodeURIComponent(meta));
-  } catch {
-    return null;
-  }
-}
-
 export default async function Layout({ children }: { children: ReactNode }) {
-  const user = await getUserFromCookies();
+  const user = await getServerSession();
+
+  const cookieStore = await cookies();
+  const defaultOpen = cookieStore.get("sidebar_state")?.value !== "false";
+  const theme = (cookieStore.get("theme_mode")?.value as "light" | "dark") || "light";
 
   return (
-    <SidebarProvider>
+    <SidebarProvider defaultOpen={defaultOpen}>
       <AppSidebar user={user} />
 
       <SidebarInset className="mx-auto max-w-screen-2xl">
@@ -37,8 +29,9 @@ export default async function Layout({ children }: { children: ReactNode }) {
               <Separator orientation="vertical" className="mx-2 hidden h-4 md:flex" />
               <SearchDialog />
             </div>
+
             <div className="flex items-center gap-2">
-              <ThemeSwitcher />
+              <ThemeSwitcher initialTheme={theme} />
             </div>
           </div>
         </header>

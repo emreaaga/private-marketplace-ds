@@ -3,7 +3,7 @@
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
 import { CompanySelect } from "@/entities/company";
-import { ServiceLookupSelect } from "@/entities/service/ui/service-lookup-select";
+import { ServiceLookupSelect } from "@/entities/service";
 import { cn } from "@/shared/lib/utils";
 import { DateTimePicker } from "@/shared/ui/atoms/date-picker";
 import { Input } from "@/shared/ui/atoms/input";
@@ -128,27 +128,6 @@ export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormP
 
       <div className="grid grid-cols-2 gap-2">
         <Controller
-          name="loading_at"
-          control={control}
-          render={({ field, fieldState }) => (
-            <div className={getFieldClassName(fieldState.isDirty)}>
-              <DateTimePicker placeholder="Погрузка" {...field} />
-            </div>
-          )}
-        />
-        <Controller
-          name="unloading_at"
-          control={control}
-          render={({ field, fieldState }) => (
-            <div className={getFieldClassName(fieldState.isDirty)}>
-              <DateTimePicker placeholder="Разгрузка" {...field} />
-            </div>
-          )}
-        />
-      </div>
-
-      <div className="grid grid-cols-2 gap-2">
-        <Controller
           name="departure_at"
           control={control}
           render={({ field, fieldState }) => (
@@ -163,6 +142,27 @@ export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormP
           render={({ field, fieldState }) => (
             <div className={getFieldClassName(fieldState.isDirty)}>
               <DateTimePicker placeholder="Прилет" {...field} />
+            </div>
+          )}
+        />
+      </div>
+
+      <div className="grid grid-cols-2 gap-2">
+        <Controller
+          name="loading_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <div className={getFieldClassName(fieldState.isDirty)}>
+              <DateTimePicker placeholder="Погрузка" {...field} />
+            </div>
+          )}
+        />
+        <Controller
+          name="unloading_at"
+          control={control}
+          render={({ field, fieldState }) => (
+            <div className={getFieldClassName(fieldState.isDirty)}>
+              <DateTimePicker placeholder="Разгрузка" {...field} />
             </div>
           )}
         />

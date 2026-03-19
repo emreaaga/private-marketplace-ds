@@ -13,7 +13,7 @@ interface MobileBottomNavProps {
 }
 
 export default function MobileBottomNav({ items }: MobileBottomNavProps) {
-  const pathname = usePathname();
+  const pathname = usePathname() ?? "";
   const [hidden, setHidden] = useState(false);
 
   const bottomItems = useMemo(() => {

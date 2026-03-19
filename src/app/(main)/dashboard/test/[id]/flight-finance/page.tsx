@@ -14,7 +14,7 @@ import { StatCard } from "@/shared/ui/stat-card";
 import { DataTable } from "@/widgets/data-table/ui/data-table";
 
 export default function FlightFinancePage() {
-  const { id } = useParams();
+  const { id } = useParams() as { id: string };
   const flight_id = Number(id);
   const [page, setPage] = useState(1);
 

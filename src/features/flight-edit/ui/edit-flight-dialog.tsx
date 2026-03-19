@@ -97,7 +97,7 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
                   <FlightGeneralForm mode="edit" />
                 </div>
 
-                <div className="bg-muted/20 min-w-0 overflow-hidden px-2">
+                <div className="min-w-0 overflow-hidden">
                   <EditFlightShipments key={`${flightId}-${sessionKey}`} />
                 </div>
               </div>
@@ -107,20 +107,10 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
           </div>
 
           <div className="bg-background border-border/40 flex shrink-0 justify-end gap-2 border-t px-6 py-4">
-            <Button
-              variant="outline"
-              size="sm"
-              onClick={handleClose}
-              className="border-border/40 hover:bg-muted h-8 rounded-lg px-4 text-[13px] font-medium transition-colors"
-            >
+            <Button variant="outline" size="sm" onClick={handleClose}>
               Отмена
             </Button>
-            <Button
-              size="sm"
-              onClick={onSave}
-              disabled={!canSave || updateMutation.isPending}
-              className="bg-foreground text-background hover:bg-foreground/90 h-8 min-w-35 rounded-lg text-[13px] font-bold transition-all active:scale-[0.98]"
-            >
+            <Button size="sm" onClick={onSave} disabled={!canSave || updateMutation.isPending}>
               {updateMutation.isPending ? "Сохранение..." : "Сохранить изменения"}
             </Button>
           </div>
