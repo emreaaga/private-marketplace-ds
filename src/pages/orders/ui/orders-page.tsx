@@ -26,16 +26,24 @@ export default function OrdersPage({ initialUser }: OrdersPageProps) {
   const [page, setPage] = useState(1);
 
   const setSession = useSessionStore((s) => s.setSession);
-  useEffect(() => {
-    setSession(initialUser);
-  }, [initialUser, setSession]);
 
-  const isAdmin = initialUser.company_type === "platform";
+  useEffect(() => {
+    if (initialUser) {
+      setSession(initialUser);
+    }
+  }, [initialUser, setSession]);
 
   const { data, isLoading, isError } = useOrdersList({ page });
 
+  const columns = useMemo(() => getOrdersColumns(setEditId, () => import("@/features/order-edit")), []);
+
+  if (!initialUser) {
+    return null;
+  }
+
+  const isAdmin = initialUser.company_type === "platform";
   const orders = data?.data ?? [];
-  const pageCount = data?.pagination.totalPages ?? 1;
+  const pageCount = data?.pagination?.totalPages ?? 1;
   const emptyMessage = isLoading ? "Загрузка..." : isError ? "Ошибка загрузки" : "Заказы не найдены";
 
   const onPageChange = (next: number) => {
@@ -45,8 +53,6 @@ export default function OrdersPage({ initialUser }: OrdersPageProps) {
       return prev === clamped ? prev : clamped;
     });
   };
-
-  const columns = useMemo(() => getOrdersColumns(setEditId, () => import("@/features/order-edit")), []);
 
   return (
     <div className="space-y-4">
