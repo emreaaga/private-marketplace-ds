@@ -1,15 +1,25 @@
-export const dynamic = "force-dynamic";
-
+import { getOrders } from "@/entities/order/api-server/get-orders";
 import { getServerSession } from "@/entities/session/server";
-import OrdersPage from "@/pages/orders"; // Он придет уже завернутый в dynamic(ssr:false)
+import { OrdersTableClient } from "@/widgets/orders-table";
 
-export default async function Page() {
+interface PageProps {
+  searchParams: Promise<{ page?: string }>;
+}
+
+export default async function OrdersPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const currentPage = Number(params.page) || 1;
+
   const user = await getServerSession();
 
-  // Если юзера нет, лучше сразу здесь его отсечь (опционально)
-  if (!user) {
-    return <div>Доступ запрещен</div>;
-  }
+  const data = await getOrders({ page: currentPage });
 
-  return <OrdersPage initialUser={user} />;
+  return (
+    <OrdersTableClient
+      initialData={data.data}
+      pageCount={data.pagination.totalPages}
+      currentPage={currentPage}
+      user={user}
+    />
+  );
 }
