@@ -15,7 +15,6 @@ const ServiceViewDialog = dynamic(() => import("@/features/service-detail").then
 
 export default function ServicesPage() {
   const [page, setPage] = useState(1);
-
   const [viewOpen, setViewOpen] = useState(false);
   const [viewServiceId, setViewServiceId] = useState<number | null>(null);
 
@@ -29,7 +28,7 @@ export default function ServicesPage() {
   const columns = useMemo(
     () =>
       createServicesColumns({
-        onEdit: handleView,
+        onView: handleView, // Заменили onEdit на onView
       }),
     [handleView],
   );

@@ -1,3 +1,5 @@
+"use client";
+
 import { ReactNode } from "react";
 
 import type { ColumnDef } from "@tanstack/react-table";
@@ -18,8 +20,9 @@ function MinimalBadge({ children }: { children: ReactNode }) {
   );
 }
 
+// Теперь только onView
 export type ServicesTableActions = {
-  onEdit: (service: Service) => void;
+  onView: (service: Service) => void;
 };
 
 export function createServicesColumns(actions: ServicesTableActions): ColumnDef<Service>[] {
@@ -29,18 +32,15 @@ export function createServicesColumns(actions: ServicesTableActions): ColumnDef<
       accessorKey: "company_name",
       header: "Фирма",
       cell: ({ row, getValue }) => {
-        // Добавляем защиту: если данных нет, возвращаем заглушку
-        if (!row.original) return null;
+        const service = row.original;
+        if (!service) return null;
 
-        const { is_active, company_type } = row.original;
-
-        // Проверяем наличие типа в мете, чтобы не упасть на неопределенном ключе
-        const meta = ALL_COMPANY_TYPE_META[company_type as keyof typeof ALL_COMPANY_TYPE_META];
+        const meta = ALL_COMPANY_TYPE_META[service.company_type as keyof typeof ALL_COMPANY_TYPE_META];
         const Icon = meta?.Icon;
 
         return (
           <div className="flex items-center gap-2">
-            {Icon && <Icon className={cn("h-4 w-4", is_active ? "text-muted-foreground" : "text-red-500")} />}
+            {Icon && <Icon className={cn("h-4 w-4", service.is_active ? "text-muted-foreground" : "text-red-500")} />}
             <span className="leading-none">{getValue<string>() || "—"}</span>
           </div>
         );
@@ -52,14 +52,12 @@ export function createServicesColumns(actions: ServicesTableActions): ColumnDef<
       cell: ({ getValue }) => {
         const type = getValue<Service["type"]>();
         const meta = SERVICE_TYPE_META[type as keyof typeof SERVICE_TYPE_META];
+        if (!meta) return "—";
 
-        if (!meta) return <span className="text-muted-foreground text-xs">—</span>;
-
-        const { label, Icon } = meta;
         return (
           <span className="text-muted-foreground flex items-center gap-1 text-xs">
-            <Icon className="h-3.5 w-3.5" />
-            {label}
+            <meta.Icon className="h-3.5 w-3.5" />
+            {meta.label}
           </span>
         );
       },
@@ -70,14 +68,12 @@ export function createServicesColumns(actions: ServicesTableActions): ColumnDef<
       cell: ({ getValue }) => {
         const pricing = getValue<Service["pricing_type"]>();
         const meta = SERVICE_PRICING_META[pricing as keyof typeof SERVICE_PRICING_META];
-
         if (!meta) return null;
 
-        const { label, Icon } = meta;
         return (
           <MinimalBadge>
-            <Icon className="text-muted-foreground h-3.5 w-3.5" />
-            {label}
+            <meta.Icon className="text-muted-foreground h-3.5 w-3.5" />
+            {meta.label}
           </MinimalBadge>
         );
       },
@@ -87,7 +83,6 @@ export function createServicesColumns(actions: ServicesTableActions): ColumnDef<
       header: "Цена",
       cell: ({ getValue }) => {
         const price = getValue<number>();
-        // Добавляем проверку на число, чтобы toLocaleString не упал
         return <span className="font-medium">${(price || 0).toLocaleString("ru-RU")}</span>;
       },
     },
@@ -100,13 +95,13 @@ export function createServicesColumns(actions: ServicesTableActions): ColumnDef<
           <Button
             title="Просмотр"
             variant="ghost"
-            className="h-6 w-6 p-0 hover:bg-gray-500/10"
+            className="h-7 w-7 p-0 hover:bg-zinc-100"
             onClick={(e) => {
               e.stopPropagation();
-              actions.onEdit(row.original);
+              if (row.original) actions.onView(row.original);
             }}
           >
-            <Eye className="text-muted-foreground/70 h-3 w-3" />
+            <Eye className="text-muted-foreground/70 h-3.5 w-3.5" />
           </Button>
         </div>
       ),
