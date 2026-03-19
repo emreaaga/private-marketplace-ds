@@ -1,1 +1,1 @@
-export { default } from "./ui/orders-page";
+export { default } from "./ui/orders-client";
