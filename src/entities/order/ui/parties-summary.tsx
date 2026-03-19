@@ -42,8 +42,8 @@ export function PartiesSummary({ value, onChange, shipmentId }: PartiesSummaryPr
       <FloatingLabelInput
         label="Вес"
         icon={Scale}
-        type="text"
-        inputMode="decimal"
+        mode="decimal"
+        maxNumericValue={30}
         value={value.weight_kg}
         onChange={(e) => handleFormatChange("weight_kg", e.target.value)}
         className="h-9 text-xs"
@@ -52,8 +52,8 @@ export function PartiesSummary({ value, onChange, shipmentId }: PartiesSummaryPr
       <FloatingLabelInput
         label="Ставка"
         icon={DollarSign}
-        type="text"
-        inputMode="decimal"
+        mode="decimal"
+        maxNumericValue={10}
         value={value.rate_per_kg}
         onChange={(e) => handleFormatChange("rate_per_kg", e.target.value)}
         className="h-9 text-xs"
@@ -62,8 +62,7 @@ export function PartiesSummary({ value, onChange, shipmentId }: PartiesSummaryPr
       <FloatingLabelInput
         label="Д. расход"
         icon={PlusCircle}
-        type="text"
-        inputMode="decimal"
+        mode="decimal"
         value={value.extra_fee}
         onChange={(e) => handleFormatChange("extra_fee", e.target.value)}
         className="h-9 text-xs"
@@ -72,8 +71,7 @@ export function PartiesSummary({ value, onChange, shipmentId }: PartiesSummaryPr
       <FloatingLabelInput
         label="Взнос"
         icon={Wallet}
-        type="text"
-        inputMode="decimal"
+        mode="decimal"
         value={value.deposit}
         onChange={(e) => handleFormatChange("deposit", e.target.value)}
         className="h-9 text-xs"
