@@ -41,7 +41,7 @@ export default function OrdersPage({ initialUser }: OrdersPageProps) {
     return null;
   }
 
-  const isAdmin = initialUser.company_type === "platform";
+  const isAdmin = initialUser?.company_type === "platform";
   const orders = data?.data ?? [];
   const pageCount = data?.pagination?.totalPages ?? 1;
   const emptyMessage = isLoading ? "Загрузка..." : isError ? "Ошибка загрузки" : "Заказы не найдены";
