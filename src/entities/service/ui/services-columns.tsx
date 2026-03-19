@@ -7,6 +7,7 @@ import { ALL_COMPANY_TYPE_META } from "@/entities/company";
 import { Service } from "@/entities/service/model/services.model";
 import { SERVICE_PRICING_META } from "@/entities/service/model/services.pricing.meta";
 import { SERVICE_TYPE_META } from "@/entities/service/model/services.types.meta";
+import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/atoms/button";
 
 function MinimalBadge({ children }: { children: ReactNode }) {
@@ -28,12 +29,19 @@ export function createServicesColumns(actions: ServicesTableActions): ColumnDef<
       accessorKey: "company_name",
       header: "Фирма",
       cell: ({ row, getValue }) => {
+        // Добавляем защиту: если данных нет, возвращаем заглушку
+        if (!row.original) return null;
+
         const { is_active, company_type } = row.original;
-        const { Icon } = ALL_COMPANY_TYPE_META[company_type];
+
+        // Проверяем наличие типа в мете, чтобы не упасть на неопределенном ключе
+        const meta = ALL_COMPANY_TYPE_META[company_type as keyof typeof ALL_COMPANY_TYPE_META];
+        const Icon = meta?.Icon;
+
         return (
           <div className="flex items-center gap-2">
-            <Icon className={["h-4 w-4", is_active ? "text-muted-foreground" : "text-red-500"].join(" ")} />
-            <span className="leading-none">{getValue<string>()}</span>
+            {Icon && <Icon className={cn("h-4 w-4", is_active ? "text-muted-foreground" : "text-red-500")} />}
+            <span className="leading-none">{getValue<string>() || "—"}</span>
           </div>
         );
       },
@@ -43,7 +51,11 @@ export function createServicesColumns(actions: ServicesTableActions): ColumnDef<
       header: "Тип услуги",
       cell: ({ getValue }) => {
         const type = getValue<Service["type"]>();
-        const { label, Icon } = SERVICE_TYPE_META[type];
+        const meta = SERVICE_TYPE_META[type as keyof typeof SERVICE_TYPE_META];
+
+        if (!meta) return <span className="text-muted-foreground text-xs">—</span>;
+
+        const { label, Icon } = meta;
         return (
           <span className="text-muted-foreground flex items-center gap-1 text-xs">
             <Icon className="h-3.5 w-3.5" />
@@ -57,7 +69,11 @@ export function createServicesColumns(actions: ServicesTableActions): ColumnDef<
       header: "Тариф",
       cell: ({ getValue }) => {
         const pricing = getValue<Service["pricing_type"]>();
-        const { label, Icon } = SERVICE_PRICING_META[pricing];
+        const meta = SERVICE_PRICING_META[pricing as keyof typeof SERVICE_PRICING_META];
+
+        if (!meta) return null;
+
+        const { label, Icon } = meta;
         return (
           <MinimalBadge>
             <Icon className="text-muted-foreground h-3.5 w-3.5" />
@@ -71,7 +87,8 @@ export function createServicesColumns(actions: ServicesTableActions): ColumnDef<
       header: "Цена",
       cell: ({ getValue }) => {
         const price = getValue<number>();
-        return <span className="font-medium">${price.toLocaleString("ru-RU")}</span>;
+        // Добавляем проверку на число, чтобы toLocaleString не упал
+        return <span className="font-medium">${(price || 0).toLocaleString("ru-RU")}</span>;
       },
     },
     {
