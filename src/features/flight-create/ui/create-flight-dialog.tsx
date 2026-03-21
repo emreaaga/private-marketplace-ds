@@ -28,8 +28,8 @@ export function FlightsDialog({
     resolver: zodResolver(flightFormSchema),
     mode: "onSubmit",
     defaultValues: {
-      departure_location: { country: "tr", city: "ist" },
-      arrival_location: { country: "uz", city: "tas" },
+      departure_location: { country: "", city: "" },
+      arrival_location: { country: "", city: "" },
       shipments: [],
     },
   });

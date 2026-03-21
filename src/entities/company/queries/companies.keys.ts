@@ -1,11 +1,8 @@
+import { CompaniesLookupParams } from "../api/get-companies-lookup.api";
 import type { CompanyType } from "../model/company.types";
 
 export type CompaniesListParams = {
   page: number;
-  type?: CompanyType;
-};
-
-export type CompaniesLookupParams = {
   type?: CompanyType;
 };
 

@@ -1,5 +1,6 @@
 "use client";
 
+import { CountryCode } from "@/entities/geography";
 import { cn } from "@/shared/lib/utils";
 import { ScrollArea } from "@/shared/ui/atoms/scroll-area";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
@@ -12,6 +13,7 @@ interface CompanySelectProps {
   onChange: (value?: number) => void;
   onSelectName?: (name: string) => void;
   type?: CompanyType;
+  country?: CountryCode;
   placeholder?: string;
   error?: boolean;
   className?: string;
@@ -23,12 +25,21 @@ export function CompanySelect({
   onChange,
   onSelectName,
   type,
+  country,
   placeholder,
   error,
   className,
   enabled = true,
 }: CompanySelectProps) {
-  const { data: companies = [], isLoading, isError } = useCompaniesLookup({ type, enabled });
+  const {
+    data: companies = [],
+    isLoading,
+    isError,
+  } = useCompaniesLookup({
+    type,
+    country,
+    enabled,
+  });
 
   const emptyLabel = isLoading ? "Загрузка..." : isError ? "Не удалось загрузить" : "Компании не найдены";
 
@@ -53,16 +64,21 @@ export function CompanySelect({
   };
 
   return (
-    <Select value={value == null ? "" : String(value)} onValueChange={handleValueChange}>
+    <Select
+      value={value == null ? "" : String(value)}
+      onValueChange={handleValueChange}
+      disabled={!enabled || isLoading}
+    >
       <SelectTrigger
         className={cn(
           "h-9 w-full rounded-md border-zinc-200 bg-white px-3 py-2 text-[13px] transition-all",
           "shadow-sm placeholder:text-zinc-400 focus:border-zinc-400 focus:ring-0 focus:outline-none",
           error && "border-red-500 focus:border-red-500 focus:ring-red-500/10",
+          !enabled && "cursor-not-allowed bg-zinc-50 opacity-60",
           className,
         )}
       >
-        <SelectValue placeholder={placeholder ?? "Выберите компанию"} />
+        <SelectValue placeholder={!enabled ? "Выберите страну" : (placeholder ?? "Выберите компанию")} />
       </SelectTrigger>
 
       <SelectContent className="min-w-50 overflow-hidden rounded-lg border-zinc-200 p-0 shadow-xl">
@@ -81,9 +97,7 @@ export function CompanySelect({
                     <span className="font-mono text-[10px] font-medium tracking-tighter text-zinc-400">
                       {String(company.id).padStart(3, "0")}
                     </span>
-
                     <span className="h-3 w-px bg-zinc-200" />
-
                     <span className="truncate font-medium text-zinc-700">{company.name}</span>
                   </div>
                 </SelectItem>

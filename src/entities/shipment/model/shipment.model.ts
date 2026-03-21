@@ -2,6 +2,7 @@ import { ShipmentStatuses } from "./shipment.status";
 
 export type Shipment = {
   id: number;
+  public_id: string;
   company_name: string;
   flight_id: null | number;
   route: string;

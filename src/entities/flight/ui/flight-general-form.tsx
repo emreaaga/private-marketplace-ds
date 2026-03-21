@@ -22,7 +22,12 @@ interface FlightGeneralFormProps {
 export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormProps) {
   const { control, setValue } = useFormContext<FlightFormValues | EditFlightFormValues>();
 
+  const departureLocation = useWatch({ control, name: "departure_location" });
+  const arrivalLocation = useWatch({ control, name: "arrival_location" });
   const airPartnerId = useWatch({ control, name: "air_partner_id" });
+
+  const departureCountry = departureLocation?.country ?? undefined;
+  const arrivalCountry = arrivalLocation?.country ?? undefined;
 
   const getFieldClassName = (isDirty: boolean, extra?: string) =>
     cn(mode === "edit" && isDirty && "rounded-md ring-2 ring-yellow-400", extra);
@@ -35,7 +40,14 @@ export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormP
           control={control}
           render={({ field, fieldState }) => (
             <div className={getFieldClassName(fieldState.isDirty)}>
-              <CountryCityPopoverSelect value={field.value} onChange={field.onChange} />
+              <CountryCityPopoverSelect
+                value={field.value}
+                onChange={(val) => {
+                  field.onChange(val);
+                  setValue("receiver_customs_id", undefined as unknown as number);
+                  setValue("air_partner_id", undefined as unknown as number);
+                }}
+              />
             </div>
           )}
         />
@@ -44,7 +56,13 @@ export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormP
           control={control}
           render={({ field, fieldState }) => (
             <div className={getFieldClassName(fieldState.isDirty)}>
-              <CountryCityPopoverSelect value={field.value} onChange={field.onChange} />
+              <CountryCityPopoverSelect
+                value={field.value}
+                onChange={(val) => {
+                  field.onChange(val);
+                  setValue("sender_customs_id", undefined as unknown as number);
+                }}
+              />
             </div>
           )}
         />
@@ -59,7 +77,8 @@ export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormP
               <CompanySelect
                 type="air_partner"
                 placeholder="Авиапартнёр"
-                enabled={isVisible}
+                country={departureCountry}
+                enabled={isVisible && !!departureCountry}
                 value={field.value as number}
                 onChange={(id) => {
                   field.onChange(id);
@@ -104,6 +123,8 @@ export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormP
               <CompanySelect
                 type="customs_broker"
                 placeholder="Отпр. (таможня)"
+                country={departureCountry}
+                enabled={!!departureCountry}
                 value={field.value as number}
                 onChange={field.onChange}
               />
@@ -118,6 +139,8 @@ export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormP
               <CompanySelect
                 type="customs_broker"
                 placeholder="Получ. (таможня)"
+                country={arrivalCountry}
+                enabled={!!arrivalCountry}
                 value={field.value as number}
                 onChange={field.onChange}
               />

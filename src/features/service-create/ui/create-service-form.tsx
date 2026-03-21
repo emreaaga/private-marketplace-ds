@@ -20,7 +20,19 @@ export function CreateServiceForm({ disabled }: { disabled?: boolean }) {
         )}
       />
 
-      <ServiceTypeSelect disabled={disabled} />
+      <Controller
+        name="type"
+        control={control}
+        render={({ field }) => (
+          <ServiceTypeSelect
+            value={field.value}
+            onChange={field.onChange}
+            disabled={disabled}
+            className={errors.type ? "border-destructive" : ""}
+          />
+        )}
+      />
+
       <ServicePricingSelect disabled={disabled} />
 
       <Controller

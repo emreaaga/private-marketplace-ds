@@ -3,7 +3,15 @@
 import { FormProvider } from "react-hook-form";
 
 import { Button } from "@/shared/ui/atoms/button";
-import { Dialog, DialogClose, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
+import {
+  Dialog,
+  DialogClose,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+} from "@/shared/ui/atoms/dialog";
 
 import { useCreateServiceForm } from "../model/use-create-service-form";
 
@@ -28,6 +36,7 @@ export function CreateServiceDialog({ open, onOpenChangeAction }: Props) {
         <DialogHeader className="px-4 pt-4">
           <DialogTitle>Создание услуги</DialogTitle>
         </DialogHeader>
+        <DialogDescription hidden />
 
         <div className="flex-1 overflow-y-auto px-6 py-4">
           <FormProvider {...form}>
