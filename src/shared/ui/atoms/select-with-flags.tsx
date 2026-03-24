@@ -21,7 +21,7 @@ type Mode = "country-only" | "country-city" | "country-city-district";
 
 type CountryCityPopoverSelectProps = {
   value: CountryCityValue;
-  onChange: (value: CountryCityValue) => void;
+  onChangeAction: (value: CountryCityValue) => void;
   mode?: Mode;
   placeholder?: string;
   className?: string;
@@ -30,7 +30,7 @@ type CountryCityPopoverSelectProps = {
 // eslint-disable-next-line complexity
 export default function CountryCityPopoverSelect({
   value,
-  onChange,
+  onChangeAction,
   mode = "country-city",
   placeholder,
   className,
@@ -133,7 +133,7 @@ export default function CountryCityPopoverSelect({
                       variant="ghost"
                       className="hover:bg-accent/80 group h-9 w-full justify-between rounded-lg px-2 py-1.5 text-sm font-normal"
                       onClick={() => {
-                        onChange({ country: code, city: null, district: null });
+                        onChangeAction({ country: code, city: null, district: null });
                         if (mode === "country-only") setOpen(false);
                         else setStep("city");
                       }}
@@ -161,7 +161,7 @@ export default function CountryCityPopoverSelect({
                     variant="ghost"
                     className="hover:bg-accent/80 group h-9 w-full justify-between rounded-lg px-2 py-1.5 text-sm font-normal"
                     onClick={() => {
-                      onChange({ ...value, city: c.code, district: null });
+                      onChangeAction({ ...value, city: c.code, district: null });
                       if (mode === "country-city-district") setStep("district");
                       else setOpen(false);
                     }}
@@ -183,7 +183,7 @@ export default function CountryCityPopoverSelect({
                     variant="ghost"
                     className="hover:bg-accent/80 h-9 w-full justify-start rounded-lg px-2 py-1.5 text-sm font-normal"
                     onClick={() => {
-                      onChange({ ...value, district: d });
+                      onChangeAction({ ...value, district: d });
                       setOpen(false);
                     }}
                   >

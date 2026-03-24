@@ -129,7 +129,7 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
             <div className={cn("rounded-xl transition-all", errors.origin && "ring-destructive/20 ring-2")}>
               <CountryCityPopoverSelect
                 value={origin}
-                onChange={(v) => {
+                onChangeAction={(v) => {
                   setOrigin(v);
                   clearError("origin");
                 }}
@@ -141,7 +141,7 @@ export function ShipmentCreateDialog({ open, onOpenChange }: ShipmentCreateDialo
             <div className={cn("rounded-xl transition-all", errors.destination && "ring-destructive/20 ring-2")}>
               <CountryCityPopoverSelect
                 value={destination}
-                onChange={(v) => {
+                onChangeAction={(v) => {
                   setDestination(v);
                   clearError("destination");
                 }}

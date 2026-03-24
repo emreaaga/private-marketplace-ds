@@ -91,7 +91,7 @@ export function PartyForm({ title, value, onChange }: PartyFormProps) {
             city: value.city ?? null,
             district: value.district ?? null,
           }}
-          onChange={handleGeoChange}
+          onChangeAction={handleGeoChange}
           className="h-8 px-3 text-sm font-normal"
         />
       </div>

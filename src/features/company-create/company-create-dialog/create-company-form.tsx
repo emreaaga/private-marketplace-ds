@@ -35,7 +35,7 @@ export function CreateCompanyForm() {
               country: field.value.country as CountryCode,
               city: field.value.city,
             }}
-            onChange={({ country, city }) => {
+            onChangeAction={({ country, city }) => {
               field.onChange({ country, city: city ?? "" });
             }}
             className={cn(

@@ -66,7 +66,7 @@ export function CompanyEditForm({ form, isLoading, pending, onSubmit }: CompanyE
                 <CountryCityPopoverSelect
                   mode="country-city"
                   value={field.value}
-                  onChange={(v) => {
+                  onChangeAction={(v) => {
                     field.onChange(v);
                     form.clearErrors("location");
                   }}

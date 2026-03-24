@@ -42,7 +42,7 @@ export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormP
             <div className={getFieldClassName(fieldState.isDirty)}>
               <CountryCityPopoverSelect
                 value={field.value}
-                onChange={(val) => {
+                onChangeAction={(val) => {
                   field.onChange(val);
                   setValue("receiver_customs_id", undefined as unknown as number);
                   setValue("air_partner_id", undefined as unknown as number);
@@ -58,7 +58,7 @@ export function FlightGeneralForm({ mode, isVisible = true }: FlightGeneralFormP
             <div className={getFieldClassName(fieldState.isDirty)}>
               <CountryCityPopoverSelect
                 value={field.value}
-                onChange={(val) => {
+                onChangeAction={(val) => {
                   field.onChange(val);
                   setValue("sender_customs_id", undefined as unknown as number);
                 }}

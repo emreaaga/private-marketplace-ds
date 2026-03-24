@@ -41,7 +41,7 @@ export function LocationFields({
         <CountryCityPopoverSelect
           mode="country-city-district"
           value={location}
-          onChange={(newLocation) => {
+          onChangeAction={(newLocation) => {
             onLocationChange(newLocation);
             if (newLocation.country) clearError("country");
             if (newLocation.city) clearError("city");

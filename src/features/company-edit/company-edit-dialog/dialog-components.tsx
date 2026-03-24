@@ -1,4 +1,4 @@
-import { Building2, ClipboardList, Loader2, Users } from "lucide-react";
+import { Building2, ClipboardList, GitBranch, Loader2, Users } from "lucide-react";
 
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/atoms/button";
@@ -21,6 +21,10 @@ export function CompanyDialogHeader() {
         <TabsTrigger value="company" className={tabTriggerClasses}>
           <Building2 className="h-3.5 w-3.5 shrink-0" />
           <span>Фирма</span>
+        </TabsTrigger>
+        <TabsTrigger value="branches" className={tabTriggerClasses}>
+          <GitBranch className="h-3.5 w-3.5 shrink-0" />
+          <span>Филиалы</span>
         </TabsTrigger>
         <TabsTrigger value="employees" className={tabTriggerClasses}>
           <Users className="h-3.5 w-3.5 shrink-0" />

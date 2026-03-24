@@ -83,7 +83,7 @@ export function EditUserForm({
             <CountryCityPopoverSelect
               mode="country-city-district"
               value={field.value}
-              onChange={(v) => {
+              onChangeAction={(v) => {
                 field.onChange(v);
 
                 const code = v.country ? COUNTRY_META[v.country as CountryCode]?.phoneCode : "";
