@@ -2,9 +2,9 @@
 
 import { useMemo } from "react";
 
-import { fakeOrders } from "@/app/(main)/dashboard/logistics/orders/_components/fake-orders";
 import { DataTable } from "@/widgets/data-table/ui/data-table";
 
+import { fakeOrders } from "../orders/_components/fake-orders";
 import { getOrderColumns } from "../orders/_components/orders-table-columns";
 
 export default function LogisticsMainPage() {

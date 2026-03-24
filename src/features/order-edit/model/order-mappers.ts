@@ -10,14 +10,20 @@ const generateId = () => {
   return Math.random().toString(36).substring(2, 9) + Date.now().toString(36);
 };
 
+// eslint-disable-next-line complexity
 export function mapApiToClientForm(apiParty: any): ClientForm {
   if (!apiParty) return emptyClientForm();
+
+  const doc = apiParty.identity_document;
 
   return {
     code: apiParty.code ?? "",
     firstName: apiParty.name ?? "",
     lastName: apiParty.surname ?? "",
-    passports: apiParty.passports?.map((p: any) => p.passport_number) ?? [],
+
+    passport_number: doc?.passport_number ?? "",
+    national_id: doc?.national_id ?? "",
+
     country: apiParty.country?.toLowerCase() ?? null,
     city: apiParty.city?.toLowerCase() ?? null,
     district: apiParty.district ?? null,

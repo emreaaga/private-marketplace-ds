@@ -10,6 +10,7 @@ type GetShipmentQuery = {
 
 type ShipmentOption = {
   id: number;
+  internal_number: number;
   number: string;
   orders_count: string;
   total_weight_kg: string;

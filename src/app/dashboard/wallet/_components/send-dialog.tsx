@@ -30,7 +30,9 @@ export default function SendDialog({ open, onOpenChange, userBalance }: SendDial
             Отмена
           </Button>
 
-          <Button size="sm" onClick={handleSubmit}>Отправить</Button>
+          <Button size="sm" onClick={handleSubmit}>
+            Отправить
+          </Button>
         </DialogFooter>
       </DialogContent>
     </Dialog>

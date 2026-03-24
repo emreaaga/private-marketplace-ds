@@ -9,7 +9,7 @@ import { toCreateFlightDto } from "@/entities/flight/lib";
 import { FlightGeneralForm } from "@/entities/flight/ui";
 import { ShipmentList } from "@/entities/shipment/ui";
 import { Button } from "@/shared/ui/atoms/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
 
 export function FlightsDialog({
   open,
@@ -60,6 +60,7 @@ export function FlightsDialog({
         <DialogHeader className="border-b px-6 py-3">
           <DialogTitle>Создание рейса</DialogTitle>
         </DialogHeader>
+        <DialogDescription hidden />
 
         <FormProvider {...form}>
           <div className="min-h-0 flex-1">

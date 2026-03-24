@@ -1,7 +1,8 @@
 import { ColumnDef } from "@tanstack/react-table";
 
-import type { Order } from "@/app/(main)/dashboard/logistics/orders/_components/order.types";
-import { StatusStepper } from "@/app/(main)/dashboard/logistics/orders/_components/status-stepper";
+import { StatusStepper } from "@/app/dashboard/logistics/orders/_components/status-stepper";
+
+import type { Order } from "./order.types";
 
 export const getOrderColumns = (): ColumnDef<Order>[] => [
   {

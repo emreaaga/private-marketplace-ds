@@ -12,7 +12,7 @@ import { FlightGeneralForm } from "@/entities/flight/ui";
 import { EditFlightShipments } from "@/entities/shipment/ui/edit-flight-shipments";
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
-import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
 
 interface EditFlightDialogProps {
   open: boolean;
@@ -24,6 +24,7 @@ const DEFAULT_VALUES: EditFlightFormValues = {
   departure_location: { country: null, city: null },
   arrival_location: { country: null, city: null },
   air_kg_price: "",
+  total_flight_weight_kg: "",
   awb_number: "",
   final_gross_weight_kg: "",
   shipments: [],
@@ -54,7 +55,7 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
     if (!flightId) return;
     try {
       const payload = toUpdatePayload(values);
-      await updateMutation.mutateAsync({ id: flightId });
+      await updateMutation.mutateAsync({ id: flightId, payload: payload });
       handleClose();
     } catch {
       // Обработка ошибки
@@ -68,6 +69,7 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
       <DialogContent className="flex h-140! w-375! max-w-[calc(100vw-2rem)]! flex-col overflow-hidden p-0">
         <DialogHeader className="flex flex-row items-center gap-3 space-y-0 border-b px-4 py-3">
           <DialogTitle className="leading-none">{flightId ? `Рейс #${flightId}` : "Загрузка..."}</DialogTitle>
+          <DialogDescription hidden />
 
           {flight && (
             <Badge variant="secondary" className="gap-1">

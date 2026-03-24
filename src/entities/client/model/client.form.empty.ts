@@ -6,7 +6,8 @@ export const emptyClientForm = (): ClientForm => ({
   firstName: "",
   lastName: "",
 
-  passports: ["", ""],
+  passport_number: "",
+  national_id: "",
 
   country: null,
   city: null,

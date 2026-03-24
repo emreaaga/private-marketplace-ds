@@ -6,7 +6,13 @@ import { toast } from "sonner";
 
 import { type ClientForm, emptyClientForm } from "@/entities/client";
 import type { ItemUI } from "@/entities/item";
-import { type OrderSummaryForm, EMPTY_ORDER_SUMMARY_FORM, useCreateOrder } from "@/entities/order";
+import {
+  type OrderSummaryForm,
+  CreateOrderPay,
+  EMPTY_ORDER_SUMMARY_FORM,
+  OrderContact,
+  useCreateOrder,
+} from "@/entities/order";
 import { toFixedScaleForApi } from "@/shared/lib/money";
 
 export function useOrderCreateForm(onSuccess: () => void, initialShipmentId?: number) {
@@ -72,7 +78,7 @@ export function useOrderCreateForm(onSuccess: () => void, initialShipmentId?: nu
   const handleCreate = async () => {
     if (createOrder.isPending || !validate()) return;
 
-    const payload = {
+    const payload: CreateOrderPay = {
       sender: mapClientToApi(sender),
       receiver: mapClientToApi(receiver),
       order_items: items.map((it) => ({
@@ -105,16 +111,24 @@ export function useOrderCreateForm(onSuccess: () => void, initialShipmentId?: nu
   };
 }
 
-function mapClientToApi(value: ClientForm) {
+// eslint-disable-next-line complexity
+function mapClientToApi(value: ClientForm): OrderContact {
+  const hasDocumentInfo = Boolean(value.passport_number || value.national_id);
+
   return {
-    name: value.firstName,
-    surname: value.lastName,
-    country: value.country,
-    city: value.city,
-    district: value.district,
-    phone_country_code: value.phone_country_code.replace("+", "") || "",
-    phone_number: value.phone_number,
-    address_line: value.address,
-    passports: value.passports.filter(Boolean).map((p) => ({ passport_number: p.trim() })),
+    name: value.firstName || "",
+    surname: value.lastName || "",
+    country: value.country || "",
+    city: value.city || "",
+    district: value.district || "",
+    phone_country_code: value.phone_country_code?.replace("+", "") || "",
+    phone_number: value.phone_number || "",
+    address_line: value.address || "",
+    identity_document: hasDocumentInfo
+      ? {
+          passport_number: value.passport_number?.trim() || "",
+          national_id: value.national_id?.trim() || "",
+        }
+      : undefined,
   };
 }

@@ -5,14 +5,12 @@ import { useState } from "react";
 import { useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import {
-  productFormDefaultValues,
-  type ProductFormValues,
-} from "@/app/(main)/dashboard/seller/main/_components/types/product-form.types";
 import { useMediaQuery } from "@/shared/hooks/use-media-query";
 import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
 import { Drawer, DrawerContent, DrawerHeader, DrawerTitle } from "@/shared/ui/atoms/drawer";
 import { Form } from "@/shared/ui/atoms/form";
+
+import { productFormDefaultValues, type ProductFormValues } from "../_components/types/product-form.types";
 
 import { ProductFormContent } from "./create-form";
 

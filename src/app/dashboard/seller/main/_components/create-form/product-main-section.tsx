@@ -2,8 +2,9 @@
 
 import type { UseFormReturn } from "react-hook-form";
 
-import type { ProductFormValues } from "@/app/(main)/dashboard/seller/main/_components/types/product-form.types";
 import { FormControl, FormField, FormItem, FormMessage } from "@/shared/ui/atoms/form";
+
+import type { ProductFormValues } from "../types/product-form.types";
 
 import { CategorySelect } from "./category-select";
 import { SubCategorySelect } from "./subcategories-select";

@@ -13,13 +13,9 @@ import { ORDER_STATUS_META } from "../model/order.status.meta";
 
 export const getOrdersColumns = (onView: (id: number) => void, onHover: () => void): ColumnDef<OrderListItem>[] => [
   {
-    accessorKey: "id",
+    accessorKey: "internal_number",
     header: "ID",
-    cell: ({ row }) => {
-      const data = row.original;
-      if (!data) return null;
-      return <span className="text-muted-foreground font-mono text-xs">{data.id}</span>;
-    },
+    cell: ({ row }) => <span className="text-muted-foreground font-mono text-xs">{row.original.internal_number}</span>,
   },
   {
     accessorKey: "company_name",

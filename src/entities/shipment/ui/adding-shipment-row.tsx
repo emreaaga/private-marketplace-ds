@@ -8,7 +8,7 @@ import { CompanySelect } from "@/entities/company";
 import { cn } from "@/shared/lib/utils";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
 
-import { useAvailableShipments } from "../queries/use-shipments-lookup";
+import { useShipmentsLookup } from "../queries/use-shipments-lookup";
 
 interface AddingShipmentRowProps {
   onCancelAction: () => void;
@@ -16,6 +16,8 @@ interface AddingShipmentRowProps {
     id: number,
     meta: {
       name: string;
+      internalNumber: number;
+      ordersCount: string;
       weight: number | unknown;
       prepaid: number | unknown;
       remaining: number | unknown;
@@ -27,10 +29,10 @@ interface AddingShipmentRowProps {
 export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }: AddingShipmentRowProps) {
   const [companyId, setCompanyId] = useState<number | undefined>();
   const [companyName, setCompanyName] = useState<string>("");
-  const { data: shipments = [], isLoading } = useAvailableShipments(companyId);
+  const { data: shipments = [], isLoading } = useShipmentsLookup(companyId);
 
   return (
-    <div className="animate-in fade-in slide-in-from-top-1 grid h-8 grid-cols-[32px_60px_1fr_80px_90px_90px_32px] items-center gap-3 border-b border-dashed border-zinc-200/60 bg-zinc-50/30 px-4">
+    <div className="animate-in fade-in slide-in-from-top-1 grid h-8 grid-cols-[32px_50px_1fr_50px_70px_80px_80px_32px] items-center gap-3 border-b border-dashed border-zinc-200/60 bg-zinc-50/30 px-4">
       <div className="flex items-center justify-center">
         <button
           type="button"
@@ -41,6 +43,7 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
         </button>
       </div>
 
+      {/* Объединяем ячейки, чтобы уместить CompanySelect */}
       <div className="col-span-2 flex h-full min-w-0 items-center">
         <CompanySelect
           type="postal"
@@ -52,7 +55,7 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
         />
       </div>
 
-      <div className="col-span-3 flex h-full min-w-0 items-center">
+      <div className="col-span-4 flex h-full min-w-0 items-center">
         <div className="mr-4 h-3 w-px shrink-0 bg-zinc-200" />
 
         <Select
@@ -62,6 +65,8 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
             if (s) {
               onSelectAction(s.id, {
                 name: companyName,
+                internalNumber: s.internal_number, // Передаем номер
+                ordersCount: s.orders_count, // Передаем заказы
                 weight: s.total_weight_kg,
                 prepaid: s.total_prepaid,
                 remaining: s.total_remaining,
@@ -75,6 +80,7 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
           </SelectTrigger>
 
           <SelectContent className="min-w-64">
+            {/* Оставляем SelectContent без изменений, он и так красивый */}
             {shipments.length === 0 ? (
               <div className="p-3 text-center text-[10px] font-medium text-zinc-500">
                 {companyId ? "Нет доступных грузов" : "Сначала выберите фирму"}
@@ -94,10 +100,12 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
                         excludeIds.includes(s.id) ? "text-zinc-300" : "text-zinc-900",
                       )}
                     >
-                      #{s.number || s.id}
+                      #{s.internal_number}
                     </span>
                     <span className="text-zinc-400">|</span>
-                    <span className="font-medium text-zinc-600">{Number(s.total_weight_kg).toFixed(1)} кг</span>
+                    <span className="font-medium text-zinc-600">{s.orders_count} зак.</span>
+                    <span className="text-zinc-400">|</span>
+                    <span className="font-medium text-zinc-600">{s.total_weight_kg} кг</span>
                   </div>
                 </SelectItem>
               ))
@@ -105,7 +113,6 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
           </SelectContent>
         </Select>
       </div>
-
       <div />
     </div>
   );

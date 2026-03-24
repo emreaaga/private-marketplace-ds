@@ -1,6 +1,7 @@
-import { productTableMock } from "@/app/(main)/dashboard/seller/main/_components/fake-products";
-import { productColumns } from "@/app/(main)/dashboard/seller/main/_components/product-table-columns";
 import { DataTable } from "@/widgets/data-table/ui/data-table";
+
+import { productTableMock } from "./_components/fake-products";
+import { productColumns } from "./_components/product-table-columns";
 
 export default function SellerMainPage() {
   return (

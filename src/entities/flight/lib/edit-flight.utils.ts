@@ -3,6 +3,7 @@ import Big from "big.js";
 import type { CountryCode } from "@/entities/geography";
 
 import type { DetailFlightRequest } from "../api/types/detail-flight.req";
+import type { UpdateFlightRequest } from "../api/types/update-flight.pay";
 
 export function distributeWeightProportionally<T extends { total_weight_kg: string | number }>(
   actualWeight: string | number,
@@ -28,8 +29,10 @@ export type EditFlightFormValues = {
   air_partner_id?: number;
   sender_customs_id?: number;
   receiver_customs_id?: number;
-  total_flight_weight_kg?: string;
+
   air_kg_price: string;
+  total_flight_weight_kg?: string;
+
   loading_at?: Date;
   departure_at?: Date;
   arrival_at?: Date;
@@ -39,6 +42,8 @@ export type EditFlightFormValues = {
   shipments: number[];
   shipments_data: {
     id: number;
+    internal_number: number;
+    orders_count: string | number;
     total_weight_kg: string;
     original_weight_kg?: string;
     company_name: string;
@@ -72,8 +77,10 @@ export function toFormValues(f: DetailFlightRequest): EditFlightFormValues {
     air_partner_id: f.air_partner_id,
     sender_customs_id: f.sender_customs_id,
     receiver_customs_id: f.receiver_customs_id,
-    total_flight_weight_kg: formatNumber(f.total_flight_weight_kg),
+
     air_kg_price: formatNumber(f.air_kg_price),
+    total_flight_weight_kg: formatNumber(f.total_flight_weight_kg),
+
     loading_at: parseDate(f.loading_at),
     departure_at: parseDate(f.departure_at),
     arrival_at: parseDate(f.arrival_at),
@@ -86,6 +93,8 @@ export function toFormValues(f: DetailFlightRequest): EditFlightFormValues {
 
       return {
         id: s.id,
+        internal_number: s.internal_number,
+        orders_count: s.orders_count,
         company_name: s.company_name,
         total_weight_kg: formatNumber(s.total_weight_kg),
         original_weight_kg: formatNumber(s.total_weight_kg),
@@ -96,22 +105,35 @@ export function toFormValues(f: DetailFlightRequest): EditFlightFormValues {
   };
 }
 
-export function toUpdatePayload(v: EditFlightFormValues) {
+export function toUpdatePayload(v: EditFlightFormValues): UpdateFlightRequest {
   const finalKg = normalizeKg(v.final_gross_weight_kg);
 
   return {
-    departure_location: v.departure_location,
-    arrival_location: v.arrival_location,
-    air_partner_id: v.air_partner_id,
-    sender_customs_id: v.sender_customs_id,
-    receiver_customs_id: v.receiver_customs_id,
+    departure_location: {
+      country: v.departure_location.country as string,
+      city: v.departure_location.city as string,
+    },
+    arrival_location: {
+      country: v.arrival_location.country as string,
+      city: v.arrival_location.city as string,
+    },
+    air_partner_id: v.air_partner_id as number,
+    sender_customs_id: v.sender_customs_id as number,
+    receiver_customs_id: v.receiver_customs_id as number,
+
     air_kg_price: v.air_kg_price,
-    loading_at: v.loading_at?.toISOString(),
-    departure_at: v.departure_at?.toISOString(),
-    arrival_at: v.arrival_at?.toISOString(),
-    unloading_at: v.unloading_at?.toISOString(),
+
+    loading_at: v.loading_at?.toISOString() as string,
+    departure_at: v.departure_at?.toISOString() as string,
+    arrival_at: v.arrival_at?.toISOString() as string,
+    unloading_at: v.unloading_at?.toISOString() as string,
+
     awb_number: v.awb_number.length ? v.awb_number : null,
     final_gross_weight_kg: finalKg,
-    shipments: v.shipments,
-  };
+
+    shipments: v.shipments_data.map((s) => ({
+      id: s.id,
+      total_weight_kg: s.total_weight_kg,
+    })),
+  } as UpdateFlightRequest;
 }

@@ -4,9 +4,10 @@ import { X } from "lucide-react";
 
 interface SelectedShipmentRowProps {
   index: number;
-  id: number;
+  internalNumber?: number;
   meta?: {
     name: string;
+    ordersCount?: number | string;
     weight: number | string | unknown;
     weightDiff?: number;
     prepaid?: number | string | unknown;
@@ -15,9 +16,9 @@ interface SelectedShipmentRowProps {
   onRemoveAction: () => void;
 }
 
-export function SelectedShipmentRow({ index, id, meta, onRemoveAction }: SelectedShipmentRowProps) {
+export function SelectedShipmentRow({ index, internalNumber, meta, onRemoveAction }: SelectedShipmentRowProps) {
   return (
-    <div className="grid min-h-8 grid-cols-[32px_60px_1fr_80px_90px_90px_32px] items-center gap-3 px-4 py-1">
+    <div className="grid min-h-8 grid-cols-[32px_50px_1fr_50px_70px_80px_80px_32px] items-center gap-3 px-4 py-1">
       <div className="flex w-full items-center justify-center">
         <span className="font-mono text-[10px] text-zinc-400 group-hover:hidden">{index + 1}</span>
         <button
@@ -31,11 +32,15 @@ export function SelectedShipmentRow({ index, id, meta, onRemoveAction }: Selecte
       </div>
 
       <div className="flex items-center">
-        <span className="font-mono text-[11px] text-zinc-600">{id}</span>
+        <span className="font-mono text-[11px] font-bold text-zinc-600">#{internalNumber}</span>
       </div>
 
       <div className="min-w-0">
         <span className="block truncate text-[13px] font-medium text-zinc-900">{meta?.name ?? "..."}</span>
+      </div>
+
+      <div className="flex items-center justify-end text-right">
+        <span className="font-mono text-[12px] font-medium text-zinc-500 tabular-nums">{meta?.ordersCount ?? 0}</span>
       </div>
 
       <div className="flex flex-col items-end justify-center text-right tabular-nums">

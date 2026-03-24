@@ -6,9 +6,10 @@ import Image from "next/image";
 
 import { Heart, ListFilter, ShoppingCart, SlidersHorizontal } from "lucide-react";
 
-import { fakeProducts } from "@/app/(main)/dashboard/seller/main/_components/fake-products";
-import type { Product } from "@/app/(main)/dashboard/seller/main/_components/types/product.types";
 import { Button } from "@/shared/ui/atoms/button";
+
+import { fakeProducts } from "../main/_components/fake-products";
+import type { Product } from "../main/_components/types/product.types";
 
 function ProductCard({ product }: { product: Product }) {
   const [isFavorite, setIsFavorite] = useState(false);

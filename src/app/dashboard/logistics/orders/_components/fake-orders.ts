@@ -1,4 +1,4 @@
-import type { Order } from "@/app/(main)/dashboard/logistics/orders/_components/order.types";
+import type { Order } from "./order.types";
 
 export const fakeOrders: Order[] = [
   {

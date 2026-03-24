@@ -43,7 +43,18 @@ export function ShipmentList() {
   );
 
   const addShipmentAction = useCallback(
-    (id: number, meta: { name: string; weight: unknown; prepaid?: unknown; remaining?: unknown }, rowId: string) => {
+    (
+      id: number,
+      meta: {
+        name: string;
+        internalNumber: number;
+        ordersCount: string;
+        weight: unknown;
+        prepaid?: unknown;
+        remaining?: unknown;
+      },
+      rowId: string,
+    ) => {
       const currentIds = getValues("shipments");
 
       if (!currentIds.includes(id)) {
@@ -51,6 +62,8 @@ export function ShipmentList() {
 
         append({
           id,
+          internal_number: meta.internalNumber,
+          orders_count: meta.ordersCount,
           company_name: meta.name,
           total_weight_kg: String(meta.weight ?? 0),
           original_weight_kg: String(meta.weight ?? 0),
@@ -83,6 +96,7 @@ export function ShipmentList() {
       weight: new Big(0),
       prepaid: new Big(0),
       remaining: new Big(0),
+      orders: 0,
     };
 
     const diffs: Record<number, number> = {};
@@ -97,6 +111,8 @@ export function ShipmentList() {
       const diff = currentW.minus(originalW).toNumber();
       diffs[curr.id] = diff > 0.01 ? diff : 0;
 
+      acc.orders += Number(curr.orders_count || 0);
+
       acc.weight = acc.weight.plus(currentW);
       acc.prepaid = acc.prepaid.plus(new Big(String(curr.total_prepaid) || "0"));
       acc.remaining = acc.remaining.plus(new Big(String(curr.total_remaining) || "0"));
@@ -108,7 +124,8 @@ export function ShipmentList() {
   return (
     <div className="flex h-full flex-col overflow-hidden rounded-xl border border-zinc-200/60 bg-white shadow-[0_1px_3px_rgba(0,0,0,0.02)]">
       <div className="border-b border-zinc-200/60 bg-zinc-50/50 px-4 py-1">
-        <div className="grid grid-cols-[32px_60px_1fr_80px_90px_90px_32px] items-center gap-3">
+        {/* НОВЫЙ GRID: добавлена колонка 50px для заказов */}
+        <div className="grid grid-cols-[32px_50px_1fr_50px_70px_80px_80px_32px] items-center gap-3">
           <div className="flex justify-center">
             <Button
               variant="ghost"
@@ -119,9 +136,10 @@ export function ShipmentList() {
               <Plus className="h-3.5 w-3.5" />
             </Button>
           </div>
-          <span className="text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">ID</span>
+          <span className="text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">№</span>
           <span className="text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">Фирма</span>
-          <span className="text-right text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">Вес (кг)</span>
+          <span className="text-right text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">Зак.</span>
+          <span className="text-right text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">Вес</span>
           <span className="text-right text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">Взнос</span>
           <span className="text-right text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">Остаток</span>
           <span />
@@ -135,9 +153,10 @@ export function ShipmentList() {
               <div key={field.rhf_id} className="group transition-colors hover:bg-zinc-50/50">
                 <SelectedShipmentRow
                   index={index}
-                  id={field.id}
+                  internalNumber={field.internal_number}
                   meta={{
                     name: field.company_name,
+                    ordersCount: field.orders_count,
                     weight: field.total_weight_kg,
                     weightDiff: weightDiffs[field.id] ?? 0,
                     prepaid: field.total_prepaid,
@@ -174,13 +193,16 @@ export function ShipmentList() {
       </div>
 
       <div className="border-t border-zinc-200/60 bg-zinc-50/80 px-4">
-        <div className="grid grid-cols-[32px_60px_1fr_80px_90px_90px_32px] items-center gap-3">
+        <div className="grid grid-cols-[32px_50px_1fr_50px_70px_80px_80px_32px] items-center gap-3">
           <span />
           <span />
           <div className="text-right">
             <span className="text-[10px] font-bold tracking-tight text-zinc-400 uppercase">
               Итого ({fields.length}):
             </span>
+          </div>
+          <div className="text-right">
+            <span className="text-[13px] font-bold text-zinc-500 tabular-nums">{totals.orders} зак</span>
           </div>
           <div className="text-right">
             <span className="text-[13px] font-bold text-zinc-900 tabular-nums">{totals.weight.toFixed(2)}</span>

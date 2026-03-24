@@ -3,7 +3,7 @@
 import { useCallback, useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
-import { useParams } from "next/navigation";
+import { useParams, useSearchParams } from "next/navigation";
 
 import { useOrdersList } from "@/entities/order";
 import { getOrdersColumns } from "@/entities/order/ui";
@@ -17,10 +17,12 @@ const clamp = (v: number, min: number, max: number) => Math.max(min, Math.min(v,
 
 export default function ShipmentOrdersPage() {
   const params = useParams();
+  const searchParams = useSearchParams();
 
   const { id } = params ?? {};
 
   const shipmentId = id ? Number(id) : undefined;
+  const publicIdFromUrl = searchParams.get("publicId");
 
   const [page, setPage] = useState(1);
   const [selectedOrderId, setSelectedOrderId] = useState<number | null>(null);
@@ -62,7 +64,13 @@ export default function ShipmentOrdersPage() {
 
   return (
     <div className="space-y-4">
-      <OrdersToolbar open={isCreateOpen} onOpenChange={setIsCreateOpen} shipmentId={shipmentId} canCreate={canCreate} />
+      <OrdersToolbar
+        open={isCreateOpen}
+        onOpenChange={setIsCreateOpen}
+        publicId={publicIdFromUrl}
+        shipmentId={shipmentId}
+        canCreate={canCreate}
+      />
 
       <DataTable
         columns={columns}

@@ -1,7 +1,8 @@
 "use client";
 
-import { CATEGORY_LIST } from "@/app/(main)/dashboard/seller/main/_components/fake-products";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/shared/ui/atoms/select";
+
+import { CATEGORY_LIST } from "../../_components/fake-products";
 
 interface CategorySelectProps {
   value: string;

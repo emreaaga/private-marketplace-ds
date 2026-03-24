@@ -14,6 +14,7 @@ interface PartyFormProps {
 }
 
 export function PartyForm({ title, value, onChange }: PartyFormProps) {
+  const filterNationalId = (val: string) => val.replace(/[^0-9]/g, "");
   const handleGeoChange = (geo: { country: CountryCode | null; city: string | null; district?: string | null }) => {
     const patch: Partial<ClientForm> = { ...geo };
 
@@ -62,21 +63,22 @@ export function PartyForm({ title, value, onChange }: PartyFormProps) {
 
       <div className="grid grid-cols-2 gap-2">
         <Input
-          placeholder="Паспорт 1"
+          placeholder="Паспорт"
           className="h-8 px-3 text-sm"
-          value={value.passports[0] || ""}
+          value={value.passport_number || ""}
           onChange={(e) => {
             const masked = filterPassport(e.target.value);
-            onChange({ passports: [masked, value.passports[1] || ""] });
+            onChange({ passport_number: masked });
           }}
         />
         <Input
-          placeholder="Паспорт 2"
+          placeholder="ПИНФЛ"
           className="h-8 px-3 text-sm"
-          value={value.passports[1] || ""}
+          maxLength={14}
+          value={value.national_id || ""}
           onChange={(e) => {
-            const masked = filterPassport(e.target.value);
-            onChange({ passports: [value.passports[0] || "", masked] });
+            const masked = filterNationalId(e.target.value).slice(0, 14);
+            onChange({ national_id: masked });
           }}
         />
       </div>

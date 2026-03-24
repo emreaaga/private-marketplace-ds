@@ -2,13 +2,12 @@
 
 import type { UseFormReturn } from "react-hook-form";
 
-import { PhotoField } from "@/app/(main)/dashboard/seller/main/_components/create-form/photo-field";
-import { ProductFormFooter } from "@/app/(main)/dashboard/seller/main/_components/create-form/product-form-footer";
-import { ProductFormValues } from "@/app/(main)/dashboard/seller/main/_components/types/product-form.types";
-
+import { PhotoField } from "./create-form/photo-field";
+import { ProductFormFooter } from "./create-form/product-form-footer";
 import { ProductMainSection } from "./create-form/product-main-section";
 import { ProductMetaSection } from "./create-form/product-meta-section";
 import { ProductResultSection } from "./create-form/product-result-section";
+import { ProductFormValues } from "./types/product-form.types";
 
 interface ProductFormContentProps {
   form: UseFormReturn<ProductFormValues>;

@@ -2,8 +2,9 @@ import { CityCode, CountryCode } from "@/entities/geography";
 
 import { type OrderStatus } from "../../model/order.status";
 
-export type OrderPassport = {
+type OrderIdentityDocument = {
   passport_number: string;
+  national_id: string;
 };
 
 export type OrderContact = {
@@ -15,7 +16,7 @@ export type OrderContact = {
   phone_country_code: string;
   phone_number: string;
   address_line: string;
-  passports: OrderPassport[];
+  identity_document?: OrderIdentityDocument;
 };
 
 export type OrderItem = {
@@ -26,6 +27,7 @@ export type OrderItem = {
 
 export type OrderListItem = {
   id: number;
+  internal_number: number;
   company_name: string;
   sender_name: string;
   receiver_name: string;

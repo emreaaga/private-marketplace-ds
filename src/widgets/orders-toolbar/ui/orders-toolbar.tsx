@@ -16,21 +16,22 @@ const OrderCreateDialog = dynamic(() => import("@/features/order-create").then((
 interface OrdersToolbarProps {
   open: boolean;
   onOpenChange: (open: boolean) => void;
+  publicId?: string | null;
   shipmentId?: number;
   canCreate?: boolean;
 }
 
-export function OrdersToolbar({ open, onOpenChange, shipmentId, canCreate = true }: OrdersToolbarProps) {
+export function OrdersToolbar({ open, onOpenChange, shipmentId, publicId, canCreate = true }: OrdersToolbarProps) {
   const [shouldLoad, setShouldLoad] = useState(false);
 
   return (
     <>
       <div className="flex w-full items-center justify-between gap-4 py-1">
         <div className="flex flex-1 items-center gap-3">
-          {shipmentId && (
+          {publicId && (
             <div className="border-border/40 bg-background/50 flex h-8 shrink-0 items-center gap-1.5 rounded-md border px-2.5 shadow-sm">
               <span className="text-muted-foreground/50 text-[10px] font-bold tracking-tight uppercase">OTP</span>
-              <span className="font-mono text-[13px] leading-none font-bold">{shipmentId}</span>
+              <span className="font-mono text-[13px] leading-none font-bold">{publicId}</span>
             </div>
           )}
 

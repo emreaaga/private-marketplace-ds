@@ -1,5 +1,6 @@
 export type FlightShipment = {
   id: number;
+  internal_number: number;
   company_id: number;
   company_name: string;
   orders_count: string;

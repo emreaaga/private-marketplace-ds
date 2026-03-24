@@ -2,12 +2,13 @@
 
 import { useState } from "react";
 
-import { ALL_SIZES } from "@/app/(main)/dashboard/seller/main/_components/fake-products";
-import { SizeWithQuantity } from "@/app/(main)/dashboard/seller/main/_components/types/product-form.types";
 import { cn } from "@/shared/lib/utils";
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
 import { QuantityStepper } from "@/shared/ui/molecules/quantity-stepper";
+
+import { ALL_SIZES } from "../../_components/fake-products";
+import { SizeWithQuantity } from "../types/product-form.types";
 
 interface SizesMultiSelectProps {
   value: SizeWithQuantity[];

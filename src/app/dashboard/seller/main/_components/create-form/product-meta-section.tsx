@@ -4,9 +4,10 @@ import { useEffect } from "react";
 
 import { type UseFormReturn, useWatch } from "react-hook-form";
 
-import type { ProductFormValues } from "@/app/(main)/dashboard/seller/main/_components/types/product-form.types";
 import { FormControl, FormField, FormItem, FormMessage } from "@/shared/ui/atoms/form";
 import { NumberStepper } from "@/shared/ui/molecules/number-stepper";
+
+import type { ProductFormValues } from "../types/product-form.types";
 
 import { SizesMultiSelect } from "./sizes-multi-select";
 

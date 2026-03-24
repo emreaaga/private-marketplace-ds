@@ -1,27 +1,35 @@
 "use client";
 
-import { AlertTriangle, CheckCircle2, RefreshCw } from "lucide-react";
+import { AlertTriangle, CheckCircle2, RefreshCw, Undo2 } from "lucide-react";
 import { useFormContext, useWatch } from "react-hook-form";
 
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/atoms/button";
 import { Input } from "@/shared/ui/atoms/input";
 
-import { distributeWeightProportionally, EditFlightFormValues } from "../lib";
+import { distributeWeightProportionally, type EditFlightFormValues } from "../lib";
 
 export function FlightWeightControl() {
-  const { control, register, setValue } = useFormContext<EditFlightFormValues>();
+  const {
+    control,
+    register,
+    setValue,
+    resetField,
+    formState: { dirtyFields },
+  } = useFormContext<EditFlightFormValues>();
 
   const calculatedStr = useWatch({ control, name: "total_flight_weight_kg" });
   const actualStr = useWatch({ control, name: "final_gross_weight_kg" });
   const shipmentsData = useWatch({ control, name: "shipments_data" });
 
   const calculated = parseFloat(calculatedStr ?? "0");
-  const actual = parseFloat(actualStr);
+  const actual = parseFloat(actualStr || "0");
   const diff = actual - calculated;
 
   const hasOverweight = diff > 0.01;
   const isOk = Math.abs(diff) <= 0.01 && actual > 0;
+
+  const canReset = dirtyFields.final_gross_weight_kg || dirtyFields.shipments_data;
 
   const handleDistribute = () => {
     if (!actualStr || shipmentsData.length === 0) return;
@@ -36,17 +44,37 @@ export function FlightWeightControl() {
     setValue("total_flight_weight_kg", actual.toFixed(2), { shouldDirty: true });
   };
 
+  const handleReset = () => {
+    resetField("final_gross_weight_kg");
+    resetField("total_flight_weight_kg");
+    resetField("shipments_data");
+  };
+
   return (
     <div className="space-y-1">
       <div className="flex items-center justify-between px-1 text-[10px] font-medium tracking-tight uppercase">
-        <span className="text-muted-foreground/60">Факт. вес</span>
+        <span className="text-muted-foreground/60 flex items-center gap-1">Факт. вес</span>
         <span className="text-muted-foreground/30 font-mono italic">Sys: {calculated.toFixed(2)}</span>
       </div>
 
       <div className="flex items-center gap-1.5">
         <div className="relative flex-1">
           <Input
-            {...register("final_gross_weight_kg")}
+            {...register("final_gross_weight_kg", {
+              onChange: (e) => {
+                let val = e.target.value.replace(/[^0-9.]/g, "");
+                const parts = val.split(".");
+
+                if (parts.length > 2) {
+                  val = parts[0] + "." + parts.slice(1).join("");
+                }
+                if (parts[1] !== undefined && parts[1].length > 2) {
+                  val = parts[0] + "." + parts[1].slice(0, 2);
+                }
+
+                e.target.value = val;
+              },
+            })}
             placeholder="0.00"
             className={cn(
               "h-8 pr-7 font-mono text-sm transition-all",
@@ -67,9 +95,22 @@ export function FlightWeightControl() {
             size="icon"
             className="h-8 w-8 shrink-0 border-orange-200 bg-orange-50 text-orange-600 shadow-sm hover:bg-orange-100"
             onClick={handleDistribute}
-            title={`Распределить +${diff.toFixed(2)} кг`}
+            title={`Авто-распределение +${diff.toFixed(2)} кг`}
           >
             <RefreshCw className="h-3.5 w-3.5" />
+          </Button>
+        )}
+
+        {canReset && (
+          <Button
+            type="button"
+            variant="outline"
+            size="icon"
+            className="text-muted-foreground hover:text-foreground h-8 w-8 shrink-0 shadow-sm"
+            onClick={handleReset}
+            title="Отменить изменения веса"
+          >
+            <Undo2 className="h-3.5 w-3.5" />
           </Button>
         )}
       </div>

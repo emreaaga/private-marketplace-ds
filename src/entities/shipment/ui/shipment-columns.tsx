@@ -14,7 +14,7 @@ import { formatWeight } from "@/shared/ui/molecules/format-weight";
 
 export const getShipmentsColumns = (onView: (id: number) => void, onPrefetch: () => void): ColumnDef<Shipment>[] => [
   {
-    accessorKey: "id",
+    accessorKey: "public_id",
     header: "Public ID",
     cell: ({ row }) => <span className="text-muted-foreground font-mono text-xs">C{row.original.public_id}</span>,
   },
@@ -67,6 +67,7 @@ export const getShipmentsColumns = (onView: (id: number) => void, onPrefetch: ()
     meta: { align: "right" },
     cell: ({ row }) => {
       const shipmentId = row.original.id;
+      const publicId = row.original.public_id;
 
       return (
         <div className="flex items-center justify-end gap-0.5">
@@ -81,7 +82,7 @@ export const getShipmentsColumns = (onView: (id: number) => void, onPrefetch: ()
           </Button>
 
           <Button asChild variant="ghost" className="hover:bg-muted/50 h-6 w-6 p-0" onMouseEnter={onPrefetch}>
-            <Link href={`/dashboard/test/${shipmentId}/orders`} title="Открыть заказы">
+            <Link href={`/dashboard/test/${shipmentId}/orders?publicId=${publicId}`} title="Открыть заказы">
               <ChevronRight className="text-muted-foreground/70 h-3 w-3" />
             </Link>
           </Button>
