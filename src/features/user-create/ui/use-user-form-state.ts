@@ -10,6 +10,8 @@ export function useUserFormState() {
   const [phoneNumber, setPhoneNumber] = useState("");
 
   const [companyId, setCompanyId] = useState<number | undefined>();
+  const [branchId, setBranchId] = useState<number | undefined>();
+
   const [role, setRole] = useState<UserRoles | undefined>();
 
   const reset = useCallback(() => {
@@ -18,6 +20,7 @@ export function useUserFormState() {
     setAddressLine("");
     setPhoneNumber("");
     setCompanyId(undefined);
+    setBranchId(undefined);
     setRole(undefined);
   }, []);
 
@@ -33,6 +36,8 @@ export function useUserFormState() {
     setPhoneNumber,
 
     companyId,
+    branchId,
+    setBranchId,
     setCompanyId,
     role,
     setRole,

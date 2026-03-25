@@ -102,7 +102,6 @@ export function CompanyBranchPopoverSelect({
         align="start"
         sideOffset={6}
       >
-        {/* Header */}
         <div className="flex items-center justify-between border-b border-zinc-100 bg-zinc-50/50 px-3 py-2 dark:border-zinc-800 dark:bg-zinc-900/50">
           <span className="text-[10px] font-semibold tracking-wider text-zinc-400 uppercase">
             {step === "company" ? "Компании" : "Филиалы"}
@@ -110,14 +109,13 @@ export function CompanyBranchPopoverSelect({
           {step === "branch" && (
             <button
               onClick={() => setStep("company")}
-              className="rounded p-1 text-zinc-500 transition-colors hover:bg-zinc-200 dark:hover:bg-zinc-800"
+              className="rounded text-zinc-500 transition-colors hover:bg-zinc-200 dark:hover:bg-zinc-800"
             >
-              <ChevronLeft className="h-3 w-3" />
+              <ChevronLeft className="h-4 w-4" />
             </button>
           )}
         </div>
 
-        {/* Scrollable Area */}
         <div
           onWheel={(e) => e.stopPropagation()}
           className={cn("custom-scrollbar max-h-70 overflow-x-hidden overflow-y-auto p-1", "touch-pan-y")}

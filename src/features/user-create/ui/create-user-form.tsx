@@ -1,7 +1,5 @@
 "use client";
 
-import { useState } from "react"; // Добавили для теста
-
 import { CompanyBranchPopoverSelect } from "@/entities/branch";
 import { CountryCode } from "@/entities/geography";
 import { type UserRoles, USER_ROLE_META } from "@/entities/user";
@@ -17,33 +15,25 @@ export interface CreateUserFormProps {
 }
 
 export function CreateUserForm({ form }: CreateUserFormProps) {
-  // --- ВРЕМЕННЫЙ СТЕЙТ ДЛЯ ТЕСТА ---
-  const [testLocation, setTestLocation] = useState<{
-    companyId: number | null;
-    branchId: number | null;
-  }>({
-    companyId: null,
-    branchId: null,
-  });
-
   return (
     <div className="space-y-4">
-      {/* Секция 1: Организация и Роль */}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        {/* Тестовый Поповер */}
         <CompanyBranchPopoverSelect
-          value={testLocation}
-          onChangeAction={(val) => {
-            console.log("Выбрано в поповере:", val);
-            setTestLocation(val);
-
-            // Если хочешь, чтобы компания все-таки улетала в форму:
-            if (val.companyId) {
-              form.setCompanyId(val.companyId);
-              form.clearError("company_id");
-            }
+          value={{
+            companyId: form.companyId ?? null,
+            branchId: form.branchId ?? null,
           }}
-          className={cn(form.errors.company_id && "border-destructive")}
+          onChangeAction={(val) => {
+            form.setCompanyId(val.companyId ?? undefined);
+
+            form.setBranchId(val.branchId ?? undefined);
+
+            if (val.companyId) form.clearError("company_id");
+            if (val.branchId) form.clearError("branch_id");
+          }}
+          className={cn(
+            (form.errors.company_id || form.errors.branch_id) && "border-destructive focus-visible:ring-destructive/20",
+          )}
         />
 
         <Select

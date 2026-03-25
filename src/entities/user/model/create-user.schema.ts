@@ -12,6 +12,7 @@ const locationSchema = z.object({
 
 export const createUserSchema = z.object({
   company_id: z.number().int().positive("Выберите компанию"),
+  branch_id: z.number().int().positive("Выберите филиал"),
 
   name: z.string().min(1, "Имя обязательно"),
   surname: z.string().min(1, "Фамилия обязательна"),

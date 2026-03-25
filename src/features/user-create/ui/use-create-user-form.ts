@@ -35,6 +35,7 @@ export function useCreateUserForm() {
 
     const payload = {
       company_id: form.companyId,
+      branch_id: form.branchId,
       name: form.name.trim(),
       surname: form.surname.trim(),
       email,
