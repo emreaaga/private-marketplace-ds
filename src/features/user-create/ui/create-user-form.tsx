@@ -1,6 +1,8 @@
 "use client";
 
-import { CompanySelect } from "@/entities/company";
+import { useState } from "react"; // Добавили для теста
+
+import { CompanyBranchPopoverSelect } from "@/entities/branch";
 import { CountryCode } from "@/entities/geography";
 import { type UserRoles, USER_ROLE_META } from "@/entities/user";
 import { useCreateUserForm } from "@/features/user-create/ui/use-create-user-form";
@@ -15,16 +17,33 @@ export interface CreateUserFormProps {
 }
 
 export function CreateUserForm({ form }: CreateUserFormProps) {
+  // --- ВРЕМЕННЫЙ СТЕЙТ ДЛЯ ТЕСТА ---
+  const [testLocation, setTestLocation] = useState<{
+    companyId: number | null;
+    branchId: number | null;
+  }>({
+    companyId: null,
+    branchId: null,
+  });
+
   return (
     <div className="space-y-4">
+      {/* Секция 1: Организация и Роль */}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
-        <CompanySelect
-          value={form.companyId}
-          onChange={(v) => {
-            form.setCompanyId(v);
-            form.clearError("company_id");
+        {/* Тестовый Поповер */}
+        <CompanyBranchPopoverSelect
+          value={testLocation}
+          onChangeAction={(val) => {
+            console.log("Выбрано в поповере:", val);
+            setTestLocation(val);
+
+            // Если хочешь, чтобы компания все-таки улетала в форму:
+            if (val.companyId) {
+              form.setCompanyId(val.companyId);
+              form.clearError("company_id");
+            }
           }}
-          error={!!form.errors.company_id}
+          className={cn(form.errors.company_id && "border-destructive")}
         />
 
         <Select
@@ -66,6 +85,7 @@ export function CreateUserForm({ form }: CreateUserFormProps) {
         </Select>
       </div>
 
+      {/* Секция 2: Имя и Фамилия */}
       <div className="grid grid-cols-1 gap-3 md:grid-cols-2">
         <FloatingLabelInput
           label="Имя"
@@ -100,16 +120,12 @@ export function CreateUserForm({ form }: CreateUserFormProps) {
         phoneNumber={form.phoneNumber}
         onLocationChange={(loc) => {
           const newCountry = loc.country ?? "";
-          const currentCountry = form.country ?? "";
-
-          if (newCountry !== currentCountry) {
+          if (newCountry !== (form.country ?? "")) {
             form.handleCountryChange(newCountry as CountryCode);
           }
-
           if (loc.city !== form.city) {
             form.handleCityChange(loc.city ?? "");
           }
-
           if (loc.district !== form.district) {
             form.setDistrict(loc.district ?? "");
           }

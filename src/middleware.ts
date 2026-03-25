@@ -31,18 +31,25 @@ export async function middleware(req: NextRequest) {
         });
 
         if (res.ok) {
-          const response = NextResponse.next();
+          // КРИТИЧЕСКОЕ ИЗМЕНЕНИЕ:
+          // Вместо .next() делаем редирект на текущую страницу, чтобы куки "применились"
+          const response = NextResponse.redirect(new URL(pathname, req.url));
+
           const setCookieHeaders = res.headers.getSetCookie();
-          setCookieHeaders.forEach((c) => response.headers.append("set-cookie", c));
+          setCookieHeaders.forEach((c) => {
+            response.headers.append("set-cookie", c);
+          });
+
           return response;
         }
       } catch (e) {
         console.error("Refresh failed", e);
       }
 
-      // Если рефреш сдох — чистим всё
+      // Если рефреш сдох — чистим всё и на логин
       const resp = NextResponse.redirect(new URL("/auth/login", req.url));
       resp.cookies.delete("user_metadata");
+      resp.cookies.delete("refresh_token"); // Не забудь почистить и его
       return resp;
     }
 
