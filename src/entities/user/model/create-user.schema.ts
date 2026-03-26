@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-const UserRolesEnum = z.enum(["company_owner"]);
+const UserRolesEnum = z.enum(["company_owner", "employee"]);
 
 const locationSchema = z.object({
   country: z.string().regex(/^[a-z]{2}$/, "Код страны должен состоять из 2 маленьких букв"),

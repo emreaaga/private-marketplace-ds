@@ -1,3 +1,5 @@
+import { BranchSummary } from "@/entities/branch";
+
 import { FlightShipment } from "../../model/flight.dto";
 import { FlightStatuses } from "../../model/flight.status";
 
@@ -16,6 +18,7 @@ export type DetailFlightRequest = Omit<CreateFlightPayload, "shipments"> & {
   created_at: string;
 
   shipments: FlightShipment[];
+  branches_summary: BranchSummary[];
 
   total_flight_weight_kg: string | null;
 };

@@ -1,4 +1,6 @@
+// MODEL
 export { type Branch } from "./model/branch.model";
+export { type BranchSummary } from "./model/branch.summary";
 
 // QUERIES
 export { useBranchesLookup } from "./queries/use-branches-lookup";

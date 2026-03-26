@@ -27,7 +27,7 @@ interface Props {
 export function CompanyBranchPopoverSelect({
   value,
   onChangeAction,
-  placeholder = "Выберите филиал",
+  placeholder = "Выберите фирму",
   className,
   disabled,
 }: Props) {

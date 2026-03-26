@@ -5,8 +5,7 @@ import { useMemo, useState, useTransition } from "react";
 import dynamic from "next/dynamic";
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
-import { toast } from "sonner";
-
+import { ConfirmArrivalDialog, useConfirmArrival } from "@/entities/flight";
 import { createFlightsColumns } from "@/entities/flight/ui";
 import { UserAuth } from "@/entities/user";
 import { DataTable } from "@/widgets/data-table/ui/data-table";
@@ -28,11 +27,15 @@ interface FlightsTableClientProps {
 
 export function FlightsTableClient({ initialData, pageCount, currentPage, user }: FlightsTableClientProps) {
   const [editId, setEditId] = useState<number | null>(null);
+  const [confirmId, setConfirmId] = useState<number | null>(null);
+
   const [isPending, startTransition] = useTransition();
 
   const router = useRouter();
   const pathname = usePathname() ?? "";
   const searchParams = useSearchParams();
+
+  const { mutate: confirmCustoms, isPending: isConfirming } = useConfirmArrival();
 
   const onPageChange = (next: number) => {
     const params = new URLSearchParams(searchParams?.toString() ?? "");
@@ -43,11 +46,20 @@ export function FlightsTableClient({ initialData, pageCount, currentPage, user }
     });
   };
 
-  const handleCustomsConfirm = async (flightId: number) => {
-    toast.success(`Статус рейса ${flightId} обновлен`);
+  const handleConfirmSubmit = () => {
+    if (!confirmId) return;
+
+    confirmCustoms(confirmId, {
+      onSuccess: () => {
+        setConfirmId(null);
+      },
+      onError: (error) => {
+        console.error(error);
+      },
+    });
   };
 
-  const columns = useMemo(() => createFlightsColumns(setEditId, handleCustomsConfirm, user), [user]);
+  const columns = useMemo(() => createFlightsColumns(setEditId, (id) => setConfirmId(id), user), [user]);
 
   return (
     <div className={isPending ? "opacity-70 transition-opacity" : ""}>
@@ -66,6 +78,13 @@ export function FlightsTableClient({ initialData, pageCount, currentPage, user }
       {editId !== null && (
         <EditFlightDialog open={true} flightId={editId} onOpenChangeAction={(open) => !open && setEditId(null)} />
       )}
+
+      <ConfirmArrivalDialog
+        isOpen={confirmId !== null}
+        isLoading={isConfirming}
+        onClose={() => setConfirmId(null)}
+        onConfirm={handleConfirmSubmit}
+      />
     </div>
   );
 }

@@ -22,7 +22,7 @@ export const ALL_USER_ROLE_META: Record<AllUserRoles, RoleMeta> = {
   employee: {
     label: "Сотрудник",
     Icon: Users,
-    disabled: true,
+    disabled: false,
   },
   courier: {
     label: "Курьер",

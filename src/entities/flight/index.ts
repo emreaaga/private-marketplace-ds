@@ -22,8 +22,12 @@ export { type UpdateFlightRequest } from "./api/types/update-flight.pay";
 
 // QUERIES
 export * from "./queries/flights-keys";
+export { useConfirmArrival } from "./queries/use-confirm-arrival";
 export * from "./queries/use-create-flight";
 export * from "./queries/use-flight-details";
 export * from "./queries/use-flight-summary";
 export * from "./queries/use-flight-update";
 export * from "./queries/use-flights-list";
+
+// UI
+export { ConfirmArrivalDialog } from "./ui/confirm-arrival-dialog";

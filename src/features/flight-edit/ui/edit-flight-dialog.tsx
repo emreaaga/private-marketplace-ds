@@ -9,10 +9,11 @@ import { toFormValues, toUpdatePayload, type EditFlightFormValues } from "@/enti
 import { useFlightDetails } from "@/entities/flight/queries/use-flight-details";
 import { useUpdateFlight } from "@/entities/flight/queries/use-flight-update";
 import { FlightGeneralForm } from "@/entities/flight/ui";
-import { EditFlightShipments } from "@/entities/shipment/ui/edit-flight-shipments";
 import { Badge } from "@/shared/ui/atoms/badge";
 import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
+
+import { EditFlightShipments } from "./edit-flight-shipments";
 
 interface EditFlightDialogProps {
   open: boolean;
@@ -66,7 +67,7 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
 
   return (
     <Dialog open={open} onOpenChange={(o) => !o && handleClose()}>
-      <DialogContent className="flex h-140! w-375! max-w-[calc(100vw-2rem)]! flex-col overflow-hidden p-0">
+      <DialogContent className="flex h-160! w-375! max-w-[calc(100vw-2rem)]! flex-col overflow-hidden p-0">
         <DialogHeader className="flex flex-row items-center gap-3 space-y-0 border-b px-4 py-3">
           <DialogTitle className="leading-none">{flightId ? `Рейс #${flightId}` : "Загрузка..."}</DialogTitle>
           <DialogDescription hidden />
@@ -100,7 +101,7 @@ export function EditFlightDialog({ open, flightId, onOpenChangeAction }: EditFli
                 </div>
 
                 <div className="min-w-0 overflow-hidden">
-                  <EditFlightShipments key={`${flightId}-${sessionKey}`} />
+                  <EditFlightShipments key={`${flightId}-${sessionKey}`} branches={flight.branches_summary} />
                 </div>
               </div>
             ) : (
