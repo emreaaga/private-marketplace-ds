@@ -6,7 +6,7 @@ import { ResponsiveTabsHeader } from "@/widgets/responsive-tabs-header";
 const TestHeaderItems = [
   {
     href: "/dashboard/test/flights",
-    label: "Рейсы",
+    label: "Авиа Рейсы",
     icon: "flights",
   },
   {
@@ -23,6 +23,11 @@ const TestHeaderItems = [
     href: "/dashboard/test/incoming-orders",
     label: "Входящие заказы",
     icon: "inbound",
+  },
+  {
+    href: "/dashboard/test/trips",
+    label: "Маршруты",
+    icon: "truck",
   },
 ] as const;
 

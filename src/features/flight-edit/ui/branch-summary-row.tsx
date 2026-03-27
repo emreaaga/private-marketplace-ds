@@ -40,7 +40,7 @@ export function BranchSummaryRow({ index, branch, onRemoveAction }: BranchSummar
       </div>
 
       <div className="min-w-0">
-        <span className="block truncate text-[13px] font-medium text-zinc-900">{branch.to_city}</span>
+        <span className="block truncate text-[13px] font-medium text-zinc-900 uppercase">{branch.to_city}</span>
       </div>
 
       <div className="flex items-center justify-end text-right">

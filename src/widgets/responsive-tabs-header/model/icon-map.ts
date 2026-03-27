@@ -9,6 +9,7 @@ import {
   Package,
   Plane,
   ShoppingCart,
+  Truck,
   Users,
   UserSquare,
 } from "lucide-react";
@@ -26,6 +27,7 @@ export const ICON_MAP = {
   outbound: ArrowUpRight,
   inbound: ArrowDownLeft,
   clients: UserSquare,
+  truck: Truck,
 } as const;
 
 export type HeaderIconKey = keyof typeof ICON_MAP;
