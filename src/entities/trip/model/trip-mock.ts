@@ -1,0 +1,37 @@
+import { TripMock } from "../ui/trips-columns";
+
+export const MOCK_TRIPS: TripMock[] = [
+  {
+    id: 1,
+    vehicle_info: "Isuzu",
+    driver_info: "Begzod",
+    cities_count: 12,
+    orders_count: 45,
+    total_weight: "1470.45",
+    total_remaining: "25400.00",
+    status: "on_way",
+    created_at: "2024-03-26T10:00:00Z",
+  },
+  {
+    id: 2,
+    vehicle_info: "Isuzu",
+    driver_info: "Begzod",
+    cities_count: 7,
+    orders_count: 12,
+    total_weight: "450.45",
+    total_remaining: "8200.50",
+    status: "created",
+    created_at: "2024-03-27T08:30:00Z",
+  },
+  {
+    id: 3,
+    vehicle_info: "Isuzu",
+    driver_info: "Dilshod",
+    cities_count: 9,
+    orders_count: 89,
+    total_weight: "1240.45",
+    total_remaining: "0.00",
+    status: "completed",
+    created_at: "2024-03-20T12:00:00Z",
+  },
+];
