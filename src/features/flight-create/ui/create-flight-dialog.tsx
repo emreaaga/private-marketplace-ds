@@ -1,7 +1,7 @@
 "use client";
 
 import { zodResolver } from "@hookform/resolvers/zod";
-import { FormProvider, useForm } from "react-hook-form";
+import { FieldErrors, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
 import { flightFormSchema, useCreateFlight, type FlightFormValues } from "@/entities/flight";
@@ -20,8 +20,11 @@ export function FlightsDialog({
 }) {
   const createMutation = useCreateFlight();
 
-  const onInvalid = () => {
-    toast.error("Пожалуйста, заполните все поля");
+  const onInvalid = (errors: FieldErrors<FlightFormValues>) => {
+    const fieldNames = Object.keys(errors);
+
+    toast.error(`Проверьте поля: ${fieldNames.join(", ")}`);
+    console.error("Validation Errors:", errors);
   };
 
   const form = useForm<FlightFormValues>({

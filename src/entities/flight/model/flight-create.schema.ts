@@ -11,7 +11,7 @@ const countryCitySchema = z.object({
 
 const shipmentDataSchema = z.object({
   id: z.number(),
-  internal_number: z.number(),
+  internal_number: z.string().or(z.number()),
   orders_count: z.string().or(z.number()),
   company_name: z.string(),
   total_weight_kg: z.string(),
