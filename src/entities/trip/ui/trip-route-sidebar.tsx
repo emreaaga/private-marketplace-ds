@@ -1,55 +1,32 @@
 "use client";
 
-import { useMemo } from "react";
-
 import { CheckCircle2, ChevronRight } from "lucide-react";
 
-import { COUNTRY_META } from "@/entities/geography";
 import { cn } from "@/shared/lib/utils";
 
-interface Stop {
-  id: string;
-  code: string;
-  status: string;
-  orders_count: number;
-}
+import { type TripStop } from "../api/get-trip-stops.api";
 
 interface TripRouteSidebarProps {
-  stops: Stop[];
-  selectedStopId: string;
-  onSelect: (id: string) => void;
+  stops: TripStop[];
+  selectedStopId: number | null;
+  onSelect: (id: number) => void;
 }
 
 export function TripRouteSidebar({ stops, selectedStopId, onSelect }: TripRouteSidebarProps) {
-  const cityLookup = useMemo(() => {
-    const lookup: Record<string, { code: string; label: string }> = {};
-
-    Object.values(COUNTRY_META).forEach((country) => {
-      Object.values(country.cities).forEach((city) => {
-        lookup[city.code.toLowerCase()] = city;
-      });
-    });
-
-    return lookup;
-  }, []);
-
   return (
     <div className="relative w-full max-w-70 space-y-1">
       <div className="bg-border/60 absolute top-4 bottom-4 left-6.5 w-px" />
 
       {stops.map((stop) => {
-        const isActive = selectedStopId === stop.id;
-        const isDelivered = stop.status === "delivered";
+        const isActive = selectedStopId === stop.branch_id;
+        const isDelivered = stop.status === "completed";
 
-        const cityMeta = cityLookup[stop.code.toLowerCase()] || {
-          label: stop.code.toUpperCase(),
-          code: stop.code,
-        };
+        const cityCode = stop.city.toUpperCase();
 
         return (
           <button
-            key={stop.id}
-            onClick={() => onSelect(stop.id)}
+            key={stop.branch_id}
+            onClick={() => onSelect(stop.branch_id)}
             className={cn(
               "group relative flex w-full items-center gap-3 rounded-lg p-2 text-left transition-all duration-200",
               isActive ? "bg-secondary/60 shadow-[inset_0_0_0_1px_rgba(0,0,0,0.05)]" : "hover:bg-secondary/30",
@@ -65,7 +42,7 @@ export function TripRouteSidebar({ stops, selectedStopId, onSelect }: TripRouteS
                     : "border-border bg-background text-muted-foreground group-hover:border-border/80",
               )}
             >
-              {cityMeta.code}
+              {cityCode}
             </div>
 
             <div className="flex-1 overflow-hidden">
@@ -76,12 +53,12 @@ export function TripRouteSidebar({ stops, selectedStopId, onSelect }: TripRouteS
                     isActive ? "text-foreground" : "text-muted-foreground group-hover:text-foreground",
                   )}
                 >
-                  {cityMeta.label}
+                  {cityCode}
                 </span>
                 {isDelivered && <CheckCircle2 size={12} className="shrink-0 text-green-600/80" />}
               </div>
               <p className="text-muted-foreground/60 mt-1.5 text-[10px] leading-none font-medium tracking-tight">
-                {stop.orders_count} заказов
+                {stop.orders_count ?? 0} заказов
               </p>
             </div>
 

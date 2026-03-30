@@ -1,10 +1,10 @@
 "use client";
 
-import { CheckCircle2, CircleDollarSign, Clock, Package, Truck, User, Weight } from "lucide-react";
+import { CheckCircle2, CircleDollarSign, Clock, Package, Pencil, Weight, X } from "lucide-react";
 
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/atoms/button";
-import { Dialog, DialogContent, DialogFooter, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog"; // Используй свои компоненты диалога
+import { Dialog, DialogContent, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
 
 interface TripDetailDialogProps {
   tripId: number | null;
@@ -12,12 +12,11 @@ interface TripDetailDialogProps {
   onOpenChangeAction: (open: boolean) => void;
 }
 
-// В будущем здесь будет fetch данных по tripId
 const MOCK_DETAILS = {
   id: 1,
   vehicle: "Isuzu (01 A 777 AA)",
   driver: "Begzod (+998 90 123-45-67)",
-  total_weight: "1470.45 кг",
+  total_weight: "1 470.45 кг",
   total_cash: "$25,400",
   status: "on_way",
   stops: [
@@ -32,92 +31,90 @@ export function TripDetailDialog({ tripId, open, onOpenChangeAction }: TripDetai
 
   return (
     <Dialog open={open} onOpenChange={onOpenChangeAction}>
-      <DialogContent className="sm:max-w-125">
-        <DialogHeader>
-          <DialogTitle className="flex items-center gap-2 text-xl">
+      <DialogContent className="gap-0 overflow-hidden p-0 sm:max-w-105 [&>button]:hidden">
+        <DialogHeader className="flex flex-row items-center justify-between border-b px-4 py-3">
+          <DialogTitle className="flex items-center gap-1.5 text-sm font-medium">
             <span className="text-muted-foreground font-normal">Манифест</span>
-            TR-{tripId}
+            <span className="text-foreground/40">/</span>
+            <span>TR-{tripId}</span>
           </DialogTitle>
+          <button
+            onClick={() => onOpenChangeAction(false)}
+            className="text-muted-foreground hover:text-foreground hover:bg-accent rounded-md p-1 transition-colors"
+          >
+            <X size={14} />
+          </button>
         </DialogHeader>
 
-        <div className="space-y-6 py-4">
-          {/* Инфо-панель рейса */}
-          <div className="bg-muted/20 grid grid-cols-2 gap-4 rounded-xl border p-4">
-            <div className="space-y-1">
-              <div className="text-muted-foreground flex items-center gap-1.5 text-[10px] font-bold uppercase">
-                <Truck size={12} /> Транспорт
+        <div className="divide-y">
+          <div className="grid grid-cols-2 divide-x">
+            <div className="flex flex-col gap-0.5 px-4 py-3">
+              <div className="text-muted-foreground flex items-center gap-1 text-[10px] font-medium tracking-wide uppercase">
+                <Weight size={10} />
+                Общий вес
               </div>
-              <p className="text-sm font-medium">{MOCK_DETAILS.vehicle}</p>
+              <p className="text-sm font-semibold tabular-nums">{MOCK_DETAILS.total_weight}</p>
             </div>
-            <div className="space-y-1">
-              <div className="text-muted-foreground flex items-center gap-1.5 text-[10px] font-bold uppercase">
-                <User size={12} /> Водитель
+            <div className="flex flex-col gap-0.5 px-4 py-3">
+              <div className="text-muted-foreground flex items-center gap-1 text-[10px] font-medium tracking-wide uppercase">
+                <CircleDollarSign size={10} />К сбору
               </div>
-              <p className="text-sm font-medium">{MOCK_DETAILS.driver}</p>
-            </div>
-            <div className="space-y-1">
-              <div className="text-muted-foreground flex items-center gap-1.5 text-[10px] font-bold uppercase">
-                <Weight size={12} /> Общий вес
-              </div>
-              <p className="text-sm font-medium">{MOCK_DETAILS.total_weight}</p>
-            </div>
-            <div className="space-y-1">
-              <div className="text-muted-foreground flex items-center gap-1.5 text-[10px] font-bold uppercase">
-                <CircleDollarSign size={12} /> К сбору
-              </div>
-              <p className="text-sm font-bold text-green-600">{MOCK_DETAILS.total_cash}</p>
+              <p className="text-sm font-semibold text-emerald-600 tabular-nums">{MOCK_DETAILS.total_cash}</p>
             </div>
           </div>
 
-          {/* Визуальный маршрут (Vertical Stepper) */}
-          <div className="space-y-4">
-            <h4 className="text-muted-foreground text-[11px] font-bold tracking-wider uppercase">Маршрут следования</h4>
-            <div className="relative ml-2 space-y-6">
+          <div className="px-4 py-3">
+            <p className="text-muted-foreground mb-3 text-[10px] font-medium tracking-wide uppercase">Маршрут</p>
+            <div className="relative ml-1 space-y-3">
               {MOCK_DETAILS.stops.map((stop, index) => (
-                <div key={stop.city} className="relative flex items-start gap-4">
-                  {/* Линия соединения */}
+                <div key={stop.city} className="relative flex items-center gap-3">
                   {index !== MOCK_DETAILS.stops.length - 1 && (
-                    <div className="bg-muted-foreground/10 absolute top-[26px] left-[11px] h-[calc(100%+8px)] w-[2px]" />
+                    <div className="bg-border absolute top-4.5 left-1.75 h-[calc(100%+4px)] w-px" />
                   )}
 
-                  {/* Иконка точки */}
                   <div
                     className={cn(
-                      "relative z-10 flex h-6 w-6 items-center justify-center rounded-full border-2 bg-white",
+                      "bg-background relative z-10 flex h-3.75 w-3.75 shrink-0 items-center justify-center rounded-full border",
                       stop.status === "delivered"
-                        ? "border-green-500 text-green-500"
-                        : "border-muted-foreground/30 text-muted-foreground/30",
+                        ? "border-emerald-500 text-emerald-500"
+                        : "border-border text-muted-foreground/40",
                     )}
                   >
                     {stop.status === "delivered" ? (
-                      <CheckCircle2 size={14} strokeWidth={3} />
+                      <CheckCircle2 size={11} strokeWidth={2.5} className="-m-px" />
                     ) : (
-                      <div className="h-2 w-2 rounded-full bg-current" />
+                      <div className="h-1.5 w-1.5 rounded-full bg-current" />
                     )}
                   </div>
 
-                  {/* Данные остановки */}
-                  <div className="bg-background flex flex-1 items-center justify-between rounded-lg border p-3 shadow-sm">
+                  <div className="bg-card flex flex-1 items-center justify-between rounded-md border px-3 py-2">
                     <div>
-                      <div className="flex items-center gap-2">
-                        <span className="text-sm font-bold">{stop.city}</span>
-                        <span className="text-muted-foreground text-xs">— {stop.name}</span>
+                      <div className="flex items-center gap-1.5">
+                        <span className="text-[13px] font-semibold">{stop.city}</span>
+                        <span className="text-muted-foreground text-xs">{stop.name}</span>
                       </div>
-                      <div className="text-muted-foreground mt-1 flex items-center gap-3 text-[11px]">
-                        <span className="flex items-center gap-1">
-                          <Package size={10} /> {stop.orders} зак.
+                      <div className="text-muted-foreground mt-0.5 flex items-center gap-2 text-[11px]">
+                        <span className="flex items-center gap-0.5">
+                          <Package size={9} />
+                          {stop.orders} зак.
                         </span>
                         {stop.time && (
-                          <span className="flex items-center gap-1 text-green-600">
-                            <Clock size={10} /> {stop.time}
+                          <span className="flex items-center gap-0.5 text-emerald-600">
+                            <Clock size={9} />
+                            {stop.time}
                           </span>
                         )}
                       </div>
                     </div>
                     {stop.status === "pending" && (
-                      <div className="rounded bg-orange-50 px-2 py-0.5 text-[10px] font-bold text-orange-500 uppercase">
+                      <span className="rounded bg-amber-50 px-1.5 py-0.5 text-[10px] font-medium text-amber-600 ring-1 ring-amber-200 ring-inset">
                         В пути
-                      </div>
+                      </span>
+                    )}
+                    {stop.status === "delivered" && (
+                      <span className="rounded bg-emerald-50 px-1.5 py-0.5 text-[10px] font-medium text-emerald-600 ring-1 ring-emerald-200 ring-inset">
+                        Доставлено
+                      </span>
                     )}
                   </div>
                 </div>
@@ -126,14 +123,15 @@ export function TripDetailDialog({ tripId, open, onOpenChangeAction }: TripDetai
           </div>
         </div>
 
-        <DialogFooter>
-          <Button variant="ghost" onClick={() => onOpenChangeAction(false)} className="w-full sm:w-auto">
+        <div className="bg-muted/30 flex items-center justify-end gap-2 border-t px-4 py-2.5">
+          <Button size="sm" variant="outline" className="h-7 text-xs" onClick={() => onOpenChangeAction(false)}>
             Закрыть
           </Button>
-          <Button variant="primary" className="w-full px-8 sm:w-auto">
+          <Button size="sm" className="h-7 gap-1.5 text-xs">
+            <Pencil size={11} />
             Редактировать
           </Button>
-        </DialogFooter>
+        </div>
       </DialogContent>
     </Dialog>
   );

@@ -1,6 +1,4 @@
-import { TripMock } from "../ui/trips-columns";
-
-export const MOCK_TRIPS: TripMock[] = [
+export const MOCK_TRIPS = [
   {
     id: 1,
     vehicle_info: "Isuzu",

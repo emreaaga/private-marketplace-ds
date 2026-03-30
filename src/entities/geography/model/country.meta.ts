@@ -47,14 +47,64 @@ export const COUNTRY_META: Record<
         districts: ["Chilanzar", "Yunusabad", "Mirzo Ulugbek", "Yakkasaray", "Sergeli"],
       },
       samarkand: {
-        code: "sam",
+        code: "skd",
         label: "Samarkand",
-        districts: ["Central", "Bagishamol", "Sogdiana"],
+        districts: ["Pastdargom", "Bulungur", "Taylak", "Jomboy", "Ishtixon"],
       },
       bukhara: {
-        code: "bkh",
+        code: "bhk",
         label: "Bukhara",
-        districts: ["Central", "Kagan", "Gijduvan"],
+        districts: ["Gijduvan", "Kagan", "Shofirkon", "Vobkent", "Jondor"],
+      },
+      namangan: {
+        code: "nma",
+        label: "Namangan",
+        districts: ["Pap", "Chust", "Chartak", "Uychi", "Uchkurgan"],
+      },
+      andijan: {
+        code: "azn",
+        label: "Andijan",
+        districts: ["Asaka", "Shahrixon", "Kurgantepa", "Izboskan", "Altinkul"],
+      },
+      fergana: {
+        code: "feg",
+        label: "Fergana",
+        districts: ["Kokand", "Margilan", "Kuva", "Rishtan", "Oltiariq"],
+      },
+      nukus: {
+        code: "ncu",
+        label: "Nukus",
+        districts: ["Beruniy", "Kungrad", "Turtkul", "Khodjeyli", "Muynak"],
+      },
+      qarshi: {
+        code: "ksq",
+        label: "Qarshi",
+        districts: ["Shahrisabz", "Kitab", "Guzar", "Nishon", "Kamashi"],
+      },
+      urgench: {
+        code: "ugc",
+        label: "Urgench",
+        districts: ["Khiva", "Gurlan", "Shavat", "Bagat", "Hazarasp"],
+      },
+      termez: {
+        code: "tmz",
+        label: "Termez",
+        districts: ["Denau", "Sherabad", "Jarqurgan", "Boysun", "Sariosiyo"],
+      },
+      navoi: {
+        code: "nvi",
+        label: "Navoi",
+        districts: ["Zarafshan", "Uchkuduk", "Karmana", "Kyzyltepa", "Khatirchi"],
+      },
+      jizzakh: {
+        code: "jiz",
+        label: "Jizzakh",
+        districts: ["Zaamin", "Gallaorol", "Dustlik", "Zarbdor", "Pakhtakor"],
+      },
+      gulistan: {
+        code: "gul",
+        label: "Gulistan",
+        districts: ["Yangiyer", "Shirin", "Sardoba", "Sayhunabad", "Bayaut"],
       },
     },
   },

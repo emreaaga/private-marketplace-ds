@@ -44,7 +44,7 @@ export function TripsToolbar() {
         </Button>
       </div>
 
-      <TripCreateDialog open={isCreateOpen} onOpenChange={setIsCreateOpen} />
+      <TripCreateDialog open={isCreateOpen} onOpenChangeAction={setIsCreateOpen} />
     </div>
   );
 }

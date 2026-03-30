@@ -19,6 +19,7 @@ export { SERVICE_EDIT_EMPTY, serviceEditSchema, type ServiceEditFormValues } fro
 export * from "./queries";
 
 // UI
+export { CreateServiceForm } from "./ui/create-service-form";
 export { ServiceLookupSelect } from "./ui/service-lookup-select";
 export { ServicePricingSelect } from "./ui/service-pricing-select";
 export { ServiceTypeSelect } from "./ui/service-type-select";

@@ -10,6 +10,7 @@ import { Tabs, TabsContent } from "@/shared/ui/atoms/tabs";
 import { CompanyBranchesList } from "./company-branches-list";
 import { CompanyEditForm } from "./company-edit-form";
 import { CompanyEmployeesList } from "./company-employees-list";
+import { CompanyServicesList } from "./company-services-list";
 import { CompanyDialogFooter, CompanyDialogHeader } from "./dialog-components";
 import { useCompanyForm } from "./use-company-form";
 
@@ -73,7 +74,7 @@ export function CompanyEditDialog({ open, companyId, pending = false, onOpenChan
             </TabsContent>
 
             <TabsContent value="services" className="m-0 h-full border-none p-4 outline-none">
-              <p className="text-muted-foreground mt-10 text-center text-sm">Список услуг в разработке</p>
+              <CompanyServicesList companyId={companyId} />
             </TabsContent>
             <TabsContent value="branches" className="m-0 h-full border-none p-4 outline-none">
               <CompanyBranchesList companyId={companyId} />
