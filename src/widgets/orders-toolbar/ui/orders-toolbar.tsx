@@ -31,7 +31,7 @@ export function OrdersToolbar({ open, onOpenChange, shipmentId, publicId, canCre
           {publicId && (
             <div className="border-border/40 bg-background/50 flex h-8 shrink-0 items-center gap-1.5 rounded-md border px-2.5 shadow-sm">
               <span className="text-muted-foreground/50 text-[10px] font-bold tracking-tight uppercase">OTP</span>
-              <span className="font-mono text-[13px] leading-none font-bold">{publicId}</span>
+              <span className="font-mono text-[13px] leading-none font-bold">{shipmentId}</span>
             </div>
           )}
 

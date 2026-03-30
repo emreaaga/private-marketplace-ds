@@ -84,7 +84,7 @@ export default function CountryCityPopoverSelect({
           <div className="flex items-center gap-2 overflow-hidden">
             {country ? (
               <>
-                <div className="relative h-3.5 w-4.5 shrink-0 overflow-hidden rounded-[2px] border border-black/5">
+                <div className="relative h-3.5 w-4.5 shrink-0 overflow-hidden rounded-[2px] border border-black/5 bg-zinc-100 dark:bg-zinc-800">
                   <Image src={country.flag} alt="" fill className="object-cover" sizes="20px" />
                 </div>
                 <span className="truncate">
@@ -109,7 +109,10 @@ export default function CountryCityPopoverSelect({
         </Button>
       </PopoverTrigger>
 
-      <PopoverContent className="border-muted/40 w-60 overflow-hidden rounded-xl p-0 shadow-xl" align="start">
+      <PopoverContent
+        className="border-muted/40 flex max-h-100 w-60 flex-col overflow-hidden rounded-xl p-0 shadow-xl"
+        align="start"
+      >
         {/* HEADER */}
         <div className="bg-muted/20 flex shrink-0 items-center justify-between border-b px-3 py-2">
           <span className="text-muted-foreground/80 text-[11px] font-medium tracking-wider uppercase">
@@ -125,8 +128,11 @@ export default function CountryCityPopoverSelect({
           )}
         </div>
 
-        <ScrollArea className="h-80 w-full" onWheel={(e) => e.stopPropagation()}>
-          <div className="flex flex-col p-1 pr-3">
+        <ScrollArea className="w-full flex-1 overflow-y-auto" onWheel={(e) => e.stopPropagation()}>
+          <div
+            key={step}
+            className="animate-in fade-in-0 slide-in-from-bottom-1 flex flex-col p-1 pr-3 duration-200 ease-out"
+          >
             {step === "country" && (
               <ul className="space-y-0.5">
                 {(Object.entries(COUNTRY_META) as [CountryCode, (typeof COUNTRY_META)[CountryCode]][]).map(
@@ -143,7 +149,7 @@ export default function CountryCityPopoverSelect({
                         }}
                       >
                         <div className="flex items-center gap-2.5">
-                          <div className="relative h-3.5 w-4.5 shrink-0 overflow-hidden rounded-[2px] border border-black/5">
+                          <div className="relative h-3.5 w-4.5 shrink-0 overflow-hidden rounded-[2px] border border-black/5 bg-zinc-100 dark:bg-zinc-800">
                             <Image src={meta.flag} alt="" fill className="object-cover" sizes="20px" />
                           </div>
                           <span className="text-foreground/90">{meta.label}</span>
