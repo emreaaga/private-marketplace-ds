@@ -153,7 +153,7 @@ export function ShipmentList() {
               <div key={field.rhf_id} className="group transition-colors hover:bg-zinc-50/50">
                 <SelectedShipmentRow
                   index={index}
-                  internalNumber={field.internal_number}
+                  internalNumber={field.id}
                   meta={{
                     name: field.company_name,
                     ordersCount: field.orders_count,

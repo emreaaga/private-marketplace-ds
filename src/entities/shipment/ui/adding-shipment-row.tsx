@@ -100,7 +100,7 @@ export function AddingShipmentRow({ onCancelAction, onSelectAction, excludeIds }
                         excludeIds.includes(s.id) ? "text-zinc-300" : "text-zinc-900",
                       )}
                     >
-                      #{s.internal_number}
+                      #{s.id}
                     </span>
                     <span className="text-zinc-400">|</span>
                     <span className="font-medium text-zinc-600">{s.orders_count} зак.</span>
