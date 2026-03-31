@@ -2,10 +2,9 @@
 
 import { use, useState } from "react";
 
-import { useSearchParams } from "next/navigation";
-
 import { Package } from "lucide-react";
 
+import { FlightAndTripTimeline } from "@/entities/flight";
 import { TripRouteSidebar, TripStopOrders, useTripStops } from "@/entities/trip";
 import { Button } from "@/shared/ui/atoms/button";
 
@@ -13,19 +12,9 @@ interface PageProps {
   params: Promise<{ id: string }>;
 }
 
-// eslint-disable-next-line complexity
 export default function TripDetailsPage({ params }: PageProps) {
   const unwrappedParams = use(params);
   const tripId = Number(unwrappedParams.id);
-
-  const searchParams = useSearchParams();
-
-  const stats = {
-    orders: searchParams.get("orders") || "0",
-    cities: searchParams.get("cities") || "0",
-    weight: searchParams.get("weight") || "0",
-    remaining: searchParams.get("remaining") || "0",
-  };
 
   const { data: stopsResponse, isLoading, isError } = useTripStops(tripId);
   const stops = stopsResponse?.data || [];
@@ -45,16 +34,7 @@ export default function TripDetailsPage({ params }: PageProps) {
 
   return (
     <div className="space-y-4">
-      {/* <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
-        <StatCard icon={Package} label="Заказы" value={formatQuantity(Number(stats.orders), { unit: "шт" })} />
-        <StatCard
-          icon={CircleDollarSign}
-          label="Городов"
-          value={formatQuantity(Number(stats.cities), { unit: "гр" })}
-        />
-        <StatCard icon={Weight} label="Общий вес" value={formatWeight(stats.weight)} />
-        <StatCard icon={CircleDollarSign} label="К сбору" value={formatMoney(stats.remaining)} />
-      </div>*/}
+      <FlightAndTripTimeline currentStatusId="warehouse_dest" />
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div className="lg:col-span-2">
@@ -75,7 +55,7 @@ export default function TripDetailsPage({ params }: PageProps) {
 
             <div className="flex items-center">
               {selectedStop?.status === "created" && activeBranchId && (
-                <Button variant="primary" size="sm">
+                <Button variant="ghost" size="sm">
                   Подтвердить доставку
                 </Button>
               )}

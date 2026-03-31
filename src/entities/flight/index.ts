@@ -40,3 +40,4 @@ export { ConfirmArrivalDialog } from "./ui/confirm-arrival-dialog";
 export { DemoRouteBuilder } from "./ui/demo-route-builder";
 export { DomesticFlightGeneralForm } from "./ui/domestic-general-form";
 export { FlightSelect } from "./ui/flight-select";
+export { FlightAndTripTimeline } from "./ui/flight-status-timeline";
