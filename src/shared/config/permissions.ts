@@ -83,7 +83,7 @@ export const ROUTE_PERMISSIONS: Record<string, AccessRule> = {
     roles: ["admin", "company_owner"],
     companyTypes: ["platform", "customs_broker"],
   },
-  "/dashboard/test/trips/:id": {
+  "/dashboard/test/:id/trips": {
     roles: ["admin", "company_owner"],
     companyTypes: ["platform", "customs_broker"],
   },

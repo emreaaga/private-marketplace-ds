@@ -9,20 +9,22 @@ import type { TripFormValues } from "../model/trip-create.schema";
 import { useTripCreateForm } from "../model/use-trip-create-form";
 
 import { TripDistributionSummary } from "./trip-distribution-summary";
-import { TripFlightSection } from "./trip-flight-section";
 import { TripRouteList } from "./trip-route-list";
 
 interface TripCreateFormProps {
   open: boolean;
   onCancel: () => void;
+  flightId: number;
 }
 
-export function TripCreateForm({ open, onCancel }: TripCreateFormProps) {
-  const { form, fields, selectedFlightId, currentStops, isFormReady, handlers } = useTripCreateForm(open, 0);
+export function TripCreateForm({ open, onCancel, flightId }: TripCreateFormProps) {
+  // Передаем flightId прямо в хук (предполагаю, что второй аргумент это initialFlightId)
+  const { form, fields, currentStops, isFormReady, handlers } = useTripCreateForm(open, flightId);
 
   const { mutate: createTrip, isPending } = useCreateTrip();
 
-  const { data: distribution, isFetching } = useFlightDistribution(selectedFlightId || null);
+  // Запрашиваем дистрибуцию сразу по известному flightId
+  const { data: distribution, isFetching } = useFlightDistribution(flightId);
 
   const isAllCitiesAdded = distribution?.data ? currentStops.length === distribution.data.length : false;
   const finalIsFormReady = isFormReady || (form.formState.isValid && isAllCitiesAdded);
@@ -31,7 +33,7 @@ export function TripCreateForm({ open, onCancel }: TripCreateFormProps) {
     if (!distribution?.data) return;
 
     const payload = {
-      flight_id: values.flight_id as number,
+      flight_id: flightId, // <-- Используем переданный пропс, а не данные из формы
       stops: values.stops.map((stop, index) => {
         const city = distribution.data.find((c) => c.code.toUpperCase() === stop.code.toUpperCase());
         return {
@@ -55,15 +57,9 @@ export function TripCreateForm({ open, onCancel }: TripCreateFormProps) {
 
   return (
     <form onSubmit={form.handleSubmit(onSubmit)} className="flex h-full flex-1 flex-col overflow-hidden">
-      <div className="shrink-0 px-6 pt-6 pb-2">
-        <TripFlightSection
-          selectedFlightId={selectedFlightId || null}
-          onFlightChange={handlers.handleFlightChange}
-          distributionData={distribution?.data}
-        />
-      </div>
+      {/* Секция TripFlightSection удалена, так как рейс уже выбран */}
 
-      <div className="custom-scrollbar flex-1 overflow-y-auto px-6 py-2">
+      <div className="custom-scrollbar flex-1 overflow-y-auto px-6 py-6">
         <TripRouteList
           stops={stopsForList}
           availableCities={distribution?.data}
@@ -77,7 +73,7 @@ export function TripCreateForm({ open, onCancel }: TripCreateFormProps) {
         <TripDistributionSummary
           summary={distribution?.summary}
           isFetching={isFetching}
-          isVisible={!!selectedFlightId}
+          isVisible={true} // <-- Всегда показываем, так как рейс уже есть
         />
       </div>
 

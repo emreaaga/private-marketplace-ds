@@ -76,7 +76,7 @@ export const getTripsColumns = (onView: (id: number) => void, onPrefetch: () => 
           <Button asChild variant="ghost" className="hover:bg-muted/50 h-6 w-6 p-0" onMouseEnter={onPrefetch}>
             <Link
               href={{
-                pathname: `/dashboard/test/trips/${tripId}`,
+                pathname: `/dashboard/test/${tripId}/trips`,
                 query: {
                   orders: total_orders,
                   cities: total_city,

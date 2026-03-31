@@ -4,14 +4,10 @@ import { use, useState } from "react";
 
 import { useSearchParams } from "next/navigation";
 
-import { CircleDollarSign, Package, Weight } from "lucide-react";
+import { Package } from "lucide-react";
 
 import { TripRouteSidebar, TripStopOrders, useTripStops } from "@/entities/trip";
 import { Button } from "@/shared/ui/atoms/button";
-import { formatMoney } from "@/shared/ui/molecules/format-money";
-import { formatQuantity } from "@/shared/ui/molecules/format-quantity";
-import { formatWeight } from "@/shared/ui/molecules/format-weight";
-import { StatCard } from "@/shared/ui/stat-card";
 
 interface PageProps {
   params: Promise<{ id: string }>;
@@ -49,7 +45,7 @@ export default function TripDetailsPage({ params }: PageProps) {
 
   return (
     <div className="space-y-4">
-      <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
+      {/* <div className="grid grid-cols-2 gap-2 md:grid-cols-4">
         <StatCard icon={Package} label="Заказы" value={formatQuantity(Number(stats.orders), { unit: "шт" })} />
         <StatCard
           icon={CircleDollarSign}
@@ -58,7 +54,7 @@ export default function TripDetailsPage({ params }: PageProps) {
         />
         <StatCard icon={Weight} label="Общий вес" value={formatWeight(stats.weight)} />
         <StatCard icon={CircleDollarSign} label="К сбору" value={formatMoney(stats.remaining)} />
-      </div>
+      </div>*/}
 
       <div className="grid grid-cols-1 gap-6 lg:grid-cols-12">
         <div className="lg:col-span-2">

@@ -2,6 +2,7 @@ import { type FlightStatuses } from "./flight.status";
 
 export type Flight = {
   id: number;
+  trip_id: number | null;
   route: string;
   air_partner_name: string;
   air_kg_price: string;

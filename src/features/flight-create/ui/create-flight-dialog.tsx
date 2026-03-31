@@ -4,12 +4,19 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import { flightFormSchema, useCreateFlight, type FlightFormValues } from "@/entities/flight";
+import {
+  DemoRouteBuilder,
+  DomesticFlightGeneralForm,
+  flightFormSchema,
+  useCreateFlight,
+  type FlightFormValues,
+} from "@/entities/flight";
 import { toCreateFlightDto } from "@/entities/flight/lib";
 import { FlightGeneralForm } from "@/entities/flight/ui";
 import { ShipmentList } from "@/entities/shipment/ui";
 import { Button } from "@/shared/ui/atoms/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/shared/ui/atoms/dialog";
+import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/shared/ui/atoms/tabs"; // Импортируем табы
 
 export function FlightsDialog({
   open,
@@ -22,7 +29,6 @@ export function FlightsDialog({
 
   const onInvalid = (errors: FieldErrors<FlightFormValues>) => {
     const fieldNames = Object.keys(errors);
-
     toast.error(`Проверьте поля: ${fieldNames.join(", ")}`);
     console.error("Validation Errors:", errors);
   };
@@ -60,34 +66,59 @@ export function FlightsDialog({
           "flex flex-col overflow-hidden p-0",
         ].join(" ")}
       >
-        <DialogHeader className="border-b px-6 py-3">
-          <DialogTitle>Создание рейса</DialogTitle>
-        </DialogHeader>
-        <DialogDescription hidden />
-
         <FormProvider {...form}>
-          <div className="min-h-0 flex-1">
-            <div className="grid h-full min-h-0 grid-cols-[450px_1fr]">
-              <div className="min-w-0 overflow-auto px-4 py-4">
-                <FlightGeneralForm mode="create" isVisible={open} />
-              </div>
+          <Tabs defaultValue="international" className="flex min-h-0 flex-1 flex-col">
+            <DialogHeader className="flex flex-row items-center justify-between space-y-0 border-b px-6 py-2">
+              <DialogTitle className="text-lg">Создание рейса</DialogTitle>
 
-              <div className="min-w-0 overflow-hidden">
-                <ShipmentList />
+              <TabsList className="grid w-64 grid-cols-2">
+                <TabsTrigger value="international">Международный</TabsTrigger>
+                <TabsTrigger value="domestic">Внутренний</TabsTrigger>
+              </TabsList>
+
+              <div className="hidden w-35 sm:block" />
+            </DialogHeader>
+
+            <DialogDescription hidden />
+
+            <TabsContent value="international" className="m-0 min-h-0 flex-1 border-none data-[state=inactive]:hidden">
+              <div className="grid h-full min-h-0 grid-cols-[450px_1fr]">
+                <div className="min-w-0 overflow-auto px-4 py-4">
+                  <FlightGeneralForm mode="create" isVisible={open} />
+                </div>
+                <div className="min-w-0 overflow-hidden">
+                  <ShipmentList />
+                </div>
+              </div>
+            </TabsContent>
+
+            <TabsContent value="domestic" className="m-0 min-h-0 flex-1 data-[state=inactive]:hidden">
+              <div className="grid h-full min-h-0 grid-cols-[350px_140px_1fr]">
+                <div className="min-w-0 overflow-auto px-4 py-4">
+                  <DomesticFlightGeneralForm isVisible={open} />
+                </div>
+
+                <div className="min-w-0 overflow-hidden">
+                  <DemoRouteBuilder />
+                </div>
+
+                <div className="min-w-0 overflow-hidden">
+                  <ShipmentList />
+                </div>
+              </div>
+            </TabsContent>
+
+            <div className="border-border/40 bg-background shrink-0 border-t px-4 py-2">
+              <div className="flex justify-end gap-3">
+                <Button variant="outline" size="sm" onClick={handleClose}>
+                  Отмена
+                </Button>
+                <Button size="sm" onClick={onSave} disabled={createMutation.isPending}>
+                  {createMutation.isPending ? "Сохранение..." : "Создать рейс"}
+                </Button>
               </div>
             </div>
-          </div>
-
-          <div className="border-border/40 bg-background shrink-0 border-t px-4 py-2">
-            <div className="flex justify-end gap-3">
-              <Button variant="outline" size="sm" onClick={handleClose}>
-                Отмена
-              </Button>
-              <Button size="sm" onClick={onSave} disabled={createMutation.isPending}>
-                {createMutation.isPending ? "Сохранение..." : "Создать рейс"}
-              </Button>
-            </div>
-          </div>
+          </Tabs>
         </FormProvider>
       </DialogContent>
     </Dialog>

@@ -24,11 +24,6 @@ const TestHeaderItems = [
     label: "Входящие заказы",
     icon: "inbound",
   },
-  {
-    href: "/dashboard/test/trips",
-    label: "Маршруты",
-    icon: "truck",
-  },
 ] as const;
 
 export default async function LogisticsLayout({ children }: { children: ReactNode }) {

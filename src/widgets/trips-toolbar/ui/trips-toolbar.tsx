@@ -4,7 +4,6 @@ import { useState } from "react";
 
 import { ListFilter, Plus, RotateCcw, Search, SlidersHorizontal } from "lucide-react";
 
-import { TripCreateDialog } from "@/features/trips-create";
 import { Button } from "@/shared/ui/atoms/button";
 
 export function TripsToolbar() {
@@ -44,7 +43,7 @@ export function TripsToolbar() {
         </Button>
       </div>
 
-      <TripCreateDialog open={isCreateOpen} onOpenChangeAction={setIsCreateOpen} />
+      {/* <TripCreateDialog open={isCreateOpen} onOpenChangeAction={setIsCreateOpen} />*/}
     </div>
   );
 }

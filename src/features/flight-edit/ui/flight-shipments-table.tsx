@@ -39,7 +39,7 @@ export function FlightShipmentsTable({
                 <div key={field.rhf_id} className="group transition-colors hover:bg-zinc-50/50">
                   <SelectedShipmentRow
                     index={index}
-                    internalNumber={field.internal_number}
+                    internalNumber={field.id}
                     meta={{
                       name: field.company_name,
                       ordersCount: field.orders_count,
@@ -67,11 +67,7 @@ export function FlightShipmentsTable({
           </ScrollArea>
         </div>
 
-        <div className="flex items-center justify-center gap-2 border-y border-zinc-200/60 bg-zinc-50/50 px-4 py-0.5 shadow-[0_-1px_2px_rgba(0,0,0,0.02)]">
-          <span className="text-[9px] font-bold tracking-widest text-zinc-400 uppercase">
-            Распределение по филиалам
-          </span>
-        </div>
+        <FlightShipmentsFooter totals={totals} />
 
         <div className="flex min-h-0 flex-1 flex-col bg-zinc-50/20">
           <ScrollArea className="h-full">
@@ -86,8 +82,6 @@ export function FlightShipmentsTable({
           </ScrollArea>
         </div>
       </div>
-
-      <FlightShipmentsFooter totals={totals} />
     </div>
   );
 }

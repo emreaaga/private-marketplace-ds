@@ -14,6 +14,10 @@ const EditFlightDialog = dynamic(() => import("@/features/flight-edit").then((mo
   ssr: false,
 });
 
+const TripCreateDialog = dynamic(() => import("@/features/trips-create").then((mod) => mod.TripCreateDialog), {
+  ssr: false,
+});
+
 const FlightExpandedRow = dynamic(() => import("@/entities/flight/ui").then((mod) => mod.FlightExpandedRow), {
   ssr: false,
 });
@@ -28,6 +32,8 @@ interface FlightsTableClientProps {
 export function FlightsTableClient({ initialData, pageCount, currentPage, user }: FlightsTableClientProps) {
   const [editId, setEditId] = useState<number | null>(null);
   const [confirmId, setConfirmId] = useState<number | null>(null);
+
+  const [createTripFlightId, setCreateTripFlightId] = useState<number | null>(null);
 
   const [isPending, startTransition] = useTransition();
 
@@ -59,7 +65,16 @@ export function FlightsTableClient({ initialData, pageCount, currentPage, user }
     });
   };
 
-  const columns = useMemo(() => createFlightsColumns(setEditId, (id) => setConfirmId(id), user), [user]);
+  const columns = useMemo(
+    () =>
+      createFlightsColumns(
+        setEditId,
+        (id) => setConfirmId(id),
+        (id) => setCreateTripFlightId(id), // Функция для открытия модалки создания маршрута
+        user,
+      ),
+    [user],
+  );
 
   return (
     <div className={isPending ? "opacity-70 transition-opacity" : ""}>
@@ -78,6 +93,12 @@ export function FlightsTableClient({ initialData, pageCount, currentPage, user }
       {editId !== null && (
         <EditFlightDialog open={true} flightId={editId} onOpenChangeAction={(open) => !open && setEditId(null)} />
       )}
+
+      <TripCreateDialog
+        open={createTripFlightId !== null}
+        flightId={createTripFlightId}
+        onOpenChangeAction={(open) => !open && setCreateTripFlightId(null)}
+      />
 
       <ConfirmArrivalDialog
         isOpen={confirmId !== null}

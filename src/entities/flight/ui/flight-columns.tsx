@@ -3,7 +3,7 @@
 import Link from "next/link";
 
 import type { ColumnDef } from "@tanstack/react-table";
-import { ChevronRight, DollarSign, Eye, PackageCheck } from "lucide-react";
+import { ChevronRight, Eye, PackageCheck, Truck } from "lucide-react";
 
 import { FLIGHT_STATUS_META, type Flight } from "@/entities/flight";
 import type { UserAuth } from "@/entities/user";
@@ -15,9 +15,9 @@ import { formatWeight } from "@/shared/ui/molecules/format-weight";
 export const createFlightsColumns = (
   onEdit: (id: number) => void,
   onCustomsConfirm: (id: number) => void,
+  onCreateTrip: (flightId: number) => void,
   user: UserAuth | null,
 ): ColumnDef<Flight>[] => {
-  // Вычисляем роли на основе переданного пользователя
   const isAdmin = user?.company_type === "platform";
   const isCustomsBroker = user?.company_type === "customs_broker";
 
@@ -105,6 +105,9 @@ export const createFlightsColumns = (
       meta: { align: "right" },
       cell: ({ row }) => {
         const status = row.original.status;
+        const tripId = row.original.trip_id;
+        const flightId = row.original.id; // ID самого рейса
+        const hasTrip = Boolean(tripId);
 
         return (
           <div className="flex items-center justify-end gap-0.5">
@@ -114,16 +117,28 @@ export const createFlightsColumns = (
                   variant="ghost"
                   className="h-6 w-6 p-0 hover:bg-gray-500/10"
                   title="Просмотр"
-                  onClick={() => onEdit(row.original.id)}
+                  onClick={() => onEdit(flightId)}
                 >
                   <Eye className="text-muted-foreground/70 h-3 w-3" />
                 </Button>
 
-                <Button asChild variant="ghost" className="h-6 w-6 p-0 hover:bg-green-500/10">
-                  <Link href={`/dashboard/test/${row.original.id}/flight-finance`} title="Финансы рейса">
-                    <DollarSign className="text-muted-foreground/70 h-3.5 w-3.5 transition-colors hover:text-green-600" />
-                  </Link>
-                </Button>
+                {/* Если есть маршрут — ссылка, если нет — желтая кнопка добавления */}
+                {hasTrip ? (
+                  <Button asChild variant="ghost" className="h-6 w-6 p-0 transition-all hover:bg-zinc-950/5">
+                    <Link href={`/dashboard/test/${tripId}/trips`} title="Маршрут рейса">
+                      <Truck className="h-3.5 w-3.5 text-zinc-500 transition-colors hover:text-zinc-950" />
+                    </Link>
+                  </Button>
+                ) : (
+                  <Button
+                    variant="ghost"
+                    onClick={() => onCreateTrip(flightId)}
+                    className="h-6 w-6 p-0 transition-all hover:bg-yellow-500/10"
+                    title="Создать маршрут"
+                  >
+                    <Truck className="h-3.5 w-3.5 text-yellow-500 transition-colors hover:text-yellow-600" />
+                  </Button>
+                )}
               </>
             )}
 
@@ -132,14 +147,14 @@ export const createFlightsColumns = (
                 variant="ghost"
                 className="h-6 w-6 p-0 hover:bg-blue-500/10"
                 title="Подтвердить прием с таможни"
-                onClick={() => onCustomsConfirm(row.original.id)}
+                onClick={() => onCustomsConfirm(flightId)}
               >
                 <PackageCheck className="text-muted-foreground/70 h-3.5 w-3.5 transition-colors hover:text-blue-600" />
               </Button>
             )}
 
             <Button asChild variant="ghost" className="h-6 w-6 p-0 hover:bg-gray-500/10">
-              <Link href={`/dashboard/test/${row.original.id}/shipments`} title="Открыть отправки">
+              <Link href={`/dashboard/test/${flightId}/shipments`} title="Открыть отправки">
                 <ChevronRight className="text-muted-foreground/70 h-3 w-3" />
               </Link>
             </Button>
