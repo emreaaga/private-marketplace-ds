@@ -4,7 +4,7 @@ import { useMemo, useState } from "react";
 
 import dynamic from "next/dynamic";
 
-import { useShipmentsList } from "@/entities/shipment/queries/use-shipments-list.server";
+import { useShipmentsList } from "@/entities/shipment/queries/use-shipments-list";
 import { getShipmentsColumns } from "@/entities/shipment/ui";
 import { DataTable } from "@/widgets/data-table/ui/data-table";
 import { ShipmentToolbar } from "@/widgets/shipments-toolbar";

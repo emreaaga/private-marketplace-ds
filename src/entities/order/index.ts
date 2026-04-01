@@ -10,6 +10,7 @@ export * from "./model/order.status.meta";
 export * from "./api/types/orders.types";
 
 // API
+export { revalidateOrders } from "./api-server/orders-actions";
 export * from "./api/create-order.api";
 export * from "./api/get-order-detail.api";
 export * from "./api/get-order-summary.api";

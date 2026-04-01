@@ -14,6 +14,7 @@ export type {
 } from "./api/types/flight-distribution.res";
 
 // API
+export { revalidateFlights } from "./api-server/flights-actions";
 export { createFlightApi } from "./api/create-flight.api";
 export * from "./api/get-flight-detail.api";
 export * from "./api/get-flight-summary.api";

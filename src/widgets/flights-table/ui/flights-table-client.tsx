@@ -70,7 +70,7 @@ export function FlightsTableClient({ initialData, pageCount, currentPage, user }
       createFlightsColumns(
         setEditId,
         (id) => setConfirmId(id),
-        (id) => setCreateTripFlightId(id), // Функция для открытия модалки создания маршрута
+        (id) => setCreateTripFlightId(id),
         user,
       ),
     [user],
