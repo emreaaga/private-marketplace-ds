@@ -88,15 +88,22 @@ export default function CountryCityPopoverSelect({
                   <Image src={country.flag} alt="" fill className="object-cover" sizes="20px" />
                 </div>
                 <span className="truncate">
-                  {country.label}
+                  {value.country?.toUpperCase()}
+
                   {mode !== "country-only" && selectedCityMeta && (
-                    <span className="text-muted-foreground/70 mx-1">/</span>
+                    <>
+                      <span className="text-muted-foreground/70 mx-1">/</span>
+
+                      {selectedCityMeta.code.toUpperCase()}
+                    </>
                   )}
-                  {mode !== "country-only" && selectedCityMeta && selectedCityMeta.label}
+
                   {mode === "country-city-district" && value.district && (
-                    <span className="text-muted-foreground/70 mx-1">/</span>
+                    <>
+                      <span className="text-muted-foreground/70 mx-1">/</span>
+                      {value.district}
+                    </>
                   )}
-                  {mode === "country-city-district" && value.district}
                 </span>
               </>
             ) : (

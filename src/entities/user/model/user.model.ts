@@ -1,7 +1,7 @@
 import type { CompanyType } from "@/entities/company";
 
 export type UserStatuses = "pending" | "active" | "blocked";
-export type UserRoles = "company_owner" | "employee" | "courier" | "seller";
+export type UserRoles = "company_owner" | "employee" | "courier";
 export type AllUserRoles = UserRoles | "admin";
 
 export type User = {

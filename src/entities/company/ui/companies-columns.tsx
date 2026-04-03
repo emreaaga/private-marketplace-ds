@@ -5,7 +5,6 @@ import { ReactNode } from "react";
 import type { ColumnDef } from "@tanstack/react-table";
 import { Eye } from "lucide-react";
 
-import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/atoms/button";
 
 import type { Company } from "../model/company.model";
@@ -35,29 +34,6 @@ export function createCompaniesColumns(actions: CompaniesTableActions): ColumnDe
       ),
     },
     {
-      accessorKey: "name",
-      header: "Фирма",
-      cell: ({ row, getValue }) => {
-        const name = getValue<string>() ?? "";
-        const isActive = row.original.is_active;
-
-        const CHAR_LIMIT = 6;
-        const isTooLong = name.length > CHAR_LIMIT;
-
-        const displayName = isTooLong ? name.slice(0, CHAR_LIMIT).trim() + ".." : name;
-
-        return (
-          <div className="flex items-center gap-2">
-            <div className={cn("h-1.5 w-1.5 shrink-0 rounded-full", isActive ? "bg-emerald-500" : "bg-red-500")} />
-
-            <span className="text-foreground text-[13px] font-medium tracking-tight" title={name}>
-              {displayName}
-            </span>
-          </div>
-        );
-      },
-    },
-    {
       accessorKey: "type",
       header: "Тип",
       cell: ({ getValue }) => {
@@ -71,6 +47,10 @@ export function createCompaniesColumns(actions: CompaniesTableActions): ColumnDe
           </MinimalBadge>
         );
       },
+    },
+    {
+      accessorKey: "name",
+      header: "Фирма",
     },
     {
       id: "location",

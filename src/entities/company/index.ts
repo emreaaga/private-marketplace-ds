@@ -28,4 +28,5 @@ export * from "./queries/use-update-company";
 // UI
 export { createCompaniesColumns } from "./ui/companies-columns";
 export { CompanySelect } from "./ui/company-select";
+export { CompanyServicePopoverSelect } from "./ui/company-service-select";
 export { CompanyTypeSelect } from "./ui/company-type-select";

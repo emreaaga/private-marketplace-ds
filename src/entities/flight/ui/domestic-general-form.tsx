@@ -2,7 +2,7 @@
 
 import { Controller, useFormContext, useWatch } from "react-hook-form";
 
-import { CompanySelect } from "@/entities/company";
+import { CompanyServicePopoverSelect } from "@/entities/company";
 import { DateTimePicker } from "@/shared/ui/atoms/date-picker";
 import CountryCityPopoverSelect from "@/shared/ui/atoms/select-with-flags";
 
@@ -13,14 +13,15 @@ interface DomesticFlightGeneralFormProps {
 }
 
 export function DomesticFlightGeneralForm({ isVisible = true }: DomesticFlightGeneralFormProps) {
-  const { control } = useFormContext<FlightFormValues>();
+  const { control, setValue } = useFormContext<FlightFormValues>();
 
   const departureLocation = useWatch({ control, name: "departure_location" });
   const departureCountry = departureLocation?.country ?? undefined;
 
+  const airServiceId = useWatch({ control, name: "air_service_id" });
+
   return (
     <div className="space-y-4 text-xs">
-      {/* Локации */}
       <div className="grid grid-cols-2 gap-2">
         <Controller
           name="departure_location"
@@ -34,25 +35,45 @@ export function DomesticFlightGeneralForm({ isVisible = true }: DomesticFlightGe
         />
       </div>
 
-      {/* Партнер (например, авто-перевозчик или внутренняя авиалиния) */}
+      {/* Выбор перевозчика и услуги в одном месте */}
       <div className="grid grid-cols-1">
         <Controller
           name="air_partner_id"
           control={control}
           render={({ field }) => (
-            <CompanySelect
-              type="air_partner" // Можно сменить на "trucking_company", если есть такой тип
-              placeholder="Перевозчик ISUZU"
+            <CompanyServicePopoverSelect
+              placeholder="Выберите перевозчика и тариф"
               country={departureCountry}
               enabled={isVisible && !!departureCountry}
-              value={field.value as number}
-              onChange={field.onChange}
+              // Передаем текущие значения из формы
+              value={{
+                companyId: field.value as number,
+                serviceId: airServiceId as number,
+              }}
+              onChangeAction={(val, price) => {
+                // 1. Обновляем ID партнера (основное поле контроллера)
+                field.onChange(val.companyId);
+
+                // 2. Обновляем ID услуги
+                setValue("air_service_id", val.serviceId as number, {
+                  shouldDirty: true,
+                  shouldValidate: true,
+                });
+
+                // 3. Обновляем цену за кг (если она есть в схеме)
+                if (price !== undefined) {
+                  setValue("air_kg_price", price.toString(), {
+                    shouldDirty: true,
+                    shouldValidate: true,
+                  });
+                }
+              }}
             />
           )}
         />
       </div>
 
-      {/* Даты вылета/прилета */}
+      {/* Остальные поля... */}
       <div className="grid grid-cols-2 gap-2">
         <Controller
           name="departure_at"
@@ -66,7 +87,6 @@ export function DomesticFlightGeneralForm({ isVisible = true }: DomesticFlightGe
         />
       </div>
 
-      {/* Даты погрузки/разгрузки */}
       <div className="grid grid-cols-2 gap-2">
         <Controller
           name="loading_at"

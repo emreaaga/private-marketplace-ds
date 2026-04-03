@@ -1,6 +1,4 @@
 import {
-  ArrowDownLeft,
-  ArrowUpRight,
   Banknote,
   Building2,
   ClipboardList,
@@ -24,8 +22,6 @@ export const ICON_MAP = {
   finance: Banknote,
   company: Building2,
   service: LucideTextSelection,
-  outbound: ArrowUpRight,
-  inbound: ArrowDownLeft,
   clients: UserSquare,
   truck: Truck,
 } as const;

@@ -1,4 +1,4 @@
-import { Briefcase, ShieldCheck, ShoppingCart, Truck, Users } from "lucide-react";
+import { Briefcase, ShieldCheck, Truck, Users } from "lucide-react";
 
 import { AllUserRoles, UserRoles } from "./user.model";
 
@@ -27,11 +27,6 @@ export const ALL_USER_ROLE_META: Record<AllUserRoles, RoleMeta> = {
   courier: {
     label: "Курьер",
     Icon: Truck,
-    disabled: true,
-  },
-  seller: {
-    label: "Продавец",
-    Icon: ShoppingCart,
     disabled: true,
   },
 };

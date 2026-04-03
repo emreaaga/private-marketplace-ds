@@ -1,5 +1,10 @@
 export const usersHeaderItems = [
   {
+    href: "/dashboard/users/roles",
+    label: "Роли",
+    icon: "users",
+  },
+  {
     href: "/dashboard/users/main",
     label: "Пользователи",
     icon: "users",
