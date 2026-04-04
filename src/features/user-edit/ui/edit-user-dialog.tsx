@@ -29,7 +29,7 @@ type Props = {
 };
 
 const EMPTY: EditUserFormValues = {
-  role: "employee",
+  role: "company_owner",
   name: "",
   surname: "",
   email: "",

@@ -5,14 +5,14 @@ export const usersHeaderItems = [
     icon: "users",
   },
   {
-    href: "/dashboard/users/main",
-    label: "Пользователи",
-    icon: "users",
+    href: "/dashboard/users/companies",
+    label: "Компании",
+    icon: "company",
   },
   {
-    href: "/dashboard/users/companies",
-    label: "Фирмы",
-    icon: "company",
+    href: "/dashboard/users/main",
+    label: "Сотрудники",
+    icon: "users",
   },
   {
     href: "/dashboard/users/services",

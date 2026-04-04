@@ -50,26 +50,6 @@ export function createUsersColumns(actions: UsersTableActions): ColumnDef<User>[
       },
     },
     {
-      accessorKey: "email",
-      header: "Email",
-      cell: ({ getValue }) => <span className="text-muted-foreground text-[13px]">{getValue<string>()}</span>,
-    },
-    {
-      accessorKey: "company_name",
-      header: "Компания",
-      cell: ({ row }) => {
-        const type = row.original.company_type as CompanyType;
-        const meta = COMPANY_TYPE_META[type];
-
-        return (
-          <div className="inline-flex items-center gap-2 text-[13px]">
-            <meta.Icon className="text-muted-foreground/60 h-3.5 w-3.5" />
-            <span className="truncate">{row.original.company_name}</span>
-          </div>
-        );
-      },
-    },
-    {
       accessorKey: "role",
       header: "Роль",
       cell: ({ getValue }) => {
@@ -83,6 +63,31 @@ export function createUsersColumns(actions: UsersTableActions): ColumnDef<User>[
           </MinimalBadge>
         );
       },
+    },
+    {
+      accessorKey: "company_type",
+      header: "Тип компании",
+      cell: ({ getValue }) => {
+        const type = getValue<CompanyType>();
+        const meta = COMPANY_TYPE_META[type];
+
+        return (
+          <MinimalBadge>
+            <meta.Icon className="h-3 w-3 opacity-70" />
+            {meta.label}
+          </MinimalBadge>
+        );
+      },
+    },
+
+    {
+      accessorKey: "company_name",
+      header: "Компания",
+    },
+    {
+      accessorKey: "email",
+      header: "Email",
+      cell: ({ getValue }) => <span className="text-muted-foreground text-[13px]">{getValue<string>()}</span>,
     },
     {
       accessorKey: "created_at",

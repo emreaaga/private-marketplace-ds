@@ -16,7 +16,7 @@ export const sidebarItems: NavGroup[] = [
       },
       {
         title: "Пользователи",
-        url: "/dashboard/users/main",
+        url: "/dashboard/users/roles",
         icon: Users,
       },
       {

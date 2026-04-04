@@ -1,65 +1,45 @@
-import React from "react";
+"use client";
 
-import { COMPANY_TYPE_META, type CompanyType } from "@/entities/company";
+import { useMemo } from "react";
+
+import { COMPANY_TYPE_META, CompanyType } from "@/entities/company";
 import { USER_ROLE_META, UserRoles } from "@/entities/user";
+import { DataTable } from "@/widgets/data-table/ui/data-table";
 
-interface DirectoryItem {
-  number: number;
-  label: string;
-  Icon: React.ComponentType<{ className?: string }>;
-}
-
-interface SimpleTableProps {
-  title: string;
-  data: DirectoryItem[];
-}
-
-function SimpleDirectoryList({ title, data }: SimpleTableProps) {
-  return (
-    <div className="border-border/50 bg-background/50 hover:border-border/80 flex flex-col gap-4 rounded-xl border p-4 shadow-[0_1px_3px_rgba(0,0,0,0.01)] transition-colors">
-      <h3 className="text-muted-foreground/70 px-1 text-[10px] font-bold tracking-[0.2em] uppercase">{title}</h3>
-
-      <div className="space-y-0.5">
-        {data.map((item) => (
-          <div
-            key={item.number}
-            className="group hover:bg-secondary/60 flex items-center gap-4 rounded-md px-2 py-1.5 transition-colors"
-          >
-            <span className="text-muted-foreground/60 group-hover:text-primary/80 w-5 shrink-0 font-mono text-[11px] font-medium transition-colors">
-              {String(item.number).padStart(2, "0")}
-            </span>
-
-            <div className="flex items-center gap-3">
-              <div className="bg-muted/40 text-muted-foreground/60 group-hover:bg-primary/10 group-hover:text-primary flex h-7 w-7 items-center justify-center rounded-lg transition-colors">
-                <item.Icon className="h-4 w-4" />
-              </div>
-
-              <span className="text-foreground/90 group-hover:text-foreground text-[13px] font-medium transition-colors">
-                {item.label}
-              </span>
-            </div>
-          </div>
-        ))}
-      </div>
-    </div>
-  );
-}
+// Импортируем колонки, которые мы подготовили
+import { directoryColumns, DirectoryEntity } from "./_components/directory-columns";
 
 export default function DirectoryPage() {
-  const rolesData: DirectoryItem[] = (Object.keys(USER_ROLE_META) as UserRoles[]).map((key, index) => ({
-    number: index + 1,
-    ...USER_ROLE_META[key],
-  }));
-
-  const companyTypesData: DirectoryItem[] = (Object.keys(COMPANY_TYPE_META) as CompanyType[]).map((key, index) => ({
-    number: index + 1,
-    ...COMPANY_TYPE_META[key],
-  }));
+  const data = useMemo<DirectoryEntity[]>(
+    () => [
+      ...(Object.keys(USER_ROLE_META) as UserRoles[]).map((key) => ({
+        id: key,
+        label: USER_ROLE_META[key].label,
+        category: "Роль" as const,
+        Icon: USER_ROLE_META[key].Icon,
+        rawKey: key,
+      })),
+      ...(Object.keys(COMPANY_TYPE_META) as CompanyType[]).map((key) => ({
+        id: key,
+        label: COMPANY_TYPE_META[key].label,
+        category: "Компания" as const,
+        Icon: COMPANY_TYPE_META[key].Icon,
+        rawKey: key,
+      })),
+    ],
+    [],
+  );
 
   return (
-    <div className="grid grid-cols-1 items-start gap-6 md:grid-cols-2 lg:gap-8">
-      <SimpleDirectoryList title="Роли пользователей" data={rolesData} />
-      <SimpleDirectoryList title="Типы компаний" data={companyTypesData} />
+    <div className="space-y-4">
+      {/* Поскольку это справочник, нам не нужна серверная пагинация.
+        DataTable просто выведет все данные из массива data.
+      */}
+      <DataTable
+        columns={directoryColumns}
+        data={data}
+        // Если данных мало, можно убрать пагинацию или оставить дефолтную клиентскую
+      />
     </div>
   );
 }
