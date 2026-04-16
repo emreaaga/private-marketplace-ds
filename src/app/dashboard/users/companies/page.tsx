@@ -17,6 +17,7 @@ export default function CompaniesMainPage() {
   const [page, setPage] = useState(1);
   const [editOpen, setEditOpen] = useState(false);
   const [editCompanyId, setEditCompanyId] = useState<number | null>(null);
+  const [editCountry, setEditCountry] = useState<string | null>(null);
 
   const { data, isLoading, isError } = useCompaniesList({ page });
 
@@ -27,12 +28,16 @@ export default function CompaniesMainPage() {
 
   const openEdit = useCallback((company: Company) => {
     setEditCompanyId(company.id);
+    setEditCountry(company.country);
     setEditOpen(true);
   }, []);
 
   const closeEdit = useCallback(() => {
     setEditOpen(false);
-    setTimeout(() => setEditCompanyId(null), 200);
+    setTimeout(() => {
+      setEditCompanyId(null);
+      setEditCountry(null);
+    }, 200);
   }, []);
 
   const columns = useMemo(
@@ -66,6 +71,7 @@ export default function CompaniesMainPage() {
       {editOpen && (
         <CompanyEditDialog
           open={editOpen}
+          country={editCountry}
           companyId={editCompanyId}
           pending={updateCompany.isPending}
           onOpenChangeAction={(open) => !open && closeEdit()}

@@ -22,7 +22,6 @@ export function DemoRouteBuilder() {
   const [openStates, setOpenStates] = useState<Record<number, boolean>>({});
 
   const addPoint = () => {
-    // Добавляем в конец массива
     setPoints((prev) => [...prev, { id: Date.now(), code: "" }]);
   };
 
@@ -38,9 +37,7 @@ export function DemoRouteBuilder() {
 
   return (
     <div className="flex h-full flex-col bg-white font-sans antialiased">
-      {/* Шапка в стиле Vercel/Notion */}
       <div className="sticky top-0 z-10 flex items-center justify-between border-b border-zinc-100 bg-white/80 px-4 py-2 backdrop-blur-md">
-        <span className="text-[11px] font-medium tracking-tight text-zinc-400 uppercase">Route</span>
         <Button
           variant="outline"
           size="icon"
@@ -61,7 +58,6 @@ export function DemoRouteBuilder() {
             return (
               <div key={point.id} className="flex flex-col items-center">
                 <div className="group relative flex items-center">
-                  {/* Миниатюрная кнопка удаления слева */}
                   <div className="absolute -left-8 opacity-0 transition-all duration-200 group-hover:opacity-100">
                     <button
                       type="button"

@@ -5,14 +5,16 @@ import { useState } from "react";
 import { BadgeCheckIcon, Building2, Loader2, MapPin, MoreHorizontal, Plus, X } from "lucide-react";
 
 import { Branch, CreateBranchForm, useCompanyBranches } from "@/entities/branch";
+import { type CountryCode } from "@/entities/geography";
 import { cn } from "@/shared/lib/utils";
 import { Button } from "@/shared/ui/atoms/button";
 
 type Props = {
   companyId: number | null;
+  defaultCountry: CountryCode | null | undefined;
 };
 
-export function CompanyBranchesList({ companyId }: Props) {
+export function CompanyBranchesList({ companyId, defaultCountry }: Props) {
   const { data: branches, isLoading, isError } = useCompanyBranches(companyId);
   const [isAdding, setIsAdding] = useState(false);
 
@@ -53,7 +55,13 @@ export function CompanyBranchesList({ companyId }: Props) {
         )}
       </div>
 
-      {isAdding && companyId && <CreateBranchForm companyId={companyId} onCloseAction={() => setIsAdding(false)} />}
+      {isAdding && companyId && (
+        <CreateBranchForm
+          companyId={companyId}
+          initialCountry={defaultCountry}
+          onCloseAction={() => setIsAdding(false)}
+        />
+      )}
 
       {!branches?.length ? (
         <div className="flex flex-col items-center justify-center py-12 text-center">

@@ -37,10 +37,17 @@ export function PartyForm({ title, value, onChange }: PartyFormProps) {
   return (
     <section className="w-full space-y-2 py-1">
       <div className="flex items-center justify-between">
-        <h3 className="text-primary/40 text-[10px] font-bold tracking-widest uppercase">{title}</h3>
         <Input
-          placeholder="Код"
-          className="h-7 w-16 px-2 text-[11px]"
+          placeholder={`${title} филиал`}
+          readOnly
+          className="h-7 w-30 px-2 text-[11px]"
+          value={value.code || ""}
+          onChange={(e) => onChange({ code: e.target.value })}
+        />
+        <Input
+          placeholder={`${title} курьер`}
+          readOnly
+          className="h-7 w-30 px-2 text-[11px]"
           value={value.code || ""}
           onChange={(e) => onChange({ code: e.target.value })}
         />

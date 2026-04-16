@@ -90,11 +90,7 @@ export const ShipmentColumns: ColumnDef<Shipment>[] = [
   {
     accessorKey: "col9",
     header: () => <HeaderWithIcon icon={stageIcons.client} label="Клиент" />,
-    cell: () => (
-      <TableBadge icon={stageIcons.client} variant="outline">
-        Клнт.
-      </TableBadge>
-    ),
+    cell: () => <TableBadge icon={stageIcons.client}>Клнт.</TableBadge>,
   },
 
   {

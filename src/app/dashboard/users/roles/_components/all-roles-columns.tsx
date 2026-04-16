@@ -2,10 +2,8 @@
 
 import { ReactNode } from "react";
 
-import Link from "next/link";
-
 import type { ColumnDef } from "@tanstack/react-table";
-import { ChevronRight, Edit2, Eye, HelpCircle, MoreHorizontal } from "lucide-react";
+import { Edit2, Eye, HelpCircle, MoreHorizontal } from "lucide-react";
 
 import { COMPANY_TYPE_META } from "@/entities/company";
 import { USER_ROLE_META } from "@/entities/user";
@@ -96,10 +94,6 @@ export function createAllUsersColumns(actions: DirectoryTableActions): ColumnDef
       meta: { align: "right" },
       size: 70,
       cell: ({ row }) => {
-        const { category } = row.original;
-
-        const href = category === "user" ? "/dashboard/users/main" : "/dashboard/users/companies";
-
         return (
           <div className="flex items-center justify-end gap-0.5">
             <Button
@@ -127,12 +121,6 @@ export function createAllUsersColumns(actions: DirectoryTableActions): ColumnDef
                 </DropdownMenuItem>
               </DropdownMenuContent>
             </DropdownMenu>
-
-            <Button asChild variant="ghost" className="h-6 w-6 p-0 hover:bg-gray-500/10" title="Перейти" size="icon">
-              <Link href={href}>
-                <ChevronRight className="text-muted-foreground/70 h-3.5 w-3.5" />
-              </Link>
-            </Button>
           </div>
         );
       },

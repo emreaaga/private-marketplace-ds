@@ -31,7 +31,7 @@ export const sidebarItems: NavGroup[] = [
     label: "Логистика",
     items: [
       {
-        title: "Логистика",
+        title: "Почта",
         url: "/dashboard/test/flights",
         icon: Package,
       },

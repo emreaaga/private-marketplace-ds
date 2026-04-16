@@ -18,6 +18,8 @@ type DateTimePickerProps = {
 
 export function DateTimePicker({ placeholder, value, onChange }: DateTimePickerProps) {
   const [open, setOpen] = React.useState(false);
+
+  // Оставляем логику для input type="time"
   const timeValue = value
     ? `${value.getHours().toString().padStart(2, "0")}:${value.getMinutes().toString().padStart(2, "0")}`
     : "12:00";
@@ -29,7 +31,8 @@ export function DateTimePicker({ placeholder, value, onChange }: DateTimePickerP
           variant="outline"
           className={cn("h-9 w-full justify-between px-3 text-sm font-normal", !value && "text-muted-foreground")}
         >
-          {value ? value.toLocaleString() : placeholder}
+          {/* ИЗМЕНЕНО: используем toLocaleDateString() вместо toLocaleString() */}
+          {value ? value.toLocaleDateString() : placeholder}
           <ChevronDownIcon className="h-4 w-4 opacity-60" />
         </Button>
       </PopoverTrigger>
@@ -54,9 +57,11 @@ export function DateTimePicker({ placeholder, value, onChange }: DateTimePickerP
               type="time"
               value={timeValue}
               onChange={(e) => {
-                if (!value) return;
+                // Если дата еще не выбрана, а время уже меняют,
+                // создаем текущую дату и применяем к ней время
+                const current = value || new Date();
                 const [h, m] = e.target.value.split(":");
-                const d = new Date(value);
+                const d = new Date(current);
                 d.setHours(Number(h), Number(m));
                 onChange(d);
               }}

@@ -21,14 +21,10 @@ export function OrderCreateFormContent({ onSuccess, onCancel, shipmentId }: Prop
       <div className="flex min-h-0 flex-1 gap-0 overflow-hidden px-0">
         <aside className="custom-scrollbar border-border/40 bg-muted/5 w-90 shrink-0 overflow-y-auto border-r p-6">
           <div className="space-y-8">
-            <PartyForm
-              title="Отправитель"
-              value={state.sender}
-              onChange={(p) => actions.setSender((s) => ({ ...s, ...p }))}
-            />
+            <PartyForm title="Отпр" value={state.sender} onChange={(p) => actions.setSender((s) => ({ ...s, ...p }))} />
             <div className="from-border/60 h-px w-full bg-linear-to-r to-transparent" />
             <PartyForm
-              title="Получатель"
+              title="Полч"
               value={state.receiver}
               onChange={(p) => actions.setReceiver((r) => ({ ...r, ...p }))}
             />

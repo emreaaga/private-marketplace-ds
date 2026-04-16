@@ -4,13 +4,7 @@ import { zodResolver } from "@hookform/resolvers/zod";
 import { FieldErrors, FormProvider, useForm } from "react-hook-form";
 import { toast } from "sonner";
 
-import {
-  DemoRouteBuilder,
-  DomesticFlightGeneralForm,
-  flightFormSchema,
-  useCreateFlight,
-  type FlightFormValues,
-} from "@/entities/flight";
+import { DemoRouteBuilder, flightFormSchema, useCreateFlight, type FlightFormValues } from "@/entities/flight";
 import { toCreateFlightDto } from "@/entities/flight/lib";
 import { FlightGeneralForm } from "@/entities/flight/ui";
 import { ShipmentList } from "@/entities/shipment/ui";
@@ -93,18 +87,12 @@ export function FlightsDialog({
             </TabsContent>
 
             <TabsContent value="domestic" className="m-0 min-h-0 flex-1 data-[state=inactive]:hidden">
-              <div className="grid h-full min-h-0 grid-cols-[350px_140px_1fr]">
-                <div className="min-w-0 overflow-auto px-4 py-4">
-                  <DomesticFlightGeneralForm isVisible={open} />
-                </div>
-
-                <div className="min-w-0 overflow-hidden">
+              <div className="grid h-full min-h-0 grid-cols-[minmax(300px,20%)_1fr]">
+                <div className="min-w-0 overflow-auto border-r bg-slate-50/30 p-4">
                   <DemoRouteBuilder />
                 </div>
 
-                <div className="min-w-0 overflow-hidden">
-                  <ShipmentList />
-                </div>
+                <div className="min-w-0 overflow-hidden bg-white"> test{/* <DomesticFlightStats />*/}</div>
               </div>
             </TabsContent>
 

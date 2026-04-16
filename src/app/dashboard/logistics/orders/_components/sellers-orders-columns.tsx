@@ -1,128 +1,122 @@
-import { ColumnDef } from "@tanstack/react-table";
-import { MoreHorizontal } from "lucide-react";
+import { ColumnDef, Row } from "@tanstack/react-table";
 
-import { Button } from "@/shared/ui/atoms/button";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuTrigger,
-} from "@/shared/ui/atoms/dropdown-menu";
 import { TableBadge } from "@/shared/ui/molecules/table-badge";
 
 import { HeaderWithIcon } from "./header-icon";
 import { type Order } from "./orders.type";
 import { stageIcons } from "./stage-icons";
 
+type CellValue = string | ((row: Row<Order>) => string | React.ReactNode);
+
+interface FinanceStat {
+  value: string;
+  unit: string;
+  highlight?: boolean;
+}
+
+interface StageRowConfig {
+  text: CellValue;
+  tooltip?: string;
+  stats?: FinanceStat[];
+}
+
+const MiniStat = ({ value, unit, highlight }: FinanceStat) => {
+  const [int, dec] = value.split(".");
+  return (
+    <span
+      className={`flex items-baseline text-[8px] font-bold tabular-nums ${
+        highlight ? "text-blue-600" : "text-slate-500"
+      }`}
+    >
+      {int}
+      {dec && <span className="text-[6px]">.{dec}</span>}
+      <span className="ml-0.5 font-medium text-slate-400">{unit}</span>
+    </span>
+  );
+};
+
+const createStackedColumn = (
+  id: string,
+  config: {
+    icon: keyof typeof stageIcons;
+    label: string;
+    top: StageRowConfig;
+    bottom: StageRowConfig;
+  },
+): ColumnDef<Order> => ({
+  accessorKey: id,
+  header: () => <HeaderWithIcon icon={stageIcons[config.icon]} label={config.label} />,
+  cell: ({ row }) => {
+    const renderRow = (rowConfig: StageRowConfig) => {
+      const text = typeof rowConfig.text === "function" ? rowConfig.text(row) : rowConfig.text;
+
+      return (
+        <TableBadge innerBadge="" tooltip={rowConfig.tooltip}>
+          <div className="flex items-center gap-1.5">
+            <span className="shrink-0">{text}</span>
+
+            {rowConfig.stats && rowConfig.stats.length > 0 && (
+              <div className="ml-0.5 flex items-center gap-1 border-slate-200 pl-1.5">
+                {rowConfig.stats.map((stat, idx) => (
+                  <MiniStat key={idx} {...stat} />
+                ))}
+              </div>
+            )}
+          </div>
+        </TableBadge>
+      );
+    };
+
+    return (
+      <div className="flex flex-col gap-1 py-1">
+        {renderRow(config.top)}
+
+        {renderRow(config.bottom)}
+      </div>
+    );
+  },
+});
+
 export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
-  {
-    accessorKey: "col1",
-    header: () => <HeaderWithIcon icon={stageIcons.client} label="Клиент" />,
-    cell: () => (
-      <TableBadge innerBadge="283.00$" tooltip="12.09.2025 · 14:32">
-        Клнт.
-      </TableBadge>
-    ),
-  },
-  {
-    accessorKey: "col2",
-    header: () => <HeaderWithIcon icon={stageIcons.courier} label="Курьер" />,
-    cell: () => <TableBadge innerBadge="128.03$">Курь.</TableBadge>,
-  },
-  {
-    accessorKey: "col3",
-    header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт1" />,
-    cell: ({ row }) => <TableBadge innerBadge="6.00$/кг">{row.original.id}</TableBadge>,
-  },
-  {
-    accessorKey: "col4",
-    header: () => <HeaderWithIcon icon={stageIcons.customs} label="Таможня" />,
-    cell: () => <TableBadge innerBadge="123456">Тамж.</TableBadge>,
-  },
-  {
-    accessorKey: "col5",
-    header: () => <HeaderWithIcon icon={stageIcons.flight} label="Самолет" />,
-    cell: () => <TableBadge innerBadge="001">TR-UZ</TableBadge>,
-  },
-  {
-    accessorKey: "col6",
-    header: () => <HeaderWithIcon icon={stageIcons.customs} label="Таможня" />,
-    cell: () => <TableBadge innerBadge="123456">Тамж.</TableBadge>,
-  },
-  {
-    accessorKey: "col7",
-    header: () => <HeaderWithIcon icon={stageIcons.point} label="Пункт 2" />,
-    cell: () => <TableBadge innerBadge="12.00кг">Почт.</TableBadge>,
-  },
-  {
-    accessorKey: "col8",
-    header: () => <HeaderWithIcon icon={stageIcons.courier} label="Курьер" />,
-    cell: () => <TableBadge innerBadge="18.05$">Курь.</TableBadge>,
-  },
-  {
-    accessorKey: "col9",
-    header: () => <HeaderWithIcon icon={stageIcons.client} label="Клиент" />,
-    cell: () => (
-      <TableBadge innerBadge="123456" variant="outline">
-        Клнт.
-      </TableBadge>
-    ),
-  },
-  {
-    accessorKey: "col10",
-    header: () => <HeaderWithIcon icon={stageIcons.finance} label="Финансы" />,
-    cell: () => (
-      <TableBadge>
-        <div className="flex items-center gap-1">
-          <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
-            183<span className="align-bottom text-[6px]">.42</span>
-            <span className="ml-0.5 text-slate-400">кг</span>
-          </span>
+  createStackedColumn("col_id", {
+    icon: "client",
+    label: "ID",
+    top: { text: (row) => `${row.original.id}` },
+    bottom: { text: "" },
+  }),
 
-          <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
-            6<span className="align-bottom text-[6px]">.15</span>
-            <span className="ml-0.5 text-slate-400">$/кг</span>
-          </span>
+  createStackedColumn("col1", {
+    icon: "client",
+    label: "Клиент",
+    top: { text: "Клнт. 1", stats: [{ value: "50.45", unit: "$" }] },
+    bottom: { text: "Клнт. 2" },
+  }),
 
-          <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
-            155<span className="align-bottom text-[6px]">.80</span>
-            <span className="ml-0.5 text-slate-400">$</span>
-          </span>
+  createStackedColumn("col2", {
+    icon: "courier",
+    label: "Курьер",
+    top: { text: "Отп курьер", stats: [{ value: "32.45", unit: "$" }] },
+    bottom: { text: "Пол курьер", stats: [{ value: "32.45", unit: "$" }] },
+  }),
 
-          <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium text-slate-700 tabular-nums">
-            340<span className="align-bottom text-[6px]">.27</span>
-            <span className="ml-0.5 text-slate-400">$</span>
-          </span>
+  createStackedColumn("col3", {
+    icon: "point",
+    label: "Пункт 1",
+    top: { text: "Пункт 1", stats: [{ value: "6.45", unit: "кг/$" }] },
+    bottom: { text: "Пункт 2", stats: [{ value: "1434.45", unit: "кг" }] },
+  }),
 
-          <span className="rounded border border-slate-200 bg-white px-1 py-0.5 text-[8px] font-medium tabular-nums">
-            160<span className="align-bottom text-[6px]">.94</span>
-            <span className="ml-0.5 text-slate-400">$</span>
-          </span>
-        </div>
-      </TableBadge>
-    ),
-  },
+  createStackedColumn("col4", {
+    icon: "customs",
+    label: "Таможня",
+    top: { text: "Отп тамж" },
+    bottom: { text: "Пол тамж" },
+  }),
 
-  {
-    id: "actions",
-    header: "",
-    size: 32,
-    enableSorting: false,
-    enableHiding: false,
-    cell: () => (
-      <DropdownMenu>
-        <DropdownMenuTrigger asChild>
-          <Button variant="ghost" size="icon" className="h-6 w-6">
-            <MoreHorizontal className="h-3.5 w-3.5" />
-          </Button>
-        </DropdownMenuTrigger>
-
-        <DropdownMenuContent align="end">
-          <DropdownMenuItem>Изменить</DropdownMenuItem>
-
-          <DropdownMenuItem className="text-destructive">Удалить</DropdownMenuItem>
-        </DropdownMenuContent>
-      </DropdownMenu>
-    ),
-  },
+  createStackedColumn("col5", {
+    icon: "flight",
+    label: "Самолет",
+    top: { text: "TR-IST" },
+    bottom: { text: "UZ-SKD" },
+  }),
 ];

@@ -3,6 +3,7 @@
 import { Loader2 } from "lucide-react";
 
 import { useCompanyDetail, type UpdateCompanyPayload } from "@/entities/company";
+import { type CountryCode } from "@/entities/geography";
 import { cn } from "@/shared/lib/utils";
 import { Dialog, DialogContent } from "@/shared/ui/atoms/dialog";
 import { Tabs, TabsContent } from "@/shared/ui/atoms/tabs";
@@ -16,13 +17,21 @@ import { useCompanyForm } from "./use-company-form";
 
 type Props = {
   open: boolean;
+  country?: CountryCode | null | undefined;
   companyId: number | null;
   pending?: boolean;
   onOpenChangeAction(open: boolean): void;
   onSubmitAction?: (companyId: number, values: UpdateCompanyPayload) => void | Promise<unknown>;
 };
 
-export function CompanyEditDialog({ open, companyId, pending = false, onOpenChangeAction, onSubmitAction }: Props) {
+export function CompanyEditDialog({
+  open,
+  companyId,
+  country,
+  pending = false,
+  onOpenChangeAction,
+  onSubmitAction,
+}: Props) {
   const isEnabled = open && companyId != null;
   const { data, isLoading, isError } = useCompanyDetail(companyId, isEnabled);
 
@@ -77,7 +86,7 @@ export function CompanyEditDialog({ open, companyId, pending = false, onOpenChan
               <CompanyServicesList companyId={companyId} />
             </TabsContent>
             <TabsContent value="branches" className="m-0 h-full border-none p-4 outline-none">
-              <CompanyBranchesList companyId={companyId} />
+              <CompanyBranchesList companyId={companyId} defaultCountry={country} />
             </TabsContent>
           </div>
         </Tabs>
