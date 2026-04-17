@@ -5,8 +5,8 @@ export const fakeOrders: Order[] = [
     id: "Z100001",
     date: "2025-02-10",
     status: "in_transit",
-    sender: { name: "Prodavec1", city: "TR-IST" },
-    recipient: { name: "Client1", city: "TAS" },
+    sender: { name: "Prodavec1", city: "IST", phone: "+90 555 123 45 67" },
+    recipient: { name: "Client1", city: "TAS", phone: "+998 90 123 45 67" },
     weight: 2.4,
     rate: 6.5,
     finances: {
@@ -21,8 +21,8 @@ export const fakeOrders: Order[] = [
     id: "Z100002",
     date: "2025-02-11",
     status: "delivered",
-    sender: { name: "Prodavec3", city: "TR-IST" },
-    recipient: { name: "Client3", city: "SKD" },
+    sender: { name: "Prodavec3", city: "IST", phone: "+998 90 123 45 67" },
+    recipient: { name: "Client3", city: "SKD", phone: "+998 90 123 45 67" },
     weight: 10.0,
     rate: 5.0,
     finances: {

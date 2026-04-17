@@ -5,8 +5,16 @@ export interface Order {
   date: string;
   status: OrderStatus;
 
-  sender: { name: string; city: string };
-  recipient: { name: string; city: string };
+  sender: {
+    name: string;
+    city: string;
+    phone: string; // Добавлено
+  };
+  recipient: {
+    name: string;
+    city: string;
+    phone: string; // Добавлено
+  };
 
   weight: number;
   rate: number;

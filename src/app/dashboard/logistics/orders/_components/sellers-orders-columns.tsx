@@ -47,6 +47,30 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
   },
 
   {
+    id: "phones",
+    header: "Контакты",
+    size: 130,
+    cell: ({ row }) => (
+      <div className="flex flex-col gap-0 py-0.5 text-[12px] tabular-nums">
+        <span>{row.original.sender.phone}</span>
+        <span>{row.original.recipient.phone}</span>
+      </div>
+    ),
+  },
+
+  {
+    id: "cities",
+    header: "Города",
+    size: 100,
+    cell: ({ row }) => (
+      <div className="flex flex-col gap-0 py-0.5 text-[12px] leading-tight tracking-wider uppercase">
+        <span>{row.original.sender.city}</span>
+        <span>{row.original.recipient.city}</span>
+      </div>
+    ),
+  },
+
+  {
     id: "couriers",
     header: "Курьер",
     size: 140,
@@ -86,12 +110,7 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     id: "flights",
     header: "Самолет",
     size: 100,
-    cell: () => (
-      <div className="flex flex-col gap-0 py-0.5 leading-tight">
-        <span className="text-[12px]">TR-IST</span>
-        <span className="text-[12px]">UZ-SKD</span>
-      </div>
-    ),
+    cell: () => <span className="text-xs font-medium tabular-nums">TR-UZ</span>,
   },
 
   {
@@ -100,10 +119,10 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     size: 90,
     cell: ({ row }) => (
       <div className="flex flex-col gap-0 py-0.5 leading-tight">
-        {/* Вес: Морская волна (Teal) — отличается от всех денежных знаков */}
-        {formatWeight(row.original.weight, cn(BASE_STYLE, "text-teal-600/90"))}
-        {/* Цена: Глубокий синий (Indigo) — стандарт информации */}
-        {formatMoney(row.original.finances.cargoPrice.toString(), cn(BASE_STYLE, "text-indigo-600/80"))}
+        {/* Верх: Вес (обычный цвет) */}
+        {formatWeight(row.original.weight, cn(BASE_STYLE, "text-foreground"))}
+        {/* Низ: Цена (приглушенный цвет для разделения) */}
+        {formatMoney(row.original.finances.cargoPrice.toString(), cn(BASE_STYLE, "text-muted-foreground"))}
       </div>
     ),
   },
@@ -114,10 +133,10 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     size: 90,
     cell: ({ row }) => (
       <div className="flex flex-col gap-0 py-0.5 leading-tight">
-        {/* Доп. оплата: Чистый зеленый (Emerald) */}
-        {formatMoney(row.original.finances.extraPayment.toString(), cn(BASE_STYLE, "text-emerald-600/90"))}
-        {/* Доп. расход: Мягкий красный (Rose) */}
-        {formatMoney(row.original.finances.extraExpense.toString(), cn(BASE_STYLE, "text-rose-500/80"))}
+        {/* Верх: Доп. оплата */}
+        {formatMoney(row.original.finances.extraPayment.toString(), cn(BASE_STYLE, "text-foreground"))}
+        {/* Низ: Доп. расход */}
+        {formatMoney(row.original.finances.extraExpense.toString(), cn(BASE_STYLE, "text-muted-foreground"))}
       </div>
     ),
   },
@@ -128,10 +147,10 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     size: 90,
     cell: ({ row }) => (
       <div className="flex flex-col gap-0 py-0.5 leading-tight">
-        {/* Взнос: Нейтральный (Slate) — показывает, что это уже в прошлом */}
-        {formatMoney(row.original.finances.deposit.toString(), cn(BASE_STYLE, "text-slate-500"))}
-        {/* Итог: Фиолетовый (Violet) — акцент на финальной цифре */}
-        {formatMoney(row.original.finances.total.toString(), cn(BASE_STYLE, "text-amber-700/70"))}
+        {/* Верх: Взнос */}
+        {formatMoney(row.original.finances.deposit.toString(), cn(BASE_STYLE, "text-foreground"))}
+        {/* Низ: Итог */}
+        {formatMoney(row.original.finances.total.toString(), cn(BASE_STYLE, "text-muted-foreground"))}
       </div>
     ),
   },
