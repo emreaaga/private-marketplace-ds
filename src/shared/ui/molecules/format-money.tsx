@@ -9,11 +9,11 @@ export function formatMoney(amount: string | null | undefined, className?: strin
 
   return (
     <div className={cn("flex items-baseline font-normal tabular-nums", className)}>
-      <span className="text-muted-foreground mr-0.5 text-[0.9em]">$</span>
+      <span className="mr-0.5 text-[0.9em] opacity-70">$</span>
 
-      <span className="text-foreground">{whole}</span>
+      <span>{whole}</span>
 
-      <span className="text-muted-foreground text-[0.75em]">.{cents}</span>
+      <span className="text-[0.75em] opacity-50">.{cents}</span>
     </div>
   );
 }
