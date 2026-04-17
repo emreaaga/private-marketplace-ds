@@ -6,6 +6,8 @@ import { formatMoney } from "@/shared/ui/molecules/format-money";
 import { type Order } from "./test-order";
 
 const BASE_STYLE = "text-[12px] font-medium";
+const TOP_ROW_STYLE = "text-[10px] text-slate-400";
+const BOTTOM_ROW_STYLE = "text-[12px] text-slate-900";
 
 const formatWeight = (value: number | string | undefined | null, className?: string) => {
   const num = Number(value);
@@ -38,10 +40,10 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     id: "clients",
     header: "Клиент",
     size: 150,
-    cell: () => (
+    cell: ({ row }) => (
       <div className="flex flex-col gap-0 py-0.5 leading-tight">
-        <span className="text-[12px]">Клнт. 1</span>
-        <span className="text-[12px]">Клнт. 2</span>
+        <span className={TOP_ROW_STYLE}>{row.original.sender.name}</span>
+        <span className={BOTTOM_ROW_STYLE}>{row.original.recipient.name}</span>
       </div>
     ),
   },
@@ -51,9 +53,9 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     header: "Контакты",
     size: 130,
     cell: ({ row }) => (
-      <div className="flex flex-col gap-0 py-0.5 text-[12px] tabular-nums">
-        <span>{row.original.sender.phone}</span>
-        <span>{row.original.recipient.phone}</span>
+      <div className="flex flex-col gap-0 py-0.5 leading-tight tabular-nums">
+        <span className={TOP_ROW_STYLE}>{row.original.sender.phone}</span>
+        <span className={BOTTOM_ROW_STYLE}>{row.original.recipient.phone}</span>
       </div>
     ),
   },
@@ -63,9 +65,9 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     header: "Города",
     size: 100,
     cell: ({ row }) => (
-      <div className="flex flex-col gap-0 py-0.5 text-[12px] leading-tight tracking-wider uppercase">
-        <span>{row.original.sender.city}</span>
-        <span>{row.original.recipient.city}</span>
+      <div className="flex flex-col gap-0 py-0.5 leading-tight">
+        <span className={TOP_ROW_STYLE}>{row.original.sender.city}</span>
+        <span className={BOTTOM_ROW_STYLE}>{row.original.recipient.city}</span>
       </div>
     ),
   },
@@ -76,8 +78,8 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     size: 140,
     cell: () => (
       <div className="flex flex-col gap-0 py-0.5 leading-tight">
-        <span className="text-[12px]">Отп курьер</span>
-        <span className="text-[12px]">Пол курьер</span>
+        <span className={TOP_ROW_STYLE}>Отп курьер</span>
+        <span className={BOTTOM_ROW_STYLE}>Пол курьер</span>
       </div>
     ),
   },
@@ -88,8 +90,8 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     size: 140,
     cell: () => (
       <div className="flex flex-col gap-0 py-0.5 leading-tight">
-        <span className="text-[12px]">Пункт 1</span>
-        <span className="text-[12px]">Пункт 2</span>
+        <span className={TOP_ROW_STYLE}>Пункт 1</span>
+        <span className={BOTTOM_ROW_STYLE}>Пункт 2</span>
       </div>
     ),
   },
@@ -100,8 +102,8 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     size: 120,
     cell: () => (
       <div className="flex flex-col gap-0 py-0.5 leading-tight">
-        <span className="text-[12px]">Отп тамж</span>
-        <span className="text-[12px]">Пол тамж</span>
+        <span className={TOP_ROW_STYLE}>Отп тамж</span>
+        <span className={BOTTOM_ROW_STYLE}>Пол тамж</span>
       </div>
     ),
   },
@@ -110,7 +112,12 @@ export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
     id: "flights",
     header: "Самолет",
     size: 100,
-    cell: () => <span className="text-xs font-medium tabular-nums">TR-UZ</span>,
+    cell: () => (
+      <div className="flex flex-col gap-0 py-0.5 leading-tight">
+        <span className={TOP_ROW_STYLE}>TR</span>
+        <span className={BOTTOM_ROW_STYLE}>UZ</span>
+      </div>
+    ),
   },
 
   {
