@@ -1,122 +1,116 @@
-import { ColumnDef, Row } from "@tanstack/react-table";
+import { ColumnDef } from "@tanstack/react-table";
 
-import { TableBadge } from "@/shared/ui/molecules/table-badge";
+import { formatMoney } from "@/shared/ui/molecules/format-money";
+import { formatWeight } from "@/shared/ui/molecules/format-weight";
 
-import { HeaderWithIcon } from "./header-icon";
-import { type Order } from "./orders.type";
-import { stageIcons } from "./stage-icons";
+import { type Order } from "./test-order";
 
-type CellValue = string | ((row: Row<Order>) => string | React.ReactNode);
-
-interface FinanceStat {
-  value: string;
-  unit: string;
-  highlight?: boolean;
-}
-
-interface StageRowConfig {
-  text: CellValue;
-  tooltip?: string;
-  stats?: FinanceStat[];
-}
-
-const MiniStat = ({ value, unit, highlight }: FinanceStat) => {
-  const [int, dec] = value.split(".");
-  return (
-    <span
-      className={`flex items-baseline text-[8px] font-bold tabular-nums ${
-        highlight ? "text-blue-600" : "text-slate-500"
-      }`}
-    >
-      {int}
-      {dec && <span className="text-[6px]">.{dec}</span>}
-      <span className="ml-0.5 font-medium text-slate-400">{unit}</span>
-    </span>
-  );
-};
-
-const createStackedColumn = (
-  id: string,
-  config: {
-    icon: keyof typeof stageIcons;
-    label: string;
-    top: StageRowConfig;
-    bottom: StageRowConfig;
-  },
-): ColumnDef<Order> => ({
-  accessorKey: id,
-  header: () => <HeaderWithIcon icon={stageIcons[config.icon]} label={config.label} />,
-  cell: ({ row }) => {
-    const renderRow = (rowConfig: StageRowConfig) => {
-      const text = typeof rowConfig.text === "function" ? rowConfig.text(row) : rowConfig.text;
-
-      return (
-        <TableBadge innerBadge="" tooltip={rowConfig.tooltip}>
-          <div className="flex items-center gap-1.5">
-            <span className="shrink-0">{text}</span>
-
-            {rowConfig.stats && rowConfig.stats.length > 0 && (
-              <div className="ml-0.5 flex items-center gap-1 border-slate-200 pl-1.5">
-                {rowConfig.stats.map((stat, idx) => (
-                  <MiniStat key={idx} {...stat} />
-                ))}
-              </div>
-            )}
-          </div>
-        </TableBadge>
-      );
-    };
-
-    return (
-      <div className="flex flex-col gap-1 py-1">
-        {renderRow(config.top)}
-
-        {renderRow(config.bottom)}
-      </div>
-    );
-  },
-});
+const COMMON_STYLE = "text-[12px] font-medium text-slate-700";
 
 export const getSellersOrdersColumns = (): ColumnDef<Order>[] => [
-  createStackedColumn("col_id", {
-    icon: "client",
-    label: "ID",
-    top: { text: (row) => `${row.original.id}` },
-    bottom: { text: "" },
-  }),
+  {
+    accessorKey: "id",
+    header: "ID",
+    size: 50,
+    cell: ({ row }) => <span className="text-xs font-medium tabular-nums">{row.original.id}</span>,
+  },
 
-  createStackedColumn("col1", {
-    icon: "client",
-    label: "Клиент",
-    top: { text: "Клнт. 1", stats: [{ value: "50.45", unit: "$" }] },
-    bottom: { text: "Клнт. 2" },
-  }),
+  {
+    id: "clients",
+    header: "Клиент",
+    size: 150,
+    cell: () => (
+      <div className="flex flex-col gap-0 py-0.5 leading-tight">
+        <span className="text-[13px]">Клнт. 1</span>
+        <span className="text-[11px] text-slate-400">Клнт. 2</span>
+      </div>
+    ),
+  },
 
-  createStackedColumn("col2", {
-    icon: "courier",
-    label: "Курьер",
-    top: { text: "Отп курьер", stats: [{ value: "32.45", unit: "$" }] },
-    bottom: { text: "Пол курьер", stats: [{ value: "32.45", unit: "$" }] },
-  }),
+  {
+    id: "couriers",
+    header: "Курьер",
+    size: 140,
+    cell: () => (
+      <div className="flex flex-col gap-0 py-0.5 leading-tight">
+        <span className="text-[13px]">Отп курьер</span>
+        <span className="text-[11px] text-slate-400">Пол курьер</span>
+      </div>
+    ),
+  },
 
-  createStackedColumn("col3", {
-    icon: "point",
-    label: "Пункт 1",
-    top: { text: "Пункт 1", stats: [{ value: "6.45", unit: "кг/$" }] },
-    bottom: { text: "Пункт 2", stats: [{ value: "1434.45", unit: "кг" }] },
-  }),
+  {
+    id: "points",
+    header: "Пункты",
+    size: 140,
+    cell: () => (
+      <div className="flex flex-col gap-0 py-0.5 leading-tight">
+        <span className="text-[13px]">Пункт 1</span>
+        <span className="text-[11px] text-slate-400">Пункт 2</span>
+      </div>
+    ),
+  },
 
-  createStackedColumn("col4", {
-    icon: "customs",
-    label: "Таможня",
-    top: { text: "Отп тамж" },
-    bottom: { text: "Пол тамж" },
-  }),
+  {
+    id: "customs",
+    header: "Таможня",
+    size: 120,
+    cell: () => (
+      <div className="flex flex-col gap-0 py-0.5 leading-tight">
+        <span className="text-[13px]">Отп тамж</span>
+        <span className="text-[11px] text-slate-400">Пол тамж</span>
+      </div>
+    ),
+  },
 
-  createStackedColumn("col5", {
-    icon: "flight",
-    label: "Самолет",
-    top: { text: "TR-IST" },
-    bottom: { text: "UZ-SKD" },
-  }),
+  {
+    id: "flights",
+    header: "Самолет",
+    size: 100,
+    cell: () => (
+      <div className="flex flex-col gap-0 py-0.5 leading-tight">
+        <span className="text-[13px]">TR-IST</span>
+        <span className="text-[11px] font-medium text-slate-400">UZ-SKD</span>
+      </div>
+    ),
+  },
+
+  // 1. ВЕС / ЦЕНА (В/Ц)
+  {
+    id: "weight_price",
+    header: "В/Ц",
+    size: 90,
+    cell: ({ row }) => (
+      <div className="flex flex-col gap-0 py-0.5 leading-tight">
+        {formatWeight(row.original.weight, "default", COMMON_STYLE)}
+        {formatMoney(row.original.finances.cargoPrice.toString(), COMMON_STYLE)}
+      </div>
+    ),
+  },
+
+  // 2. ДОП. ОПЛАТА / ДОП. РАСХОД (О/Р)
+  {
+    id: "extra_pay_exp",
+    header: "О/Р",
+    size: 90,
+    cell: ({ row }) => (
+      <div className="flex flex-col gap-0 py-0.5 leading-tight">
+        {formatMoney(row.original.finances.extraPayment.toString(), COMMON_STYLE)}
+        {formatMoney(row.original.finances.extraExpense.toString(), COMMON_STYLE)}
+      </div>
+    ),
+  },
+
+  // 3. ВЗНОС / ИТОГ (В/И)
+  {
+    id: "deposit_total",
+    header: "В/И",
+    size: 90,
+    cell: ({ row }) => (
+      <div className="flex flex-col gap-0 py-0.5 leading-tight">
+        {formatMoney(row.original.finances.deposit.toString(), COMMON_STYLE)}
+        {formatMoney(row.original.finances.total.toString(), COMMON_STYLE)}
+      </div>
+    ),
+  },
 ];
