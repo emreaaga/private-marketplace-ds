@@ -15,13 +15,13 @@ export const usersHeaderItems = [
     icon: "users",
   },
   {
-    href: "/dashboard/users/services",
-    label: "Услуги",
-    icon: "service",
-  },
-  {
     href: "/dashboard/users/clients",
     label: "Клиенты",
     icon: "clients",
+  },
+  {
+    href: "/dashboard/users/services",
+    label: "Услуги",
+    icon: "service",
   },
 ] as const;
