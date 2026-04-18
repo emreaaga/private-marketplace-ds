@@ -45,6 +45,24 @@ export function createAllUsersColumns(actions: DirectoryTableActions): ColumnDef
       cell: ({ row }) => <span className="text-muted-foreground/50 font-mono text-[11px]">{row.index + 1}</span>,
     },
     {
+      accessorKey: "category",
+      header: "Тип",
+      cell: ({ getValue }) => {
+        const value = getValue<"user" | "company">();
+
+        const labels = {
+          user: "Сотрудник",
+          company: "Компания",
+        };
+
+        return (
+          <span className="text-muted-foreground/80 text-[12px] font-medium tracking-wider uppercase">
+            {labels[value] || value}
+          </span>
+        );
+      },
+    },
+    {
       accessorKey: "label",
       header: "Роль",
       cell: ({ row }) => {
@@ -65,24 +83,7 @@ export function createAllUsersColumns(actions: DirectoryTableActions): ColumnDef
         );
       },
     },
-    {
-      accessorKey: "category",
-      header: "Тип",
-      cell: ({ getValue }) => {
-        const value = getValue<"user" | "company">();
 
-        const labels = {
-          user: "Сотрудник",
-          company: "Компания",
-        };
-
-        return (
-          <span className="text-muted-foreground/80 text-[12px] font-medium tracking-wider uppercase">
-            {labels[value] || value}
-          </span>
-        );
-      },
-    },
     {
       accessorKey: "count",
       header: "Кол-во",
