@@ -4,6 +4,7 @@ import { CompanyType } from "./company.types";
 
 export type Company = {
   id: number;
+  public_id?: string;
   name: string;
   type: CompanyType;
   country: CountryCode;

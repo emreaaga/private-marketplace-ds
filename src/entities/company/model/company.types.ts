@@ -1,6 +1,6 @@
 import { z } from "zod";
 
-export const COMPANY_TYPES = ["postal", "air_partner", "customs_broker", "seller"] as const;
+export const COMPANY_TYPES = ["postal", "air_partner", "customs_broker"] as const;
 export const ALL_COMPANY_TYPES = [...COMPANY_TYPES, "platform"] as const;
 
 export type CompanyType = (typeof COMPANY_TYPES)[number];

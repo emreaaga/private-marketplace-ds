@@ -1,17 +1,26 @@
-"use client";
+import { getClients } from "@/entities/client/api-server/get-clients-server.api";
+import { getServerSession } from "@/entities/session/server";
+import { ClientsTableClient } from "@/widgets/clients-table";
 
-import { UserSquare } from "lucide-react";
+interface PageProps {
+  searchParams: Promise<{ page?: string }>;
+}
 
-import { FeaturePlaceholder } from "@/shared/ui/feature-placeholder";
+export default async function ClientsPage({ searchParams }: PageProps) {
+  const params = await searchParams;
+  const user = await getServerSession();
+  const currentPage = Number(params.page) || 1;
 
-export default function ClientsPage() {
+  if (!user) return null;
+
+  const fetchParams = {
+    page: currentPage,
+    limit: 10,
+  };
+
+  const data = await getClients(fetchParams);
+
   return (
-    <div className="flex flex-1 flex-col p-4">
-      <FeaturePlaceholder
-        title="Страница клиентов"
-        description="Здесь фирмы добавляют и редактируют своих клиентов."
-        icon={UserSquare}
-      />
-    </div>
+    <ClientsTableClient initialData={data.data} pageCount={data.pagination.totalPages} currentPage={currentPage} />
   );
 }

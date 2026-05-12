@@ -26,12 +26,17 @@ const dtf = new Intl.DateTimeFormat("ru-RU");
 
 export function createCompaniesColumns(actions: CompaniesTableActions): ColumnDef<Company>[] {
   return [
+    // {
+    //   accessorKey: "id",
+    //   header: "ID",
+    //   cell: ({ getValue }) => (
+    //     <span className="text-muted-foreground/50 font-mono text-[11px]">{getValue<number>()}</span>
+    //   ),
+    // },
     {
-      accessorKey: "id",
-      header: "ID",
-      cell: ({ getValue }) => (
-        <span className="text-muted-foreground/50 font-mono text-[11px]">{getValue<number>()}</span>
-      ),
+      accessorKey: "public_id",
+      header: "Public ID",
+      cell: ({ getValue }) => <span className="font-mono">{getValue<string>()}</span>,
     },
     {
       accessorKey: "type",
@@ -50,7 +55,7 @@ export function createCompaniesColumns(actions: CompaniesTableActions): ColumnDe
     },
     {
       accessorKey: "name",
-      header: "Фирма",
+      header: "Название",
     },
     {
       id: "location",
@@ -58,7 +63,7 @@ export function createCompaniesColumns(actions: CompaniesTableActions): ColumnDe
       cell: ({ row }) => {
         const { country, city } = row.original;
         return (
-          <div className="text-muted-foreground/80 text-[12px] font-medium tracking-wider uppercase">
+          <div className="text-muted-foreground/80 uppercase">
             {country} <span className="text-muted-foreground/40 mx-0.5">/</span> {city}
           </div>
         );
@@ -68,9 +73,7 @@ export function createCompaniesColumns(actions: CompaniesTableActions): ColumnDe
       accessorKey: "created_at",
       header: "Дата",
       cell: ({ getValue }) => (
-        <span className="text-muted-foreground/70 text-[12px] tabular-nums">
-          {dtf.format(new Date(getValue<string>()))}
-        </span>
+        <span className="text-muted-foreground/70 tabular-nums">{dtf.format(new Date(getValue<string>()))}</span>
       ),
     },
     {

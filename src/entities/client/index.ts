@@ -6,4 +6,5 @@ export * from "./model/client.model";
 export * from "./model/client.status";
 
 // UI
+export { createClientsColumns } from "./ui/clients-columns";
 export { PartyForm } from "./ui/party-form";

@@ -19,16 +19,16 @@ export const ALL_USER_ROLE_META: Record<AllUserRoles, RoleMeta> = {
     Icon: Briefcase,
     disabled: false,
   },
-  // employee: {
-  //   label: "Сотрудник",
-  //   Icon: Users,
-  //   disabled: false,
-  // },
-  courier: {
+  employee: {
     label: "Курьер",
     Icon: Truck,
     disabled: true,
   },
+  // courier: {
+  //   label: "Курьер",
+  //   Icon: Truck,
+  //   disabled: true,
+  // },
   clients: {
     label: "Клиент",
     Icon: Users,
