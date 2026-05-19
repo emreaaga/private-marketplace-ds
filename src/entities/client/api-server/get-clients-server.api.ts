@@ -11,7 +11,7 @@ interface GetClientsParams {
 }
 
 export async function getClients({ page, limit = 10 }: GetClientsParams): Promise<PaginatedResponse<Client>> {
-  const baseUrl = "http://localhost:4000/api";
+  const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
   const cookieStore = await cookies();
 
   const token = cookieStore.get("access_token")?.value;
