@@ -25,13 +25,7 @@ export function ClientsTableClient({ initialData, pageCount, currentPage }: any)
     });
   };
 
-  const columns = useMemo(
-    () =>
-      createClientsColumns({
-        onView: (client) => setViewClientId(client.id),
-      }),
-    [],
-  );
+  const columns = useMemo(() => createClientsColumns(), []);
 
   return (
     <div className={isPending ? "opacity-70 transition-opacity" : ""}>

@@ -2,8 +2,6 @@
 
 import type { ColumnDef } from "@tanstack/react-table";
 
-import { cn } from "@/shared/lib/utils";
-
 import type { ClientStatus } from "../model/client.status";
 
 export interface Client {
@@ -19,45 +17,21 @@ export interface Client {
   created_at: string;
 }
 
-const CLIENT_STATUS_META: Record<ClientStatus, { label: string; dotClass: string }> = {
-  active: {
-    label: "Активен",
-    dotClass: "bg-emerald-500",
-  },
-  blocked: {
-    label: "Заблокирован",
-    dotClass: "bg-red-500",
-  },
-  pending: {
-    label: "Ожидание",
-    dotClass: "bg-amber-500",
-  },
-};
-
-type ClientsTableActions = {
-  onView(client: Client): void;
-};
-
 const dtf = new Intl.DateTimeFormat("ru-RU", {
   day: "2-digit",
   month: "2-digit",
   year: "numeric",
 });
 
-export function createClientsColumns(actions: ClientsTableActions): ColumnDef<Client>[] {
+export function createClientsColumns(): ColumnDef<Client>[] {
   return [
     {
       accessorKey: "public_id",
       header: "Public ID",
-      cell: ({ row, getValue }) => {
-        const status = row.original.status;
-        const meta = CLIENT_STATUS_META[status];
-
+      cell: () => {
         return (
           <div className="flex items-center gap-1">
-            {meta && <div className={cn("h-1.5 w-1.5 shrink-0 rounded-full", meta.dotClass)} title={meta.label} />}
-
-            <span className="text-muted-foreground/50 font-mono">{getValue<string>()}</span>
+            <span className="text-muted-foreground/50 font-mono">C01X</span>
           </div>
         );
       },
