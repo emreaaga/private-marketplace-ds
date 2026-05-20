@@ -7,16 +7,17 @@ import { Client } from "../ui/clients-columns";
 
 interface GetClientsParams {
   page: number;
-  limit?: number;
 }
 
-export async function getClients({ page, limit = 10 }: GetClientsParams): Promise<PaginatedResponse<Client>> {
+export async function getClients({ page }: GetClientsParams): Promise<PaginatedResponse<Client>> {
   const baseUrl = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000/api";
   const cookieStore = await cookies();
 
   const token = cookieStore.get("access_token")?.value;
 
-  let res = await fetch(`${baseUrl}/clients`, {
+  const queryString = `?page=${page}`;
+
+  let res = await fetch(`${baseUrl}/clients${queryString}`, {
     method: "GET",
     headers: {
       "Content-Type": "application/json",
@@ -48,7 +49,8 @@ export async function getClients({ page, limit = 10 }: GetClientsParams): Promis
       ?.split("=")[1];
 
     if (newToken) {
-      res = await fetch(`${baseUrl}/clients?page=${page}&limit=${limit}`, {
+      // ИСПРАВЛЕНО: Повторный запрос тоже идет строго без limit
+      res = await fetch(`${baseUrl}/clients${queryString}`, {
         method: "GET",
         headers: {
           "Content-Type": "application/json",

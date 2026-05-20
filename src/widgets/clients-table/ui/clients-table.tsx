@@ -1,16 +1,20 @@
 "use client";
 
-import { useMemo, useState, useTransition } from "react";
+import { useMemo, useTransition } from "react";
 
 import { usePathname, useRouter, useSearchParams } from "next/navigation";
 
 import { createClientsColumns } from "@/entities/client";
 import { DataTable } from "@/widgets/data-table/ui/data-table";
 
-export function ClientsTableClient({ initialData, pageCount, currentPage }: any) {
+interface ClientsTableClientProps {
+  data: any[];
+  pageCount: number;
+  currentPage: number;
+}
+
+export function ClientsTableClient({ data, pageCount, currentPage }: ClientsTableClientProps) {
   const [isPending, startTransition] = useTransition();
-  // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [viewClientId, setViewClientId] = useState<number | null>(null);
 
   const router = useRouter();
   const pathname = usePathname() ?? "";
@@ -28,10 +32,14 @@ export function ClientsTableClient({ initialData, pageCount, currentPage }: any)
   const columns = useMemo(() => createClientsColumns(), []);
 
   return (
-    <div className={isPending ? "opacity-70 transition-opacity" : ""}>
+    <div
+      className={
+        isPending ? "pointer-events-none opacity-50 transition-opacity duration-200" : "transition-opacity duration-200"
+      }
+    >
       <DataTable
         columns={columns}
-        data={initialData}
+        data={data}
         serverPagination={{
           page: currentPage,
           pageCount,

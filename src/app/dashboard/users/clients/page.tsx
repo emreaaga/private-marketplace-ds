@@ -20,7 +20,5 @@ export default async function ClientsPage({ searchParams }: PageProps) {
 
   const data = await getClients(fetchParams);
 
-  return (
-    <ClientsTableClient initialData={data.data} pageCount={data.pagination.totalPages} currentPage={currentPage} />
-  );
+  return <ClientsTableClient data={data.data} pageCount={data.pagination.totalPages} currentPage={currentPage} />;
 }

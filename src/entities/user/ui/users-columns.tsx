@@ -23,7 +23,12 @@ type UsersTableActions = {
   onEdit(user: User): void;
 };
 
-const dtf = new Intl.DateTimeFormat("ru-RU");
+const dtf = new Intl.DateTimeFormat("ru-RU", {
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+  timeZone: "UTC",
+});
 
 export function createUsersColumns(actions: UsersTableActions): ColumnDef<User>[] {
   return [
@@ -97,11 +102,11 @@ export function createUsersColumns(actions: UsersTableActions): ColumnDef<User>[
     {
       accessorKey: "created_at",
       header: "Дата",
-      cell: ({ getValue }) => (
-        <span className="text-muted-foreground/70 text-[12px] tabular-nums">
-          {dtf.format(new Date(getValue<string>()))}
-        </span>
-      ),
+      cell: ({ getValue }) => {
+        const val = getValue<string>();
+        if (!val) return "-";
+        return <span className="text-muted-foreground/70 text-[12px] tabular-nums">{dtf.format(new Date(val))}</span>;
+      },
     },
     {
       id: "actions",
