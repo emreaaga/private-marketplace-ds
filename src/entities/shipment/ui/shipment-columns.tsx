@@ -14,9 +14,8 @@ import { formatWeight } from "@/shared/ui/molecules/format-weight";
 
 export const getShipmentsColumns = (onView: (id: number) => void, onPrefetch: () => void): ColumnDef<Shipment>[] => [
   {
-    accessorKey: "id",
-    header: "ID",
-    cell: ({ getValue }) => <span className="text-muted-foreground font-mono text-xs">{getValue<number>()}</span>,
+    accessorKey: "public_id",
+    header: "PID",
   },
   {
     accessorKey: "company_name",

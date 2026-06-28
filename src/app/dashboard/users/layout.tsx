@@ -8,7 +8,7 @@ export default async function UsersLayout({ children }: { children: ReactNode })
   const user = await getServerSession();
 
   return (
-    <div className="space-y-4">
+    <div className="space-y-2">
       <ResponsiveTabsHeader items={usersHeaderItems} user={user} />
       <UsersToolbar user={user} />
 

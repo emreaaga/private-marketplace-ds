@@ -39,7 +39,7 @@ export function createAllUsersColumns(actions: DirectoryTableActions): ColumnDef
     },
     {
       accessorKey: "category",
-      header: "Код типа",
+      header: "Код",
       cell: ({ row }) => {
         const { category, iconKey } = row.original;
 

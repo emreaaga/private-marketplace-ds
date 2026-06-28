@@ -27,6 +27,7 @@ export type OrderItem = {
 
 export type OrderListItem = {
   id: number;
+  public_id: string;
   internal_number: number;
   company_name: string;
   sender_name: string;

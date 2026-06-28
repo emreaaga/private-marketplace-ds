@@ -49,7 +49,6 @@ export async function getClients({ page }: GetClientsParams): Promise<PaginatedR
       ?.split("=")[1];
 
     if (newToken) {
-      // ИСПРАВЛЕНО: Повторный запрос тоже идет строго без limit
       res = await fetch(`${baseUrl}/clients${queryString}`, {
         method: "GET",
         headers: {
